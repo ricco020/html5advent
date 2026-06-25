@@ -1,0 +1,148 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="best-hosting-for-laravel"
+  title="Héberger une application Laravel : VPS, exigences et déploiement"
+  description="Un guide pratique pour héberger une application Laravel — pourquoi un VPS est généralement le bon choix, les exigences serveur qui comptent (PHP, extensions, workers de file d'attente, planificateur), et un vrai déroulé de déploiement avec Composer, .env, Nginx et Supervisor."
+  cat="hosting"
+  hero="/img/best-hosting-for-laravel-hero.jpg"
+  heroAlt="Un développeur portant un casque travaille à un bureau devant un écran rempli de code, avec du code projeté sur le mur derrière lui"
+  cluster="hosting"
+>
+  <p><strong>Laravel</strong> est un framework applicatif PHP complet, pas un ensemble de pages que l'on téléverse par FTP. Il attend un vrai environnement d'exécution : un PHP récent, plusieurs extensions, un répertoire de stockage accessible en écriture, des tâches planifiées et — pour tout ce qui n'est pas trivial — des workers de file d'attente en arrière-plan. C'est pourquoi un hébergement mutualisé basique vous met souvent des bâtons dans les roues, et pourquoi un <strong>VPS</strong> est généralement le bon foyer pour une application Laravel. Ce guide couvre ce dont le serveur a réellement besoin et déroule un vrai déploiement.</p>
+
+  <h2>Pourquoi un VPS convient à Laravel</h2>
+  <p>L'hébergement mutualisé est conçu pour « déposer des fichiers dans une racine web ». Laravel veut plus que cela : un accès SSH pour exécuter <code>composer</code> et <code>artisan</code>, la possibilité de pointer le serveur web vers le répertoire <code>public/</code>, un processus de longue durée pour vider la file d'attente, et une entrée cron pour le planificateur. Un VPS vous donne un <strong>accès root, de la RAM et du CPU garantis, et le contrôle total de la pile</strong> — exactement ce que ces besoins exigent. Une plateforme managée peut aussi convenir, mais un VPS est le compromis le plus flexible dès qu'une application a des files d'attente, une base de données et un cache.</p>
+
+  <h2>Exigences serveur</h2>
+  <h3>PHP et extensions</h3>
+  <p>Faites tourner une <strong>version de PHP actuellement supportée</strong> qui correspond à votre version de Laravel — consultez la documentation du framework pour le minimum exact. Laravel a besoin d'un ensemble standard d'extensions PHP activées ; sur un VPS Debian/Ubuntu, elles s'installent généralement ensemble :</p>
+  <pre><code>{`# Ubuntu/Debian: PHP-FPM + the extensions Laravel expects
+sudo apt install -y php-fpm php-cli php-mbstring php-xml \\
+  php-bcmath php-curl php-mysql php-zip php-gd php-intl
+
+# Composer (dependency manager)
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer`}</code></pre>
+  <p>Les noms exacts des paquets varient selon la distribution, mais les extensions à confirmer sont <code>mbstring</code>, <code>xml</code>, <code>bcmath</code>, <code>curl</code>, le pilote de base de données (<code>pdo_mysql</code> ou <code>pdo_pgsql</code>), <code>zip</code> et <code>openssl</code>. Si l'une manque, cela se manifeste généralement par une erreur claire pendant <code>composer install</code> ou au démarrage.</p>
+
+  <h3>Base de données, cache et backend de file d'attente</h3>
+  <p>La plupart des applications Laravel s'associent à <strong>MySQL/MariaDB ou PostgreSQL</strong>. Pour tout ce qui utilise des files d'attente, des sessions ou du cache à grande échelle, ajoutez <strong>Redis</strong> — il sert à la fois de cache rapide, de magasin de sessions et de pilote de file d'attente. Assurez-vous que le VPS dispose d'assez de RAM pour la base de données et Redis aux côtés des workers PHP-FPM ; la mémoire est la ressource que vous êtes le plus susceptible d'épuiser.</p>
+
+  <h3>Permissions de stockage</h3>
+  <p>Laravel écrit dans deux répertoires, <code>storage/</code> et <code>bootstrap/cache/</code>. L'utilisateur du serveur web (souvent <code>www-data</code>) doit pouvoir y écrire, sinon vous obtiendrez des erreurs de permission qui ressemblent à des bugs applicatifs :</p>
+  <pre><code>{`sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R ug+rwX storage bootstrap/cache`}</code></pre>
+
+  <figure>
+    <img src="/img/best-hosting-for-laravel-inbody.jpg" alt="Gros plan d'un écran affichant du code en coloration syntaxique avec des fonctions et des conditions" width="1280" height="720" loading="lazy" />
+    <figcaption>Un déploiement Laravel est une séquence de commandes reproductible — installer les dépendances, mettre en cache la configuration et les routes, exécuter les migrations — plutôt que de téléverser des fichiers à la main.</figcaption>
+  </figure>
+
+  <h2>Déroulé du déploiement</h2>
+  <h3>1. Récupérer le code et installer les dépendances</h3>
+  <p>Récupérez le dépôt sur le serveur, puis installez les dépendances de production. Les options ci-dessous excluent les paquets de développement et construisent un autoloader optimisé :</p>
+  <pre><code>{`git clone https://github.com/you/your-app.git /var/www/app
+cd /var/www/app
+composer install --no-dev --optimize-autoloader`}</code></pre>
+
+  <h3>2. Configurer l'environnement</h3>
+  <p>Laravel lit la configuration depuis un fichier <code>.env</code> qui n'est <strong>jamais versionné dans git</strong>. Copiez l'exemple, générez la clé d'application et renseignez les vraies valeurs :</p>
+  <pre><code>{`cp .env.example .env
+php artisan key:generate`}</code></pre>
+  <p>Un <code>.env</code> de production minimal ressemble à ceci — réglez <code>APP_DEBUG</code> sur false pour que les erreurs ne soient pas divulguées aux visiteurs :</p>
+  <pre><code>{`APP_NAME="Your App"
+APP_ENV=production
+APP_KEY=base64:...generated...
+APP_DEBUG=false
+APP_URL=https://yourapp.com
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=yourapp
+DB_USERNAME=yourapp
+DB_PASSWORD=change-me
+
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+REDIS_HOST=127.0.0.1`}</code></pre>
+
+  <h3>3. Migrer et mettre en cache pour la production</h3>
+  <p>Exécutez les migrations de base de données, puis construisez la configuration, les routes et les vues mises en cache par Laravel. Mettre en cache ces éléments est ce qui rend le framework rapide en production — mais pensez à les reconstruire à chaque déploiement, car ils figent l'état courant :</p>
+  <pre><code>{`php artisan migrate --force
+
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache`}</code></pre>
+
+  <h3>4. Pointer Nginx vers public/</h3>
+  <p>La racine documentaire du serveur web doit être le répertoire <code>public/</code> — jamais la racine du projet, sinon vous exposeriez <code>.env</code> et les fichiers source. Un bloc serveur Nginx + PHP-FPM standard :</p>
+  <pre><code>{`server {
+    listen 80;
+    server_name yourapp.com;
+    root /var/www/app/public;
+
+    index index.php;
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \\.php$ {
+        fastcgi_pass unix:/run/php/php-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\\.(?!well-known).* {
+        deny all;
+    }
+}`}</code></pre>
+  <p>Ajoutez le HTTPS avec un certificat automatisé gratuit (la plupart des hébergeurs et des outils comme Certbot en font une simple ligne) — une application de production devrait toujours être servie en TLS.</p>
+
+  <h3>5. Lancer le worker de file d'attente avec Supervisor</h3>
+  <p>Les tâches en arrière-plan (emails, notifications, exports) s'exécutent via un <strong>worker de file d'attente</strong>, un processus de longue durée qui doit survivre aux plantages et aux redémarrages. N'exécutez pas <code>php artisan queue:work</code> à la main dans une session SSH — utilisez un gestionnaire de processus comme <strong>Supervisor</strong> pour le maintenir en vie :</p>
+  <pre><code>{`# /etc/supervisor/conf.d/app-worker.conf
+[program:app-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/app/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/app/storage/logs/worker.log
+stopwaitsecs=3600`}</code></pre>
+  <pre><code>{`sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start app-worker:*`}</code></pre>
+
+  <h3>6. Planifier le planificateur</h3>
+  <p>Le planificateur de tâches de Laravel est piloté par une seule entrée cron qui s'exécute chaque minute ; Laravel lui-même décide quelles tâches sont dues. Ajoutez-la au crontab de l'utilisateur de déploiement :</p>
+  <pre><code>{`* * * * * cd /var/www/app && php artisan schedule:run >> /dev/null 2>&1`}</code></pre>
+
+  <h2>Dimensionner le VPS</h2>
+  <table>
+    <thead><tr><th>Profil d'application</th><th>Ce dont elle a besoin</th></tr></thead>
+    <tbody>
+      <tr><td>Petite application, trafic léger</td><td>VPS d'entrée de gamme : quelques Go de RAM, stockage NVMe, 1 à 2 vCPU — PHP-FPM plus une petite base de données.</td></tr>
+      <tr><td>Files d'attente + Redis + base de données</td><td>Plus de marge de RAM pour que Redis, la base de données et plusieurs processus PHP-FPM et workers cohabitent confortablement.</td></tr>
+      <tr><td>Trafic plus élevé / tâches lourdes</td><td>Des vCPU dédiés pour une charge soutenue, davantage de processus workers, de la marge pour monter en charge ; envisagez de séparer la base de données plus tard.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Pour qui c'est fait</h2>
+  <ul>
+    <li><strong>Préfère ne pas administrer de serveur :</strong> une plateforme managée ou un VPS managé gère les correctifs et la supervision des processus à votre place, à un prix plus élevé.</li>
+    <li><strong>À l'aise en ligne de commande :</strong> un VPS non managé est moins cher et totalement flexible — vous possédez la configuration PHP, Nginx, Supervisor et cron présentée ci-dessus.</li>
+    <li><strong>Application en croissance avec files d'attente et cache :</strong> un VPS avec RAM/CPU garantis et Redis est le choix naturel ; dimensionnez d'abord la mémoire, puis le CPU, puis le stockage.</li>
+  </ul>
+
+  <h2>Comment décider</h2>
+  <p>Partez de ce dont Laravel a besoin pour bien tourner : un accès SSH, un PHP supporté avec les bonnes extensions, une base de données et (pour les files d'attente/le cache) Redis, un stockage accessible en écriture, un worker de file d'attente sous Supervisor et un cron d'une ligne pour le planificateur. Un VPS vous donne tout cela avec des ressources garanties et un chemin clair pour monter en charge — faites correspondre l'offre à votre trafic et à votre charge de tâches en arrière-plan, et choisissez la plus petite qui le couvre avec de la marge.</p>
+</Article>

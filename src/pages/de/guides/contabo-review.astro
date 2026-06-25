@@ -1,0 +1,55 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="contabo-review"
+  title="Contabo im Test: ein guter VPS für Web-Projekte?"
+  description="Ein ehrlicher, hype-freier Blick auf Contabo als VPS-Hoster für Websites und Apps — seine Ressourcen-für-den-Preis-Positionierung, die Art der angebotenen Tarife, die abzuwägenden Kompromisse und für wen er wirklich passt."
+  cat="hosting"
+  hero="/img/contabo-review-hero.jpg"
+  heroAlt="Silberne rackmontierte Server in einem Schrank gestapelt, blau beleuchtet, eine Einheit mit roter Anzeigeleuchte"
+  cluster="hosting"
+>
+  <p><strong>Contabo</strong> ist ein deutsches Hosting-Unternehmen, das seinen Ruf auf einer Sache aufgebaut hat: viele rohe Ressourcen zu einem niedrigen monatlichen Preis. Wenn Sie schon einmal einen VPS gesucht haben, haben Sie seine Tarife wahrscheinlich mit deutlich mehr RAM, vCPUs und Speicher als bei ähnlich teuren Wettbewerbern gesehen. Diese Positionierung ist real, aber „mehr Specs pro Euro" ist nur ein Teil der Geschichte. Dieser Test betrachtet, was Contabo tatsächlich bietet, wo es passt und welche Kompromisse es wert sind, verstanden zu werden, bevor man sich bindet — ohne Benchmarks zu erfinden oder vorzugeben, es monatelang genutzt zu haben.</p>
+
+  <h2>Was Contabo ist</h2>
+  <p>Contabo verkauft <strong>unmanaged Virtual Private Server</strong>, neben speicherorientierten VPS-Tarifen, dedizierten Servern und Objektspeicher. Es ist ein europäischer Anbieter mit Hauptsitz in Deutschland und hat seine Rechenzentrums-Präsenz über die Jahre auf mehrere Regionen in Europa, Nordamerika, Asien und darüber hinaus ausgeweitet. Das Kernversprechen ist konstant: großzügige CPU-, Speicher- und Festplatten-Zuweisungen zu Preisen, die tendenziell unter den bekannteren Namen liegen.</p>
+  <p>Da die VPS-Tarife unmanaged sind, erhalten Sie ein nacktes Betriebssystem und Root-Zugriff — und die Verantwortung, es abzusichern, zu patchen und zu warten, liegt bei Ihnen. Das ist in dieser Kategorie normal, aber es ist das Erste, worüber man sich im Klaren sein sollte: Contabo richtet sich an Menschen, die sich auf der Kommandozeile wohlfühlen, nicht an jemanden, der eine vollständig betreute, gemanagte Erfahrung möchte.</p>
+
+  <h2>Der Aspekt „Ressourcen für den Preis"</h2>
+  <p>Der Hauptgrund, warum Entwickler zu Contabo greifen, ist das Preis-Leistungs-Verhältnis. Für ein gegebenes Budget liefern seine Tarife in der Regel mehr Speicher und mehr Festplatte, als Sie anderswo bekämen, was attraktiv ist, wenn Ihre Last wirklich ressourcenhungrig ist — eine Datenbank neben einem Anwendungsserver, ein selbstgehostetes Tool, eine Staging-Umgebung oder mehrere kleine Sites auf einer Maschine.</p>
+  <p>Eine sinnvolle Art, dies ehrlich zu lesen: <em>mehr zugewiesene Ressourcen sind nicht dasselbe wie mehr Leistung in jeder Dimension</em>. Großzügiger RAM und Speicher sind leicht zu quantifizieren und leicht zu bewerben. Dinge wie das anhaltende CPU-Verhalten unter Last, der Netzwerkdurchsatz zu Ihrem spezifischen Publikum und wie ein Hoster mit „lauten Nachbarn" umgeht, sind schwerer auf ein Datenblatt zu bringen. Contabo gibt Ihnen viel von den leicht messbaren Ressourcen; ob sich das in die Erfahrung übersetzt, die Sie brauchen, hängt von Ihrer Last ab — dimensionieren Sie den Tarif also nach dem, was Sie tatsächlich betreiben werden, statt nach der größten Zahl.</p>
+
+  <figure>
+    <img src="/img/contabo-review-inbody.jpg" alt="Eine Hand, die ein Laufwerksmodul in ein blau beleuchtetes Server-Gehäuse in einem Rack einsetzt" width="1280" height="719" loading="lazy" />
+    <figcaption>Ein VPS ist ein Ausschnitt eines physischen Servers wie diese — der Anbieter verwaltet die Hardware, Sie verwalten das Betriebssystem darauf.</figcaption>
+  </figure>
+
+  <h2>Speicher und die Storage-VPS-Linie</h2>
+  <p>Über Standard-VPS-Tarife hinaus bietet Contabo <strong>Storage-VPS</strong>-Stufen, die darauf ausgelegt sind, große Datenmengen günstig vorzuhalten — Backups, Mediatheken, Archive. Wenn Ihr Projekt eher speicherlastig als rechenlastig ist, ist das eine eigene Option, die zu kennen sich lohnt. Wie immer prüfen Sie, ob ein bestimmter Tarif schnelleres NVMe/SSD oder größeren, aber langsameren Speicher nutzt, denn der Festplattentyp zeigt sich direkt in der Reaktionsfähigkeit von Datenbanken und Dateilesevorgängen. Passen Sie die Speicherklasse an das an, was die Last verlangt: schnelle Festplatte für eine vielbeschäftigte Datenbank, Massenkapazität für ein Archiv.</p>
+
+  <h2>Ehrlich abzuwägende Punkte</h2>
+  <p>Kein Hoster ist für jeden richtig. Dies sind die objektiven Überlegungen, die man mit Contabo durchdenken sollte — keine Urteile, sondern die Fragen, die man sich vor dem Kauf stellen sollte:</p>
+  <ul>
+    <li><strong>Unmanaged bedeutet Selbstbedienung.</strong> Sie kümmern sich um OS-Einrichtung, Sicherheitshärtung, Updates und Wiederherstellung. Wenn Sie nicht Ihr eigener Sysadmin sein wollen, ist ein unmanaged Budget-VPS — Contabo eingeschlossen — die falsche Kategorie.</li>
+    <li><strong>Der Support ist im Community-und-Ticket-Stil.</strong> Günstige unmanaged Anbieter bieten in der Regel nicht den tiefen, praktischen Support von Premium-Managed-Hosts. Berücksichtigen Sie Ihre eigene Fähigkeit zur Fehlersuche.</li>
+    <li><strong>Der Rechenzentrumsstandort ist für die Latenz wichtig.</strong> Contabo veröffentlicht die Regionen, in denen es tätig ist — wählen Sie eine nahe Ihrem Publikum, denn physische Entfernung fügt jeder dynamischen Anfrage Latenz hinzu. Bestätigen Sie, dass die konkrete Region für den gewünschten Tarif verfügbar ist.</li>
+    <li><strong>Einrichtungs- und Zusatzdetails.</strong> Prüfen Sie, ob ein Tarif eine einmalige Einrichtungsgebühr hat, was standardmäßig enthalten ist (Backups, zusätzliche IPs, Control Panel) und was extra kostet, damit die Gesamtsumme keine Überraschung ist.</li>
+    <li><strong>Bereitstellung und Größenänderung.</strong> Verstehen Sie, wie Sie skalieren — ob Sie an Ort und Stelle die Größe ändern können oder migrieren müssen — bevor Ihr Projekt seinen ersten Tarif übersteigt.</li>
+  </ul>
+
+  <h2>Für wen Contabo passt — und für wen nicht</h2>
+  <table>
+    <thead><tr><th>Gute Wahl, wenn Sie…</th><th>Schauen Sie woanders, wenn Sie…</th></tr></thead>
+    <tbody>
+      <tr><td>Es gewohnt sind, einen Linux-Server selbst zu administrieren</td><td>Eine vollständig gemanagte, betreute Erfahrung wollen</td></tr>
+      <tr><td>Viel RAM/Speicher bei knappem Budget brauchen</td><td>Premium-24/7-Hands-on-Support inklusive brauchen</td></tr>
+      <tr><td>Selbstgehostete Tools, Staging oder mehrere kleine Sites auf einer Maschine betreiben</td><td>Ein bestimmtes gemanagtes Compliance-/SLA-Paket benötigen</td></tr>
+      <tr><td>Ein Publikum nahe einer seiner Rechenzentrumsregionen haben</td><td>Eine Region brauchen, die Contabo nicht bedient</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Das ehrliche Fazit</h2>
+  <p>Contabo verdient seinen Ruf als <strong>value-first, ressourcenreicher, unmanaged VPS</strong>-Anbieter. Wenn Sie Ihren eigenen Server betreiben können und Ihre Last von viel Speicher und Festplatte pro Euro profitiert, ist es ein sinnvoller Kandidat für die engere Auswahl. Wenn Sie gemanagten Komfort, Premium-Support oder eine Garantie wollen, dass die größte Spec der besten Erfahrung für Ihren speziellen Traffic entspricht, wägen Sie es stattdessen gegen gemanagte Alternativen ab. Wie bei jedem Hoster ist der richtige Schritt, Ihre reale Last abzubilden — Speicher zuerst, dann CPU, dann Speicherplatz, dann Region — und den kleinsten Tarif zu wählen, der sie mit Spielraum abdeckt, bei einem Anbieter, dessen Modell dazu passt, wie viel der Wartung Sie selbst übernehmen wollen.</p>
+</Article>

@@ -1,0 +1,92 @@
+---
+import Article from '../../../layouts/Article.astro';
+export const prerender = true; // force static — overrides the prerender=false string shown in a code example below
+---
+<Article
+  lang="pt"
+  slug="astro-hosting"
+  title="Como alojar um site Astro: opções estáticas e SSR"
+  description="Um guia prático para fazer deploy de um site Astro — a diferença entre a saída estática e a saída de servidor (SSR), como funcionam os adaptadores, os comandos de build, e como escolher um alojamento para cada modo."
+  cat="hosting"
+  hero="/img/astro-hosting-hero.jpg"
+  heroAlt="Código-fonte HTML com etiquetas de âncora e de elemento de lista mostradas a cores num ecrã escuro"
+  cluster="deploy"
+>
+  <p>O <strong>Astro</strong> pode entregar o seu site de duas formas muito diferentes, e a que escolher decide onde e como o aloja. Por defeito, o Astro constrói uma pasta de simples ficheiros HTML, CSS e JS — ficheiros que qualquer alojamento estático pode servir. Mas o Astro também pode correr num servidor, renderizando páginas a pedido (SSR) para coisas como autenticação, formulários ou dados por pedido. Este guia explica ambos os modos de saída, os comandos de build por detrás deles, como se encaixam os adaptadores, e como escolher um alojamento para cada um.</p>
+
+  <h2>Estático vs servidor: a decisão central</h2>
+  <p>Toda escolha de alojamento para o Astro nasce de uma pergunta: o seu site precisa de um servidor em execução no momento do pedido?</p>
+  <ul>
+    <li><strong>Estático (o modo por defeito).</strong> As páginas são renderizadas uma vez, no momento do build, em ficheiros HTML. Não há processo de servidor — carrega a pasta construída para um CDN ou alojamento estático e este serve os ficheiros. O mais rápido, o mais barato, o mais simples. Ideal para blogues, documentação, sites de marketing e a maioria dos sites de conteúdo.</li>
+    <li><strong>Servidor / SSR.</strong> As páginas são renderizadas por pedido por um processo Node (ou edge). Necessário quando o conteúdo depende do pedido: utilizadores autenticados, processamento de formulários, personalização ao momento, ou dados que têm de estar frescos a cada carregamento.</li>
+  </ul>
+  <p>Também pode misturar os dois: manter o site na sua maioria estático e optar por renderizar a pedido rotas específicas. A ideia é renderizar estaticamente onde puder, e pagar por um servidor apenas onde realmente precisar dele.</p>
+
+  <h2>Os comandos de build</h2>
+  <p>Seja qual for o modo, o fluxo de trabalho são os mesmos dois comandos — instalar, depois construir:</p>
+  <pre><code>{`# install dependencies
+npm install
+
+# produce the production build
+npm run build
+
+# preview the production build locally before deploying
+npm run preview`}</code></pre>
+  <p>Por defeito, <code>npm run build</code> escreve um site estático na pasta <code>dist/</code>. Essa pasta é todo o seu site implementável em modo estático — não há mais nada para executar.</p>
+
+  <h2>Configurar o modo de saída</h2>
+  <p>Controla o modo em <code>astro.config.mjs</code>. O estático é o modo por defeito, por isso uma configuração mínima não precisa de nada de especial. Para renderizar no servidor, adiciona um <strong>adaptador</strong> — um pequeno pacote que ensina o Astro a correr numa plataforma específica (Node, ou um runtime edge/serverless):</p>
+  <pre><code>{`// astro.config.mjs — server (SSR) output with the Node adapter
+import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
+
+export default defineConfig({
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
+});`}</code></pre>
+  <p>Com o adaptador Node standalone, <code>npm run build</code> produz um ponto de entrada de servidor que inicia como qualquer app Node:</p>
+  <pre><code>{`# after building with the Node adapter
+node ./dist/server/entry.mjs`}</code></pre>
+  <p>Se só precisa de um punhado de rotas dinâmicas, mantenha a saída estática por defeito e retire páginas individuais do prerender em vez de mudar o site inteiro para modo servidor:</p>
+  <pre><code>{`---
+// src/pages/dashboard.astro — render this page per request
+export const prerender = false;
+---`}</code></pre>
+
+  <figure>
+    <img src="/img/astro-hosting-inbody.jpg" alt="Código-fonte JavaScript com realce de sintaxe mostrado num ecrã de editor escuro" width="1280" height="720" loading="lazy" />
+    <figcaption>JavaScript num editor de código — o passo de build transforma os seus componentes Astro no HTML e JS que é implementado.</figcaption>
+  </figure>
+
+  <h2>Escolher um alojamento por modo</h2>
+  <h3>Alojamento estático</h3>
+  <p>Para a saída estática só precisa de algures onde servir o conteúdo de <code>dist/</code> por HTTPS, idealmente a partir de um CDN. As definições de build/publicação são simples:</p>
+  <pre><code>{`Build command:    npm run build
+Publish/output:   dist`}</code></pre>
+  <p>Muitas plataformas fazem isto — alojamentos estáticos geridos, armazenamento de objetos atrás de um CDN, ou um alojamento de uso geral que consiga servir uma pasta. Como não há servidor a manter vivo, o alojamento estático é barato e sem esforço de escalar. Alojar em infraestrutura europeia é uma boa escolha aqui quando o seu público ou as suas necessidades de residência de dados apontam nessa direção.</p>
+
+  <h3>Alojamento de servidor (SSR)</h3>
+  <p>O SSR precisa de um runtime que mantenha um processo vivo. Duas vias gerais:</p>
+  <ul>
+    <li><strong>Um alojamento Node / VPS.</strong> Com o adaptador Node constrói um servidor standalone e executa-o como qualquer serviço Node. Um VPS dá-lhe controlo total sobre o processo, o ambiente e a escalabilidade — útil se já executa outros serviços lá.</li>
+    <li><strong>Serverless / edge.</strong> Adaptadores específicos de plataforma empacotam a sua app para correr como funções. Menos para gerir, mas fica preso ao modelo dessa plataforma.</li>
+  </ul>
+  <p>Uma forma simples de executar o build Node no seu próprio servidor é um gestor de processos para que reinicie em caso de falha ou reinício:</p>
+  <pre><code>{`# example: keep the Astro Node server running with PM2
+npm install -g pm2
+pm2 start ./dist/server/entry.mjs --name astro-site
+pm2 save`}</code></pre>
+
+  <h2>Referência rápida</h2>
+  <table>
+    <thead><tr><th>Necessidade</th><th>Modo</th><th>O que alojar</th></tr></thead>
+    <tbody>
+      <tr><td>Blogue, documentação, marketing, conteúdo</td><td>Estático (por defeito)</td><td>A pasta <code>dist/</code> num CDN/alojamento estático</td></tr>
+      <tr><td>Na sua maioria estático, algumas rotas dinâmicas</td><td>Estático + <code>prerender = false</code> por página</td><td>Um alojamento/adaptador que suporte rotas a pedido</td></tr>
+      <tr><td>Auth, formulários, dados por pedido em todo o lado</td><td>Servidor (SSR)</td><td>Um runtime Node / VPS ou plataforma serverless</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Como decidir</h2>
+  <p>Comece estático — é o modo por defeito por uma razão: mais barato, mais rápido e mais simples de alojar. Só recorra ao adaptador de servidor quando um requisito real (estado autenticado, processamento de formulários, dados sempre frescos) obrigar à renderização por pedido, e mesmo então considere retirar apenas essas rotas do prerender em vez de correr o site inteiro num servidor. Adapte o alojamento ao modo com que acaba: um alojamento estático apoiado em CDN para os ficheiros construídos, ou um VPS com capacidade Node / plataforma serverless quando genuinamente precisar de um servidor.</p>
+</Article>

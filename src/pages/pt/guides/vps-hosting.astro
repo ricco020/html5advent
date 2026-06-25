@@ -1,0 +1,86 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="vps-hosting"
+  title="Hospedagem VPS explicada: o que é e como escolher"
+  description="O que é realmente um VPS, em que se distingue da hospedagem compartilhada e dedicada, os critérios que importam na hora de escolher e para quem é a opção certa — sem benchmarks inventados, apenas os fatos."
+  cat="hosting"
+  hero="/img/vps-hosting-hero.jpg"
+  heroAlt="Close-up de servidores de rack empilhados mostrando LEDs de status, portas USB e baias de disco em um gabinete"
+  cluster="hosting"
+>
+  <p>Um <strong>VPS</strong> — servidor privado virtual — é um servidor físico particionado em várias máquinas virtuais isoladas, cada uma com seu próprio sistema operacional, recursos garantidos e acesso root. Você obtém a maior parte do controle de uma máquina dedicada por uma fração do custo, enquanto um hipervisor mantém a sua fatia separada da de todos os outros. Este guia explica o que um VPS realmente é, como ele se compara às alternativas e os critérios concretos para avaliar qualquer provedor — para que você não precise confiar em um ranking.</p>
+
+  <h2>O que um VPS realmente é</h2>
+  <p>O software de virtualização (o <em>hipervisor</em>) divide um servidor físico potente em vários servidores virtuais. Cada VPS se comporta como sua própria máquina: inicializa seu próprio SO, tem seu próprio endereço IP e recebe uma quantidade fixa de RAM, CPU e armazenamento que os vizinhos não podem tirar de você. Esse isolamento é a diferença fundamental em relação à hospedagem compartilhada — seu desempenho já não depende do que o site ao lado está fazendo.</p>
+  <p>Como você normalmente obtém <strong>acesso root (administrador)</strong>, pode instalar qualquer pilha de software, configurar você mesmo o servidor web, executar workers em segundo plano, contêineres ou o motor de banco de dados de sua escolha — coisas que uma hospedagem compartilhada gerenciada simplesmente não permite.</p>
+
+  <h2>VPS vs compartilhado vs dedicado</h2>
+  <p>Os três níveis comuns situam-se num espectro de controle, isolamento e custo.</p>
+  <table>
+    <thead><tr><th>Tipo</th><th>Recursos</th><th>Controle</th><th>Ideal para</th></tr></thead>
+    <tbody>
+      <tr><td>Hospedagem compartilhada</td><td>Compartilhados, limites informais</td><td>Baixo — sem root, pilha fixa</td><td>Sites pequenos, blogs, sites institucionais</td></tr>
+      <tr><td>VPS</td><td>Fatia garantida (RAM/CPU/disco)</td><td>Alto — acesso root, pilha personalizada</td><td>Aplicações em crescimento, runtimes personalizados, projetos pessoais com tráfego real</td></tr>
+      <tr><td>Servidor dedicado</td><td>Uma máquina física inteira</td><td>Total — mas você gerencia tudo</td><td>Cargas pesadas e estáveis que exigem isolamento máximo</td></tr>
+    </tbody>
+  </table>
+  <p>Um VPS é o meio-termo: mais potência e liberdade do que a hospedagem compartilhada, muito mais barato e de menor manutenção do que alugar uma máquina física inteira.</p>
+
+  <h2>Gerenciado vs não gerenciado</h2>
+  <p>Esta é a escolha que mais surpreende as pessoas.</p>
+  <ul>
+    <li><strong>VPS não gerenciado</strong> — você recebe um SO nu e é o administrador de sistemas: você o atualiza, protege, configura o servidor web, monta os backups e o conserta quando ele falha. Mais barato e com flexibilidade máxima, mas pressupõe que você esteja à vontade na linha de comando.</li>
+    <li><strong>VPS gerenciado</strong> — o provedor cuida das atualizações do SO, do reforço de segurança, do monitoramento e do suporte, normalmente com um painel de controle. Custa mais, mas devolve seu tempo se você preferir não administrar um servidor.</li>
+  </ul>
+
+  <figure>
+    <img src="/img/vps-hosting-inbody.jpg" alt="Cabos de rede agrupados conectados a switches e roteadores montados em rack dentro de um gabinete de servidores" width="1280" height="853" loading="lazy" />
+    <figcaption>Um VPS não gerenciado coloca a configuração da rede, do SO e da pilha em suas mãos — conveniente se você quer controle total, mais trabalho se não quer.</figcaption>
+  </figure>
+
+  <h2>Os critérios que importam na hora de escolher</h2>
+  <p>Ignore os superlativos de marketing e compare os provedores nestas dimensões concretas.</p>
+
+  <h3>RAM e CPU</h3>
+  <p>A <strong>RAM</strong> é o que vai acabar primeiro — um banco de dados mais um servidor de aplicação mais um cache querem todos memória, e o SO também precisa da sua parte. As <strong>vCPUs</strong> (CPUs virtuais) lidam com requisições simultâneas e trabalho intensivo de CPU como processamento de imagens ou renderização no servidor. Observe a diferença entre vCPUs <em>compartilhadas/burstable</em> (boas para cargas leves e com picos) e vCPUs <em>dedicadas</em> (desempenho constante, preço mais alto).</p>
+
+  <h3>Tipo de armazenamento</h3>
+  <p>Prefira <strong>NVMe ou SSD</strong> a discos mecânicos — a velocidade do disco aparece diretamente nos tempos de consulta do banco de dados e na construção das páginas. Verifique também a quantidade: logs, uploads e o crescimento do banco de dados se acumulam mais rápido do que você imagina.</p>
+
+  <h3>Largura de banda e localização</h3>
+  <p>A «largura de banda» esconde dois números: a <strong>franquia mensal de transferência de dados</strong> e a <strong>velocidade da porta</strong>. Sites com muita mídia consomem suas cotas de transferência, então leia a política de excedente. E escolha uma <strong>região de datacenter próxima do seu público</strong> — a distância física adiciona latência a cada requisição dinâmica.</p>
+
+  <h3>Backups, escalabilidade e suporte</h3>
+  <ul>
+    <li><strong>Backups</strong> — snapshots incluídos ou um complemento pago? Backups automatizados valem o investimento.</li>
+    <li><strong>Escalabilidade</strong> — você consegue redimensionar o plano (mais RAM/CPU) sem reconstruir do zero?</li>
+    <li><strong>Suporte</strong> — os tempos de resposta importam sobretudo nos planos não gerenciados quando algo quebra às 2 da manhã.</li>
+  </ul>
+
+  <h3>Preço</h3>
+  <p>Compare o preço de <em>renovação</em>, não apenas a tarifa promocional do primeiro período, e confirme o que está incluído (backups, largura de banda, um endereço IPv4, um painel de controle). Entre os provedores que apostam numa boa relação recursos-preço, a <strong>Contabo</strong> é uma opção bem conhecida por CPU e RAM generosos a um baixo custo mensal — útil quando você quer folga sem pagar tarifas premium. Como sempre, ajuste as especificações à sua carga de trabalho real em vez de a um preço de vitrine.</p>
+
+  <h2>Prós e contras de um VPS</h2>
+  <h3>Vantagens</h3>
+  <ul>
+    <li>Recursos garantidos e isolados — sem vizinhos barulhentos.</li>
+    <li>Acesso root e pilha personalizada — instale qualquer coisa, ajuste tudo.</li>
+    <li>Muito mais barato do que um servidor dedicado, com controle semelhante.</li>
+    <li>Geralmente escalável sob demanda (redimensione o plano à medida que cresce).</li>
+  </ul>
+  <h3>Compromissos</h3>
+  <ul>
+    <li>Mais responsabilidade — um VPS não gerenciado significa que você cuida da segurança e da manutenção.</li>
+    <li>Exagero para um pequeno site estático que uma hospedagem compartilhada ou estática serviria mais barato.</li>
+    <li>Exige certa familiaridade com Linux/a linha de comando, a menos que você pague por um gerenciado.</li>
+  </ul>
+
+  <h2>Para quem é um VPS</h2>
+  <p>Um VPS é a escolha certa quando o seu projeto superou a hospedagem compartilhada mas não justifica uma máquina dedicada: uma aplicação dinâmica em crescimento, um site que precisa de uma versão específica de runtime, um projeto que executa tarefas em segundo plano ou contêineres, ou qualquer carga em que você queira controle sobre a pilha e isolamento dos demais inquilinos. Se você só mantém um pequeno site estático ou um blog de baixo tráfego, a hospedagem compartilhada ou estática costuma ser mais simples e barata.</p>
+
+  <h2>Como decidir</h2>
+  <p>Parta da sua carga de trabalho, não de uma lista dos «melhores». Estime primeiro a memória, depois a CPU, em seguida o armazenamento e a transferência. Exija uma região próxima dos seus usuários, insista em NVMe/SSD e backups acessíveis, decida se quer gerenciado ou não gerenciado, e compare os preços de renovação com especificações equivalentes. Depois de julgar os critérios por conta própria, nosso guia complementar sobre <a href="/pt/guides/best-vps-for-web-hosting">escolher o melhor VPS para um projeto web</a> percorre o dimensionamento de um plano para um projeto real.</p>
+</Article>

@@ -1,0 +1,87 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="best-cheap-vps"
+  title="VPS barato: como obter valor sem cortar no essencial"
+  description="Um guia prático para escolher um VPS barato — como ler com honestidade os planos de baixo preço, quais cortes são seguros e quais não são, e os critérios que separam o valor real de uma falsa pechincha."
+  cat="hosting"
+  hero="/img/best-cheap-vps-hero.jpg"
+  heroAlt="Close-up dos compartimentos de discos de um servidor cheios de SSDs SATA de 1,92 TB sob uma luz azul"
+  cluster="hosting"
+>
+  <p>Um <strong>VPS barato</strong> pode ser um excelente custo-benefício ou uma falsa economia — e só o preço não vai dizer qual dos dois. O objetivo não é gastar o menos possível; é obter os recursos e a confiabilidade de que o seu projeto precisa pelo menor preço honesto. Este guia explica como ler os planos de baixo custo, quais cortes são seguros e quais lhe custarão mais caro depois.</p>
+
+  <h2>Por que um VPS pode ser barato e ainda assim bom</h2>
+  <p>Um <strong>VPS</strong> (servidor privado virtual) divide uma máquina física em fatias isoladas, cada uma com RAM, CPU e armazenamento garantidos mais acesso root. Como o provedor reparte o custo do hardware entre muitos inquilinos, um VPS pode ser realmente acessível e ainda lhe dar recursos dedicados — muito mais controlo do que a hospedagem partilhada por não muito mais dinheiro. Preço baixo e bom valor não são opostos; o truque está em distinguir um plano enxuto e eficiente de um que foi esvaziado por dentro.</p>
+
+  <h2>Como ler com honestidade um plano de VPS barato</h2>
+  <p>Os planos de baixo preço muitas vezes parecem idênticos numa ficha técnica mas diferem onde importa. Verifique estes pontos antes de julgar o preço:</p>
+
+  <h3>vCPU dedicada ou burstable</h3>
+  <p>Os planos baratos vendem com frequência <strong>vCPUs partilhadas ou burstable</strong> — boas para cargas leves e pontuais, mas podem ser limitadas sob carga sustentada. Um plano um pouco mais caro com <strong>vCPUs dedicadas</strong> pode ser a verdadeira pechincha se a sua aplicação correr de forma contínua. Adapte o tipo de CPU à sua carga de trabalho, não apenas ao número de núcleos.</p>
+
+  <h3>A RAM é o recurso que se esgota primeiro</h3>
+  <p>A memória costuma ser o que se esgota primeiro sob carga, arrastando a sua aplicação com ela. Não a dimensione ao mínimo absoluto com que a plataforma «tecnicamente» funciona — deixe margem para os picos de tráfego e para o próprio sistema operativo. Um plano barato com pouca RAM é a falsa pechincha mais comum.</p>
+
+  <h3>O tipo de armazenamento, não só a quantidade</h3>
+  <p>Prefira <strong>NVMe ou SSD</strong> aos antigos discos mecânicos — a velocidade do disco aparece diretamente nas consultas à base de dados e na geração das páginas. Verifique também a quantidade, pois os registos, os uploads e o crescimento da base de dados acumulam-se. Os planos baratos por vezes anunciam muito armazenamento em discos lentos; rápido mas mais pequeno costuma servir melhor uma aplicação web.</p>
+
+  <figure>
+    <img src="/img/best-cheap-vps-inbody.jpg" alt="Pontos de luz laranja brilhantes a percorrer fios de fibra ótica agrupados sobre um fundo escuro" width="1280" height="853" loading="lazy" />
+    <figcaption>A qualidade da rede também faz parte do preço: o limite de largura de banda e a velocidade da porta decidem quanto pode servir, e a que velocidade.</figcaption>
+  </figure>
+
+  <h3>Largura de banda: limite e velocidade da porta</h3>
+  <p>Duas coisas escondem-se sob «largura de banda»: o <strong>limite mensal de transferência de dados</strong> (GB/TB que pode servir) e a <strong>velocidade da porta</strong> (a que velocidade). Os planos baratos por vezes limitam a transferência de forma estrita ou aplicam um limite de uso razoável por trás de um rótulo «ilimitado» — leia os termos, sobretudo se servir media ou downloads.</p>
+
+  <h3>O preço de renovação, não a oferta de lançamento</h3>
+  <p>O preço em destaque costuma ser um primeiro período promocional que dispara na renovação. Compare o que vai pagar <em>depois</em> da promoção, e confirme o que está incluído — backups, um endereço IPv4, um painel de controlo e a largura de banda são por vezes faturados à parte. Um plano «barato» que cobra cada extra separadamente pode acabar por custar mais do que um transparente.</p>
+
+  <h2>Cortes seguros — e cortes que não o são</h2>
+  <table>
+    <thead><tr><th>Onde poupar sem risco</th><th>No que não economizar</th></tr></thead>
+    <tbody>
+      <tr><td>Plano não gerido se estiver à vontade na linha de comandos</td><td>Margem de RAM para a sua carga de trabalho real</td></tr>
+      <tr><td>Menos vCPUs para tráfego leve ou pontual</td><td>Armazenamento NVMe/SSD em vez de discos lentos</td></tr>
+      <tr><td>Menos armazenamento se a sua pegada for pequena</td><td>Backups automatizados (uma restauração salva-o uma vez)</td></tr>
+      <tr><td>Sem painel de controlo premium se for usar a CLI</td><td>Uma região de data center perto dos seus utilizadores</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Gerido ou não gerido</h3>
+  <p>A maior poupança honesta num VPS barato é optar pelo <strong>não gerido</strong>: você corrige, protege e mantém o sistema operativo por conta própria, e o provedor cobra menos. Se está à vontade com Linux e um terminal, é dinheiro grátis. Se prefere não fazer administração de sistemas, um plano gerido custa mais mas devolve-lhe o tempo — e um servidor não gerido que negligencia é uma falsa economia de outro tipo.</p>
+
+  <h2>Uma primeira configuração sensata</h2>
+  <p>Seja qual for o provedor que escolher, uns minutos de hardening transformam um VPS barato e nu num seguro:</p>
+  <pre><code>{`# Update the system
+sudo apt update && sudo apt upgrade -y
+
+# Create a non-root user with sudo
+sudo adduser deploy
+sudo usermod -aG sudo deploy
+
+# Basic firewall: allow SSH + web only
+sudo ufw allow OpenSSH
+sudo ufw allow 80,443/tcp
+sudo ufw enable
+
+# Disable root SSH login, then reload
+# (edit /etc/ssh/sshd_config: PermitRootLogin no)
+sudo systemctl reload ssh`}</code></pre>
+  <p>A partir daí, configure as atualizações de segurança automáticas e os seus próprios backups fora do servidor para não depender de um único snapshot.</p>
+
+  <h2>Onde está o valor real</h2>
+  <p>Um VPS barato vale o que custa quando o provedor é transparente quanto aos recursos e a rede é sólida. A <strong>Contabo</strong>, por exemplo, é amplamente conhecida por oferecer CPU e RAM generosos pelo preço — o tipo de recursos-por-euro que tornam um VPS uma opção realista com um orçamento reduzido, sem que a ficha técnica esteja esvaziada. Seja o que for que escolher, avalie-o pelos critérios acima em vez do número em destaque.</p>
+
+  <h2>Para quem é</h2>
+  <ul>
+    <li><strong>Programadores e curiosos</strong> à vontade com Linux → VPS barato não gerido, controlo total, custo mais baixo.</li>
+    <li><strong>Pequenos sites e projetos paralelos</strong> → um plano de entrada com RAM suficiente e armazenamento NVMe numa região próxima.</li>
+    <li><strong>Quem prefere não gerir um servidor</strong> → gaste um pouco mais no gerido, ou pagará em tempo.</li>
+  </ul>
+
+  <h2>Como decidir</h2>
+  <p>Parta da sua carga de trabalho: estime primeiro a RAM, depois o tipo de CPU, em seguida o armazenamento e a transferência. Insista em NVMe/SSD, uma região perto dos seus utilizadores e backups automatizados ou acessíveis. Compare os preços de <em>renovação</em> em especificações equivalentes, e trate as promessas «ilimitado» suspeitosamente baratas como marketing até que os termos provem o contrário. O melhor VPS barato é o que cobre as suas necessidades reais com alguma margem — não o que mostra o número mais pequeno no banner.</p>
+</Article>

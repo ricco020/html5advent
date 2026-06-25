@@ -1,0 +1,79 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="best-hosting-for-woocommerce"
+  title="Hospedagem para uma loja WooCommerce: os requisitos que realmente importam"
+  description="Um guia prático para hospedar uma loja WooCommerce — os requisitos de desempenho, recursos e escalabilidade que realmente importam, além de como se comparam a hospedagem compartilhada, gerenciada e VPS para uma loja online."
+  cat="hosting"
+  hero="/img/best-hosting-for-woocommerce-hero.jpg"
+  heroAlt="Uma mão segurando um cartão de fidelidade vermelho diante de um portátil que exibe uma loja online com selos de desconto"
+  cluster="hosting"
+>
+  <p><strong>WooCommerce</strong> transforma o WordPress numa loja online completa, o que significa que a sua hospedagem agora tem de fazer dois trabalhos exigentes ao mesmo tempo: servir um sistema de gestão de conteúdos <em>e</em> executar uma loja transacional. Um blog tolera uma página lenta; uma loja não — um carrinho lento ou um tempo limite no pagamento custa-lhe a venda. Este guia percorre os requisitos que afetam de verdade uma loja WooCommerce, para que possa avaliar qualquer hospedagem por conta própria, em vez de confiar num ranking de marketing.</p>
+
+  <h2>Por que uma loja é mais pesada do que um blog</h2>
+  <p>Um blog WordPress típico pode colocar quase todas as páginas em cache e servi-las como HTML estático. Uma loja não pode fazer isso nas páginas que mais importam. Carrinho, pagamento, «minha conta» e qualquer visualização com sessão iniciada são <strong>dinâmicas e por utilizador</strong>, por isso contornam a cache de página e atingem o PHP e a base de dados em cada pedido. Acrescente a pesquisa de produtos, a filtragem por facetas, a lógica de cupões, as verificações de stock e as chamadas aos gateways de pagamento, e o servidor está a fazer trabalho real exatamente nas páginas onde a velocidade se converte em receita.</p>
+  <p>É por isso que uma hospedagem que parece adequada para um site institucional pode sofrer com uma loja: o gargalo passa de «consegue servir HTML rapidamente?» para «consegue executar PHP e consultas à base de dados rapidamente, para muitos compradores em simultâneo?».</p>
+
+  <h2>Os requisitos que importam</h2>
+  <p>Compare as hospedagens nestas dimensões concretas em vez de em adjetivos como «ultrarrápido».</p>
+
+  <h3>Versão do PHP e recursos</h3>
+  <p>Execute uma <strong>versão do PHP atualmente suportada</strong> — as versões mais recentes são consideravelmente mais rápidas e ainda recebem correções de segurança, enquanto as versões em fim de vida não. Para além da versão, dois limites do lado do servidor afetam diretamente as lojas WooCommerce:</p>
+  <ul>
+    <li><code>memory_limit</code> — o WooCommerce recomenda um limite de memória PHP generoso; importar produtos, gerar relatórios ou executar muitos plugins pode esgotar um limite demasiado apertado.</li>
+    <li><code>max_execution_time</code> e os limites de upload — as tarefas demoradas (importações de produtos em massa, CSV grandes) falham silenciosamente quando são demasiado baixos.</li>
+  </ul>
+  <p>Confirme que a hospedagem o deixa aumentar estes valores, idealmente por site, em vez de o prender aos valores predefinidos do compartilhado.</p>
+
+  <h3>Desempenho da base de dados</h3>
+  <p>O WooCommerce é intensivo em base de dados. Encomendas, produtos, sessões e especialmente as tabelas <code>wp_options</code> e de metadados são consultadas constantemente. Prefira uma hospedagem num MySQL ou MariaDB moderno com <strong>armazenamento NVMe/SSD</strong> — a velocidade do disco reflete-se diretamente nos tempos de consulta e, portanto, na latência do pagamento. Em catálogos maiores, a capacidade de usar o <strong>High-Performance Order Storage</strong> do WooCommerce (tabelas de encomendas dedicadas) ajuda a base de dados a escalar; é uma definição do WooCommerce, mas só compensa numa hospedagem que não esteja já carente de CPU e de I/O.</p>
+
+  <figure>
+    <img src="/img/best-hosting-for-woocommerce-inbody.jpg" alt="Uma pessoa segurando um cartão bancário enquanto digita num portátil, concluindo um pagamento online" width="1280" height="853" loading="lazy" />
+    <figcaption>O pagamento é dinâmico e por utilizador: contorna a cache de página e atinge o PHP e a base de dados em cada pedido, por isso o desempenho do servidor nesse ponto afeta diretamente a conclusão da venda.</figcaption>
+  </figure>
+
+  <h3>Margem de RAM e CPU</h3>
+  <p>A memória costuma ser o primeiro recurso a esgotar-se numa loja. Cada worker PHP que trata um pedido dinâmico consome RAM, e um pagamento muito movimentado significa vários workers ao mesmo tempo. Pouca memória e os pedidos formam fila ou são terminados; o sintoma que o comprador vê é um carrinho a rodar. A CPU importa para essas mesmas páginas dinâmicas e para o trabalho em segundo plano (cron, e-mails de encomenda, indexação da pesquisa). Dimensione ambos com margem para os picos de tráfego — uma venda relâmpago ou uma menção numa newsletter pode multiplicar os utilizadores em simultâneo em minutos.</p>
+
+  <h3>Cache bem feita</h3>
+  <p>A cache é a maior alavanca individual para a velocidade de uma loja, mas tem de ser <em>consciente da loja</em>:</p>
+  <ul>
+    <li><strong>Cache de página</strong> para as páginas de catálogo e de conteúdo — pode ser colocada em cache de forma agressiva.</li>
+    <li><strong>Exclusões de cache</strong> para o carrinho, o pagamento e as páginas de conta — estas nunca devem ser servidas desatualizadas, ou um comprador vê o carrinho de outra pessoa.</li>
+    <li><strong>Cache de objetos</strong> (Redis ou Memcached) para colocar em cache os resultados das consultas à base de dados e os objetos PHP — é o que mantém as páginas dinâmicas rápidas em escala. Verifique se a hospedagem oferece uma cache de objetos persistente.</li>
+    <li><strong>Cache de opcode</strong> (OPcache) ativada, para que o PHP compilado seja reutilizado entre pedidos.</li>
+  </ul>
+
+  <h3>SSL, segurança e considerações de PCI</h3>
+  <p>Uma loja lida com dados pessoais e encaminha pagamentos, por isso o <strong>HTTPS é obrigatório</strong>, não opcional — a maioria das hospedagens inclui certificados automatizados gratuitos, por isso confirme-o. Se recolhe os dados dos cartões no seu site, herda obrigações de PCI-DSS; usar um gateway de pagamento alojado (em que os dados do cartão são introduzidos do lado do fornecedor) mantém a maior parte dessa carga longe do seu servidor. Procure predefinições sensatas: uma firewall de aplicações web, uma análise automatizada de malware e um isolamento para que a violação de um vizinho não consiga chegar à sua loja.</p>
+
+  <h3>Backups e staging</h3>
+  <p>Uma loja online é um sistema transacional vivo — perder a tabela de encomendas é perder dinheiro e a confiança dos clientes. Exija <strong>backups diários automatizados</strong> que incluam tanto os ficheiros como a base de dados, com um restauro fácil com um clique. Um <strong>ambiente de staging</strong> é quase tão importante: as atualizações do WooCommerce, do WordPress e dos plugins podem quebrar o pagamento, por isso convém testá-las numa cópia antes de tocarem em clientes reais.</p>
+
+  <h3>Escalabilidade</h3>
+  <p>O tráfego de uma loja é irregular por natureza — lançamentos, saldos, picos sazonais. Pergunte como o plano escala: pode adicionar RAM e CPU sem reconstruir o site? Existe um caminho de upgrade claro de um plano pequeno para um maior, ou para um VPS, à medida que o catálogo e as encomendas crescem? Uma hospedagem que pode redimensionar a pedido vence uma em que crescer significa uma migração dolorosa.</p>
+
+  <h2>Compartilhado vs WordPress gerido vs VPS</h2>
+  <table>
+    <thead><tr><th>Opção</th><th>Ideal para</th><th>A ter atenção</th></tr></thead>
+    <tbody>
+      <tr><td>Hospedagem compartilhada</td><td>Uma loja acabada de criar com poucos produtos e pouco tráfego, com um orçamento apertado.</td><td>Vizinhos ruidosos, limites de CPU/processos, muitas vezes sem cache de objetos — rapidamente ultrapassada assim que as encomendas arrancam.</td></tr>
+      <tr><td>WordPress/WooCommerce gerido</td><td>Donos que querem uma cache consciente da loja, staging e atualizações tratadas por eles.</td><td>Preço mais alto; por vezes restrições de plugins ou tarifação por visita — leia os limites.</td></tr>
+      <tr><td>VPS (autogerido ou gerido)</td><td>Lojas em crescimento que precisam de RAM/CPU garantidas, configuração à medida e espaço para crescer.</td><td>É você (ou um plano gerido) que assume a administração do servidor, a afinação e a segurança.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Para quem é</h2>
+  <ul>
+    <li><strong>Em pleno lançamento, catálogo pequeno:</strong> um plano compartilhado de qualidade ou um gerido de entrada é suficiente — concentre o orçamento numa versão do PHP suportada, SSL e backups.</li>
+    <li><strong>Vendas constantes, catálogo em crescimento:</strong> passe para uma hospedagem WooCommerce gerida ou um VPS pequeno para obter uma cache de objetos, staging e recursos garantidos.</li>
+    <li><strong>Tráfego elevado, vendas relâmpago, catálogo grande:</strong> um VPS (ou superior) com CPU/RAM dedicadas, cache de objetos Redis e um caminho de escalabilidade claro — as páginas de pagamento dinâmicas precisam de margem real.</li>
+  </ul>
+
+  <h2>Como decidir</h2>
+  <p>Parta da loja, não de uma lista das «melhores hospedagens». Confirme uma versão do PHP suportada com um limite de memória generoso, armazenamento de base de dados NVMe/SSD, uma cache consciente da loja com uma cache de objetos persistente, SSL gratuito, backups automatizados de ficheiros e base de dados, um ambiente de staging e um caminho limpo para escalar. Faça corresponder esses requisitos ao seu tráfego real e ao tamanho do catálogo, e depois escolha o plano mais pequeno que os cubra com margem — poderá crescer para um VPS ou um nível superior à medida que as encomendas aumentam.</p>
+</Article>

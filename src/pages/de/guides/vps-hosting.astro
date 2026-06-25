@@ -1,0 +1,86 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="vps-hosting"
+  title="VPS-Hosting erklärt: Was es ist und wie man es auswählt"
+  description="Was ein VPS wirklich ist, wie er sich von Shared- und Dedicated-Hosting unterscheidet, welche Kriterien bei der Wahl zählen und für wen er die richtige Lösung ist — ohne erfundene Benchmarks, nur die Fakten."
+  cat="hosting"
+  hero="/img/vps-hosting-hero.jpg"
+  heroAlt="Nahaufnahme gestapelter Rack-Server mit Status-LEDs, USB-Anschlüssen und Laufwerksschächten in einem Schrank"
+  cluster="hosting"
+>
+  <p>Ein <strong>VPS</strong> — Virtual Private Server — ist ein physischer Server, der in mehrere isolierte virtuelle Maschinen aufgeteilt ist, jede mit eigenem Betriebssystem, garantierten Ressourcen und Root-Zugriff. Sie erhalten den Großteil der Kontrolle einer dedizierten Maschine zu einem Bruchteil der Kosten, während ein Hypervisor Ihren Bereich von dem aller anderen getrennt hält. Dieser Leitfaden erklärt, was ein VPS wirklich ist, wie er sich mit den Alternativen vergleicht und an welchen konkreten Kriterien sich jeder Anbieter messen lassen muss — damit Sie sich nicht auf eine Rangliste verlassen müssen.</p>
+
+  <h2>Was ein VPS wirklich ist</h2>
+  <p>Die Virtualisierungssoftware (der <em>Hypervisor</em>) teilt einen leistungsstarken physischen Server in mehrere virtuelle Server auf. Jeder VPS verhält sich wie eine eigene Maschine: Er startet sein eigenes Betriebssystem, hat seine eigene IP-Adresse und bekommt eine feste Menge an RAM, CPU und Speicher zugewiesen, die die Nachbarn Ihnen nicht wegnehmen können. Diese Isolation ist der entscheidende Unterschied zum Shared-Hosting — Ihre Leistung hängt nicht mehr davon ab, was die Seite nebenan gerade tut.</p>
+  <p>Da Sie in der Regel <strong>Root-Zugriff (Administratorrechte)</strong> erhalten, können Sie jeden Software-Stack installieren, den Webserver selbst konfigurieren, Hintergrundprozesse, Container oder die Datenbank-Engine Ihrer Wahl betreiben — Dinge, die ein verwaltetes Shared-Hosting Ihnen schlicht nicht erlaubt.</p>
+
+  <h2>VPS vs. Shared vs. Dedicated</h2>
+  <p>Die drei gängigen Stufen liegen auf einem Spektrum von Kontrolle, Isolation und Kosten.</p>
+  <table>
+    <thead><tr><th>Typ</th><th>Ressourcen</th><th>Kontrolle</th><th>Am besten geeignet für</th></tr></thead>
+    <tbody>
+      <tr><td>Shared-Hosting</td><td>Gemeinsam genutzt, informelle Grenzen</td><td>Gering — kein Root, fester Stack</td><td>Kleine Websites, Blogs, Visitenkarten-Seiten</td></tr>
+      <tr><td>VPS</td><td>Garantierter Anteil (RAM/CPU/Speicher)</td><td>Hoch — Root-Zugriff, individueller Stack</td><td>Wachsende Apps, eigene Laufzeitumgebungen, Nebenprojekte mit echtem Traffic</td></tr>
+      <tr><td>Dedicated-Server</td><td>Eine ganze physische Maschine</td><td>Vollständig — aber Sie verwalten alles</td><td>Schwere, gleichmäßige Lasten mit Bedarf an maximaler Isolation</td></tr>
+    </tbody>
+  </table>
+  <p>Ein VPS ist der Mittelweg: mehr Leistung und Freiheit als Shared-Hosting, deutlich günstiger und wartungsärmer als die Miete einer ganzen physischen Maschine.</p>
+
+  <h2>Verwaltet vs. unverwaltet</h2>
+  <p>Das ist die Entscheidung, die die meisten überrascht.</p>
+  <ul>
+    <li><strong>Unverwalteter VPS</strong> — Sie erhalten ein nacktes Betriebssystem und sind der Systemadministrator: Sie patchen es, sichern es ab, konfigurieren den Webserver, richten Backups ein und reparieren es, wenn es ausfällt. Günstiger und maximal flexibel, setzt aber voraus, dass Sie auf der Kommandozeile sicher sind.</li>
+    <li><strong>Verwalteter VPS</strong> — der Anbieter übernimmt Betriebssystem-Updates, Sicherheits-Härtung, Monitoring und Support, meist mit einem Control-Panel. Kostet mehr, kauft Ihnen aber Ihre Zeit zurück, wenn Sie lieber keinen Server betreiben möchten.</li>
+  </ul>
+
+  <figure>
+    <img src="/img/vps-hosting-inbody.jpg" alt="Gebündelte Netzwerkkabel, die an rackmontierte Switches und Router in einem Serverschrank angeschlossen sind" width="1280" height="853" loading="lazy" />
+    <figcaption>Ein unverwalteter VPS legt die Konfiguration von Netzwerk, Betriebssystem und Stack in Ihre Hände — praktisch, wenn Sie volle Kontrolle wollen, mehr Arbeit, wenn nicht.</figcaption>
+  </figure>
+
+  <h2>Die Kriterien, die bei der Wahl zählen</h2>
+  <p>Ignorieren Sie Marketing-Superlative und vergleichen Sie Anbieter stattdessen anhand dieser konkreten Dimensionen.</p>
+
+  <h3>RAM und CPU</h3>
+  <p><strong>RAM</strong> ist das, was Ihnen zuerst ausgeht — eine Datenbank plus ein Anwendungsserver plus ein Cache wollen alle Speicher, und das Betriebssystem braucht ebenfalls seinen Anteil. <strong>vCPUs</strong> (virtuelle CPUs) bewältigen gleichzeitige Anfragen und CPU-lastige Arbeit wie Bildverarbeitung oder serverseitiges Rendering. Achten Sie auf den Unterschied zwischen <em>geteilten/burstbaren</em> vCPUs (gut für sporadische leichte Lasten) und <em>dedizierten</em> vCPUs (gleichmäßige Leistung, höherer Preis).</p>
+
+  <h3>Speichertyp</h3>
+  <p>Bevorzugen Sie <strong>NVMe oder SSD</strong> gegenüber mechanischen Festplatten — die Festplattengeschwindigkeit zeigt sich direkt in Datenbank-Abfragezeiten und Seitenaufbau. Prüfen Sie auch die Menge: Logs, Uploads und das Wachstum der Datenbank summieren sich schneller, als man erwartet.</p>
+
+  <h3>Bandbreite und Standort</h3>
+  <p>„Bandbreite" verbirgt zwei Zahlen: das monatliche <strong>Datentransfer-Kontingent</strong> und die <strong>Port-Geschwindigkeit</strong>. Medienlastige Websites verbrauchen ihre Transfer-Kontingente, lesen Sie also die Übernutzungs-Richtlinie. Und wählen Sie eine <strong>Rechenzentrumsregion nahe Ihrer Zielgruppe</strong> — die physische Entfernung fügt jeder dynamischen Anfrage Latenz hinzu.</p>
+
+  <h3>Backups, Skalierung und Support</h3>
+  <ul>
+    <li><strong>Backups</strong> — inkludierte Snapshots oder ein kostenpflichtiges Add-on? Automatisierte Backups sind das Geld wert.</li>
+    <li><strong>Skalierung</strong> — können Sie den Tarif (mehr RAM/CPU) anpassen, ohne von Grund auf neu aufzubauen?</li>
+    <li><strong>Support</strong> — Reaktionszeiten zählen vor allem bei unverwalteten Tarifen, wenn um 2 Uhr nachts etwas kaputtgeht.</li>
+  </ul>
+
+  <h3>Preis</h3>
+  <p>Vergleichen Sie den <em>Verlängerungspreis</em>, nicht nur den werblichen Erstlaufzeit-Tarif, und prüfen Sie, was enthalten ist (Backups, Bandbreite, eine IPv4-Adresse, ein Control-Panel). Unter den Anbietern, die auf ein starkes Verhältnis von Ressourcen zu Preis setzen, ist <strong>Contabo</strong> eine bekannte Option für großzügige CPU und RAM zu niedrigen monatlichen Kosten — nützlich, wenn Sie Spielraum wollen, ohne Premium-Tarife zu zahlen. Passen Sie wie immer die Spezifikationen an Ihre echte Arbeitslast an und nicht an einen Schaufensterpreis.</p>
+
+  <h2>Vor- und Nachteile eines VPS</h2>
+  <h3>Vorteile</h3>
+  <ul>
+    <li>Garantierte, isolierte Ressourcen — keine lauten Nachbarn.</li>
+    <li>Root-Zugriff und individueller Stack — alles installieren, alles feinjustieren.</li>
+    <li>Deutlich günstiger als ein Dedicated-Server, bei ähnlicher Kontrolle.</li>
+    <li>Meist auf Abruf skalierbar (Tarif anpassen, während Sie wachsen).</li>
+  </ul>
+  <h3>Kompromisse</h3>
+  <ul>
+    <li>Mehr Verantwortung — ein unverwalteter VPS bedeutet, dass Sie sich um Sicherheit und Wartung kümmern.</li>
+    <li>Überdimensioniert für eine winzige statische Website, die Shared- oder statisches Hosting günstiger ausliefern würde.</li>
+    <li>Erfordert etwas Vertrautheit mit Linux/der Kommandozeile, es sei denn, Sie zahlen für verwaltetes Hosting.</li>
+  </ul>
+
+  <h2>Für wen ein VPS geeignet ist</h2>
+  <p>Ein VPS ist die richtige Wahl, wenn Ihr Projekt dem Shared-Hosting entwachsen ist, aber keine dedizierte Maschine rechtfertigt: eine wachsende dynamische App, eine Website, die eine bestimmte Laufzeitversion benötigt, ein Projekt mit Hintergrundjobs oder Containern, oder jede Last, bei der Sie Kontrolle über den Stack und Isolation von anderen Mietern wollen. Wenn Sie nur eine kleine statische Website oder einen Blog mit geringem Traffic betreiben, ist Shared- oder statisches Hosting in der Regel einfacher und günstiger.</p>
+
+  <h2>Wie man entscheidet</h2>
+  <p>Gehen Sie von Ihrer Arbeitslast aus, nicht von einer „Bestenliste". Schätzen Sie zuerst den Speicher, dann die CPU, dann Speicherplatz und Transfer. Fordern Sie eine Region nahe Ihren Nutzern, bestehen Sie auf NVMe/SSD und bezahlbaren Backups, entscheiden Sie, ob Sie verwaltetes oder unverwaltetes Hosting wollen, und vergleichen Sie Verlängerungspreise bei gleichwertigen Spezifikationen. Sobald Sie die Kriterien selbst beurteilt haben, führt unser begleitender Leitfaden zur <a href="/de/guides/best-vps-for-web-hosting">Wahl des besten VPS für ein Webprojekt</a> durch die Dimensionierung eines Tarifs für ein reales Projekt.</p>
+</Article>

@@ -1,0 +1,79 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="best-hosting-for-woocommerce"
+  title="Alojamiento para una tienda WooCommerce: los requisitos que realmente importan"
+  description="Una guía práctica para alojar una tienda WooCommerce — los requisitos de rendimiento, recursos y escalabilidad que de verdad importan, además de cómo se comparan el alojamiento compartido, gestionado y VPS para una tienda online."
+  cat="hosting"
+  hero="/img/best-hosting-for-woocommerce-hero.jpg"
+  heroAlt="Una mano sosteniendo una tarjeta de fidelización roja frente a un portátil que muestra una tienda online con etiquetas de descuento"
+  cluster="hosting"
+>
+  <p><strong>WooCommerce</strong> convierte WordPress en una tienda online completa, lo que significa que tu alojamiento ahora tiene que hacer dos trabajos exigentes a la vez: servir un sistema de gestión de contenidos <em>y</em> hacer funcionar una tienda transaccional. Un blog puede tolerar una página lenta; una tienda no — un carrito perezoso o un tiempo de espera al pagar te cuesta la venta. Esta guía repasa los requisitos que afectan de verdad a una tienda WooCommerce para que puedas juzgar cualquier alojamiento por ti mismo, en lugar de fiarte de un ranking de marketing.</p>
+
+  <h2>Por qué una tienda es más pesada que un blog</h2>
+  <p>Un blog típico de WordPress puede cachear casi todas las páginas y servirlas como HTML estático. Una tienda no puede hacer eso con las páginas que más importan. El carrito, el pago, «mi cuenta» y cualquier vista con sesión iniciada son <strong>dinámicas y por usuario</strong>, así que saltan el caché de página y golpean PHP y la base de datos en cada petición. Añade la búsqueda de productos, el filtrado por facetas, la lógica de cupones, las comprobaciones de stock y las llamadas a las pasarelas de pago, y el servidor está haciendo trabajo real en las páginas exactas donde la velocidad se convierte en ingresos.</p>
+  <p>Por eso un alojamiento que parece correcto para un sitio de presentación puede sufrir con una tienda: el cuello de botella pasa de «¿puede servir HTML rápido?» a «¿puede ejecutar PHP y consultas de base de datos rápido, para muchos compradores simultáneos?».</p>
+
+  <h2>Los requisitos que importan</h2>
+  <p>Compara los alojamientos en estas dimensiones concretas en lugar de en adjetivos como «ultrarrápido».</p>
+
+  <h3>Versión de PHP y recursos</h3>
+  <p>Ejecuta una <strong>versión de PHP actualmente soportada</strong> — las versiones más nuevas son notablemente más rápidas y siguen recibiendo parches de seguridad, mientras que las versiones que han llegado al fin de su vida no. Más allá de la versión, dos límites del lado del servidor afectan directamente a las tiendas WooCommerce:</p>
+  <ul>
+    <li><code>memory_limit</code> — WooCommerce recomienda un límite de memoria PHP generoso; importar productos, generar informes o ejecutar muchos plugins puede agotar uno demasiado ajustado.</li>
+    <li><code>max_execution_time</code> y los límites de subida — las tareas largas (importaciones masivas de productos, CSV grandes) fallan en silencio cuando son demasiado bajos.</li>
+  </ul>
+  <p>Confirma que el alojamiento te deja subir estos valores, idealmente por sitio, en lugar de encerrarte en los valores por defecto del compartido.</p>
+
+  <h3>Rendimiento de la base de datos</h3>
+  <p>WooCommerce hace un uso intensivo de la base de datos. Los pedidos, los productos, las sesiones y especialmente las tablas <code>wp_options</code> y de metadatos se consultan constantemente. Prefiere un alojamiento con un MySQL o MariaDB moderno con <strong>almacenamiento NVMe/SSD</strong> — la velocidad del disco se nota directamente en los tiempos de consulta y, por tanto, en la latencia del pago. En catálogos más grandes, la capacidad de usar el <strong>almacenamiento de pedidos de alto rendimiento</strong> de WooCommerce (tablas de pedidos dedicadas) ayuda a que la base de datos escale; es un ajuste de WooCommerce, pero solo rinde en un alojamiento que no esté ya falto de CPU y de E/S.</p>
+
+  <figure>
+    <img src="/img/best-hosting-for-woocommerce-inbody.jpg" alt="Una persona sosteniendo una tarjeta bancaria mientras teclea en un portátil, completando un pago online" width="1280" height="853" loading="lazy" />
+    <figcaption>El pago es dinámico y por usuario: salta el caché de página y golpea PHP y la base de datos en cada petición, así que el rendimiento del servidor en ese punto afecta directamente a que la venta se complete.</figcaption>
+  </figure>
+
+  <h3>Margen de RAM y CPU</h3>
+  <p>La memoria suele ser el primer recurso que se agota en una tienda. Cada worker de PHP que atiende una petición dinámica consume RAM, y un pago muy concurrido significa varios workers a la vez. Demasiada poca memoria y las peticiones se encolan o mueren; el síntoma que ve el comprador es un carrito que da vueltas. La CPU importa para esas mismas páginas dinámicas y para el trabajo en segundo plano (cron, correos de pedidos, indexación de búsqueda). Dimensiona ambos con margen para los picos de tráfico — una venta flash o una mención en una newsletter puede multiplicar los usuarios simultáneos en minutos.</p>
+
+  <h3>Un caché bien hecho</h3>
+  <p>El caché es la mayor palanca individual para la velocidad de una tienda, pero tiene que ser <em>consciente de la tienda</em>:</p>
+  <ul>
+    <li><strong>Caché de página</strong> para las páginas de catálogo y de contenido — bien cachear de forma agresiva.</li>
+    <li><strong>Exclusiones de caché</strong> para el carrito, el pago y las páginas de cuenta — estas nunca deben servirse caducadas, o un comprador verá el carrito de otra persona.</li>
+    <li><strong>Caché de objetos</strong> (Redis o Memcached) para cachear los resultados de las consultas a la base de datos y los objetos PHP — esto es lo que mantiene rápidas las páginas dinámicas a escala. Comprueba si el alojamiento ofrece un caché de objetos persistente.</li>
+    <li><strong>Caché de opcode</strong> (OPcache) activado, para que el PHP compilado se reutilice entre peticiones.</li>
+  </ul>
+
+  <h3>SSL, seguridad y consideraciones PCI</h3>
+  <p>Una tienda maneja datos personales y enruta pagos, así que el <strong>HTTPS es obligatorio</strong>, no opcional — la mayoría de los alojamientos incluyen certificados automatizados gratuitos, así que confírmalo. Si recoges los datos de las tarjetas en tu sitio, heredas obligaciones PCI-DSS; usar una pasarela de pago alojada (donde los datos de la tarjeta se introducen del lado del proveedor) mantiene la mayor parte de esa carga fuera de tu servidor. Busca valores por defecto sensatos: un cortafuegos de aplicaciones web, un análisis automatizado de malware y un aislamiento para que una brecha de un vecino no pueda llegar a tu tienda.</p>
+
+  <h3>Copias de seguridad y entorno de pruebas</h3>
+  <p>Una tienda online es un sistema transaccional vivo — perder la tabla de pedidos es perder dinero y la confianza de los clientes. Exige <strong>copias de seguridad diarias automatizadas</strong> que incluyan tanto los archivos como la base de datos, con una restauración fácil de un clic. Un <strong>entorno de pruebas (staging)</strong> es casi igual de importante: las actualizaciones de WooCommerce, WordPress y los plugins pueden romper el pago, así que querrás probarlas en una copia antes de que toquen a clientes reales.</p>
+
+  <h3>Escalabilidad</h3>
+  <p>El tráfico de una tienda es irregular por naturaleza — lanzamientos, rebajas, picos estacionales. Pregunta cómo escala el plan: ¿puedes añadir RAM y CPU sin reconstruir el sitio? ¿Hay un camino de mejora claro de un plan pequeño a uno mayor, o a un VPS, a medida que crecen el catálogo y los pedidos? Un alojamiento que puedes redimensionar bajo demanda supera a uno donde crecer implica una migración dolorosa.</p>
+
+  <h2>Compartido vs WordPress gestionado vs VPS</h2>
+  <table>
+    <thead><tr><th>Opción</th><th>Ideal para</th><th>A tener en cuenta</th></tr></thead>
+    <tbody>
+      <tr><td>Alojamiento compartido</td><td>Una tienda recién creada con pocos productos y poco tráfico, con un presupuesto ajustado.</td><td>Vecinos ruidosos, límites de CPU/procesos, a menudo sin caché de objetos — se queda corto rápido en cuanto despegan los pedidos.</td></tr>
+      <tr><td>WordPress/WooCommerce gestionado</td><td>Dueños que quieren un caché consciente de la tienda, entorno de pruebas y actualizaciones gestionadas por ellos.</td><td>Precio más alto; a veces restricciones de plugins o tarificación por visita — lee los límites.</td></tr>
+      <tr><td>VPS (autogestionado o gestionado)</td><td>Tiendas en crecimiento que necesitan RAM/CPU garantizadas, configuración a medida y espacio para crecer.</td><td>Tú (o un plan gestionado) asumes la administración del servidor, el ajuste y la seguridad.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Para quién es</h2>
+  <ul>
+    <li><strong>Recién lanzando, catálogo pequeño:</strong> un plan compartido de calidad o un gestionado de entrada basta — concentra tu presupuesto en una versión de PHP soportada, SSL y copias de seguridad.</li>
+    <li><strong>Ventas constantes, catálogo en crecimiento:</strong> pasa a un alojamiento WooCommerce gestionado o a un VPS pequeño para obtener un caché de objetos, entorno de pruebas y recursos garantizados.</li>
+    <li><strong>Tráfico alto, ventas flash, catálogo grande:</strong> un VPS (o superior) con CPU/RAM dedicadas, caché de objetos Redis y un camino de escalado claro — las páginas de pago dinámicas necesitan margen real.</li>
+  </ul>
+
+  <h2>Cómo decidir</h2>
+  <p>Parte de la tienda, no de una lista de «mejores alojamientos». Confirma una versión de PHP soportada con un límite de memoria generoso, almacenamiento de base de datos NVMe/SSD, un caché consciente de la tienda con un caché de objetos persistente, SSL gratuito, copias de seguridad automatizadas de archivos y base de datos, un entorno de pruebas y un camino limpio para escalar. Haz coincidir esos requisitos con tu tráfico real y el tamaño de tu catálogo, y luego elige el plan más pequeño que los cubra con margen — podrás crecer hacia un VPS o un nivel superior a medida que suban los pedidos.</p>
+</Article>

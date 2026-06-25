@@ -1,0 +1,148 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="best-hosting-for-laravel"
+  title="Alojar una aplicación Laravel: VPS, requisitos y despliegue"
+  description="Una guía práctica para alojar una aplicación Laravel — por qué un VPS suele ser la opción adecuada, los requisitos de servidor que importan (PHP, extensiones, workers de cola, planificador) y un recorrido de despliegue real con Composer, .env, Nginx y Supervisor."
+  cat="hosting"
+  hero="/img/best-hosting-for-laravel-hero.jpg"
+  heroAlt="Un desarrollador con auriculares trabajando en un escritorio frente a un monitor lleno de código, con código proyectado en la pared detrás"
+  cluster="hosting"
+>
+  <p><strong>Laravel</strong> es un framework de aplicaciones PHP completo, no un conjunto de páginas que subes por FTP. Espera un entorno de ejecución real: un PHP reciente, varias extensiones, un directorio de almacenamiento con permiso de escritura, tareas programadas y — para cualquier cosa no trivial — workers de cola en segundo plano. Por eso un alojamiento compartido básico a menudo te pone trabas, y por eso un <strong>VPS</strong> suele ser el hogar adecuado para una aplicación Laravel. Esta guía cubre lo que el servidor realmente necesita y recorre un despliegue real.</p>
+
+  <h2>Por qué un VPS le va bien a Laravel</h2>
+  <p>El alojamiento compartido está pensado para «soltar archivos en una raíz web». Laravel quiere más que eso: acceso SSH para ejecutar <code>composer</code> y <code>artisan</code>, la capacidad de apuntar el servidor web al directorio <code>public/</code>, un proceso de larga duración para vaciar la cola y una entrada cron para el planificador. Un VPS te da <strong>acceso root, RAM y CPU garantizadas y control total del stack</strong> — exactamente lo que requieren esas necesidades. Una plataforma gestionada también puede servir, pero un VPS es el término medio más flexible una vez que una aplicación tiene colas, una base de datos y una caché.</p>
+
+  <h2>Requisitos del servidor</h2>
+  <h3>PHP y extensiones</h3>
+  <p>Ejecuta una <strong>versión de PHP actualmente soportada</strong> que coincida con tu versión de Laravel — consulta la documentación del framework para el mínimo exacto. Laravel necesita un conjunto estándar de extensiones PHP activadas; en un VPS Debian/Ubuntu normalmente se instalan juntas:</p>
+  <pre><code>{`# Ubuntu/Debian: PHP-FPM + the extensions Laravel expects
+sudo apt install -y php-fpm php-cli php-mbstring php-xml \\
+  php-bcmath php-curl php-mysql php-zip php-gd php-intl
+
+# Composer (dependency manager)
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer`}</code></pre>
+  <p>Los nombres exactos de los paquetes varían según la distribución, pero las extensiones a confirmar son <code>mbstring</code>, <code>xml</code>, <code>bcmath</code>, <code>curl</code>, el controlador de base de datos (<code>pdo_mysql</code> o <code>pdo_pgsql</code>), <code>zip</code> y <code>openssl</code>. Si falta alguna, suele aparecer como un error claro durante <code>composer install</code> o al arrancar.</p>
+
+  <h3>Base de datos, caché y backend de cola</h3>
+  <p>La mayoría de las aplicaciones Laravel se emparejan con <strong>MySQL/MariaDB o PostgreSQL</strong>. Para cualquier cosa que use colas, sesiones o caché a escala, añade <strong>Redis</strong> — sirve a la vez como caché rápida, almacén de sesiones y driver de cola. Asegúrate de que el VPS tenga RAM suficiente para la base de datos y Redis junto a los workers de PHP-FPM; la memoria es el recurso que más probablemente agotarás.</p>
+
+  <h3>Permisos de almacenamiento</h3>
+  <p>Laravel escribe en dos directorios, <code>storage/</code> y <code>bootstrap/cache/</code>. El usuario del servidor web (a menudo <code>www-data</code>) debe poder escribir en ellos, o tendrás errores de permisos que parecen fallos de la aplicación:</p>
+  <pre><code>{`sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R ug+rwX storage bootstrap/cache`}</code></pre>
+
+  <figure>
+    <img src="/img/best-hosting-for-laravel-inbody.jpg" alt="Primer plano de una pantalla que muestra código con resaltado de sintaxis con funciones y condicionales" width="1280" height="720" loading="lazy" />
+    <figcaption>Un despliegue de Laravel es una secuencia de comandos repetible — instalar dependencias, cachear configuración y rutas, ejecutar migraciones — en lugar de subir archivos a mano.</figcaption>
+  </figure>
+
+  <h2>Recorrido del despliegue</h2>
+  <h3>1. Obtener el código e instalar dependencias</h3>
+  <p>Clona el repositorio en el servidor y luego instala las dependencias de producción. Las opciones de abajo omiten los paquetes de desarrollo y construyen un autoloader optimizado:</p>
+  <pre><code>{`git clone https://github.com/you/your-app.git /var/www/app
+cd /var/www/app
+composer install --no-dev --optimize-autoloader`}</code></pre>
+
+  <h3>2. Configurar el entorno</h3>
+  <p>Laravel lee la configuración desde un archivo <code>.env</code> que <strong>nunca se versiona en git</strong>. Copia el ejemplo, genera la clave de la aplicación y rellena los valores reales:</p>
+  <pre><code>{`cp .env.example .env
+php artisan key:generate`}</code></pre>
+  <p>Un <code>.env</code> de producción mínimo se ve así — pon <code>APP_DEBUG</code> en false para que los errores no se filtren a los visitantes:</p>
+  <pre><code>{`APP_NAME="Your App"
+APP_ENV=production
+APP_KEY=base64:...generated...
+APP_DEBUG=false
+APP_URL=https://yourapp.com
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=yourapp
+DB_USERNAME=yourapp
+DB_PASSWORD=change-me
+
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+REDIS_HOST=127.0.0.1`}</code></pre>
+
+  <h3>3. Migrar y cachear para producción</h3>
+  <p>Ejecuta las migraciones de base de datos y luego construye la configuración, las rutas y las vistas cacheadas de Laravel. Cachear esto es lo que hace rápido al framework en producción — pero recuerda reconstruirlas en cada despliegue, ya que congelan el estado actual:</p>
+  <pre><code>{`php artisan migrate --force
+
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache`}</code></pre>
+
+  <h3>4. Apuntar Nginx a public/</h3>
+  <p>La raíz de documentos del servidor web debe ser el directorio <code>public/</code> — nunca la raíz del proyecto, o expondrías <code>.env</code> y los archivos fuente. Un bloque de servidor Nginx + PHP-FPM estándar:</p>
+  <pre><code>{`server {
+    listen 80;
+    server_name yourapp.com;
+    root /var/www/app/public;
+
+    index index.php;
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \\.php$ {
+        fastcgi_pass unix:/run/php/php-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\\.(?!well-known).* {
+        deny all;
+    }
+}`}</code></pre>
+  <p>Añade HTTPS con un certificado automatizado gratuito (la mayoría de los alojamientos y herramientas como Certbot lo convierten en una sola línea) — una aplicación de producción siempre debería servirse sobre TLS.</p>
+
+  <h3>5. Ejecutar el worker de cola con Supervisor</h3>
+  <p>Los trabajos en segundo plano (correos, notificaciones, exportaciones) se ejecutan a través de un <strong>worker de cola</strong>, un proceso de larga duración que debe sobrevivir a caídas y reinicios. No ejecutes <code>php artisan queue:work</code> a mano en una sesión SSH — usa un gestor de procesos como <strong>Supervisor</strong> para mantenerlo vivo:</p>
+  <pre><code>{`# /etc/supervisor/conf.d/app-worker.conf
+[program:app-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/app/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/app/storage/logs/worker.log
+stopwaitsecs=3600`}</code></pre>
+  <pre><code>{`sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start app-worker:*`}</code></pre>
+
+  <h3>6. Programar el planificador</h3>
+  <p>El planificador de tareas de Laravel se impulsa con una sola entrada cron que se ejecuta cada minuto; Laravel mismo decide qué tareas tocan. Añádela al crontab del usuario de despliegue:</p>
+  <pre><code>{`* * * * * cd /var/www/app && php artisan schedule:run >> /dev/null 2>&1`}</code></pre>
+
+  <h2>Dimensionar el VPS</h2>
+  <table>
+    <thead><tr><th>Perfil de la aplicación</th><th>Lo que necesita</th></tr></thead>
+    <tbody>
+      <tr><td>Aplicación pequeña, tráfico ligero</td><td>VPS de entrada: un par de GB de RAM, almacenamiento NVMe, 1–2 vCPU — PHP-FPM más una base de datos pequeña.</td></tr>
+      <tr><td>Colas + Redis + base de datos</td><td>Más margen de RAM para que Redis, la base de datos y varios procesos de PHP-FPM y workers convivan cómodamente.</td></tr>
+      <tr><td>Tráfico más alto / trabajos pesados</td><td>vCPU dedicadas para carga sostenida, más procesos workers, espacio para escalar; considera separar la base de datos más adelante.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Para quién es</h2>
+  <ul>
+    <li><strong>Prefiere no gestionar un servidor:</strong> una plataforma gestionada o un VPS gestionado se encarga del parcheo y la supervisión de procesos por ti, a un precio más alto.</li>
+    <li><strong>Cómodo en la línea de comandos:</strong> un VPS no gestionado es más barato y totalmente flexible — tú eres dueño de la configuración de PHP, Nginx, Supervisor y cron mostrada arriba.</li>
+    <li><strong>Aplicación en crecimiento con colas y caché:</strong> un VPS con RAM/CPU garantizadas y Redis es el ajuste natural; dimensiona primero la memoria, luego la CPU y después el almacenamiento.</li>
+  </ul>
+
+  <h2>Cómo decidir</h2>
+  <p>Parte de lo que Laravel necesita para funcionar bien: acceso SSH, un PHP soportado con las extensiones adecuadas, una base de datos y (para colas/caché) Redis, almacenamiento con permiso de escritura, un worker de cola bajo Supervisor y un cron de una línea para el planificador. Un VPS te da todo eso con recursos garantizados y un camino claro para escalar — haz coincidir el plan con tu tráfico y tu carga de trabajos en segundo plano, y elige el más pequeño que lo cubra con margen.</p>
+</Article>

@@ -1,0 +1,77 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="managed-wordpress-hosting"
+  title="Hospedagem WordPress gerenciada: o que é e para quem serve"
+  description="O que a hospedagem WordPress gerenciada inclui, como se diferencia da hospedagem compartilhada genérica e de um VPS autogerenciado, suas reais vantagens e desvantagens, e os tipos de donos de sites a quem realmente convém — sem preços ou rankings inventados."
+  cat="hosting"
+  hero="/img/managed-wordpress-hosting-hero.jpg"
+  heroAlt="Um MacBook Air sobre uma mesa de madeira exibindo o painel de administração do WordPress, ao lado de um telefone, um caderno e um café"
+  cluster="hosting"
+>
+  <p>A <strong>hospedagem WordPress gerenciada</strong> é uma hospedagem ajustada especificamente para o WordPress, na qual o provedor cuida da manutenção técnica — configuração do servidor, atualizações, cache, segurança e backups — para que você possa se concentrar no seu conteúdo em vez de na sua infraestrutura. Custa mais do que a hospedagem compartilhada genérica e você abre mão de alguma flexibilidade, mas para muitos donos de sites é uma troca justa. Este guia explica exatamente o que está incluído, como se compara às alternativas e a quem realmente serve.</p>
+
+  <h2>O que «gerenciada» realmente inclui</h2>
+  <p>Na hospedagem genérica, o WordPress é apenas mais um aplicativo que você instala; na hospedagem WordPress gerenciada, todo o ambiente é construído em torno dele. O pacote exato varia conforme o provedor, mas normalmente cobre:</p>
+  <ul>
+    <li><strong>Servidores ajustados para o WordPress</strong> — o servidor web, a versão do PHP e o banco de dados são configurados para o WordPress de fábrica.</li>
+    <li><strong>Atualizações automáticas do núcleo</strong> — e muitas vezes de plugins/temas — aplicadas por você.</li>
+    <li><strong>Cache integrado</strong> — no lado do servidor e às vezes uma CDN, para que você não precise montar uma pilha de cache sozinho.</li>
+    <li><strong>Backups automatizados</strong> — geralmente diários, com restauração em um clique.</li>
+    <li><strong>Segurança voltada ao WordPress</strong> — varredura de malware, regras de firewall e reforço voltados aos vetores de ataque comuns do WordPress.</li>
+    <li><strong>Ambientes de teste (staging)</strong> — uma cópia do seu site para testar mudanças antes de publicá-las.</li>
+    <li><strong>Suporte especializado</strong> — equipes de ajuda que conhecem o WordPress, não apenas servidores genéricos.</li>
+  </ul>
+  <p>O fio condutor: o trabalho de administração de sistemas que um site WordPress auto-hospedado exige é feito por você.</p>
+
+  <figure>
+    <img src="/img/managed-wordpress-hosting-inbody.jpg" alt="Uma pessoa digitando em um laptop que mostra o editor do WordPress «Adicionar novo post» com um rascunho de postagem de blog" width="1280" height="853" loading="lazy" />
+    <figcaption>A hospedagem gerenciada é feita para que você passe seu tempo no editor do WordPress — e não configurando servidores, cache ou backups.</figcaption>
+  </figure>
+
+  <h2>WordPress gerenciado em comparação com as alternativas</h2>
+  <table>
+    <thead><tr><th>Opção</th><th>Quem mantém a infraestrutura</th><th>Flexibilidade</th><th>Esforço para você</th></tr></thead>
+    <tbody>
+      <tr><td>Hospedagem compartilhada genérica</td><td>Você (lado WordPress), o host (servidor)</td><td>Moderada — instale o que o host permitir</td><td>Você gerencia atualizações, cache, backups</td></tr>
+      <tr><td>WordPress gerenciado</td><td>O provedor, de ponta a ponta</td><td>Menor — apenas WordPress, alguns plugins restritos</td><td>Mínimo — concentre-se no conteúdo</td></tr>
+      <tr><td>VPS autogerenciado</td><td>Você, inteiramente</td><td>Máxima — qualquer pilha, qualquer software</td><td>Alto — você é o administrador de sistemas</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Prós e contras</h2>
+  <h3>Vantagens</h3>
+  <ul>
+    <li><strong>Menos manutenção</strong> — atualizações, backups e segurança tratados por você.</li>
+    <li><strong>Desempenho pronto para uso</strong> — cache e servidores ajustados ao WordPress sem configuração manual.</li>
+    <li><strong>Suporte especializado</strong> — equipe que entende especificamente de WordPress.</li>
+    <li><strong>Mudanças mais seguras</strong> — os ambientes de teste e as restaurações em um clique reduzem o risco de quebrar seu site no ar.</li>
+  </ul>
+  <h3>Contrapartidas</h3>
+  <ul>
+    <li><strong>Preço mais alto</strong> do que a hospedagem compartilhada genérica para recursos comparáveis.</li>
+    <li><strong>Menos flexibilidade</strong> — roda apenas WordPress, e alguns provedores restringem ou proíbem certos plugins.</li>
+    <li><strong>Limites de recursos e tráfego</strong> — os planos gerenciados costumam ser medidos por visitas ou armazenamento; crescer pode exigir subir de nível.</li>
+    <li><strong>Sensação de dependência</strong> — a comodidade vem de ceder o controle do ambiente subjacente.</li>
+  </ul>
+
+  <h2>Para quem serve</h2>
+  <p><strong>É uma boa escolha se você:</strong></p>
+  <ul>
+    <li>Administra um site WordPress focado em conteúdo (um blog, um site de empresa ou uma pequena loja) e quer dedicar seu tempo ao conteúdo, não aos servidores.</li>
+    <li>Não quer gerenciar você mesmo as atualizações, o cache, a segurança e os backups.</li>
+    <li>Valoriza o suporte específico para WordPress e a rede de segurança do staging e das restaurações fáceis.</li>
+    <li>Está disposto a pagar um valor maior para se livrar do peso da manutenção.</li>
+  </ul>
+  <p><strong>Provavelmente não é a escolha certa se você:</strong></p>
+  <ul>
+    <li>Precisa rodar software além do WordPress — um aplicativo sob medida, um CMS que não seja WordPress, serviços em segundo plano ou sua própria pilha. Um <a href="/guides/vps-hosting">VPS</a> lhe dá essa liberdade.</li>
+    <li>Quer controle máximo sobre o servidor e não se importa em fazer o trabalho de administração de sistemas.</li>
+    <li>Tem um orçamento apertado e se sente à vontade mantendo o WordPress você mesmo em uma hospedagem genérica mais barata.</li>
+  </ul>
+
+  <h2>Como decidir</h2>
+  <p>Pese a comodidade contra o controle e o custo. Se o WordPress é todo o seu projeto e seu tempo é mais bem empregado escrevendo ou tocando um negócio do que aplicando patches em servidores, a hospedagem WordPress gerenciada se paga sozinha. Se você precisa de mais do que WordPress, quer controle total, ou quer manter os custos baixos fazendo a manutenção você mesmo, um <a href="/guides/vps-hosting">VPS</a> autogerenciado — onde provedores focados em uma boa relação recursos-preço, como a <strong>Contabo</strong>, oferecem CPU e RAM generosas a um baixo custo mensal — lhe dá a flexibilidade de rodar o WordPress (e qualquer outra coisa) exatamente como quiser. Seja qual for sua inclinação, ajuste a escolha à parte da infraestrutura que você realmente quer gerenciar.</p>
+</Article>

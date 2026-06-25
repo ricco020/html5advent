@@ -1,0 +1,148 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="best-hosting-for-laravel"
+  title="Hospedar uma aplicação Laravel: VPS, requisitos e implantação"
+  description="Um guia prático para hospedar uma aplicação Laravel — por que um VPS costuma ser a escolha certa, os requisitos de servidor que importam (PHP, extensões, workers de fila, agendador) e um percurso de implantação real com Composer, .env, Nginx e Supervisor."
+  cat="hosting"
+  hero="/img/best-hosting-for-laravel-hero.jpg"
+  heroAlt="Um programador com auscultadores a trabalhar numa secretária diante de um monitor cheio de código, com código projetado na parede atrás"
+  cluster="hosting"
+>
+  <p><strong>Laravel</strong> é um framework de aplicações PHP completo, não um conjunto de páginas que se carrega por FTP. Espera um ambiente de execução real: um PHP recente, várias extensões, um diretório de armazenamento com permissão de escrita, tarefas agendadas e — para qualquer coisa não trivial — workers de fila em segundo plano. É por isso que uma hospedagem compartilhada básica muitas vezes lhe cria obstáculos, e por que um <strong>VPS</strong> costuma ser a casa certa para uma aplicação Laravel. Este guia cobre o que o servidor realmente precisa e percorre uma implantação real.</p>
+
+  <h2>Por que um VPS combina com Laravel</h2>
+  <p>A hospedagem compartilhada foi feita para «largar ficheiros numa raiz web». O Laravel quer mais do que isso: acesso SSH para executar <code>composer</code> e <code>artisan</code>, a capacidade de apontar o servidor web para o diretório <code>public/</code>, um processo de longa duração para esvaziar a fila e uma entrada cron para o agendador. Um VPS dá-lhe <strong>acesso root, RAM e CPU garantidos e controlo total da stack</strong> — exatamente o que essas necessidades exigem. Uma plataforma gerida também pode funcionar, mas um VPS é o meio-termo mais flexível assim que uma aplicação tem filas, uma base de dados e uma cache.</p>
+
+  <h2>Requisitos do servidor</h2>
+  <h3>PHP e extensões</h3>
+  <p>Execute uma <strong>versão do PHP atualmente suportada</strong> que corresponda à sua versão do Laravel — consulte a documentação do framework para o mínimo exato. O Laravel precisa de um conjunto padrão de extensões PHP ativadas; num VPS Debian/Ubuntu costumam instalar-se em conjunto:</p>
+  <pre><code>{`# Ubuntu/Debian: PHP-FPM + the extensions Laravel expects
+sudo apt install -y php-fpm php-cli php-mbstring php-xml \\
+  php-bcmath php-curl php-mysql php-zip php-gd php-intl
+
+# Composer (dependency manager)
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer`}</code></pre>
+  <p>Os nomes exatos dos pacotes variam consoante a distribuição, mas as extensões a confirmar são <code>mbstring</code>, <code>xml</code>, <code>bcmath</code>, <code>curl</code>, o controlador da base de dados (<code>pdo_mysql</code> ou <code>pdo_pgsql</code>), <code>zip</code> e <code>openssl</code>. Se faltar uma, costuma surgir como um erro claro durante o <code>composer install</code> ou no arranque.</p>
+
+  <h3>Base de dados, cache e backend de fila</h3>
+  <p>A maioria das aplicações Laravel combina-se com <strong>MySQL/MariaDB ou PostgreSQL</strong>. Para qualquer coisa que use filas, sessões ou cache em escala, adicione <strong>Redis</strong> — serve ao mesmo tempo de cache rápida, armazém de sessões e driver de fila. Garanta que o VPS tem RAM suficiente para a base de dados e o Redis a par dos workers PHP-FPM; a memória é o recurso que mais provavelmente irá esgotar.</p>
+
+  <h3>Permissões de armazenamento</h3>
+  <p>O Laravel escreve em dois diretórios, <code>storage/</code> e <code>bootstrap/cache/</code>. O utilizador do servidor web (muitas vezes <code>www-data</code>) tem de poder escrever neles, ou terá erros de permissão que parecem bugs da aplicação:</p>
+  <pre><code>{`sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R ug+rwX storage bootstrap/cache`}</code></pre>
+
+  <figure>
+    <img src="/img/best-hosting-for-laravel-inbody.jpg" alt="Grande plano de um ecrã que mostra código com realce de sintaxe com funções e condicionais" width="1280" height="720" loading="lazy" />
+    <figcaption>Uma implantação de Laravel é uma sequência de comandos repetível — instalar dependências, colocar configuração e rotas em cache, executar migrações — em vez de carregar ficheiros à mão.</figcaption>
+  </figure>
+
+  <h2>Percurso de implantação</h2>
+  <h3>1. Obter o código e instalar dependências</h3>
+  <p>Clone o repositório no servidor e depois instale as dependências de produção. As flags abaixo ignoram os pacotes de desenvolvimento e constroem um autoloader otimizado:</p>
+  <pre><code>{`git clone https://github.com/you/your-app.git /var/www/app
+cd /var/www/app
+composer install --no-dev --optimize-autoloader`}</code></pre>
+
+  <h3>2. Configurar o ambiente</h3>
+  <p>O Laravel lê a configuração de um ficheiro <code>.env</code> que <strong>nunca é versionado no git</strong>. Copie o exemplo, gere a chave da aplicação e preencha os valores reais:</p>
+  <pre><code>{`cp .env.example .env
+php artisan key:generate`}</code></pre>
+  <p>Um <code>.env</code> de produção mínimo tem este aspeto — defina <code>APP_DEBUG</code> como false para que os erros não sejam expostos aos visitantes:</p>
+  <pre><code>{`APP_NAME="Your App"
+APP_ENV=production
+APP_KEY=base64:...generated...
+APP_DEBUG=false
+APP_URL=https://yourapp.com
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=yourapp
+DB_USERNAME=yourapp
+DB_PASSWORD=change-me
+
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+REDIS_HOST=127.0.0.1`}</code></pre>
+
+  <h3>3. Migrar e colocar em cache para produção</h3>
+  <p>Execute as migrações da base de dados e depois construa a configuração, as rotas e as views em cache do Laravel. Colocar isto em cache é o que torna o framework rápido em produção — mas lembre-se de reconstruí-las a cada implantação, pois congelam o estado atual:</p>
+  <pre><code>{`php artisan migrate --force
+
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache`}</code></pre>
+
+  <h3>4. Apontar o Nginx para public/</h3>
+  <p>A raiz de documentos do servidor web tem de ser o diretório <code>public/</code> — nunca a raiz do projeto, ou exporia o <code>.env</code> e os ficheiros de origem. Um bloco de servidor Nginx + PHP-FPM padrão:</p>
+  <pre><code>{`server {
+    listen 80;
+    server_name yourapp.com;
+    root /var/www/app/public;
+
+    index index.php;
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \\.php$ {
+        fastcgi_pass unix:/run/php/php-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\\.(?!well-known).* {
+        deny all;
+    }
+}`}</code></pre>
+  <p>Adicione HTTPS com um certificado automatizado gratuito (a maioria das hospedagens e ferramentas como o Certbot tornam-no numa só linha) — uma aplicação de produção deve ser sempre servida sobre TLS.</p>
+
+  <h3>5. Executar o worker de fila com o Supervisor</h3>
+  <p>Os trabalhos em segundo plano (e-mails, notificações, exportações) correm através de um <strong>worker de fila</strong>, um processo de longa duração que tem de sobreviver a falhas e reinícios. Não execute <code>php artisan queue:work</code> à mão numa sessão SSH — use um gestor de processos como o <strong>Supervisor</strong> para o manter vivo:</p>
+  <pre><code>{`# /etc/supervisor/conf.d/app-worker.conf
+[program:app-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/app/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/app/storage/logs/worker.log
+stopwaitsecs=3600`}</code></pre>
+  <pre><code>{`sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start app-worker:*`}</code></pre>
+
+  <h3>6. Agendar o agendador</h3>
+  <p>O agendador de tarefas do Laravel é movido por uma única entrada cron que corre a cada minuto; é o próprio Laravel que decide quais tarefas estão pendentes. Adicione-a ao crontab do utilizador de implantação:</p>
+  <pre><code>{`* * * * * cd /var/www/app && php artisan schedule:run >> /dev/null 2>&1`}</code></pre>
+
+  <h2>Dimensionar o VPS</h2>
+  <table>
+    <thead><tr><th>Perfil da aplicação</th><th>Do que precisa</th></tr></thead>
+    <tbody>
+      <tr><td>Aplicação pequena, tráfego leve</td><td>VPS de entrada: alguns GB de RAM, armazenamento NVMe, 1–2 vCPU — PHP-FPM mais uma pequena base de dados.</td></tr>
+      <tr><td>Filas + Redis + base de dados</td><td>Mais margem de RAM para que o Redis, a base de dados e vários processos PHP-FPM e workers coexistam confortavelmente.</td></tr>
+      <tr><td>Tráfego mais elevado / trabalhos pesados</td><td>vCPU dedicadas para carga constante, mais processos workers, espaço para escalar; considere separar a base de dados mais tarde.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Para quem é</h2>
+  <ul>
+    <li><strong>Prefere não gerir um servidor:</strong> uma plataforma gerida ou um VPS gerido trata do patching e da supervisão de processos por si, a um preço mais alto.</li>
+    <li><strong>À vontade na linha de comandos:</strong> um VPS não gerido é mais barato e totalmente flexível — é seu dono da configuração de PHP, Nginx, Supervisor e cron mostrada acima.</li>
+    <li><strong>Aplicação em crescimento com filas e cache:</strong> um VPS com RAM/CPU garantidos e Redis é a escolha natural; dimensione primeiro a memória, depois a CPU e depois o armazenamento.</li>
+  </ul>
+
+  <h2>Como decidir</h2>
+  <p>Parta do que o Laravel precisa para funcionar bem: acesso SSH, um PHP suportado com as extensões certas, uma base de dados e (para filas/cache) Redis, armazenamento com permissão de escrita, um worker de fila sob o Supervisor e um cron de uma linha para o agendador. Um VPS dá-lhe tudo isso com recursos garantidos e um caminho claro para escalar — faça corresponder o plano ao seu tráfego e à carga de trabalhos em segundo plano, e escolha o mais pequeno que o cubra com margem.</p>
+</Article>

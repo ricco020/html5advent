@@ -1,0 +1,86 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="vps-hosting"
+  title="L'hosting VPS spiegato: che cos'è e come sceglierlo"
+  description="Che cos'è davvero un VPS, in che cosa si distingue dall'hosting condiviso e dedicato, i criteri che contano nella scelta e a chi è adatto — senza benchmark inventati, solo i fatti."
+  cat="hosting"
+  hero="/img/vps-hosting-hero.jpg"
+  heroAlt="Primo piano di server rack impilati che mostrano LED di stato, porte USB e alloggiamenti per dischi in un armadio"
+  cluster="hosting"
+>
+  <p>Un <strong>VPS</strong> — Virtual Private Server — è un server fisico partizionato in più macchine virtuali isolate, ciascuna con il proprio sistema operativo, risorse garantite e accesso root. Ottieni gran parte del controllo di una macchina dedicata a una frazione del costo, mentre un hypervisor tiene la tua porzione separata da quella di tutti gli altri. Questa guida spiega che cos'è davvero un VPS, come si confronta con le alternative e i criteri concreti su cui giudicare qualsiasi provider — così non dovrai fidarti di una classifica.</p>
+
+  <h2>Che cos'è davvero un VPS</h2>
+  <p>Il software di virtualizzazione (l'<em>hypervisor</em>) suddivide un potente server fisico in più server virtuali. Ogni VPS si comporta come una macchina a sé: avvia il proprio sistema operativo, ha il proprio indirizzo IP e gli viene assegnata una quantità fissa di RAM, CPU e spazio di archiviazione che i vicini non possono sottrarti. Questo isolamento è la differenza chiave rispetto all'hosting condiviso — le tue prestazioni non dipendono più da ciò che sta facendo il sito accanto.</p>
+  <p>Poiché di solito ottieni <strong>l'accesso root (amministratore)</strong>, puoi installare qualsiasi stack software, configurare tu stesso il server web, eseguire worker in background, container o il motore di database che preferisci — cose che un hosting condiviso gestito semplicemente non ti permetterà di fare.</p>
+
+  <h2>VPS vs condiviso vs dedicato</h2>
+  <p>I tre livelli più comuni si collocano su uno spettro di controllo, isolamento e costo.</p>
+  <table>
+    <thead><tr><th>Tipo</th><th>Risorse</th><th>Controllo</th><th>Ideale per</th></tr></thead>
+    <tbody>
+      <tr><td>Hosting condiviso</td><td>In pool, limiti informali</td><td>Basso — niente root, stack fisso</td><td>Siti piccoli, blog, siti vetrina</td></tr>
+      <tr><td>VPS</td><td>Porzione garantita (RAM/CPU/disco)</td><td>Alto — accesso root, stack personalizzato</td><td>App in crescita, runtime personalizzati, progetti personali con traffico reale</td></tr>
+      <tr><td>Server dedicato</td><td>Un'intera macchina fisica</td><td>Totale — ma gestisci tutto tu</td><td>Carichi pesanti e costanti che richiedono il massimo isolamento</td></tr>
+    </tbody>
+  </table>
+  <p>Un VPS è la via di mezzo: più potenza e libertà dell'hosting condiviso, molto più economico e meno impegnativo in termini di manutenzione rispetto all'affitto di un'intera macchina fisica.</p>
+
+  <h2>Gestito vs non gestito</h2>
+  <p>È la scelta che sorprende di più le persone.</p>
+  <ul>
+    <li><strong>VPS non gestito</strong> — ottieni un sistema operativo nudo e sei tu il sistemista: lo aggiorni, lo metti in sicurezza, configuri il server web, imposti i backup e lo ripari quando si guasta. Più economico e flessibile al massimo, ma presuppone che tu sia a tuo agio con la riga di comando.</li>
+    <li><strong>VPS gestito</strong> — il provider si occupa degli aggiornamenti del sistema operativo, dell'hardening della sicurezza, del monitoraggio e del supporto, di solito con un pannello di controllo. Costa di più, ma ti restituisce il tuo tempo se preferisci non amministrare un server.</li>
+  </ul>
+
+  <figure>
+    <img src="/img/vps-hosting-inbody.jpg" alt="Cavi di rete raggruppati collegati a switch e router montati su rack all'interno di un armadio server" width="1280" height="853" loading="lazy" />
+    <figcaption>Un VPS non gestito mette nelle tue mani la configurazione della rete, del sistema operativo e dello stack — comodo se vuoi il controllo totale, più lavoro se non lo vuoi.</figcaption>
+  </figure>
+
+  <h2>I criteri che contano nella scelta</h2>
+  <p>Ignora i superlativi del marketing e confronta invece i provider su queste dimensioni concrete.</p>
+
+  <h3>RAM e CPU</h3>
+  <p>La <strong>RAM</strong> è la prima cosa che finirà — un database più un server applicativo più una cache vogliono tutti memoria, e anche il sistema operativo ha bisogno della sua parte. Le <strong>vCPU</strong> (CPU virtuali) gestiscono le richieste simultanee e il lavoro intensivo per la CPU come l'elaborazione delle immagini o il rendering lato server. Fai attenzione alla differenza tra vCPU <em>condivise/burstable</em> (adatte a carichi leggeri e a picchi) e vCPU <em>dedicate</em> (prestazioni costanti, prezzo più alto).</p>
+
+  <h3>Tipo di archiviazione</h3>
+  <p>Preferisci <strong>NVMe o SSD</strong> ai dischi meccanici — la velocità del disco si vede direttamente nei tempi di query del database e nella costruzione delle pagine. Controlla anche la quantità: log, upload e crescita del database si accumulano più velocemente di quanto immagini.</p>
+
+  <h3>Banda e posizione</h3>
+  <p>La «banda» nasconde due numeri: il <strong>limite mensile di trasferimento dati</strong> e la <strong>velocità della porta</strong>. I siti ricchi di contenuti multimediali consumano le quote di trasferimento, quindi leggi la politica sugli eccessi. E scegli una <strong>regione del datacenter vicina al tuo pubblico</strong> — la distanza fisica aggiunge latenza a ogni richiesta dinamica.</p>
+
+  <h3>Backup, scalabilità e supporto</h3>
+  <ul>
+    <li><strong>Backup</strong> — snapshot inclusi o componente aggiuntivo a pagamento? I backup automatizzati valgono la spesa.</li>
+    <li><strong>Scalabilità</strong> — puoi ridimensionare il piano (più RAM/CPU) senza ricostruire da zero?</li>
+    <li><strong>Supporto</strong> — i tempi di risposta contano soprattutto sui piani non gestiti quando qualcosa si rompe alle 2 di notte.</li>
+  </ul>
+
+  <h3>Prezzo</h3>
+  <p>Confronta il prezzo di <em>rinnovo</em>, non solo la tariffa promozionale del primo periodo, e verifica cosa è incluso (backup, banda, un indirizzo IPv4, un pannello di controllo). Tra i provider che puntano su un buon rapporto risorse-prezzo, <strong>Contabo</strong> è un'opzione ben nota per CPU e RAM generose a basso costo mensile — utile quando vuoi margine senza pagare tariffe premium. Come sempre, adatta le specifiche al tuo carico di lavoro reale piuttosto che a un prezzo da vetrina.</p>
+
+  <h2>Pro e contro di un VPS</h2>
+  <h3>Vantaggi</h3>
+  <ul>
+    <li>Risorse garantite e isolate — nessun vicino rumoroso.</li>
+    <li>Accesso root e stack personalizzato — installa qualsiasi cosa, regola tutto.</li>
+    <li>Molto più economico di un server dedicato, con un controllo simile.</li>
+    <li>Di solito scalabile su richiesta (ridimensiona il piano man mano che cresci).</li>
+  </ul>
+  <h3>Compromessi</h3>
+  <ul>
+    <li>Più responsabilità — un VPS non gestito significa che ti occupi tu di sicurezza e manutenzione.</li>
+    <li>Eccessivo per un piccolo sito statico che un hosting condiviso o statico servirebbe a costo inferiore.</li>
+    <li>Richiede una certa dimestichezza con Linux/la riga di comando, a meno che tu non paghi per uno gestito.</li>
+  </ul>
+
+  <h2>A chi è adatto un VPS</h2>
+  <p>Un VPS è la scelta giusta quando il tuo progetto è cresciuto oltre l'hosting condiviso ma non giustifica una macchina dedicata: un'app dinamica in crescita, un sito che necessita di una versione specifica del runtime, un progetto che esegue processi in background o container, o qualsiasi carico in cui desideri il controllo sullo stack e l'isolamento dagli altri inquilini. Se gestisci solo un piccolo sito statico o un blog a basso traffico, l'hosting condiviso o statico è di solito più semplice ed economico.</p>
+
+  <h2>Come decidere</h2>
+  <p>Parti dal tuo carico di lavoro, non da una lista dei «migliori». Stima prima la memoria, poi la CPU, poi lo spazio di archiviazione e il trasferimento. Pretendi una regione vicina ai tuoi utenti, insisti su NVMe/SSD e backup a prezzi accessibili, decidi se vuoi un servizio gestito o non gestito, e confronta i prezzi di rinnovo a parità di specifiche. Una volta che hai giudicato i criteri da solo, la nostra guida di accompagnamento sulla <a href="/it/guides/best-vps-for-web-hosting">scelta del miglior VPS per un progetto web</a> illustra il dimensionamento di un piano per un progetto reale.</p>
+</Article>

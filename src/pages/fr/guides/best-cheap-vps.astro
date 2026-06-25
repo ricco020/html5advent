@@ -1,0 +1,87 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="best-cheap-vps"
+  title="VPS pas cher : obtenir de la valeur sans rogner sur l'essentiel"
+  description="Un guide pratique pour choisir un VPS pas cher — comment lire honnêtement les offres à bas prix, quels compromis sont sûrs et lesquels ne le sont pas, et les critères qui distinguent la vraie valeur d'une fausse bonne affaire."
+  cat="hosting"
+  hero="/img/best-cheap-vps-hero.jpg"
+  heroAlt="Gros plan sur les baies de disques d'un serveur remplies de SSD SATA de 1,92 To sous une lumière bleue"
+  cluster="hosting"
+>
+  <p>Un <strong>VPS pas cher</strong> peut représenter une excellente valeur ou une fausse économie — et le prix seul ne vous dira pas laquelle. L'objectif n'est pas de dépenser le moins possible ; c'est d'obtenir les ressources et la fiabilité dont votre projet a besoin au prix honnête le plus bas. Ce guide explique comment lire les offres à bas coût, quels compromis sont sûrs, et lesquels vous coûteront plus cher plus tard.</p>
+
+  <h2>Pourquoi un VPS peut être bon marché tout en restant bon</h2>
+  <p>Un <strong>VPS</strong> (serveur privé virtuel) découpe une machine physique en tranches isolées, chacune avec de la RAM, du CPU et du stockage garantis, plus un accès root. Comme l'hébergeur répartit le coût du matériel entre de nombreux locataires, un VPS peut être réellement abordable tout en vous offrant des ressources dédiées — bien plus de contrôle qu'un hébergement mutualisé pour pas beaucoup plus cher. Bas prix et bonne valeur ne sont pas opposés ; l'astuce consiste à distinguer une offre sobre et efficace d'une offre vidée de sa substance.</p>
+
+  <h2>Comment lire honnêtement une offre de VPS pas cher</h2>
+  <p>Les offres à bas prix semblent souvent identiques sur une fiche technique mais diffèrent là où ça compte. Vérifiez ces points avant de juger le prix :</p>
+
+  <h3>vCPU dédié ou en burst</h3>
+  <p>Les offres bon marché vendent fréquemment des <strong>vCPU partagés ou en burst</strong> — parfaits pour des charges légères et ponctuelles, mais qui peuvent être bridés sous une charge soutenue. Une offre un peu plus chère avec des <strong>vCPU dédiés</strong> peut être la vraie bonne affaire si votre application tourne en continu. Adaptez le type de CPU à votre charge de travail, pas seulement au nombre de cœurs.</p>
+
+  <h3>La RAM est la ressource qui manque en premier</h3>
+  <p>La mémoire est généralement ce qui s'épuise en premier sous la charge, entraînant votre application dans sa chute. Ne dimensionnez pas au strict minimum sur lequel la plateforme « tourne techniquement » — gardez de la marge pour les pics de trafic et pour le système d'exploitation lui-même. Une offre bon marché avec trop peu de RAM est la fausse bonne affaire la plus courante.</p>
+
+  <h3>Le type de stockage, pas seulement la quantité</h3>
+  <p>Préférez le <strong>NVMe ou le SSD</strong> aux anciens disques mécaniques — la vitesse du disque se ressent directement dans les requêtes de base de données et la génération des pages. Vérifiez aussi la quantité, car les journaux, les fichiers téléversés et la croissance de la base s'accumulent. Les offres bon marché annoncent parfois beaucoup de stockage sur des disques lents ; un stockage rapide mais plus petit sert généralement mieux une application web.</p>
+
+  <figure>
+    <img src="/img/best-cheap-vps-inbody.jpg" alt="Points de lumière orange brillants circulant le long de brins de fibre optique groupés sur fond sombre" width="1280" height="853" loading="lazy" />
+    <figcaption>La qualité du réseau fait aussi partie du prix : le forfait de bande passante et la vitesse du port déterminent combien vous pouvez servir, et à quelle vitesse.</figcaption>
+  </figure>
+
+  <h3>Bande passante : forfait et vitesse de port</h3>
+  <p>Deux choses se cachent sous « bande passante » : le <strong>forfait mensuel de transfert de données</strong> (Go/To que vous pouvez servir) et la <strong>vitesse du port</strong> (à quelle vitesse). Les offres bon marché plafonnent parfois le transfert de façon stricte ou appliquent une limite d'usage raisonnable derrière une étiquette « illimitée » — lisez les conditions, surtout si vous servez des médias ou des téléchargements.</p>
+
+  <h3>Le prix de renouvellement, pas l'offre de lancement</h3>
+  <p>Le prix affiché est souvent un premier terme promotionnel qui grimpe au renouvellement. Comparez ce que vous paierez <em>après</em> la promo, et vérifiez ce qui est inclus — sauvegardes, adresse IPv4, panneau de contrôle et bande passante sont parfois facturés à part. Une offre « pas chère » qui fait payer chaque extra à la pièce peut finir par coûter plus cher qu'une offre transparente.</p>
+
+  <h2>Les compromis qu'on peut faire — et ceux qu'on ne peut pas</h2>
+  <table>
+    <thead><tr><th>Où économiser sans risque</th><th>Sur quoi ne pas lésiner</th></tr></thead>
+    <tbody>
+      <tr><td>Offre non managée si vous êtes à l'aise en ligne de commande</td><td>De la marge en RAM pour votre charge réelle</td></tr>
+      <tr><td>Moins de vCPU pour un trafic léger ou ponctuel</td><td>Du stockage NVMe/SSD plutôt que des disques lents</td></tr>
+      <tr><td>Moins de stockage si votre empreinte est faible</td><td>Des sauvegardes automatisées (une restauration vous sauve un jour)</td></tr>
+      <tr><td>Pas de panneau de contrôle premium si vous utilisez la CLI</td><td>Une région de datacenter proche de vos utilisateurs</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Managé ou non managé</h3>
+  <p>La plus grande économie honnête sur un VPS pas cher, c'est de passer en <strong>non managé</strong> : vous corrigez, sécurisez et maintenez le système d'exploitation vous-même, et l'hébergeur facture moins cher. Si vous êtes à l'aise avec Linux et un terminal, c'est de l'argent gratuit. Si vous préférez ne pas faire d'administration système, une offre managée coûte plus cher mais vous rachète du temps — et un serveur non managé que vous négligez est une fausse économie d'un autre genre.</p>
+
+  <h2>Une première configuration raisonnable</h2>
+  <p>Quel que soit le fournisseur choisi, quelques minutes de durcissement transforment un VPS pas cher et nu en un serveur sûr :</p>
+  <pre><code>{`# Update the system
+sudo apt update && sudo apt upgrade -y
+
+# Create a non-root user with sudo
+sudo adduser deploy
+sudo usermod -aG sudo deploy
+
+# Basic firewall: allow SSH + web only
+sudo ufw allow OpenSSH
+sudo ufw allow 80,443/tcp
+sudo ufw enable
+
+# Disable root SSH login, then reload
+# (edit /etc/ssh/sshd_config: PermitRootLogin no)
+sudo systemctl reload ssh`}</code></pre>
+  <p>À partir de là, configurez les mises à jour de sécurité automatiques et vos propres sauvegardes hors serveur pour ne pas dépendre d'un unique instantané.</p>
+
+  <h2>Où se trouve la vraie valeur</h2>
+  <p>Un VPS pas cher mérite son prix quand le fournisseur est transparent sur les ressources et que le réseau est solide. <strong>Contabo</strong>, par exemple, est largement connu pour offrir du CPU et de la RAM généreux pour le prix — le genre de ressources-par-euro qui font d'un VPS une option réaliste sur un petit budget, sans que la fiche technique soit vidée de sa substance. Quel que soit votre choix, jugez-le sur les critères ci-dessus plutôt que sur le chiffre affiché.</p>
+
+  <h2>Pour qui c'est fait</h2>
+  <ul>
+    <li><strong>Développeurs et bricoleurs</strong> à l'aise avec Linux → VPS pas cher non managé, contrôle total, coût le plus bas.</li>
+    <li><strong>Petits sites et projets perso</strong> → une offre d'entrée avec assez de RAM et du stockage NVMe dans une région proche.</li>
+    <li><strong>Quiconque préfère ne pas faire d'administration système</strong> → dépensez un peu plus en managé, sinon vous paierez en temps.</li>
+  </ul>
+
+  <h2>Comment décider</h2>
+  <p>Partez de votre charge de travail : estimez d'abord la RAM, puis le type de CPU, ensuite le stockage et le transfert. Exigez du NVMe/SSD, une région proche de vos utilisateurs et des sauvegardes automatisées ou abordables. Comparez les prix de <em>renouvellement</em> sur des spécifications équivalentes, et traitez les promesses « illimitées » suspectement bon marché comme du marketing jusqu'à ce que les conditions prouvent le contraire. Le meilleur VPS pas cher est celui qui couvre vos besoins réels avec un peu de marge — pas celui qui affiche le plus petit chiffre sur la bannière.</p>
+</Article>

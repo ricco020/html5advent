@@ -1,0 +1,92 @@
+---
+import Article from '../../../layouts/Article.astro';
+export const prerender = true; // force static — overrides the prerender=false string shown in a code example below
+---
+<Article
+  lang="de"
+  slug="astro-hosting"
+  title="Eine Astro-Site hosten: statische und SSR-Optionen"
+  description="Ein praktischer Leitfaden zum Deployen einer Astro-Site — der Unterschied zwischen statischer Ausgabe und Server-Ausgabe (SSR), wie Adapter funktionieren, die Build-Befehle und wie man für jeden Modus einen Hoster auswählt."
+  cat="hosting"
+  hero="/img/astro-hosting-hero.jpg"
+  heroAlt="HTML-Quellcode mit Anker- und Listenelement-Tags farbig auf einem dunklen Bildschirm dargestellt"
+  cluster="deploy"
+>
+  <p><strong>Astro</strong> kann Ihre Site auf zwei sehr unterschiedliche Arten ausliefern, und welche Sie wählen, entscheidet darüber, wo und wie Sie sie hosten. Standardmäßig baut Astro einen Ordner aus einfachem HTML, CSS und JS — Dateien, die jeder statische Hoster ausliefern kann. Aber Astro kann auch auf einem Server laufen und Seiten bei Bedarf (SSR) rendern, für Dinge wie Authentifizierung, Formulare oder Daten pro Anfrage. Dieser Leitfaden erklärt beide Ausgabemodi, die dahinterstehenden Build-Befehle, wie Adapter sich einfügen und wie man für jeden einen Hoster auswählt.</p>
+
+  <h2>Statisch vs. Server: die zentrale Entscheidung</h2>
+  <p>Jede Hosting-Entscheidung für Astro ergibt sich aus einer Frage: Braucht Ihre Site einen laufenden Server zum Anfragezeitpunkt?</p>
+  <ul>
+    <li><strong>Statisch (der Standard).</strong> Seiten werden einmal, zur Build-Zeit, in HTML-Dateien gerendert. Es gibt keinen Serverprozess — Sie laden den gebauten Ordner auf ein CDN oder einen statischen Hoster hoch, und er liefert die Dateien aus. Am schnellsten, günstigsten, einfachsten. Ideal für Blogs, Dokumentationen, Marketing-Sites und die meisten Content-Sites.</li>
+    <li><strong>Server / SSR.</strong> Seiten werden pro Anfrage von einem Node- (oder Edge-)Prozess gerendert. Nötig, wenn der Inhalt von der Anfrage abhängt: angemeldete Benutzer, Formularverarbeitung, Personalisierung im Fluge oder Daten, die bei jedem Laden frisch sein müssen.</li>
+  </ul>
+  <p>Sie können auch beides mischen: die Site größtenteils statisch halten und bestimmte Routen in das On-Demand-Rendering hineinnehmen. Der Punkt ist, überall dort statisch zu rendern, wo es geht, und nur dort für einen Server zu zahlen, wo Sie ihn tatsächlich brauchen.</p>
+
+  <h2>Die Build-Befehle</h2>
+  <p>Was auch immer der Modus ist, der Workflow sind dieselben zwei Befehle — installieren, dann bauen:</p>
+  <pre><code>{`# install dependencies
+npm install
+
+# produce the production build
+npm run build
+
+# preview the production build locally before deploying
+npm run preview`}</code></pre>
+  <p>Standardmäßig schreibt <code>npm run build</code> eine statische Site in den Ordner <code>dist/</code>. Dieser Ordner ist Ihre gesamte deploybare Site im statischen Modus — es gibt nichts weiter auszuführen.</p>
+
+  <h2>Den Ausgabemodus konfigurieren</h2>
+  <p>Sie steuern den Modus in <code>astro.config.mjs</code>. Statisch ist der Standard, daher braucht eine minimale Konfiguration nichts Besonderes. Um auf dem Server zu rendern, fügen Sie einen <strong>Adapter</strong> hinzu — ein kleines Paket, das Astro beibringt, wie es auf einer bestimmten Plattform läuft (Node oder eine Edge-/Serverless-Laufzeit):</p>
+  <pre><code>{`// astro.config.mjs — server (SSR) output with the Node adapter
+import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
+
+export default defineConfig({
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
+});`}</code></pre>
+  <p>Mit dem Standalone-Node-Adapter erzeugt <code>npm run build</code> einen Server-Einstiegspunkt, den Sie wie jede Node-App starten:</p>
+  <pre><code>{`# after building with the Node adapter
+node ./dist/server/entry.mjs`}</code></pre>
+  <p>Wenn Sie nur eine Handvoll dynamischer Routen brauchen, behalten Sie die standardmäßige statische Ausgabe bei und nehmen einzelne Seiten vom Prerendering aus, statt die ganze Site in den Servermodus umzustellen:</p>
+  <pre><code>{`---
+// src/pages/dashboard.astro — render this page per request
+export const prerender = false;
+---`}</code></pre>
+
+  <figure>
+    <img src="/img/astro-hosting-inbody.jpg" alt="JavaScript-Quellcode mit Syntaxhervorhebung auf einem dunklen Editor-Bildschirm dargestellt" width="1280" height="720" loading="lazy" />
+    <figcaption>JavaScript in einem Code-Editor — der Build-Schritt verwandelt Ihre Astro-Komponenten in das HTML und JS, das deployt wird.</figcaption>
+  </figure>
+
+  <h2>Einen Hoster nach Modus wählen</h2>
+  <h3>Statisches Hosting</h3>
+  <p>Für die statische Ausgabe brauchen Sie nur irgendwo, um den Inhalt von <code>dist/</code> über HTTPS auszuliefern, idealerweise von einem CDN. Die Build-/Publish-Einstellungen sind einfach:</p>
+  <pre><code>{`Build command:    npm run build
+Publish/output:   dist`}</code></pre>
+  <p>Zahlreiche Plattformen tun dies — gemanagte statische Hoster, Objektspeicher hinter einem CDN oder ein universeller Hoster, der einen Ordner ausliefern kann. Da kein Server am Leben gehalten werden muss, ist statisches Hosting günstig und mühelos zu skalieren. Hosting auf europäischer Infrastruktur ist hier eine gute Wahl, wenn Ihr Publikum oder Ihre Datenresidenz-Anforderungen in diese Richtung weisen.</p>
+
+  <h3>Server-Hosting (SSR)</h3>
+  <p>SSR braucht eine Laufzeit, die einen Prozess am Leben hält. Zwei grobe Wege:</p>
+  <ul>
+    <li><strong>Ein Node-Hoster / VPS.</strong> Mit dem Node-Adapter bauen Sie einen Standalone-Server und betreiben ihn wie jeden Node-Dienst. Ein VPS gibt Ihnen volle Kontrolle über Prozess, Umgebung und Skalierung — praktisch, wenn Sie dort bereits andere Dienste betreiben.</li>
+    <li><strong>Serverless / Edge.</strong> Plattformspezifische Adapter verpacken Ihre App, damit sie als Funktionen läuft. Weniger zu verwalten, aber Sie sind an das Modell dieser Plattform gebunden.</li>
+  </ul>
+  <p>Eine einfache Art, den Node-Build auf Ihrem eigenen Server zu betreiben, ist ein Prozessmanager, damit er bei Absturz oder Neustart neu startet:</p>
+  <pre><code>{`# example: keep the Astro Node server running with PM2
+npm install -g pm2
+pm2 start ./dist/server/entry.mjs --name astro-site
+pm2 save`}</code></pre>
+
+  <h2>Schnellreferenz</h2>
+  <table>
+    <thead><tr><th>Bedarf</th><th>Modus</th><th>Was hosten</th></tr></thead>
+    <tbody>
+      <tr><td>Blog, Dokumentation, Marketing, Content</td><td>Statisch (Standard)</td><td>Der Ordner <code>dist/</code> auf einem CDN/statischen Hoster</td></tr>
+      <tr><td>Größtenteils statisch, ein paar dynamische Routen</td><td>Statisch + <code>prerender = false</code> pro Seite</td><td>Ein Hoster/Adapter, der On-Demand-Routen unterstützt</td></tr>
+      <tr><td>Auth, Formulare, Daten pro Anfrage überall</td><td>Server (SSR)</td><td>Eine Node-Laufzeit / VPS oder Serverless-Plattform</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Wie man entscheidet</h2>
+  <p>Beginnen Sie statisch — es ist aus gutem Grund der Standard: günstiger, schneller und einfacher zu hosten. Greifen Sie erst dann zum Server-Adapter, wenn eine echte Anforderung (angemeldeter Zustand, Formularverarbeitung, immer frische Daten) das Rendering pro Anfrage erzwingt, und selbst dann erwägen Sie, nur diese Routen vom Prerendering auszunehmen, statt die ganze Site auf einem Server zu betreiben. Passen Sie den Hoster an den Modus an, bei dem Sie landen: ein CDN-gestützter statischer Hoster für gebaute Dateien oder ein Node-fähiges VPS / eine Serverless-Plattform, wenn Sie wirklich einen Server brauchen.</p>
+</Article>
