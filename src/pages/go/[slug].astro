@@ -1,0 +1,28 @@
+---
+// Affiliate redirect — /go/<slug>. noindex, nofollow, excluded from sitemap (astro.config filter).
+// Static: emits one HTML page per offer that redirects to the real affiliate URL.
+import { OFFERS } from '../../data/cta.js';
+
+export function getStaticPaths() {
+  return Object.keys(OFFERS).map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const offer = OFFERS[slug];
+if (!offer) return Astro.redirect('/404');
+const target = offer.url;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Redirecting…</title>
+    <script is:inline define:vars={{ target }}>window.location.replace(target);</script>
+  </head>
+  <body>
+    <p>Redirecting to <a rel="nofollow sponsored" href={target}>{offer.label}</a>…</p>
+  </body>
+</html>

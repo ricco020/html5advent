@@ -1,0 +1,35 @@
+---
+// Affiliate CTA block — only renders when a page declares a hosting/deploy cluster.
+// ≤2 per article (caller controls). Honest, on-theme, points at /go/<slug>.
+import { offerForCluster } from '../data/cta.js';
+const { cluster, locale = 'en' } = Astro.props;
+const offer = cluster ? offerForCluster(cluster) : null;
+const a = offer?.angle?.[locale] || offer?.angle?.en;
+---
+{offer && a && (
+  <aside class="cta">
+    <div class="cta__body">
+      <p class="cta__title">{a.title}</p>
+      <p class="cta__sub">{a.sub}</p>
+    </div>
+    <a class="cta__btn" href={`/go/${offer.slug}`} rel="nofollow sponsored">{offer.label} →</a>
+  </aside>
+)}
+
+<style>
+  .cta {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;
+    margin: 2.5rem 0; padding: 1.25rem 1.5rem;
+    border: 1px solid var(--line); border-left: 3px solid var(--accent-amber);
+    border-radius: 10px; background: var(--surface);
+  }
+  .cta__title { font-weight: 600; margin: 0; color: var(--ink); }
+  .cta__sub { margin: .25rem 0 0; color: var(--muted); font-size: .92rem; }
+  .cta__btn {
+    flex: none; padding: .65rem 1.1rem; border-radius: 8px;
+    background: var(--accent-amber); color: #1a1205; font-weight: 600; text-decoration: none;
+    font-family: var(--mono); font-size: .9rem; white-space: nowrap;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .cta__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px -8px var(--accent-amber); }
+</style>

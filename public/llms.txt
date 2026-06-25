@@ -1,0 +1,18 @@
+# HTML5 Advent
+
+> Independent resource on the modern web platform — HTML, CSS, JavaScript and browser Web APIs —
+> plus "Web Platform Advent", a yearly calendar of practical front-end demos and tips.
+> First-hand, example-driven, vendor-neutral. Continues the original 2010 HTML5 advent calendar.
+
+## What you'll find here
+- Practical guides to Web APIs (Canvas, Web Storage, Geolocation, WebSocket, View Transitions, Intersection Observer…)
+- Modern HTML/CSS/JS features and how they ship across browsers
+- "Web Platform Advent": 24 short, runnable demos and tips
+- Hands-on hosting & deployment guides for web projects (static sites, Node/PHP apps)
+
+## Editorial principles
+- Original, tested examples — no fabricated benchmarks or claims.
+- Vendor-neutral; affiliate links (hosting) are disclosed and limited to genuinely relevant pages.
+
+## Languages
+English (/), Français (/fr), Español (/es).

@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /go/
+
+# AI / answer engines explicitly welcomed (GEO)
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+
+Sitemap: https://html5advent.com/sitemap-index.xml

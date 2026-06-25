@@ -1,0 +1,123 @@
+---
+import '@fontsource-variable/space-grotesk';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
+import { LOCALES, localePath, t } from '../i18n/ui.js';
+
+const GA4_MEASUREMENT_ID = ''; // filled after GA4 property creation (J0 rule)
+
+const {
+  title,
+  description,
+  lang = 'en',
+  path = '',            // path without locale prefix, e.g. "guides/web-storage"
+  schema = null,        // optional JSON-LD object
+  ogType = 'website',
+} = Astro.props;
+
+const site = 'https://html5advent.com';
+const canonical = site + localePath(lang, path);
+const alternates = LOCALES.map((l) => ({ l, href: site + localePath(l, path) }));
+const year = 2026;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.l} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={site + localePath('en', path)} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="HTML5 Advent" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    {GA4_MEASUREMENT_ID && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}></script>
+        <script is:inline define:vars={{ id: GA4_MEASUREMENT_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', id);
+        </script>
+      </>
+    )}
+  </head>
+  <body>
+    <a class="skip" href="#main">{t(lang, 'skip')}</a>
+    <header class="site-head">
+      <a class="brand" href={localePath(lang)}>
+        <span class="brand__mark">&lt;/&gt;</span>
+        <span class="brand__name">HTML5<span class="brand__accent">Advent</span></span>
+      </a>
+      <nav class="nav">
+        <a href={localePath(lang, 'advent')}>{t(lang, 'advent')}</a>
+        <a href={localePath(lang, 'guides')}>{t(lang, 'guides')}</a>
+      </nav>
+      <div class="langs" aria-label="Language">
+        {LOCALES.map((l) => (
+          <a class={l === lang ? 'on' : ''} href={site + localePath(l, path)} hreflang={l}>{l.toUpperCase()}</a>
+        ))}
+      </div>
+    </header>
+
+    <main id="main"><slot /></main>
+
+    <footer class="site-foot">
+      <p class="disclosure">{t(lang, 'disclosure')}</p>
+      <p class="meta">© {year} HTML5 Advent · <a href={localePath(lang, 'advent')}>{t(lang, 'advent')}</a></p>
+    </footer>
+
+    <style is:global>
+      :root {
+        --bg: #0d0f17; --surface: #161a26; --line: #262c3d;
+        --ink: #eef1f8; --muted: #9aa3b8;
+        --accent-amber: #f5a524;   /* advent / December warmth */
+        --accent-blue: #4d8dff;    /* the web platform */
+        --display: 'Space Grotesk Variable', system-ui, sans-serif;
+        --mono: 'IBM Plex Mono', ui-monospace, monospace;
+        --body: var(--mono);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0; background:
+          radial-gradient(900px 500px at 85% -10%, rgba(77,141,255,.10), transparent 60%),
+          radial-gradient(700px 400px at 0% 0%, rgba(245,165,36,.08), transparent 55%),
+          var(--bg);
+        color: var(--ink); font-family: var(--body); line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: var(--accent-blue); }
+      h1, h2, h3 { font-family: var(--display); line-height: 1.1; letter-spacing: -.02em; }
+      .skip { position: absolute; left: -999px; }
+      .skip:focus { left: 1rem; top: 1rem; background: var(--accent-amber); color: #1a1205; padding: .5rem .8rem; border-radius: 6px; z-index: 10; }
+      .site-head {
+        display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+        max-width: 1080px; margin: 0 auto; padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand { display: inline-flex; align-items: baseline; gap: .5rem; text-decoration: none; color: var(--ink); }
+      .brand__mark { font-family: var(--mono); color: var(--accent-blue); font-weight: 600; }
+      .brand__name { font-family: var(--display); font-weight: 700; font-size: 1.25rem; }
+      .brand__accent { color: var(--accent-amber); }
+      .nav { display: flex; gap: 1.25rem; margin-right: auto; }
+      .nav a { color: var(--muted); text-decoration: none; font-size: .9rem; }
+      .nav a:hover { color: var(--ink); }
+      .langs { display: flex; gap: .4rem; font-family: var(--mono); font-size: .78rem; }
+      .langs a { color: var(--muted); text-decoration: none; padding: .15rem .35rem; border-radius: 5px; }
+      .langs a.on { color: #1a1205; background: var(--accent-amber); }
+      main { max-width: 1080px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+      .site-foot { max-width: 1080px; margin: 0 auto; padding: 2rem 1.5rem 3rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+      .disclosure { color: var(--muted); }
+      .site-foot a { color: var(--accent-blue); }
+    </style>
+  </body>
+</html>

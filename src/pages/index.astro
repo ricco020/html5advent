@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import Home from '../components/Home.astro';
+const schema = {
+  '@context': 'https://schema.org', '@type': 'WebSite', name: 'HTML5 Advent',
+  url: 'https://html5advent.com',
+  description: 'Practical guides to the modern web platform — HTML, CSS, JavaScript and browser Web APIs.',
+  inLanguage: 'en',
+};
+---
+<Base
+  title="HTML5 Advent — modern web platform guides, HTML/CSS/JS & Web APIs"
+  description="Practical, tested guides to HTML, CSS, JavaScript and browser Web APIs, plus the Web Platform Advent calendar of front-end demos."
+  lang="en" path="" schema={schema}
+>
+  <Home lang="en" />
+</Base>

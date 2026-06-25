@@ -1,0 +1,86 @@
+---
+import { t, localePath } from '../i18n/ui.js';
+import { GUIDES, guidesByDay } from '../data/guides.js';
+const { lang = 'en' } = Astro.props;
+const byDay = guidesByDay();
+const doors = Array.from({ length: 24 }, (_, i) => i + 1);
+const soon = { en: 'Soon', fr: 'Bientôt', es: 'Pronto' }[lang];
+const featured = GUIDES.slice(0, 6);
+---
+<section class="hero">
+  <p class="kicker">// {t(lang, 'advent')}</p>
+  <h1 class="hero__h1">HTML5 <span class="amber">Advent</span></h1>
+  <p class="hero__tag">{t(lang, 'tagline')}</p>
+  <p class="hero__intro">{t(lang, 'intro')}</p>
+</section>
+
+<section class="advent" aria-label={t(lang, 'advent')}>
+  <ol class="grid">
+    {doors.map((d) => {
+      const g = byDay[d];
+      return g ? (
+        <li class="door door--open">
+          <a href={localePath(lang, `guides/${g.slug}`)}>
+            <span class="door__num">{d}</span>
+            <span class="door__title">{g.title[lang] || g.title.en}</span>
+          </a>
+        </li>
+      ) : (
+        <li class="door door--soon"><span class="door__num">{d}</span><span class="door__soon">{soon}</span></li>
+      );
+    })}
+  </ol>
+</section>
+
+{featured.length > 0 && (
+  <section class="latest">
+    <h2>{t(lang, 'guides')}</h2>
+    <ul class="cards">
+      {featured.map((g) => (
+        <li class="card">
+          <a href={localePath(lang, `guides/${g.slug}`)}>
+            <span class="card__cat">{g.cat}</span>
+            <span class="card__title">{g.title[lang] || g.title.en}</span>
+            <span class="card__desc">{(g.desc?.[lang] || g.desc?.en) ?? ''}</span>
+            <span class="card__more">{t(lang, 'readMore')} →</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .hero { padding: 2rem 0 1rem; max-width: 720px; }
+  .kicker { font-family: var(--mono); color: var(--accent-blue); font-size: .85rem; margin: 0 0 .5rem; }
+  .hero__h1 { font-size: clamp(2.6rem, 7vw, 4.5rem); margin: 0; }
+  .amber { color: var(--accent-amber); }
+  .hero__tag { font-family: var(--display); font-size: 1.4rem; color: var(--ink); margin: .75rem 0 0; }
+  .hero__intro { color: var(--muted); margin: 1rem 0 0; max-width: 60ch; }
+
+  .advent { margin: 3rem 0; }
+  .grid { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+  .door { aspect-ratio: 1; border: 1px solid var(--line); border-radius: 10px;
+    background: var(--surface); position: relative; overflow: hidden; }
+  .door__num { position: absolute; top: .5rem; left: .6rem; font-family: var(--display);
+    font-weight: 700; font-size: 1.4rem; color: var(--accent-amber); opacity: .9; }
+  .door--soon { display: grid; place-items: end center; }
+  .door__soon { font-family: var(--mono); font-size: .7rem; color: var(--muted); padding-bottom: .6rem; }
+  .door--open a { display: flex; flex-direction: column; justify-content: flex-end; height: 100%;
+    padding: .6rem; text-decoration: none; color: var(--ink); transition: background .2s ease; }
+  .door--open { border-color: var(--accent-blue); }
+  .door--open a:hover { background: rgba(77,141,255,.10); }
+  .door__title { font-family: var(--display); font-size: .82rem; line-height: 1.15; }
+
+  .latest { margin: 3rem 0; }
+  .latest h2 { font-size: 1.6rem; }
+  .cards { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .card { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  .card a { display: flex; flex-direction: column; gap: .5rem; padding: 1.25rem; text-decoration: none; height: 100%; }
+  .card__cat { font-family: var(--mono); font-size: .72rem; color: var(--accent-blue); text-transform: uppercase; }
+  .card__title { font-family: var(--display); font-weight: 600; font-size: 1.1rem; color: var(--ink); }
+  .card__desc { color: var(--muted); font-size: .9rem; }
+  .card__more { margin-top: auto; color: var(--accent-amber); font-size: .85rem; }
+</style>

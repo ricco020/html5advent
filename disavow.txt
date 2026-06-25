@@ -1,0 +1,24 @@
+# Disavow file — html5advent.com
+# Nettoyage du profil de backlinks toxiques (réseau récupéré, DR51).
+# À soumettre dans Google Search Console > Disavow Tool (UI manuelle), après vérification de la propriété GSC.
+# Format Google : une entrée par ligne. "domain:" désavoue tout le domaine source.
+# Généré 2026-06-25.
+
+# --- Réseau de spam AI "SEOExpress" (faux avis générés) ---
+domain:seoexpress-digital-system.store
+domain:expert-domain-seoexpress-specialists.store
+domain:elite-domain-seoexpress-consultants.store
+domain:instant-webpage-seoexpress-consultants.store
+domain:seoexpress.website
+domain:rent-a-shop.shop
+
+# --- Injections gambling "situs toto" ---
+domain:dayboihieptam.com
+domain:masterjason.com
+
+# --- Marketplaces aged-domains / backlinks (référencent ns1/ns2.html5advent.com) ---
+domain:bestwebstats.com
+domain:indians.cc
+
+# NOTE : Google ignore probablement déjà ces liens automatiquement ; ce disavow est une sécurité.
+# Re-vérifier le profil Ahrefs/GSC après 4-6 semaines et compléter si de nouveaux spams apparaissent.
