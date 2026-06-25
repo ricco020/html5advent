@@ -1,0 +1,81 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="css-nesting"
+  title="CSS Nesting nativo: o seletor &, o suporte dos navegadores e as diferenças com o Sass"
+  description="Escrever CSS aninhado sem um pré-processador. Como funciona o seletor de aninhamento &, onde difere do Sass e quais navegadores o suportam hoje."
+  cat="css"
+  day={7}
+  hero="/img/css-nesting-hero.jpg"
+  heroAlt="Uma folha impressa de marcação HTML com uma caneta apoiada sobre ela"
+  cluster={null}
+>
+  <p>O <strong>CSS nesting</strong> permite escrever regras dentro de outras regras, de modo que estilos que pertencem juntos permaneçam juntos. Durante anos isso só foi possível com um pré-processador como o Sass. Agora é um recurso nativo do CSS, disponível em todos os navegadores modernos — sem nenhuma etapa de build.</p>
+
+  <h2>A ideia básica</h2>
+  <p>Em vez de repetir o seletor pai para cada filho, você aninha a regra filha dentro dele. Estes dois blocos produzem o mesmo resultado:</p>
+  <pre><code>{`/* Flat, traditional CSS */
+.card { padding: 1rem; }
+.card h2 { margin: 0; }
+.card p { color: #555; }
+
+/* Nested */
+.card {
+  padding: 1rem;
+  h2 { margin: 0; }
+  p { color: #555; }
+}`}</code></pre>
+  <p>Cada seletor aninhado é lido em relação ao seu pai, portanto <code>.card p</code> é o que o navegador realmente aplica.</p>
+
+  <h2>O seletor de aninhamento &amp;</h2>
+  <p>O e comercial <code>&amp;</code> refere-se ao seletor pai. Você precisa dele sempre que o seletor aninhado tiver de se conectar diretamente ao pai em vez de descrever um descendente — pseudo-classes, classes modificadoras e seletores compostos:</p>
+  <pre><code>{`.btn {
+  background: #2563eb;
+
+  &:hover { background: #1d4ed8; }   /* .btn:hover */
+  &.is-active { background: #1e40af; } /* .btn.is-active */
+}`}</code></pre>
+  <p>Sem o <code>&amp;</code>, um simples <code>:hover</code> seria tratado como um descendente: <code>.btn *:hover</code>, o que quase nunca é o que você quer. Quando você escreve um seletor aninhado que começa com um elemento ou classe (como <code>p</code> acima), o navegador insere implicitamente um combinador de descendência para você.</p>
+
+  <figure>
+    <img src="/img/css-nesting-inbody.jpg" alt="Source code on a dark editor showing function blocks nested inside curly braces" width="1280" height="853" loading="lazy" />
+    <figcaption>O aninhamento espelha a estrutura já presente no seu código: blocos colocados dentro das chaves, indentados para mostrar o que pertence a quê.</figcaption>
+  </figure>
+
+  <h2>Aninhar media queries</h2>
+  <p>Você pode aninhar <code>@media</code> (e outras at-rules) dentro de um seletor, mantendo os ajustes responsivos ao lado da regra que eles modificam:</p>
+  <pre><code>{`.sidebar {
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 280px;
+  }
+}`}</code></pre>
+
+  <h2>Onde difere do Sass</h2>
+  <p>A sintaxe parece o Sass, mas os dois não são idênticos. As diferenças que mais costumam morder:</p>
+  <ul>
+    <li><strong>Concatenação</strong>: o Sass permite construir seletores como <code>&amp;__title</code> (BEM). O CSS nesting nativo <em>não</em> concatena — <code>&amp;__title</code> é inválido. Você precisa escrever o nome completo da classe.</li>
+    <li><strong>Nenhuma etapa de compilação</strong>: o aninhamento nativo roda no navegador, então não há nada para compilar nem source maps para gerenciar.</li>
+    <li><strong>Especificidade do &amp;</strong>: no CSS nativo, <code>&amp;</code> comporta-se como <code>:is()</code> e assume a especificidade do seletor mais específico da lista do pai, o que pode diferir sutilmente da saída do Sass.</li>
+  </ul>
+
+  <h2>Suporte dos navegadores e fallback</h2>
+  <p>O CSS nesting nativo é suportado nas versões atuais de Chrome, Edge, Firefox e Safari. As primeiras implementações exigiam que o seletor aninhado começasse com um símbolo (então você escrevia <code>&amp; p</code> em vez de <code>p</code>); a sintaxe relaxada que permite um simples seletor de elemento é o que é distribuído nos navegadores de hoje. Se você precisar dar suporte a motores mais antigos, continue usando Sass ou PostCSS — o plugin <code>postcss-nesting</code> compila o aninhamento nativo em CSS plano.</p>
+
+  <h2>Referência rápida</h2>
+  <table>
+    <thead><tr><th>Você quer</th><th>Escreva</th></tr></thead>
+    <tbody>
+      <tr><td>Descendente</td><td><code>.card &#123; p &#123; ... &#125; &#125;</code></td></tr>
+      <tr><td>Pseudo-classe</td><td><code>&amp;:hover &#123; ... &#125;</code></td></tr>
+      <tr><td>Classe modificadora</td><td><code>&amp;.is-active &#123; ... &#125;</code></td></tr>
+      <tr><td>Responsivo</td><td><code>@media (...) &#123; ... &#125;</code> aninhada</td></tr>
+      <tr><td>Concatenação BEM</td><td>não suportada — escreva a classe completa</td></tr>
+    </tbody>
+  </table>
+
+  <p>O aninhamento nativo remove um dos últimos grandes motivos para recorrer a um pré-processador em um novo projeto. Mantenha o aninhamento raso — dois ou três níveis — e suas folhas de estilo permanecem legíveis enquanto as relações entre os seletores permanecem óbvias.</p>
+</Article>

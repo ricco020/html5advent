@@ -1,7 +1,7 @@
 // Single source of truth for published guides (home grid, hub, listings all derive from this).
 //   day=Advent door (1–24) · cat='apis|css|js|html|hosting' · cluster='hosting'|'deploy'|null
 //   locales: which locales the page actually exists in (controls links → no 404s)
-const L = ['en', 'fr', 'es']; // bump to add 'de','it','pt' once those pages are written
+const L = ['en', 'fr', 'es', 'de', 'it', 'pt']; // all 6 locales live (articles translated)
 export const GUIDES = [
   { slug: 'fetch-api-javascript', day: 1, cat: 'apis', cluster: null, locales: L,
     title: { en: 'The Fetch API in JavaScript', fr: 'L’API Fetch en JavaScript', es: 'La API Fetch en JavaScript' },

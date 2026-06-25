@@ -1,0 +1,87 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="service-worker"
+  title="Service Worker: caching, offline e aggiornamenti spiegati"
+  description="Una guida pratica ai service worker — registrarne uno, il ciclo di vita install/activate, la Cache API, servire una pagina offline e distribuire aggiornamenti in sicurezza."
+  cat="apis"
+  day={4}
+  hero="/img/service-worker-hero.jpg"
+  heroAlt="Lo schermo di uno smartphone in modalità aereo che mostra l'ora, senza connessione di rete"
+  cluster={null}
+>
+  <p>Un <strong>service worker</strong> è uno script che il browser esegue in background, separato dalla tua pagina. Si colloca tra la tua app e la rete come un proxy programmabile: può intercettare le richieste, rispondere dalla cache e mantenere il tuo sito funzionante anche quando l'utente è offline. È la base delle Progressive Web App.</p>
+
+  <p>Due regole fondamentali prima di tutto. Un service worker funziona solo su <strong>HTTPS</strong> (o <code>localhost</code> durante lo sviluppo) e <strong>non ha accesso al DOM</strong> — comunica con le pagine tramite eventi e messaggi, non toccando <code>document</code>.</p>
+
+  <h2>Registrare un service worker</h2>
+  <p>Registri il worker dal normale script della tua pagina. Verifica prima la disponibilità della funzionalità, poi indirizza il browser al file dello script:</p>
+  <pre><code>{`if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then((reg) => console.log('Scope:', reg.scope))
+      .catch((err) => console.error('SW failed:', err));
+  });
+}`}</code></pre>
+  <p>La posizione del file è importante: un worker in <code>/sw.js</code> controlla l'intero origin, mentre uno in <code>/app/sw.js</code> controlla solo le pagine sotto <code>/app/</code>. Quel confine è il suo <em>scope</em>.</p>
+
+  <h2>Il ciclo di vita: install e activate</h2>
+  <p>Un service worker ha una propria vita indipendente dalla pagina. I due eventi che ti interessano di più sono <code>install</code> (attivato una sola volta, un buon punto per pre-mettere in cache gli asset) e <code>activate</code> (un buon punto per ripulire le vecchie cache):</p>
+  <pre><code>{`const CACHE = 'site-v1';
+const ASSETS = ['/', '/index.html', '/styles.css', '/app.js', '/offline.html'];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE).then((cache) => cache.addAll(ASSETS))
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+    )
+  );
+});`}</code></pre>
+  <p>Chiamare <code>event.waitUntil()</code> dice al browser di non considerare la fase conclusa finché la tua promise non si risolve — altrimenti potrebbe terminare il worker a metà del compito.</p>
+
+  <figure>
+    <img src="/img/service-worker-inbody.jpg" alt="A rack of server hard-drive bays with status lights" width="1280" height="720" loading="lazy" />
+    <figcaption>La Cache API memorizza le risposte sul dispositivo stesso dell'utente, non su un server come quello illustrato — quella copia locale è ciò che permette a una pagina di caricarsi senza alcuna rete.</figcaption>
+  </figure>
+
+  <h2>Intercettare le richieste con fetch</h2>
+  <p>L'evento <code>fetch</code> è dove avviene la magia. Decidi tu cosa restituisce ogni richiesta. Una strategia comune e sicura è <em>cache-first con fallback sulla rete</em>:</p>
+  <pre><code>{`self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      return cached || fetch(event.request);
+    })
+  );
+});`}</code></pre>
+  <p>Per mostrare una pagina offline personalizzata quando sia la cache sia la rete falliscono, aggiungi un catch:</p>
+  <pre><code>{`self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request).catch(() => caches.match('/offline.html'))
+  );
+});`}</code></pre>
+
+  <h2>Strategie di caching a colpo d'occhio</h2>
+  <table>
+    <thead><tr><th>Strategia</th><th>Comportamento</th><th>Adatta per</th></tr></thead>
+    <tbody>
+      <tr><td>Cache-first</td><td>Servire dalla cache, ripiegare sulla rete</td><td>Asset statici (CSS, JS, font)</td></tr>
+      <tr><td>Network-first</td><td>Provare la rete, ripiegare sulla cache</td><td>HTML, dati API che cambiano</td></tr>
+      <tr><td>Stale-while-revalidate</td><td>Servire dalla cache, aggiornarla in background</td><td>Avatar, feed, elenchi di contenuti</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Distribuire aggiornamenti senza penalizzare gli utenti</h2>
+  <p>Quando modifichi <code>sw.js</code>, il browser rileva i nuovi byte e installa il nuovo worker, ma rimane <em>in attesa</em> finché ogni scheda che usa il vecchio non viene chiusa. Questo impedisce che due versioni vengano eseguite contemporaneamente. Per prendere il controllo prima, chiama <code>self.skipWaiting()</code> in <code>install</code> e <code>clients.claim()</code> in <code>activate</code> — ma fallo solo quando sei certo che la nuova versione sia compatibile con le pagine già aperte.</p>
+  <p>Incrementa sempre il nome della cache (<code>site-v1</code> → <code>site-v2</code>) quando gli asset cambiano. L'handler <code>activate</code> qui sopra elimina poi la cache obsoleta, così gli utenti non ricevono mai un misto di file vecchi e nuovi.</p>
+
+  <p>Questo è l'intero ciclo fondamentale: registrare, pre-mettere in cache all'install, ripulire all'activate e rispondere alle richieste al fetch. Inizia con una strategia cache-first per i file statici e una network-first per il tuo HTML, e avrai un sito che si carica istantaneamente alle visite ripetute e sopravvive a una connessione caduta.</p>
+</Article>

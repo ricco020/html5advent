@@ -1,0 +1,104 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="web-components"
+  title="Web Components: Custom Elements, Shadow DOM und Templates"
+  description="Erstellen Sie wiederverwendbare HTML-Elemente mit den nativen Web-Components-APIs — ein Custom Element definieren, Stile mit dem Shadow DOM kapseln, ein &lt;template&gt; klonen und Daten über Attribute übergeben."
+  cat="html"
+  day={5}
+  hero="/img/web-components-hero.jpg"
+  heroAlt="Ein Haufen bunter ineinandergreifender Bausteine aus Kunststoff in verschiedenen Formen"
+  cluster={null}
+>
+  <p><strong>Web Components</strong> sind eine Reihe nativer Browser-APIs, mit denen Sie Ihre eigenen wiederverwendbaren HTML-Elemente erstellen können — ganz ohne Framework. Eine Komponente, die Sie ausliefern, funktioniert gleich in reinem HTML, React, Vue oder Svelte, weil sie einfach ein Element ist, das der Browser versteht. Drei APIs machen es möglich: Custom Elements, das Shadow DOM und das <code>&lt;template&gt;</code>-Tag.</p>
+
+  <h2>Custom Elements</h2>
+  <p>Ein Custom Element ist eine Klasse, die <code>HTMLElement</code> erweitert und mit einem Tag-Namen registriert wird, der <strong>einen Bindestrich enthalten muss</strong> (damit er niemals mit einem künftigen eingebauten Tag kollidieren kann):</p>
+  <pre><code>{`class GreetingCard extends HTMLElement {
+  connectedCallback() {
+    const p = document.createElement('p');
+    p.textContent = 'Hello from a custom element!';
+    this.append(p);
+  }
+}
+
+customElements.define('greeting-card', GreetingCard);`}</code></pre>
+  <p>Einmal definiert, verwenden Sie es wie jedes andere Tag:</p>
+  <pre><code>{`<greeting-card></greeting-card>`}</code></pre>
+  <p>Die Klasse gibt Ihnen <strong>Lebenszyklus-Callbacks</strong>. Die nützlichsten sind <code>connectedCallback</code> (das Element wurde der Seite hinzugefügt), <code>disconnectedCallback</code> (es wurde entfernt) und <code>attributeChangedCallback</code> (ein beobachtetes Attribut hat sich geändert).</p>
+
+  <h2>Auf Attribute reagieren</h2>
+  <p>Um Daten zu übergeben, lesen Sie Attribute — genau wie <code>src</code> bei einem Bild. Geben Sie mit einem statischen <code>observedAttributes</code>-Getter an, welche zu beobachten sind, und reagieren Sie dann in <code>attributeChangedCallback</code>. Den Knoten mit <code>textContent</code> aufzubauen hält vom Nutzer gelieferte Werte sicher:</p>
+  <pre><code>{`class GreetingCard extends HTMLElement {
+  static get observedAttributes() {
+    return ['name'];
+  }
+  attributeChangedCallback(attr, oldVal, newVal) {
+    if (attr === 'name') this.render();
+  }
+  connectedCallback() {
+    this.render();
+  }
+  render() {
+    const name = this.getAttribute('name') || 'friend';
+    this.replaceChildren();
+    const p = document.createElement('p');
+    p.textContent = 'Hello, ' + name + '!';
+    this.append(p);
+  }
+}
+customElements.define('greeting-card', GreetingCard);`}</code></pre>
+  <p>Nun rendert <code>&lt;greeting-card name="Ada"&gt;&lt;/greeting-card&gt;</code> "Hello, Ada!", und das Attribut live zu ändern rendert es neu.</p>
+
+  <figure>
+    <img src="/img/web-components-inbody.jpg" alt="An open metal toolbox with neatly organised tools in separate compartments" width="1280" height="720" loading="lazy" />
+    <figcaption>Eine Web Component ist wie ein Werkzeug in einem Werkzeugkasten: eine in sich geschlossene, beschriftete Einheit, nach der Sie greifen und die Sie über viele Projekte hinweg wiederverwenden, ohne sie jedes Mal neu zu bauen.</figcaption>
+  </figure>
+
+  <h2>Das Shadow DOM: echte Kapselung</h2>
+  <p>Das Shadow DOM gibt einem Element einen privaten Teilbaum, dessen Stile und Markup vom Rest der Seite <strong>isoliert</strong> sind. Ein <code>&lt;style&gt;</code> darin kann niemals nach außen dringen, und externes CSS kann niemals versehentlich hineinreichen. Bauen Sie es mit der DOM-API und einem <code>&lt;slot&gt;</code> für projizierten Inhalt:</p>
+  <pre><code>{`class FancyButton extends HTMLElement {
+  connectedCallback() {
+    const shadow = this.attachShadow({ mode: 'open' });
+
+    const style = document.createElement('style');
+    style.textContent =
+      'button { background:#2563eb; color:#fff; border:0;' +
+      ' border-radius:8px; padding:.6rem 1rem; }';
+
+    const button = document.createElement('button');
+    button.append(document.createElement('slot'));
+
+    shadow.append(style, button);
+  }
+}
+customElements.define('fancy-button', FancyButton);`}</code></pre>
+  <p>Der <code>&lt;slot&gt;</code> ist ein Platzhalter: Was auch immer Sie zwischen die Tags setzen — <code>&lt;fancy-button&gt;Save&lt;/fancy-button&gt;</code> — wird an diese Stelle projiziert, sodass die Komponente Ihren Inhalt umschließt, ohne ihn zu ersetzen.</p>
+
+  <h2>Templates: einmal klonen, günstig wiederverwenden</h2>
+  <p>Das <code>&lt;template&gt;</code>-Element enthält inertes Markup, das geparst, aber nicht gerendert wird, bis Sie es klonen. Es ist der effiziente Weg, wiederkehrende Strukturen auszustanzen:</p>
+  <pre><code>{`<template id="row-tpl">
+  <li><span class="label"></span></li>
+</template>
+
+<script>
+  const tpl = document.getElementById('row-tpl');
+  const node = tpl.content.cloneNode(true);
+  node.querySelector('.label').textContent = 'Item 1';
+  document.querySelector('ul').append(node);
+<\/script>`}</code></pre>
+
+  <h2>Die drei Teile zusammen</h2>
+  <table>
+    <thead><tr><th>API</th><th>Gibt Ihnen</th></tr></thead>
+    <tbody>
+      <tr><td>Custom Elements</td><td>Eigene Tags mit Lebenszyklus-Callbacks</td></tr>
+      <tr><td>Shadow DOM</td><td>Stil- und Markup-Kapselung, Slots</td></tr>
+      <tr><td><code>&lt;template&gt;</code></td><td>Wiederverwendbares, klonbares inertes Markup</td></tr>
+    </tbody>
+  </table>
+
+  <p>Sie brauchen selten alle drei auf einmal. Ein einfacher Wrapper verwendet vielleicht nur ein Custom Element; ein gestyltes, in sich geschlossenes Widget kombiniert ein Custom Element mit dem Shadow DOM und einem Slot. Da das Ergebnis reines DOM ist, fügt es sich in jeden Stack ein und überlebt jedes Framework, das in dem Jahr beliebt war, in dem Sie es geschrieben haben.</p>
+</Article>

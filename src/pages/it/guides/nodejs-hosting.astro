@@ -1,0 +1,97 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="nodejs-hosting"
+  title="Come ospitare un'app Node.js: VPS, PaaS e serverless"
+  description="I modi pratici per fare il deploy di un'applicazione Node.js — VPS, PaaS gestito o serverless — più PM2, un reverse proxy, le variabili d'ambiente e un flusso di deploy sensato."
+  cat="hosting"
+  day={14}
+  hero="/img/nodejs-hosting-hero.jpg"
+  heroAlt="Una mano inserisce una blade server in un rack di server illuminato di blu"
+  cluster="hosting"
+>
+  <p>Ospitare un'app Node.js è diverso dall'ospitare un sito statico o una pagina PHP. Node esegue un processo a lunga durata che possiede il proprio server HTTP, quindi l'host deve <em>mantenere vivo quel processo</em>, riavviarlo in caso di crash e instradare verso di esso il traffico pubblico. Questa guida ti accompagna attraverso le tre opzioni realistiche e i componenti di cui hai bisogno indipendentemente da quella che scegli.</p>
+
+  <h2>Tre modi per ospitare Node.js</h2>
+  <p>Quasi ogni deployment ricade in uno di questi modelli. La scelta giusta dipende da quanta parte del server vuoi gestire e da come si comporta il tuo traffico.</p>
+  <ul>
+    <li><strong>VPS (autogestito)</strong> — ottieni una macchina Linux e accesso root completo. Massimo controllo e costi prevedibili, ma installi e mantieni tu stesso Node, il process manager, il reverse proxy e il TLS.</li>
+    <li><strong>PaaS (platform-as-a-service)</strong> — fai il push del codice (spesso via Git) e la piattaforma costruisce, esegue e scala il processo al posto tuo. Meno controllo, più veloce nel rilascio, di solito a consumo.</li>
+    <li><strong>Serverless / functions</strong> — fai il deploy di singoli handler anziché di un server in esecuzione. La piattaforma li avvia su richiesta. Ottimo per carichi di lavoro irregolari o a basso traffico, ma stateless e soggetto a cold start.</li>
+  </ul>
+
+  <h2>Mantenere vivo il processo con PM2</h2>
+  <p>Su un VPS, eseguire <code>node server.js</code> nella tua shell si interrompe nel momento in cui ti disconnetti, e nulla lo riavvia dopo un crash. Un process manager risolve entrambe le cose. <strong>PM2</strong> è la scelta più comune:</p>
+  <pre><code>{`npm install -g pm2
+
+# start the app and name it
+pm2 start server.js --name web
+
+# restart automatically after a server reboot
+pm2 startup
+pm2 save
+
+# useful day-to-day commands
+pm2 list
+pm2 logs web
+pm2 restart web`}</code></pre>
+  <p>PM2 esegue la tua app anche in <em>modalità cluster</em> per usare ogni core della CPU, il modo più semplice per scalare una singola macchina:</p>
+  <pre><code>{`pm2 start server.js --name web -i max`}</code></pre>
+
+  <figure>
+    <img src="/img/nodejs-hosting-inbody.jpg" alt="Una fila di server montati a rack in un data center" width="1280" height="853" loading="lazy" />
+    <figcaption>Su un VPS il tuo processo Node gira su una macchina fisica o virtuale come queste; un process manager lo tiene in esecuzione e un reverse proxy lo espone al web.</figcaption>
+  </figure>
+
+  <h2>Un reverse proxy davanti a Node</h2>
+  <p>Non esporre Node direttamente sulla porta 80/443. Metti davanti un reverse proxy come <strong>Nginx</strong>: termina il TLS, serve i file statici in modo efficiente e può instradare più app su una sola macchina. Un blocco server Nginx minimale che inoltra il traffico a un'app Node in ascolto sulla porta 3000:</p>
+  <pre><code>{`server {
+  listen 80;
+  server_name example.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}`}</code></pre>
+  <p>Gli header <code>Upgrade</code> e <code>Connection</code> contano se la tua app usa i WebSocket. Per l'HTTPS, la via usuale è un certificato gratuito di Let's Encrypt tramite <code>certbot</code>, che modifica questa configurazione al posto tuo.</p>
+
+  <h2>Variabili d'ambiente e configurazione</h2>
+  <p>Non scrivere mai segreti (URL di database, chiavi API) direttamente nel tuo sorgente. Leggili dall'ambiente con <code>process.env</code> e lascia che sia la piattaforma a iniettarli:</p>
+  <pre><code>{`const port = process.env.PORT || 3000;
+const dbUrl = process.env.DATABASE_URL;
+
+app.listen(port, () => {
+  console.log(\`listening on \${port}\`);
+});`}</code></pre>
+  <p>Su un VPS puoi tenerli in un file <code>.env</code> (caricato da una libreria ed escluso da Git) oppure passarli tramite il file ecosystem di PM2. Su una PaaS li imposti nella dashboard. Leggi sempre <code>process.env.PORT</code> — le piattaforme gestite assegnano la porta al posto tuo.</p>
+
+  <h2>Un flusso di deploy sensato</h2>
+  <p>Comunque tu ospiti, punta a un deploy ripetibile anziché a modificare i file sul server a mano:</p>
+  <ul>
+    <li>Recupera il nuovo codice (<code>git pull</code> o un artefatto di CI).</li>
+    <li>Installa solo le dipendenze di produzione: <code>npm ci --omit=dev</code>.</li>
+    <li>Esegui lo step di build se ne hai uno (<code>npm run build</code>).</li>
+    <li>Ricarica il processo senza downtime: <code>pm2 reload web</code>.</li>
+  </ul>
+  <p>Su una PaaS l'intera sequenza è innescata da un <code>git push</code>; su un VPS puoi scriverla in uno script o collegarla a un CI runner.</p>
+
+  <h2>Quale opzione fa al caso tuo?</h2>
+  <table>
+    <thead><tr><th>Opzione</th><th>Gestisci</th><th>Ideale quando</th></tr></thead>
+    <tbody>
+      <tr><td>VPS</td><td>OS, Node, PM2, Nginx, TLS</td><td>Vuoi controllo e costi prevedibili</td></tr>
+      <tr><td>PaaS</td><td>Solo il tuo codice + variabili d'ambiente</td><td>Vuoi rilasciare in fretta e scalare facilmente</td></tr>
+      <tr><td>Serverless</td><td>Singoli handler</td><td>Traffico irregolare o basso, lavoro stateless</td></tr>
+    </tbody>
+  </table>
+
+  <p>Se stai iniziando, un singolo VPS ben configurato con PM2 e Nginx eseguirà comodamente la maggior parte delle app Node e ti insegnerà cosa automatizzano le piattaforme gestite. Passa a una PaaS o al serverless quando lo scaling o l'overhead operativo diventano il collo di bottiglia — non prima.</p>
+</Article>

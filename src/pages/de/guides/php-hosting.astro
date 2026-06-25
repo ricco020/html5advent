@@ -1,0 +1,80 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="php-hosting"
+  title="PHP-Hosting erklärt: Shared vs. VPS, Versionen und Performance"
+  description="Worauf Sie bei PHP-Hosting achten sollten — Shared vs. VPS, PHP-Versionen und Erweiterungen, Deployment, .htaccess und Performance mit OPcache — ohne das Marketing-Rauschen."
+  cat="hosting"
+  day={15}
+  hero="/img/php-hosting-hero.jpg"
+  heroAlt="PHP-Quellcode auf einem dunklen Bildschirm, mit version_compare- und require_once-Anweisungen"
+  cluster="hosting"
+>
+  <p>PHP treibt nach wie vor einen großen Teil des Webs an, und es zu hosten ist ausgetretener Boden — was genau der Grund ist, warum die Angebote alle gleich aussehen und die echten Unterschiede sich in den Details verstecken. Dieser Leitfaden behandelt die Kriterien, die wirklich zählen: den Kompromiss Shared vs. VPS, PHP-Versionen und Erweiterungen, wie Sie deployen, was <code>.htaccess</code> steuert und die Performance-Stellschrauben, die man kennen sollte.</p>
+
+  <h2>Shared Hosting vs. VPS</h2>
+  <p>Die erste Entscheidung ist, wie isoliert Ihre Umgebung ist.</p>
+  <ul>
+    <li><strong>Shared Hosting</strong> — Ihre Site liegt zusammen mit vielen anderen auf einer Maschine, für Sie verwaltet (PHP, Webserver, oft ein Control-Panel). Am günstigsten und einfachsten; Sie geben die Kontrolle über die PHP-Version, Erweiterungen und Server-Konfiguration ab und teilen sich Ressourcen mit den Nachbarn.</li>
+    <li><strong>VPS</strong> — ein dedizierter Teil eines Servers mit Root-Zugriff. Sie wählen die PHP-Version, installieren jede Erweiterung, optimieren den Webserver und sind von anderen Mietern nicht betroffen — aber Sie sind für Updates und Sicherheit verantwortlich.</li>
+  </ul>
+  <p>Für eine kleine Site oder ein Standard-CMS reicht Shared Hosting meist aus. Greifen Sie zu einem VPS, wenn Sie einen bestimmten PHP-Build, eigene Erweiterungen, planbarere Performance oder volle Kontrolle über den Stack benötigen.</p>
+
+  <h2>PHP-Versionen sind wichtig</h2>
+  <p>Die PHP-Version ist kein Detail — neuere Releases sind spürbar schneller und erhalten, entscheidend, weiterhin Sicherheits-Fixes. Eine End-of-Life-Version zu betreiben bedeutet keine Patches mehr. Prüfen Sie stets, welche Versionen ein Host anbietet und ob Sie leicht wechseln können. Die laufende Version lässt sich aus dem Code oder über die CLI auslesen:</p>
+  <pre><code>{`<?php
+echo phpversion();        // e.g. "8.3.x"
+// or a full report:
+phpinfo();`}</code></pre>
+  <pre><code>{`php -v`}</code></pre>
+  <p>Ein guter Host lässt Sie die PHP-Version pro Site auswählen (oft im Control-Panel) und hält eine Reihe unterstützter Versionen verfügbar, sodass Sie nach Ihrem eigenen Zeitplan aktualisieren können.</p>
+
+  <h2>Erweiterungen: prüfen, bevor Sie sich festlegen</h2>
+  <p>Die Funktionalität von PHP ist auf Erweiterungen verteilt, und Ihre App hängt wahrscheinlich von mehreren ab — einem Datenbanktreiber, Bildverarbeitung und so weiter. Häufige, die man bei einem Host verifizieren sollte:</p>
+  <ul>
+    <li><code>pdo_mysql</code> / <code>mysqli</code> — MySQL/MariaDB-Anbindung.</li>
+    <li><code>mbstring</code> — Verarbeitung von Multibyte-Strings, von vielen Frameworks vorausgesetzt.</li>
+    <li><code>gd</code> oder <code>imagick</code> — Bildverarbeitung.</li>
+    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> — HTTP-Anfragen, Verschlüsselung, Archive, Lokalisierung.</li>
+  </ul>
+  <p>Listen Sie auf, was auf dem Server tatsächlich geladen ist, mit:</p>
+  <pre><code>{`php -m`}</code></pre>
+
+  <figure>
+    <img src="/img/php-hosting-inbody.jpg" alt="Hände tippen auf einem Laptop, der PHP-Quellcode in einem Code-Editor anzeigt" width="1280" height="876" loading="lazy" />
+    <figcaption>Ihre PHP-Version und die geladenen Erweiterungen früh zu prüfen erspart Ihnen, auf einen Server zu deployen, auf dem Ihre Anwendung gar nicht laufen kann.</figcaption>
+  </figure>
+
+  <h2>Deployment und .htaccess</h2>
+  <p>Auf Shared Hosting deployen Sie typischerweise per Datei-Upload (SFTP) oder indem Sie aus Git in das Web-Root ziehen; manche Hosts ergänzen einen Deploy-Schritt im Panel. Unter Apache konfiguriert die Datei <code>.htaccess</code> in Ihrem Web-Root das Verhalten pro Verzeichnis, ohne die Haupt-Server-Konfiguration anzufassen — nützlich für saubere URLs, Weiterleitungen und Caching-Header. Ein gängiges Muster leitet alle Anfragen an einen Front-Controller:</p>
+  <pre><code>{`# .htaccess — route everything to index.php (front controller)
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]`}</code></pre>
+  <p>Beachten Sie, dass <code>.htaccess</code> ein Apache-Feature ist. Unter Nginx liegen die entsprechenden Regeln in der Server-Konfiguration, die Sie auf Shared Hosting möglicherweise nicht kontrollieren — ein weiterer Grund, zu wissen, welchen Webserver Ihr Host betreibt.</p>
+
+  <h2>Performance: OPcache</h2>
+  <p>Der mit Abstand größte PHP-Performance-Gewinn ist <strong>OPcache</strong>, das kompilierten Bytecode zwischenspeichert, sodass PHP Ihre Skripte nicht bei jeder Anfrage neu parsen und neu kompilieren muss. Die meisten modernen Hosts aktivieren es standardmäßig; es lohnt sich, das zu bestätigen. Typische Einstellungen in <code>php.ini</code>:</p>
+  <pre><code>{`opcache.enable=1
+opcache.memory_consumption=128
+opcache.max_accelerated_files=10000
+opcache.validate_timestamps=1`}</code></pre>
+  <p>In der Produktion können Sie <code>opcache.validate_timestamps=0</code> setzen, sodass PHP Dateien nie auf Änderungen prüft, und dann den Cache beim Deploy leeren — so holen Sie noch etwas mehr Geschwindigkeit heraus, zum Preis eines nötigen expliziten Cache-Resets.</p>
+
+  <h2>Kurze Checkliste</h2>
+  <table>
+    <thead><tr><th>Kriterium</th><th>Was zu fragen ist</th></tr></thead>
+    <tbody>
+      <tr><td>Isolation</td><td>Shared (einfach) oder VPS (Kontrolle)?</td></tr>
+      <tr><td>PHP-Version</td><td>Unterstützt, aktuell, wechselbar?</td></tr>
+      <tr><td>Erweiterungen</td><td>Sind die, die meine App braucht, verfügbar?</td></tr>
+      <tr><td>Webserver</td><td>Apache (.htaccess) oder Nginx?</td></tr>
+      <tr><td>Performance</td><td>Ist OPcache aktiviert?</td></tr>
+    </tbody>
+  </table>
+
+  <p>PHP-Hosting ist ausgereift, also zerdenken Sie die Markennamen nicht — passen Sie den Host an die echten Anforderungen Ihrer App an: die richtige PHP-Version, die Erweiterungen, von denen Sie abhängen, einen Webserver, den Sie verstehen, und aktiviertes OPcache. Bekommen Sie das richtig hin, ist der Rest größtenteils Geschmackssache.</p>
+</Article>

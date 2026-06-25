@@ -1,0 +1,76 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="fetch-api-javascript"
+  title="Die Fetch-API in JavaScript: ein praktischer Leitfaden"
+  description="Wie man im Browser mit der Fetch-API HTTP-Anfragen stellt — GET, JSON, POST, Fehlerbehandlung und das Abbrechen von Anfragen — mit ausführbaren Beispielen."
+  cat="apis"
+  day={1}
+  hero="/img/web-dev-code.jpg"
+  heroAlt="Ein Code-Editor auf dem Bildschirm mit HTML-, CSS- und JavaScript-Quellcode"
+  cluster={null}
+>
+  <p>Die <strong>Fetch-API</strong> ist die moderne, auf Promises basierende Art, vom Browser aus HTTP-Anfragen zu stellen. Sie ersetzt das ältere <code>XMLHttpRequest</code> durch eine sauberere Schnittstelle, die natürlich mit <code>async</code>/<code>await</code> und Streams zusammenarbeitet. Jeder aktuelle Browser unterstützt sie.</p>
+
+  <h2>Eine erste GET-Anfrage</h2>
+  <p><code>fetch()</code> gibt ein Promise zurück, das zu einem <code>Response</code>-Objekt aufgelöst wird. Um daraus JSON zu lesen, ruft man <code>response.json()</code> auf, was selbst ein Promise zurückgibt:</p>
+  <pre><code>{`const res = await fetch('https://api.example.com/articles');
+const data = await res.json();
+console.log(data);`}</code></pre>
+  <p>Dasselbe ohne <code>async</code>/<code>await</code>, mit Ketten aus <code>.then()</code>:</p>
+  <pre><code>{`fetch('https://api.example.com/articles')
+  .then((res) => res.json())
+  .then((data) => console.log(data));`}</code></pre>
+
+  <h2>Der Haken: fetch lehnt bei HTTP-Fehlern nicht ab</h2>
+  <p>Das bringt fast jeden ins Stolpern. Eine <code>404</code>- oder <code>500</code>-Antwort ist immer noch ein <em>erfolgreicher</em> Fetch — das Promise wird nur bei einem <strong>Netzwerk</strong>fehler abgelehnt (offline, DNS, CORS). Sie müssen <code>response.ok</code> selbst prüfen:</p>
+  <pre><code>{`const res = await fetch(url);
+if (!res.ok) {
+  throw new Error(\`HTTP \${res.status} \${res.statusText}\`);
+}
+const data = await res.json();`}</code></pre>
+
+  <figure>
+    <img src="/img/network-data.jpg" alt="Ein Netzwerk-Switch mit Kabeln, der die zwischen Client und Server übertragenen Daten darstellt" width="1280" height="720" loading="lazy" />
+    <figcaption>Jeder <code>fetch()</code>-Aufruf sendet eine HTTP-Anfrage über das Netzwerk an einen Server und wartet, bis die Antwort den Rückweg zurücklegt.</figcaption>
+  </figure>
+
+  <h2>Daten mit POST senden</h2>
+  <p>Übergeben Sie ein zweites Optionsargument, um Methode, Header und Body festzulegen. Für JSON serialisieren Sie die Nutzlast und setzen den <code>Content-Type</code>:</p>
+  <pre><code>{`const res = await fetch('/api/articles', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ title: 'Hallo', body: 'Welt' }),
+});
+const created = await res.json();`}</code></pre>
+
+  <h2>Eine Anfrage abbrechen</h2>
+  <p>Verwenden Sie einen <code>AbortController</code>, um eine Anfrage abzubrechen — nützlich für Zeitlimits oder wenn eine Komponente entfernt wird:</p>
+  <pre><code>{`const controller = new AbortController();
+const timeout = setTimeout(() => controller.abort(), 5000);
+
+try {
+  const res = await fetch(url, { signal: controller.signal });
+  const data = await res.json();
+} catch (err) {
+  if (err.name === 'AbortError') console.log('Anfrage abgelaufen');
+} finally {
+  clearTimeout(timeout);
+}`}</code></pre>
+
+  <h2>Schnellreferenz</h2>
+  <table>
+    <thead><tr><th>Aufgabe</th><th>Wie</th></tr></thead>
+    <tbody>
+      <tr><td>JSON lesen</td><td><code>await res.json()</code></td></tr>
+      <tr><td>Text lesen</td><td><code>await res.text()</code></td></tr>
+      <tr><td>Erfolg prüfen</td><td><code>res.ok</code> / <code>res.status</code></td></tr>
+      <tr><td>JSON senden</td><td><code>body: JSON.stringify(...)</code> + <code>Content-Type</code></td></tr>
+      <tr><td>Abbrechen</td><td><code>AbortController</code> + <code>signal</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>Das deckt die alltäglichen Fälle ab. Die Fetch-API unterstützt außerdem das Streamen von Antwort-Bodies, <code>FormData</code>-Uploads sowie das Klonen von Anfrage/Antwort — aber die obigen Muster bewältigen die große Mehrheit realer Aufrufe.</p>
+</Article>

@@ -1,0 +1,61 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="web-hosting-for-developers"
+  title="Web hosting per sviluppatori: i criteri che contano davvero"
+  description="Accesso SSH, deploy via Git, runtime, database e staging — le funzionalità di hosting di cui gli sviluppatori hanno davvero bisogno, e come si confrontano shared, VPS e piattaforme gestite."
+  cat="hosting"
+  day={13}
+  hero="/img/web-hosting-for-developers-hero.jpg"
+  heroAlt="Uno sviluppatore con le cuffie lavora a una scrivania in una stanza buia con del codice su un grande monitor"
+  cluster="hosting"
+>
+  <p>La maggior parte dei confronti tra hosting è scritta per chi vuole cliccare „installa WordPress" e non aprire mai un terminale. Come sviluppatore, le tue esigenze sono diverse: vuoi fare il deploy da Git, eseguire il tuo stack e raggiungere la macchina via SSH quando qualcosa si rompe. Questa guida elenca i criteri che contano davvero quando ospiti un progetto da sviluppatore — e come si comportano i principali tipi di hosting rispetto ad essi.</p>
+
+  <h2>I criteri che contano</h2>
+  <h3>Accesso SSH</h3>
+  <p>L'accesso alla shell è la linea di demarcazione tra „adatto agli sviluppatori" e „non lo è". Con SSH puoi eseguire comandi di build, ispezionare i log, gestire i processi, impostare cron job e usare strumenti da riga di comando come <code>git</code>, <code>rsync</code> o <code>composer</code> direttamente sul server. Gli host che ti danno solo un pannello di controllo e un login FTP ti rallenteranno di continuo.</p>
+  <h3>Deploy basati su Git</h3>
+  <p>Il deploy tramite push è ormai il workflow di base. Cerca un host che esegua il pull dal tuo repository al <code>git push</code>, oppure uno in cui puoi configurare un deploy hook. Un flusso tipico ha questo aspetto:</p>
+  <pre><code>{`# add the host as a remote, then deploy by pushing
+git remote add production ssh://user@host/~/repo.git
+git push production main
+
+# or trigger a build/deploy hook on push
+git push origin main   # CI runs build + rsync/scp to the server`}</code></pre>
+  <h3>Runtime e versioni</h3>
+  <p>La tua app ha bisogno del runtime di linguaggio giusto — Node.js, PHP, Python, Ruby — e, cosa cruciale, della possibilità di <em>scegliere la versione</em>. Un host che ti vincola a una vecchia release di PHP o Node è una trappola. Verifica di poter selezionare e cambiare le versioni, idealmente per progetto.</p>
+  <h3>Database</h3>
+  <p>La maggior parte dei progetti non banali ha bisogno di un database. Conferma quali engine sono disponibili (PostgreSQL, MySQL/MariaDB, Redis per il caching) e se ottieni accesso diretto — una stringa di connessione e la possibilità di eseguire migrazioni — anziché solo un pannello di amministrazione limitato.</p>
+  <h3>Ambienti di staging</h3>
+  <p>Un ambiente di staging separato ti permette di testare un deploy con dati simili a quelli di produzione prima che vada in produzione. Alcuni host offrono cloni di staging con un clic; su un server semplice puoi replicarlo da solo con un secondo virtual host e un secondo database. In ogni caso, non rendere mai la produzione il tuo unico ambiente.</p>
+
+  <figure>
+    <img src="/img/web-hosting-for-developers-inbody.jpg" alt="Lo schermo di un laptop mostra del codice sorgente CSS aperto in un editor di codice" width="1280" height="853" loading="lazy" />
+    <figcaption>L'hosting orientato agli sviluppatori si giudica da quanto bene si adatta a un workflow code-first — editor, Git, SSH e un vero runtime — non da quanti installer a un clic offre.</figcaption>
+  </figure>
+
+  <h2>Tipi di hosting a confronto</h2>
+  <h3>Shared hosting</h3>
+  <p>Il tuo sito risiede insieme a molti altri su un unico server. È l'opzione più economica e va bene per piccoli siti, ma condividi le risorse e hai un controllo limitato. I migliori host condivisi per sviluppatori offrono comunque SSH, deploy via Git e cambio di versione — è questo l'insieme di funzionalità da cercare se scegli questa strada.</p>
+  <h3>VPS</h3>
+  <p>Un server privato virtuale ti dà una fetta dedicata di una macchina con accesso root completo. Installi e configuri lo stack da solo, il che significa massimo controllo e la massima responsabilità. Ideale quando hai bisogno di un runtime specifico, servizi personalizzati o configurazione a livello root.</p>
+  <h3>Hosting gestito / di piattaforma</h3>
+  <p>Le piattaforme gestite (spesso chiamate PaaS) gestiscono il server al posto tuo: tu fai il push del codice, loro lo costruiscono ed eseguono. Cedi un po' di controllo in cambio di comodità e scaling integrato. Ottimo quando vuoi concentrarti sull'app anziché sul sistema operativo — al costo di doverti adattare alle convenzioni della piattaforma.</p>
+
+  <h2>Riferimento rapido</h2>
+  <table>
+    <thead><tr><th>Criterio</th><th>Perché conta</th></tr></thead>
+    <tbody>
+      <tr><td>Accesso SSH</td><td>Eseguire comandi, leggere i log, gestire il server direttamente</td></tr>
+      <tr><td>Deploy via Git</td><td>Push-to-deploy invece di upload FTP manuali</td></tr>
+      <tr><td>Versioni runtime</td><td>Scegliere e cambiare le versioni di Node/PHP/Python per progetto</td></tr>
+      <tr><td>Database</td><td>Accesso diretto a PostgreSQL/MySQL/Redis con una stringa di connessione</td></tr>
+      <tr><td>Staging</td><td>Testare i deploy in sicurezza prima che raggiungano la produzione</td></tr>
+    </tbody>
+  </table>
+
+  <p>Scegli il tipo di hosting che corrisponde al tuo compromesso tra controllo e comodità — shared per piccoli siti, VPS per il controllo totale, gestito per lo scaling senza pensieri — poi verifica che offra davvero SSH, deploy via Git, i runtime di cui hai bisogno, un accesso reale al database e un percorso di staging. Questi cinque criteri, non il marketing, decidono se un host è davvero adatto agli sviluppatori.</p>
+</Article>

@@ -1,0 +1,87 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="service-worker"
+  title="Service Worker: Caching, Offline-Betrieb und Updates erklärt"
+  description="Ein praktischer Leitfaden zu Service Workern — einen registrieren, der Install-/Activate-Lebenszyklus, die Cache-API, eine Seite offline ausliefern und Updates sicher ausrollen."
+  cat="apis"
+  day={4}
+  hero="/img/service-worker-hero.jpg"
+  heroAlt="Ein Smartphone-Bildschirm im Flugmodus, der die Uhrzeit zeigt, ohne Netzwerkverbindung"
+  cluster={null}
+>
+  <p>Ein <strong>Service Worker</strong> ist ein Skript, das der Browser im Hintergrund ausführt, getrennt von Ihrer Seite. Er sitzt zwischen Ihrer App und dem Netzwerk wie ein programmierbarer Proxy: Er kann Anfragen abfangen, sie aus einem Cache beantworten und Ihre Website am Laufen halten, selbst wenn der Nutzer offline ist. Er ist die Grundlage von Progressive Web Apps.</p>
+
+  <p>Zwei Grundregeln vor allem anderen. Ein Service Worker läuft nur über <strong>HTTPS</strong> (oder <code>localhost</code> während der Entwicklung), und er hat <strong>keinen Zugriff auf das DOM</strong> — er kommuniziert mit Seiten über Events und Nachrichten, nicht indem er <code>document</code> berührt.</p>
+
+  <h2>Einen Service Worker registrieren</h2>
+  <p>Sie registrieren den Worker aus Ihrem normalen Seitenskript. Prüfen Sie zuerst die Verfügbarkeit der Funktion, dann verweisen Sie den Browser auf die Skriptdatei:</p>
+  <pre><code>{`if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then((reg) => console.log('Scope:', reg.scope))
+      .catch((err) => console.error('SW failed:', err));
+  });
+}`}</code></pre>
+  <p>Der Speicherort der Datei ist wichtig: Ein Worker unter <code>/sw.js</code> steuert den gesamten Origin, während einer unter <code>/app/sw.js</code> nur Seiten unter <code>/app/</code> steuert. Diese Grenze ist sein <em>Scope</em>.</p>
+
+  <h2>Der Lebenszyklus: install und activate</h2>
+  <p>Ein Service Worker hat ein eigenes Leben, unabhängig von der Seite. Die beiden Events, die Sie am meisten interessieren, sind <code>install</code> (wird einmal ausgelöst, ein guter Ort, um Assets vorzucachen) und <code>activate</code> (ein guter Ort, um alte Caches aufzuräumen):</p>
+  <pre><code>{`const CACHE = 'site-v1';
+const ASSETS = ['/', '/index.html', '/styles.css', '/app.js', '/offline.html'];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE).then((cache) => cache.addAll(ASSETS))
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+    )
+  );
+});`}</code></pre>
+  <p>Der Aufruf von <code>event.waitUntil()</code> teilt dem Browser mit, die Phase erst als abgeschlossen zu betrachten, wenn Ihr Promise erfüllt ist — andernfalls könnte er den Worker mitten in der Arbeit abbrechen.</p>
+
+  <figure>
+    <img src="/img/service-worker-inbody.jpg" alt="A rack of server hard-drive bays with status lights" width="1280" height="720" loading="lazy" />
+    <figcaption>Die Cache-API speichert Antworten auf dem eigenen Gerät des Nutzers, nicht auf einem Server wie dem abgebildeten — diese lokale Kopie ermöglicht es, dass eine Seite ganz ohne Netzwerk lädt.</figcaption>
+  </figure>
+
+  <h2>Anfragen mit fetch abfangen</h2>
+  <p>Das <code>fetch</code>-Event ist der Ort, an dem die Magie passiert. Sie entscheiden, was jede Anfrage zurückgibt. Eine gängige, sichere Strategie ist <em>Cache-First mit Netzwerk-Fallback</em>:</p>
+  <pre><code>{`self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      return cached || fetch(event.request);
+    })
+  );
+});`}</code></pre>
+  <p>Um eine eigene Offline-Seite anzuzeigen, wenn sowohl der Cache als auch das Netzwerk fehlschlagen, fügen Sie ein catch hinzu:</p>
+  <pre><code>{`self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request).catch(() => caches.match('/offline.html'))
+  );
+});`}</code></pre>
+
+  <h2>Caching-Strategien auf einen Blick</h2>
+  <table>
+    <thead><tr><th>Strategie</th><th>Verhalten</th><th>Gut für</th></tr></thead>
+    <tbody>
+      <tr><td>Cache-First</td><td>Cache ausliefern, auf Netzwerk zurückfallen</td><td>Statische Assets (CSS, JS, Schriften)</td></tr>
+      <tr><td>Network-First</td><td>Netzwerk versuchen, auf Cache zurückfallen</td><td>HTML, sich ändernde API-Daten</td></tr>
+      <tr><td>Stale-While-Revalidate</td><td>Cache ausliefern, ihn im Hintergrund aktualisieren</td><td>Avatare, Feeds, Inhaltslisten</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Updates ausrollen, ohne Nutzer zu beeinträchtigen</h2>
+  <p>Wenn Sie <code>sw.js</code> ändern, erkennt der Browser die neuen Bytes und installiert den neuen Worker, aber er bleibt <em>wartend</em>, bis jeder Tab, der den alten verwendet, geschlossen ist. Das verhindert, dass zwei Versionen gleichzeitig laufen. Um früher zu übernehmen, rufen Sie <code>self.skipWaiting()</code> in <code>install</code> und <code>clients.claim()</code> in <code>activate</code> auf — aber tun Sie das nur, wenn Sie sicher sind, dass die neue Version mit bereits geöffneten Seiten kompatibel ist.</p>
+  <p>Erhöhen Sie immer den Cache-Namen (<code>site-v1</code> → <code>site-v2</code>), wenn sich Assets ändern. Der obige <code>activate</code>-Handler löscht dann den veralteten Cache, sodass Nutzer nie eine Mischung aus alten und neuen Dateien erhalten.</p>
+
+  <p>Das ist die gesamte Kernschleife: registrieren, beim install vorcachen, beim activate aufräumen und Anfragen beim fetch beantworten. Beginnen Sie mit einer Cache-First-Strategie für statische Dateien und einer Network-First-Strategie für Ihr HTML, und Sie haben eine Website, die bei wiederholten Besuchen sofort lädt und eine abgebrochene Verbindung übersteht.</p>
+</Article>

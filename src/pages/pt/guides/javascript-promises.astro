@@ -1,0 +1,97 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="javascript-promises"
+  title="Promises em JavaScript: um guia prático"
+  description="Entenda as promises em JavaScript — como criá-las, then/catch/finally, encadeamento e combinar várias com Promise.all, race, any e allSettled — com exemplos executáveis e as armadilhas mais comuns."
+  cat="js"
+  day={2}
+  hero="/img/javascript-promises-hero.jpg"
+  heroAlt="Uma peça de quebra-cabeça vermelha encaixando no último espaço de um quebra-cabeça cinza"
+  cluster={null}
+>
+  <p>Uma <strong>promise</strong> é um objeto que representa um valor que ainda não está pronto. É a base do JavaScript assíncrono: <code>fetch()</code>, temporizadores, leituras de arquivos no Node e a maioria das APIs modernas retornam promises. Uma promise está sempre em um de três estados — <em>pendente</em>, <em>resolvida</em> ou <em>rejeitada</em> — e, uma vez decidida, nunca mais muda.</p>
+
+  <h2>Criar uma promise</h2>
+  <p>Na maior parte do tempo você <em>consome</em> promises que uma API lhe entrega. Mas você cria uma você mesmo com o construtor <code>Promise</code>, que recebe uma função executor que recebe <code>resolve</code> e <code>reject</code>:</p>
+  <pre><code>{`const wait = (ms) => new Promise((resolve) => {
+  setTimeout(resolve, ms);
+});
+
+const fetchUser = (id) => new Promise((resolve, reject) => {
+  if (!id) reject(new Error('id is required'));
+  else resolve({ id, name: 'Ada' });
+});`}</code></pre>
+  <p>Chamar <code>resolve(value)</code> resolve a promise com esse valor; chamar <code>reject(error)</code> a rejeita. Qualquer coisa lançada de forma síncrona dentro do executor também rejeita a promise.</p>
+
+  <h2>then, catch e finally</h2>
+  <p>Você lê o resultado de uma promise com <code>.then()</code> para o sucesso, <code>.catch()</code> para a falha e <code>.finally()</code> para a limpeza que roda de qualquer forma:</p>
+  <pre><code>{`fetchUser(42)
+  .then((user) => console.log('Got', user.name))
+  .catch((err) => console.error('Failed:', err.message))
+  .finally(() => console.log('Done'));`}</code></pre>
+  <p><code>.then()</code> pode receber dois argumentos — <code>onFulfilled</code> e <code>onRejected</code> — mas um <code>.catch()</code> separado no fim da cadeia é mais claro e também captura erros lançados dentro de manipuladores <code>.then()</code> anteriores.</p>
+
+  <h2>Encadeamento: o verdadeiro superpoder</h2>
+  <p>Cada <code>.then()</code> retorna uma <em>nova</em> promise, então elas se encadeiam. O que você retornar de um manipulador torna-se a entrada do próximo. Crucialmente, se você retornar uma promise, a cadeia aguarda que ela seja decidida antes de continuar:</p>
+  <pre><code>{`fetch('/api/user')
+  .then((res) => res.json())          // returns a promise → chain waits
+  .then((user) => fetch('/api/posts?user=' + user.id))
+  .then((res) => res.json())
+  .then((posts) => console.log(posts.length, 'posts'))
+  .catch((err) => console.error(err));`}</code></pre>
+  <p>Um único <code>.catch()</code> no final trata uma rejeição de <em>qualquer</em> passo acima dele, e é por isso que o encadeamento supera o aninhamento de callbacks.</p>
+
+  <figure>
+    <img src="/img/javascript-promises-inbody.jpg" alt="Corredores de revezamento numa pista passando o bastão de um corredor para o seguinte" width="1280" height="853" loading="lazy" />
+    <figcaption>Como corredores de revezamento passando um bastão, uma cadeia de promises entrega o resultado de cada passo ao próximo manipulador, em sequência.</figcaption>
+  </figure>
+
+  <h2>Executar promises em conjunto</h2>
+  <p>Quando as tarefas não dependem umas das outras, inicie-as em paralelo e combine os resultados. Quatro métodos estáticos cobrem os casos mais comuns:</p>
+  <ul>
+    <li><code>Promise.all([...])</code> — aguarda que <strong>todas</strong> sejam resolvidas; é rejeitada assim que <strong>uma</strong> for rejeitada. Retorna um array de resultados em ordem.</li>
+    <li><code>Promise.allSettled([...])</code> — aguarda que todas terminem e nunca é rejeitada; retorna um array de objetos <code>&#123; status, value &#125;</code> ou <code>&#123; status, reason &#125;</code>.</li>
+    <li><code>Promise.race([...])</code> — é decidida com a <strong>primeira</strong> promise a ser decidida, seja ela resolvida ou rejeitada.</li>
+    <li><code>Promise.any([...])</code> — é decidida com a primeira promise a ser <strong>resolvida</strong>; só é rejeitada se todas forem rejeitadas.</li>
+  </ul>
+  <pre><code>{`// Fetch three resources at once, fail if any fails
+const [user, posts, prefs] = await Promise.all([
+  fetch('/api/user').then((r) => r.json()),
+  fetch('/api/posts').then((r) => r.json()),
+  fetch('/api/prefs').then((r) => r.json()),
+]);
+
+// Same, but tolerate individual failures
+const results = await Promise.allSettled([taskA(), taskB(), taskC()]);
+results.forEach((r) => {
+  if (r.status === 'fulfilled') console.log('ok', r.value);
+  else console.warn('failed', r.reason);
+});`}</code></pre>
+
+  <h2>Armadilhas comuns</h2>
+  <ul>
+    <li><strong>Esquecer o return.</strong> Dentro de um <code>.then()</code>, se você chamar uma promise mas não a retornar com <code>return</code>, a cadeia não vai esperá-la — você perde a ordenação e o tratamento de erros.</li>
+    <li><strong>Rejeições não tratadas.</strong> Uma promise sem <code>.catch()</code> (ou um <code>try/catch</code> em torno de <code>await</code>) produz um <code>unhandledrejection</code>. Trate sempre os erros no fim da cadeia.</li>
+    <li><strong>Misturar callbacks e promises.</strong> Não chame <code>resolve</code> duas vezes nem ambos <code>resolve</code> e <code>reject</code> — só a primeira chamada conta; as demais são ignoradas silenciosamente.</li>
+    <li><strong>O executor roda imediatamente.</strong> A função que você passa para <code>new Promise()</code> roda de forma síncrona, na hora — apenas as callbacks de <code>.then()</code> são adiadas.</li>
+  </ul>
+
+  <h2>Referência rápida</h2>
+  <table>
+    <thead><tr><th>Objetivo</th><th>Método</th></tr></thead>
+    <tbody>
+      <tr><td>Tratar o sucesso</td><td><code>.then(onFulfilled)</code></td></tr>
+      <tr><td>Tratar a falha</td><td><code>.catch(onRejected)</code></td></tr>
+      <tr><td>Limpeza de qualquer forma</td><td><code>.finally(fn)</code></td></tr>
+      <tr><td>Todas devem ter sucesso</td><td><code>Promise.all</code></td></tr>
+      <tr><td>Coletar cada resultado</td><td><code>Promise.allSettled</code></td></tr>
+      <tr><td>A primeira a ser decidida</td><td><code>Promise.race</code></td></tr>
+      <tr><td>A primeira a ter sucesso</td><td><code>Promise.any</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>As promises são o encanamento por baixo de <code>async</code>/<code>await</code>, que é apenas uma sintaxe mais agradável sobre os mesmos objetos. Quando o encadeamento e os quatro combinadores se tornarem naturais, o JavaScript assíncrono deixa de ser intimidante.</p>
+</Article>

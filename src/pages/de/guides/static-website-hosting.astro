@@ -1,0 +1,73 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="static-website-hosting"
+  title="Statisches Website-Hosting: eine Astro-, Vite- oder reine HTML-Seite deployen"
+  description="Was statisches Hosting ist, wie ein CDN deinen Build ausliefert und wie du eine Astro-, Vite- oder JAMstack-Seite mit eigener Domain und kostenlosem HTTPS deployst."
+  cat="hosting"
+  day={12}
+  hero="/img/static-website-hosting-hero.jpg"
+  heroAlt="Die Hand eines Technikers wartet einen blau beleuchteten Server in einem Rechenzentrums-Rack"
+  cluster="deploy"
+>
+  <p>Eine <strong>statische Website</strong> ist eine Menge vorgefertigter Dateien — HTML, CSS, JavaScript und Assets —, die ein Server dem Browser unverändert übergeben kann, ohne dass pro Anfrage Code läuft. Werkzeuge wie <strong>Astro</strong>, <strong>Vite</strong>, Eleventy oder ein handgeschriebener HTML-Ordner erzeugen alle diese Art von Ausgabe. Sie zu hosten ist einfacher, günstiger und schneller als das Hosten einer dynamischen App, weil es serverseitig nichts auszuführen gibt.</p>
+
+  <h2>Was "statisches Hosting" tatsächlich bedeutet</h2>
+  <p>Beim statischen Hosting führst du lokal oder in CI einen Build-Schritt aus, der einen Ordner aus reinen Dateien ausgibt (oft <code>dist</code> oder <code>_site</code> genannt). Die einzige Aufgabe des Hosts ist es, diese Dateien zu speichern und über HTTP auszuliefern. Es gibt kein PHP, keinen Node-Prozess, keine Datenbank — nur Dateien. Das hat drei direkte Folgen:</p>
+  <ul>
+    <li><strong>Geschwindigkeit</strong> — Dateien können aggressiv gecacht und vom Edge ausgeliefert werden, nahe beim Besucher.</li>
+    <li><strong>Kosten</strong> — kein dauerhaft laufender Server, für den man zahlt; viele Anbieter bieten ein großzügiges kostenloses Kontingent.</li>
+    <li><strong>Zuverlässigkeit</strong> — weniger bewegliche Teile bedeuten weniger Dinge, die unter Last kaputtgehen können.</li>
+  </ul>
+
+  <h2>Den Ausgabeordner bauen</h2>
+  <p>Jedes statische Framework stellt einen Build-Befehl bereit. Das Ergebnis ist der Ordner, den du hochlädst oder auf den du deinen Host zeigen lässt:</p>
+  <pre><code>{`# Astro
+npm run build        # outputs to ./dist
+
+# Vite
+npm run build        # outputs to ./dist
+
+# Plain HTML
+# no build step — your folder of .html files is already the output`}</code></pre>
+  <p>Bei einer reinen HTML-Seite ist der "Build" einfach der Ordner, den du bereits hast. Bei Astro oder Vite ist das <code>dist</code>-Verzeichnis das, was ausgeliefert wird.</p>
+
+  <figure>
+    <img src="/img/static-website-hosting-inbody.jpg" alt="Eine Reihe schwarzer rackmontierter Server in einem Rechenzentrum" width="1280" height="853" loading="lazy" />
+    <figcaption>Hinter jeder statischen Seite steckt physische Infrastruktur — Racks voller Server und CDN-Edge-Knoten, die deine gebauten Dateien speichern und verteilen.</figcaption>
+  </figure>
+
+  <h2>Wo hosten: CDN vs. klassisches statisches Hosting</h2>
+  <p>Du hast zwei grobe Optionsfamilien:</p>
+  <h3>Edge-/CDN-Plattformen</h3>
+  <p>Diese bauen dein Projekt aus einem Git-Repository und verteilen die Ausgabe über ein Content Delivery Network. Ein <abbr title="Content Delivery Network">CDN</abbr> speichert Kopien deiner Dateien an vielen Orten weltweit, sodass ein Besucher von einem Knoten in seiner Nähe bedient wird. Das minimiert die Latenz und fängt Traffic-Spitzen ab. Deploys werden meist durch einen <code>git push</code> ausgelöst.</p>
+  <h3>Klassisches / Object-Storage-Hosting</h3>
+  <p>Du kannst eine statische Seite auch von einem traditionellen Webhost oder aus Object Storage mit einem davorgeschalteten CDN ausliefern. Das passt gut, wenn du bereits Hosting für andere Projekte hast oder wenn du den Upload lieber selbst über FTP/SSH oder ein Deploy-Skript verwaltest.</p>
+
+  <h2>Eine eigene Domain verbinden</h2>
+  <p>Welchen Host du auch wählst, die Domain-Verkabelung ist im Prinzip dieselbe. Du zeigst die DNS-Einträge deiner Domain auf den Host:</p>
+  <ul>
+    <li>Ein <strong>A</strong>- (oder <strong>AAAA</strong>-)Eintrag, der die Apex-Domain (<code>example.com</code>) auf die IP des Hosts zeigt, oder</li>
+    <li>Ein <strong>CNAME</strong>-Eintrag, der eine Subdomain (<code>www.example.com</code>) auf den vom Host bereitgestellten Hostnamen zeigt.</li>
+  </ul>
+  <p>Viele Plattformen unterstützen auch <strong>Nameserver-Delegation</strong>, bei der du die DNS-Verwaltung vollständig an den Host übergibst. Nachdem die Einträge propagiert sind, liefert der Host deine Seite unter deiner eigenen Domain aus.</p>
+
+  <h2>HTTPS kostenlos</h2>
+  <p>HTTPS ist nicht mehr optional — Browser markieren reines HTTP als "nicht sicher", und viele Web-Plattform-APIs funktionieren nur in einem sicheren Kontext. Die gute Nachricht: praktisch jeder moderne statische Host stellt TLS-Zertifikate für dich automatisch aus und erneuert sie, meist über Let's Encrypt. Sobald deine Domain verbunden ist, wird das Zertifikat ohne manuellen Schritt bereitgestellt, und Erneuerungen erfolgen von selbst.</p>
+
+  <h2>Kurzreferenz</h2>
+  <table>
+    <thead><tr><th>Schritt</th><th>Was du tust</th></tr></thead>
+    <tbody>
+      <tr><td>Build</td><td>Führe <code>npm run build</code> (Astro/Vite) aus oder nutze deinen HTML-Ordner</td></tr>
+      <tr><td>Ausgabe</td><td>Liefere den <code>dist</code>- / <code>_site</code>-Ordner aus</td></tr>
+      <tr><td>Host</td><td>Wähle eine Edge-/CDN-Plattform oder einen statikfähigen Webhost</td></tr>
+      <tr><td>Domain</td><td>Zeige A/AAAA- oder CNAME-Einträge auf den Host</td></tr>
+      <tr><td>HTTPS</td><td>Automatisches TLS-Zertifikat, keine manuelle Einrichtung</td></tr>
+    </tbody>
+  </table>
+
+  <p>Der ganze Sinn des statischen Hostings ist, dass es dir aus dem Weg geht: du baust einmal, pushst, und die Dateien werden schnell vom Edge ausgeliefert. Reserviere dynamisches Hosting für die Teile deines Projekts, die wirklich serverseitige Logik brauchen — und halte das statische Frontend auf einer Infrastruktur, die darauf ausgelegt ist, Dateien schnell zu liefern.</p>
+</Article>

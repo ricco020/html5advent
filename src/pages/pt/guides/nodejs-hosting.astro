@@ -1,0 +1,97 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="nodejs-hosting"
+  title="Como hospedar uma app Node.js: VPS, PaaS e serverless"
+  description="As formas práticas de fazer deploy de uma aplicação Node.js — VPS, PaaS gerido ou serverless — mais PM2, um reverse proxy, variáveis de ambiente e um fluxo de deploy sensato."
+  cat="hosting"
+  day={14}
+  hero="/img/nodejs-hosting-hero.jpg"
+  heroAlt="Uma mão a inserir uma blade de servidor num rack de servidores iluminado a azul"
+  cluster="hosting"
+>
+  <p>Hospedar uma app Node.js é diferente de hospedar um site estático ou uma página PHP. O Node executa um processo de longa duração que possui o seu próprio servidor HTTP, por isso o host tem de <em>manter esse processo vivo</em>, reiniciá-lo após uma falha e encaminhar o tráfego público para ele. Este guia percorre as três opções realistas e as peças de que precisas independentemente da que escolheres.</p>
+
+  <h2>Três formas de hospedar Node.js</h2>
+  <p>Quase todos os deployments se enquadram num destes modelos. A escolha certa depende de quanto do servidor queres gerir e de como o teu tráfego se comporta.</p>
+  <ul>
+    <li><strong>VPS (autogerido)</strong> — obténs uma máquina Linux e acesso root completo. Controlo máximo e custo previsível, mas instalas e manténs tu mesmo o Node, o gestor de processos, o reverse proxy e o TLS.</li>
+    <li><strong>PaaS (platform-as-a-service)</strong> — fazes push do código (muitas vezes via Git) e a plataforma constrói, executa e escala o processo por ti. Menos controlo, mais rápido a entregar, normalmente faturado por utilização.</li>
+    <li><strong>Serverless / funções</strong> — fazes deploy de handlers individuais em vez de um servidor em execução. A plataforma inicia-os a pedido. Ótimo para cargas de trabalho irregulares ou de baixo tráfego, mas stateless e sujeito a cold starts.</li>
+  </ul>
+
+  <h2>Manter o processo vivo com PM2</h2>
+  <p>Num VPS, executar <code>node server.js</code> na tua shell para no momento em que terminas a sessão, e nada o reinicia após uma falha. Um gestor de processos resolve ambas as coisas. O <strong>PM2</strong> é a escolha mais comum:</p>
+  <pre><code>{`npm install -g pm2
+
+# start the app and name it
+pm2 start server.js --name web
+
+# restart automatically after a server reboot
+pm2 startup
+pm2 save
+
+# useful day-to-day commands
+pm2 list
+pm2 logs web
+pm2 restart web`}</code></pre>
+  <p>O PM2 também executa a tua app em <em>modo cluster</em> para usar todos os núcleos da CPU, a forma mais simples de escalar uma única máquina:</p>
+  <pre><code>{`pm2 start server.js --name web -i max`}</code></pre>
+
+  <figure>
+    <img src="/img/nodejs-hosting-inbody.jpg" alt="Uma fila de servidores montados em rack num data center" width="1280" height="853" loading="lazy" />
+    <figcaption>Num VPS o teu processo Node corre numa máquina física ou virtual como estas; um gestor de processos mantém-no em execução e um reverse proxy expõe-no à web.</figcaption>
+  </figure>
+
+  <h2>Um reverse proxy à frente do Node</h2>
+  <p>Não exponhas o Node diretamente na porta 80/443. Coloca à frente um reverse proxy como o <strong>Nginx</strong>: ele termina o TLS, serve ficheiros estáticos de forma eficiente e pode encaminhar várias apps numa só máquina. Um bloco de servidor Nginx mínimo que encaminha o tráfego para uma app Node a escutar na porta 3000:</p>
+  <pre><code>{`server {
+  listen 80;
+  server_name example.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}`}</code></pre>
+  <p>Os cabeçalhos <code>Upgrade</code> e <code>Connection</code> importam se a tua app usar WebSockets. Para HTTPS, a via habitual é um certificado gratuito da Let's Encrypt através do <code>certbot</code>, que edita esta configuração por ti.</p>
+
+  <h2>Variáveis de ambiente e configuração</h2>
+  <p>Nunca escrevas segredos (URLs de base de dados, chaves de API) diretamente no teu código-fonte. Lê-os do ambiente com <code>process.env</code> e deixa a plataforma injetá-los:</p>
+  <pre><code>{`const port = process.env.PORT || 3000;
+const dbUrl = process.env.DATABASE_URL;
+
+app.listen(port, () => {
+  console.log(\`listening on \${port}\`);
+});`}</code></pre>
+  <p>Num VPS podes mantê-los num ficheiro <code>.env</code> (carregado por uma biblioteca e excluído do Git) ou passá-los através do ficheiro ecosystem do PM2. Numa PaaS, defines-os no painel. Lê sempre <code>process.env.PORT</code> — as plataformas geridas atribuem-te a porta.</p>
+
+  <h2>Um fluxo de deploy sensato</h2>
+  <p>Independentemente de como hospedas, procura um deploy repetível em vez de editar ficheiros no servidor à mão:</p>
+  <ul>
+    <li>Obtém o novo código (<code>git pull</code> ou um artefacto de CI).</li>
+    <li>Instala apenas as dependências de produção: <code>npm ci --omit=dev</code>.</li>
+    <li>Executa o passo de build, se tiveres um (<code>npm run build</code>).</li>
+    <li>Recarrega o processo sem tempo de inatividade: <code>pm2 reload web</code>.</li>
+  </ul>
+  <p>Numa PaaS toda esta sequência é despoletada por um <code>git push</code>; num VPS podes criar um script para ela ou ligá-la a um CI runner.</p>
+
+  <h2>Que opção encaixa?</h2>
+  <table>
+    <thead><tr><th>Opção</th><th>Tu geres</th><th>Melhor quando</th></tr></thead>
+    <tbody>
+      <tr><td>VPS</td><td>OS, Node, PM2, Nginx, TLS</td><td>Queres controlo e custo previsível</td></tr>
+      <tr><td>PaaS</td><td>Apenas o teu código + variáveis de ambiente</td><td>Queres entregar depressa e escalar facilmente</td></tr>
+      <tr><td>Serverless</td><td>Handlers individuais</td><td>Tráfego irregular ou baixo, trabalho stateless</td></tr>
+    </tbody>
+  </table>
+
+  <p>Se estás a começar, um único VPS bem configurado com PM2 e Nginx executará confortavelmente a maioria das apps Node e ensina-te o que as plataformas geridas automatizam. Passa para uma PaaS ou serverless quando a escalabilidade ou a sobrecarga operacional se tornarem o estrangulamento — não antes.</p>
+</Article>

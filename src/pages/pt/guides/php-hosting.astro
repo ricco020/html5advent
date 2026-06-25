@@ -1,0 +1,80 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="php-hosting"
+  title="Hospedagem PHP explicada: partilhada vs VPS, versões e desempenho"
+  description="O que procurar numa hospedagem PHP — partilhada vs VPS, versões e extensões de PHP, deployment, .htaccess e desempenho com OPcache — sem o ruído do marketing."
+  cat="hosting"
+  day={15}
+  hero="/img/php-hosting-hero.jpg"
+  heroAlt="Código-fonte PHP num ecrã escuro, a mostrar instruções version_compare e require_once"
+  cluster="hosting"
+>
+  <p>O PHP ainda alimenta uma grande fatia da web, e hospedá-lo é terreno bem pisado — o que é exatamente a razão pela qual as ofertas parecem todas iguais e as diferenças reais se escondem nos detalhes. Este guia cobre os critérios que realmente importam: o compromisso partilhada vs VPS, versões e extensões de PHP, como fazes o deploy, o que o <code>.htaccess</code> controla e os botões de desempenho que vale a pena conhecer.</p>
+
+  <h2>Hospedagem partilhada vs VPS</h2>
+  <p>A primeira decisão é quão isolado está o teu ambiente.</p>
+  <ul>
+    <li><strong>Hospedagem partilhada</strong> — o teu site reside ao lado de muitos outros numa máquina, gerida por ti (PHP, servidor web, muitas vezes um painel de controlo). A mais barata e simples; cedes o controlo sobre a versão de PHP, as extensões e a configuração do servidor, e partilhas recursos com os vizinhos.</li>
+    <li><strong>VPS</strong> — uma fatia dedicada de um servidor com acesso root. Escolhes a versão de PHP, instalas qualquer extensão, afinas o servidor web e não és afetado por outros inquilinos — mas és responsável pelas atualizações e segurança.</li>
+  </ul>
+  <p>Para um site pequeno ou um CMS padrão, a hospedagem partilhada costuma chegar. Opta por um VPS quando precisas de uma build de PHP específica, extensões personalizadas, desempenho mais previsível ou controlo total sobre a stack.</p>
+
+  <h2>As versões de PHP importam</h2>
+  <p>A versão de PHP não é um detalhe — as versões mais recentes são significativamente mais rápidas e, crucialmente, ainda recebem correções de segurança. Executar uma versão em fim de vida significa não mais patches. Verifica sempre que versões um host oferece e se podes trocar facilmente. Podes ler a versão em execução a partir do código ou da CLI:</p>
+  <pre><code>{`<?php
+echo phpversion();        // e.g. "8.3.x"
+// or a full report:
+phpinfo();`}</code></pre>
+  <pre><code>{`php -v`}</code></pre>
+  <p>Um bom host permite-te selecionar a versão de PHP por site (muitas vezes no painel de controlo) e mantém disponível uma gama de versões suportadas, para que possas atualizar ao teu próprio ritmo.</p>
+
+  <h2>Extensões: verifica antes de te comprometeres</h2>
+  <p>A funcionalidade do PHP está dividida por extensões, e a tua app provavelmente depende de várias — um driver de base de dados, processamento de imagem, e por aí fora. As comuns a verificar que um host fornece:</p>
+  <ul>
+    <li><code>pdo_mysql</code> / <code>mysqli</code> — conectividade MySQL/MariaDB.</li>
+    <li><code>mbstring</code> — processamento de strings multibyte, exigido por muitos frameworks.</li>
+    <li><code>gd</code> ou <code>imagick</code> — processamento de imagem.</li>
+    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> — pedidos HTTP, encriptação, arquivos, localização.</li>
+  </ul>
+  <p>Lista o que está efetivamente carregado no servidor com:</p>
+  <pre><code>{`php -m`}</code></pre>
+
+  <figure>
+    <img src="/img/php-hosting-inbody.jpg" alt="Mãos a digitar num portátil que mostra código-fonte PHP num editor de código" width="1280" height="876" loading="lazy" />
+    <figcaption>Verificar cedo a tua versão de PHP e as extensões carregadas poupa-te de fazer o deploy num servidor onde a tua aplicação não consegue, de facto, correr.</figcaption>
+  </figure>
+
+  <h2>Deployment e .htaccess</h2>
+  <p>Na hospedagem partilhada normalmente fazes o deploy enviando ficheiros (SFTP) ou fazendo pull do Git para a raiz web; alguns hosts acrescentam um passo de deploy a partir do painel. No Apache, o ficheiro <code>.htaccess</code> na tua raiz web configura o comportamento por diretório sem mexer na configuração principal do servidor — útil para URLs limpos, redirecionamentos e cabeçalhos de caching. Um padrão comum encaminha todos os pedidos para um front controller:</p>
+  <pre><code>{`# .htaccess — route everything to index.php (front controller)
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]`}</code></pre>
+  <p>Repara que o <code>.htaccess</code> é uma funcionalidade do Apache. No Nginx as regras equivalentes residem na configuração do servidor, que na hospedagem partilhada podes não controlar — mais uma razão para saber que servidor web o teu host executa.</p>
+
+  <h2>Desempenho: OPcache</h2>
+  <p>O maior ganho isolado de desempenho em PHP é o <strong>OPcache</strong>, que faz cache do bytecode compilado para que o PHP não tenha de re-analisar e re-compilar os teus scripts a cada pedido. A maioria dos hosts modernos ativa-o por defeito; vale a pena confirmar. Definições típicas em <code>php.ini</code>:</p>
+  <pre><code>{`opcache.enable=1
+opcache.memory_consumption=128
+opcache.max_accelerated_files=10000
+opcache.validate_timestamps=1`}</code></pre>
+  <p>Em produção podes definir <code>opcache.validate_timestamps=0</code> para que o PHP nunca verifique alterações nos ficheiros, e depois esvaziar a cache no deploy — espremendo um pouco mais de velocidade ao custo de precisar de um reset explícito da cache.</p>
+
+  <h2>Checklist rápida</h2>
+  <table>
+    <thead><tr><th>Critério</th><th>O que perguntar</th></tr></thead>
+    <tbody>
+      <tr><td>Isolamento</td><td>Partilhada (simples) ou VPS (controlo)?</td></tr>
+      <tr><td>Versão de PHP</td><td>Suportada, atual, comutável?</td></tr>
+      <tr><td>Extensões</td><td>As que a minha app precisa estão disponíveis?</td></tr>
+      <tr><td>Servidor web</td><td>Apache (.htaccess) ou Nginx?</td></tr>
+      <tr><td>Desempenho</td><td>O OPcache está ativado?</td></tr>
+    </tbody>
+  </table>
+
+  <p>A hospedagem PHP é madura, por isso não penses demais nos nomes das marcas — faz corresponder o host aos requisitos reais da tua app: a versão de PHP certa, as extensões de que dependes, um servidor web que compreendes e o OPcache ligado. Acerta nestes e o resto é, na maior parte, questão de preferência.</p>
+</Article>

@@ -1,0 +1,61 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="web-hosting-for-developers"
+  title="Webhosting für Entwickler: die Kriterien, die wirklich zählen"
+  description="SSH-Zugang, Git-Deploys, Laufzeitumgebungen, Datenbanken und Staging — die Hosting-Funktionen, die Entwickler wirklich brauchen, und wie Shared, VPS und Managed-Plattformen abschneiden."
+  cat="hosting"
+  day={13}
+  hero="/img/web-hosting-for-developers-hero.jpg"
+  heroAlt="Ein Entwickler mit Kopfhörern arbeitet an einem Schreibtisch in einem dunklen Raum mit Code auf einem großen Monitor"
+  cluster="hosting"
+>
+  <p>Die meisten Hosting-Vergleiche sind für Leute geschrieben, die auf „WordPress installieren" klicken und nie ein Terminal öffnen wollen. Als Entwickler haben Sie andere Bedürfnisse: Sie wollen aus Git deployen, Ihren eigenen Stack betreiben und per SSH auf den Server zugreifen, wenn etwas kaputtgeht. Dieser Leitfaden listet die Kriterien auf, die wirklich zählen, wenn Sie ein Projekt als Entwickler hosten — und wie die wichtigsten Hosting-Typen dabei abschneiden.</p>
+
+  <h2>Die Kriterien, die zählen</h2>
+  <h3>SSH-Zugang</h3>
+  <p>Shell-Zugang ist die Trennlinie zwischen „entwicklerfreundlich" und „nicht". Mit SSH können Sie Build-Befehle ausführen, Logs einsehen, Prozesse verwalten, Cronjobs einrichten und Kommandozeilen-Tools wie <code>git</code>, <code>rsync</code> oder <code>composer</code> direkt auf dem Server nutzen. Hosts, die Ihnen nur ein Control-Panel und einen FTP-Login geben, bremsen Sie ständig aus.</p>
+  <h3>Git-basierte Deploys</h3>
+  <p>Per Push zu deployen ist heute der Standard-Workflow. Achten Sie auf einen Host, der bei <code>git push</code> aus Ihrem Repository zieht, oder einen, bei dem Sie einen Deploy-Hook konfigurieren können. Ein typischer Ablauf sieht so aus:</p>
+  <pre><code>{`# add the host as a remote, then deploy by pushing
+git remote add production ssh://user@host/~/repo.git
+git push production main
+
+# or trigger a build/deploy hook on push
+git push origin main   # CI runs build + rsync/scp to the server`}</code></pre>
+  <h3>Laufzeitumgebungen und Versionen</h3>
+  <p>Ihre App braucht die richtige Sprach-Laufzeitumgebung — Node.js, PHP, Python, Ruby — und entscheidend ist die Möglichkeit, <em>die Version zu wählen</em>. Ein Host, der Sie auf ein altes PHP- oder Node-Release festnagelt, ist eine Falle. Prüfen Sie, ob Sie Versionen auswählen und wechseln können, idealerweise pro Projekt.</p>
+  <h3>Datenbanken</h3>
+  <p>Die meisten nicht-trivialen Projekte brauchen eine Datenbank. Klären Sie, welche Engines verfügbar sind (PostgreSQL, MySQL/MariaDB, Redis fürs Caching) und ob Sie direkten Zugriff erhalten — einen Connection-String und die Möglichkeit, Migrationen auszuführen — statt nur ein eingeschränktes Admin-Panel.</p>
+  <h3>Staging-Umgebungen</h3>
+  <p>Eine separate Staging-Umgebung erlaubt es, einen Deploy gegen produktionsnahe Daten zu testen, bevor er live geht. Manche Hosts bieten Staging-Klone per Klick; auf einem schlichten Server können Sie das selbst mit einem zweiten Virtual Host und einer zweiten Datenbank nachbauen. So oder so: Machen Sie die Produktion niemals zu Ihrer einzigen Umgebung.</p>
+
+  <figure>
+    <img src="/img/web-hosting-for-developers-inbody.jpg" alt="Ein Laptop-Bildschirm zeigt CSS-Quellcode, geöffnet in einem Code-Editor" width="1280" height="853" loading="lazy" />
+    <figcaption>Entwicklerorientiertes Hosting beurteilt man danach, wie gut es zu einem Code-First-Workflow passt — Editor, Git, SSH und eine echte Laufzeitumgebung — nicht danach, wie viele Ein-Klick-Installer es mitliefert.</figcaption>
+  </figure>
+
+  <h2>Hosting-Typen im Vergleich</h2>
+  <h3>Shared Hosting</h3>
+  <p>Ihre Website liegt zusammen mit vielen anderen auf einem Server. Es ist die günstigste Option und für kleine Sites völlig in Ordnung, aber Sie teilen sich Ressourcen und haben eingeschränkte Kontrolle. Bessere Shared-Hosts für Entwickler bieten dennoch SSH, Git-Deploys und Versionswechsel — das ist die Feature-Liste, auf die Sie achten sollten, wenn Sie diesen Weg gehen.</p>
+  <h3>VPS</h3>
+  <p>Ein virtueller privater Server gibt Ihnen einen dedizierten Teil einer Maschine mit vollem Root-Zugriff. Sie installieren und konfigurieren den Stack selbst, was maximale Kontrolle und die größte Verantwortung bedeutet. Ideal, wenn Sie eine bestimmte Laufzeitumgebung, eigene Dienste oder Konfiguration auf Root-Ebene benötigen.</p>
+  <h3>Managed- / Plattform-Hosting</h3>
+  <p>Managed-Plattformen (oft PaaS genannt) übernehmen den Server für Sie: Sie pushen Code, sie bauen und betreiben ihn. Sie tauschen etwas Kontrolle gegen Komfort und eingebaute Skalierung. Großartig, wenn Sie sich auf die App statt auf das Betriebssystem konzentrieren wollen — um den Preis, sich in die Konventionen der Plattform einfügen zu müssen.</p>
+
+  <h2>Kurzübersicht</h2>
+  <table>
+    <thead><tr><th>Kriterium</th><th>Warum es zählt</th></tr></thead>
+    <tbody>
+      <tr><td>SSH-Zugang</td><td>Befehle ausführen, Logs lesen, den Server direkt verwalten</td></tr>
+      <tr><td>Git-Deploys</td><td>Push-to-Deploy statt manueller FTP-Uploads</td></tr>
+      <tr><td>Laufzeit-Versionen</td><td>Node/PHP/Python-Versionen pro Projekt wählen und wechseln</td></tr>
+      <tr><td>Datenbanken</td><td>Direkter Zugriff auf PostgreSQL/MySQL/Redis mit Connection-String</td></tr>
+      <tr><td>Staging</td><td>Deploys sicher testen, bevor sie die Produktion erreichen</td></tr>
+    </tbody>
+  </table>
+
+  <p>Wählen Sie den Hosting-Typ, der zu Ihrem Kompromiss aus Kontrolle und Komfort passt — Shared für kleine Sites, VPS für volle Kontrolle, Managed für sorgenfreie Skalierung — und prüfen Sie dann, ob er tatsächlich SSH, Git-Deploys, die benötigten Laufzeitumgebungen, echten Datenbankzugriff und einen Staging-Weg bietet. Diese fünf Kriterien, nicht das Marketing, entscheiden, ob ein Host wirklich entwicklerfreundlich ist.</p>
+</Article>

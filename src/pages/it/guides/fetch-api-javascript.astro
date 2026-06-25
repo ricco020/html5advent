@@ -1,0 +1,76 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="fetch-api-javascript"
+  title="La Fetch API in JavaScript: una guida pratica"
+  description="Come effettuare richieste HTTP nel browser con la Fetch API — GET, JSON, POST, gestione degli errori e annullamento delle richieste — con esempi eseguibili."
+  cat="apis"
+  day={1}
+  hero="/img/web-dev-code.jpg"
+  heroAlt="Un editor di codice sullo schermo che mostra sorgente HTML, CSS e JavaScript"
+  cluster={null}
+>
+  <p>La <strong>Fetch API</strong> è il modo moderno, basato sulle promise, per effettuare richieste HTTP dal browser. Sostituisce il vecchio <code>XMLHttpRequest</code> con un'interfaccia più pulita che funziona naturalmente con <code>async</code>/<code>await</code> e con gli stream. Tutti i browser attuali la supportano.</p>
+
+  <h2>Una prima richiesta GET</h2>
+  <p><code>fetch()</code> restituisce una promise che si risolve in un oggetto <code>Response</code>. Per leggerne il JSON, si chiama <code>response.json()</code>, che a sua volta restituisce una promise:</p>
+  <pre><code>{`const res = await fetch('https://api.example.com/articles');
+const data = await res.json();
+console.log(data);`}</code></pre>
+  <p>La stessa cosa senza <code>async</code>/<code>await</code>, con catene di <code>.then()</code>:</p>
+  <pre><code>{`fetch('https://api.example.com/articles')
+  .then((res) => res.json())
+  .then((data) => console.log(data));`}</code></pre>
+
+  <h2>L'insidia: fetch non viene rifiutata sugli errori HTTP</h2>
+  <p>È ciò che sorprende quasi tutti. Una risposta <code>404</code> o <code>500</code> resta una fetch <em>riuscita</em> — la promise viene rifiutata solo in caso di guasto di <strong>rete</strong> (offline, DNS, CORS). Devi controllare <code>response.ok</code> da solo:</p>
+  <pre><code>{`const res = await fetch(url);
+if (!res.ok) {
+  throw new Error(\`HTTP \${res.status} \${res.statusText}\`);
+}
+const data = await res.json();`}</code></pre>
+
+  <figure>
+    <img src="/img/network-data.jpg" alt="Uno switch di rete con cavi, che rappresenta i dati che viaggiano tra client e server" width="1280" height="720" loading="lazy" />
+    <figcaption>Ogni chiamata <code>fetch()</code> invia una richiesta HTTP attraverso la rete a un server e attende che la risposta compia il viaggio di ritorno.</figcaption>
+  </figure>
+
+  <h2>Inviare dati con POST</h2>
+  <p>Passa un secondo argomento di opzioni per impostare il metodo, gli header e il corpo. Per il JSON, serializza il payload e imposta il <code>Content-Type</code>:</p>
+  <pre><code>{`const res = await fetch('/api/articles', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ title: 'Ciao', body: 'Mondo' }),
+});
+const created = await res.json();`}</code></pre>
+
+  <h2>Annullare una richiesta</h2>
+  <p>Usa un <code>AbortController</code> per annullare una richiesta — utile per i timeout o quando un componente viene smontato:</p>
+  <pre><code>{`const controller = new AbortController();
+const timeout = setTimeout(() => controller.abort(), 5000);
+
+try {
+  const res = await fetch(url, { signal: controller.signal });
+  const data = await res.json();
+} catch (err) {
+  if (err.name === 'AbortError') console.log('Richiesta scaduta');
+} finally {
+  clearTimeout(timeout);
+}`}</code></pre>
+
+  <h2>Riferimento rapido</h2>
+  <table>
+    <thead><tr><th>Attività</th><th>Come</th></tr></thead>
+    <tbody>
+      <tr><td>Leggere JSON</td><td><code>await res.json()</code></td></tr>
+      <tr><td>Leggere testo</td><td><code>await res.text()</code></td></tr>
+      <tr><td>Verificare il successo</td><td><code>res.ok</code> / <code>res.status</code></td></tr>
+      <tr><td>Inviare JSON</td><td><code>body: JSON.stringify(...)</code> + <code>Content-Type</code></td></tr>
+      <tr><td>Annullare</td><td><code>AbortController</code> + <code>signal</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>Questo copre i casi quotidiani. La Fetch API supporta anche lo streaming dei corpi delle risposte, gli upload con <code>FormData</code> e la clonazione di richiesta/risposta — ma i pattern qui sopra gestiscono la stragrande maggioranza delle chiamate reali.</p>
+</Article>

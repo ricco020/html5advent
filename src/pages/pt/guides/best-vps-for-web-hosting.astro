@@ -1,0 +1,77 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="best-vps-for-web-hosting"
+  title="Escolhendo o melhor VPS para hospedar um projeto web"
+  description="Um guia prático e sem exageros para escolher um VPS para um site ou app — os critérios que importam (RAM, CPU, armazenamento, banda, localização, preço) e quando um VPS supera a hospedagem compartilhada."
+  cat="hosting"
+  day={11}
+  hero="/img/best-vps-for-web-hosting-hero.jpg"
+  heroAlt="Close-up do painel frontal de um servidor de rack HP com bezel iluminado de azul em um gabinete de servidores"
+  cluster="hosting"
+>
+  <p>Um <strong>VPS</strong> (Virtual Private Server) te dá uma fatia de um servidor físico com recursos garantidos, acesso root e seu próprio sistema operacional — sem o custo de uma máquina dedicada. Para um projeto web que superou a hospedagem compartilhada mas não precisa de um servidor completo, costuma ser o meio-termo certo. Este guia percorre os critérios que realmente importam, para que você possa avaliar qualquer provedor por conta própria em vez de confiar em um ranking.</p>
+
+  <h2>VPS vs hospedagem compartilhada: quando subir de nível</h2>
+  <p>A hospedagem compartilhada coloca muitos sites em um servidor e divide os recursos de forma informal — barata e sem manutenção, mas seu desempenho depende dos vizinhos e você não pode instalar software personalizado. Um VPS te dá <strong>RAM e CPU dedicadas e garantidas</strong>, acesso root completo e a liberdade de configurar a stack como quiser.</p>
+  <p>Sinais práticos de que é hora de migrar para um VPS:</p>
+  <ul>
+    <li>Seu host compartilhado te limita ou você atinge limites de CPU/processos durante picos de tráfego.</li>
+    <li>Você precisa de um runtime ou versão específica (um determinado Node.js, PHP, Python ou um banco de dados) que o host compartilhado não fornece.</li>
+    <li>Você quer executar jobs em segundo plano, uma fila, Docker ou a configuração do seu próprio web server (ajuste de Nginx, TLS personalizado).</li>
+    <li>Você precisa de isolamento por motivos de segurança ou conformidade.</li>
+  </ul>
+
+  <h2>Os critérios que importam</h2>
+  <p>Ignore os superlativos de marketing e compare provedores por estas dimensões concretas.</p>
+
+  <h3>RAM</h3>
+  <p>O recurso que você tem mais chance de esgotar. Um site estático ou um app pequeno fica confortável com pouca memória; um banco de dados mais um servidor de aplicação mais um cache pedem mais folga. A memória é o que se esgota primeiro sob carga, então não a dimensione no mínimo absoluto — deixe espaço para picos de tráfego e para o próprio sistema operacional.</p>
+
+  <h3>CPU (vCPUs)</h3>
+  <p>Os planos de VPS são vendidos em CPUs <em>virtuais</em>. Mais vCPUs ajudam com requisições concorrentes e trabalho intensivo de CPU (processamento de imagens, SSR, builds). Atenção à diferença entre vCPUs <strong>compartilhadas/burstable</strong> — boas para cargas leves e instáveis — e vCPUs <strong>dedicadas</strong>, que custam mais mas oferecem desempenho consistente para cargas de trabalho estáveis.</p>
+
+  <h3>Armazenamento</h3>
+  <p>Prefira <strong>NVMe ou SSD</strong> aos discos giratórios antigos — a velocidade do disco aparece diretamente nos tempos de consulta do banco de dados e nas builds de páginas. Verifique também a <em>quantidade</em>: logs, uploads e o crescimento do banco de dados se acumulam. Observe se o armazenamento é local (rápido) ou conectado à rede (mais flexível, às vezes mais lento).</p>
+
+  <figure>
+    <img src="/img/best-vps-for-web-hosting-inbody.jpg" alt="Um conector de cabo de dados SATA vermelho sobre uma mesa em frente a baias de hardware de servidor" width="1280" height="853" loading="lazy" />
+    <figcaption>O tipo de armazenamento importa: as unidades NVMe e SSD atendem consultas de banco de dados e leituras de arquivos muito mais rápido que os discos mecânicos antigos.</figcaption>
+  </figure>
+
+  <h3>Banda e rede</h3>
+  <p>Duas coisas se escondem sob "banda": a <strong>cota mensal de transferência de dados</strong> (quantos GB/TB você pode servir) e a <strong>velocidade da porta</strong> (quão rápida, ex. 1 Gbps). Sites com muita mídia consomem rápido as cotas de transferência; leia a política sobre excedentes. Alguns hosts anunciam transferência "ilimitada" mas aplicam um limite de uso justo — verifique os termos.</p>
+
+  <h3>Localização do servidor</h3>
+  <p>Escolha uma região de datacenter próxima do seu público — a distância física adiciona latência a cada requisição. Se seus usuários estão na Europa, uma região europeia parecerá mais rápida que uma norte-americana. A localização também pode importar para regras de residência de dados. Uma CDN pode mascarar a distância para ativos estáticos, mas a localização de origem ainda afeta as requisições dinâmicas.</p>
+
+  <h3>Gerenciado vs não gerenciado</h3>
+  <p>Um VPS <strong>não gerenciado</strong> te entrega um sistema operacional cru — você aplica patches, protege e mantém. Um VPS <strong>gerenciado</strong> inclui atualizações, monitoramento e suporte por mais dinheiro. Se você se sente à vontade na linha de comando, o não gerenciado é mais barato e flexível; se prefere não fazer administração de sistema, o gerenciado te devolve tempo.</p>
+
+  <h3>Backups, escalabilidade e suporte</h3>
+  <ul>
+    <li><strong>Backups</strong> — os snapshots estão incluídos ou são um adicional? Backups automatizados valem o investimento.</li>
+    <li><strong>Escalabilidade</strong> — você consegue redimensionar o plano (mais RAM/CPU) sem reconstruir? A escalabilidade vertical sob demanda é valiosa.</li>
+    <li><strong>Suporte</strong> — tempos de resposta e canais; importa mais em planos não gerenciados quando algo quebra às 2 da manhã.</li>
+    <li><strong>Disponibilidade</strong> — procure um SLA publicado em vez de promessas vagas.</li>
+  </ul>
+
+  <h3>Preço</h3>
+  <p>Compare o preço de <em>renovação</em>, não apenas o primeiro período promocional, e confirme o que está incluído (backups, banda, endereço IPv4, painel de controle). O preço de tabela mais barato muitas vezes exclui coisas que você acabará comprando de qualquer forma. Mapeie as especificações para sua carga de trabalho real e escolha o menor plano que a cobre com folga — normalmente você pode escalar depois.</p>
+
+  <h2>O que você realmente precisa, por tipo de projeto</h2>
+  <table>
+    <thead><tr><th>Projeto</th><th>Necessidades típicas</th></tr></thead>
+    <tbody>
+      <tr><td>Site estático / blog</td><td>Muitas vezes ok em hospedagem compartilhada ou deploy estático; um VPS pequeno apenas se você quiser controle total.</td></tr>
+      <tr><td>App dinâmico pequeno</td><td>VPS de entrada: alguns GB de RAM, armazenamento NVMe, 1–2 vCPUs, região perto dos usuários.</td></tr>
+      <tr><td>App + banco de dados + cache</td><td>Mais folga de RAM, vCPUs dedicadas para carga estável, backups automatizados.</td></tr>
+      <tr><td>Mídia / alto tráfego</td><td>Cota generosa de transferência, rede forte, CDN na frente, espaço para escalar.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Como decidir</h2>
+  <p>Parta da sua carga de trabalho, não de uma lista de "melhores": estime primeiro a memória, depois a CPU, depois armazenamento e transferência; exija uma região perto dos seus usuários; insista em NVMe/SSD e em backups incluídos ou acessíveis; e compare preços de renovação em especificações equivalentes. Um VPS que cobre confortavelmente sua carga atual com um pouco de folga — e permite escalar depois — vence todas as vezes um superdimensionado ou subdimensionado.</p>
+</Article>

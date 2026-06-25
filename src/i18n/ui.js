@@ -1,5 +1,5 @@
 // Minimal i18n for html5advent.com. EN at root, /fr, /es (Eric rule: min trilingual).
-export const LOCALES = ['en', 'fr', 'es'];
+export const LOCALES = ['en', 'fr', 'es', 'de', 'it', 'pt'];
 export const DEFAULT_LOCALE = 'en';
 
 export const UI = {
@@ -38,6 +38,30 @@ export const UI = {
     disclosure: 'Algunos enlaces de alojamiento son de afiliados. Nunca cambian lo que recomendamos y solo los añadimos a páginas realmente relevantes.',
     home: 'Inicio',
     skip: 'Ir al contenido',
+  },
+  de: {
+    tagline: 'Die moderne Web-Plattform, eine Demo nach der anderen.',
+    intro: 'Praktische, getestete Anleitungen zu HTML, CSS, JavaScript und Browser-Web-APIs — plus der Web-Platform-Advent-Kalender mit 24 Frontend-Demos.',
+    advent: 'Web Platform Advent', guides: 'Anleitungen', apis: 'Web-APIs', hosting: 'Hosting & Deployment',
+    readMore: 'Anleitung lesen',
+    disclosure: 'Einige Hosting-Links sind Affiliate-Links. Sie ändern nie unsere Empfehlungen und stehen nur auf wirklich relevanten Seiten.',
+    home: 'Start', skip: 'Zum Inhalt springen',
+  },
+  it: {
+    tagline: 'La piattaforma web moderna, una demo alla volta.',
+    intro: 'Guide pratiche e testate su HTML, CSS, JavaScript e le Web API del browser — più il calendario Web Platform Advent di 24 demo front-end.',
+    advent: 'Web Platform Advent', guides: 'Guide', apis: 'Web API', hosting: 'Hosting e deploy',
+    readMore: 'Leggi la guida',
+    disclosure: 'Alcuni link di hosting sono link di affiliazione. Non cambiano mai ciò che consigliamo e li aggiungiamo solo a pagine davvero pertinenti.',
+    home: 'Home', skip: 'Vai al contenuto',
+  },
+  pt: {
+    tagline: 'A plataforma web moderna, uma demo de cada vez.',
+    intro: 'Guias práticos e testados sobre HTML, CSS, JavaScript e as Web APIs do navegador — além do calendário Web Platform Advent com 24 demos front-end.',
+    advent: 'Web Platform Advent', guides: 'Guias', apis: 'Web APIs', hosting: 'Hospedagem e deploy',
+    readMore: 'Ler o guia',
+    disclosure: 'Alguns links de hospedagem são links de afiliado. Nunca mudam o que recomendamos e só os adicionamos a páginas realmente relevantes.',
+    home: 'Início', skip: 'Ir para o conteúdo',
   },
 };
 

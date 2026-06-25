@@ -1,0 +1,70 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="view-transitions-api"
+  title="A View Transitions API: transições suaves de página e de estado"
+  description="Animar entre dois estados do DOM com a View Transitions API. startViewTransition, view-transition-name, transições no mesmo documento e entre documentos explicadas."
+  cat="css"
+  day={9}
+  hero="/img/view-transitions-api-hero.jpg"
+  heroAlt="Um logotipo brilhante do navegador Google Chrome sobre um anel metálico"
+  cluster={null}
+>
+  <p>A <strong>View Transitions API</strong> anima a mudança entre dois estados de uma página — uma lista que vira uma visão de detalhe, um tema sendo alternado, um item sendo filtrado — com quase nenhum código de animação. O navegador captura um instantâneo do estado antigo, um do novo e faz um cross-fade (ou uma transformação) entre eles para você.</p>
+
+  <h2>Transições no mesmo documento</h2>
+  <p>Para mudanças de estado dentro de uma única página — uma single-page app atualizando o DOM — envolva a atualização do DOM em <code>document.startViewTransition()</code>:</p>
+  <pre><code>{`function showDetail(item) {
+  if (!document.startViewTransition) {
+    updateDOM(item); // no support: just update, no animation
+    return;
+  }
+  document.startViewTransition(() => updateDOM(item));
+}`}</code></pre>
+  <p>A callback faz o seu trabalho normal no DOM. O navegador captura um instantâneo "antes" pouco antes de ela rodar e um "depois" assim que termina, e então anima entre os dois. O padrão é um cross-fade suave — já uma boa melhoria de graça.</p>
+
+  <h2>Personalizar a animação com CSS</h2>
+  <p>Durante uma transição, o navegador constrói uma árvore de pseudo-elementos que você pode estilizar. O gancho mais simples é o grupo de transição raiz:</p>
+  <pre><code>{`::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}`}</code></pre>
+  <p>Você mira no instantâneo de saída com <code>::view-transition-old()</code> e no de entrada com <code>::view-transition-new()</code>, e então aplica qualquer animação CSS que quiser.</p>
+
+  <figure>
+    <img src="/img/view-transitions-api-inbody.jpg" alt="A hand holding a phone showing an app profile screen in front of two desktop monitors" width="1280" height="853" loading="lazy" />
+    <figcaption>As view transitions suavizam o salto entre telas — o tipo de navegação fluida que os usuários esperam dos apps nativos, agora possível na web.</figcaption>
+  </figure>
+
+  <h2>Animar um elemento específico entre os estados</h2>
+  <p>Para fazer um elemento parecer mover-se e transformar-se entre os dois estados — uma miniatura crescendo até uma imagem completa — dê a ele um <code>view-transition-name</code> compartilhado em ambos os estados:</p>
+  <pre><code>{`.hero-image {
+  view-transition-name: hero;
+}`}</code></pre>
+  <p>O nome deve ser <strong>único</strong> na página a qualquer momento. Quando o navegador encontra o mesmo nome antes e depois, ele interpola a posição e o tamanho desse elemento diretamente em vez de fazer o cross-fade, produzindo um efeito contínuo de "elemento compartilhado".</p>
+
+  <h2>Transições entre documentos (MPA)</h2>
+  <p>Sites de múltiplas páginas também podem fazer transições entre navegações de página completas, sem JavaScript. Ative pelo CSS em ambas as páginas:</p>
+  <pre><code>{`@view-transition {
+  navigation: auto;
+}`}</code></pre>
+  <p>Com essa única regra, as navegações de mesma origem animam automaticamente. Valores <code>view-transition-name</code> correspondentes em ambas as páginas permitem que um elemento — digamos, a imagem hero de um post — seja transportado da página de lista para a página do artigo.</p>
+
+  <h2>Referência rápida</h2>
+  <table>
+    <thead><tr><th>Objetivo</th><th>API</th></tr></thead>
+    <tbody>
+      <tr><td>Mudança de estado SPA</td><td><code>document.startViewTransition(cb)</code></td></tr>
+      <tr><td>Navegação MPA</td><td><code>@view-transition &#123; navigation: auto &#125;</code></td></tr>
+      <tr><td>Estilizar o fade</td><td><code>::view-transition-old/new(root)</code></td></tr>
+      <tr><td>Elemento compartilhado</td><td><code>view-transition-name</code> (único)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Suporte e progressive enhancement</h2>
+  <p>As transições no mesmo documento estão disponíveis nos navegadores Chromium e no Safari; o suporte entre documentos está sendo lançado e o Firefox está implementando ambos. Como você se protege com <code>if (!document.startViewTransition)</code> e a versão entre documentos é um opt-in puramente CSS, a API degrada graciosamente: navegadores sem suporte simplesmente atualizam a página sem animação. Isso a torna segura para adicionar hoje como progressive enhancement.</p>
+
+  <p>Recorra às view transitions quando um salto entre estados parecer abrupto. Uma pequena quantidade de movimento dá aos usuários uma sensação de continuidade — de onde as coisas vieram e para onde foram — sem que você escreva à mão um único keyframe na maioria dos casos.</p>
+</Article>
