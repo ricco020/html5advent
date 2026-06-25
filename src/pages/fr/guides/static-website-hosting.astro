@@ -1,0 +1,73 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="static-website-hosting"
+  title="Hébergement de site statique : déployer un site Astro, Vite ou HTML"
+  description="Ce qu'est l'hébergement statique, comment un CDN sert votre build, et comment déployer un site Astro, Vite ou JAMstack avec un nom de domaine et HTTPS gratuit."
+  cat="hosting"
+  day={12}
+  hero="/img/static-website-hosting-hero.jpg"
+  heroAlt="La main d'un technicien manipulant un serveur éclairé en bleu dans une baie de datacenter"
+  cluster="deploy"
+>
+  <p>Un <strong>site statique</strong> est un ensemble de fichiers pré-générés — HTML, CSS, JavaScript et médias — qu'un serveur peut livrer tels quels au navigateur, sans rien exécuter à chaque requête. Des outils comme <strong>Astro</strong>, <strong>Vite</strong>, Eleventy ou un simple dossier HTML écrit à la main produisent ce type de sortie. L'héberger est plus simple, moins cher et plus rapide qu'une application dynamique, car il n'y a rien à exécuter côté serveur.</p>
+
+  <h2>Ce que signifie vraiment « hébergement statique »</h2>
+  <p>Avec l'hébergement statique, vous lancez une étape de build en local ou en CI, qui produit un dossier de fichiers bruts (souvent nommé <code>dist</code> ou <code>_site</code>). Le seul rôle de l'hébergeur est de stocker ces fichiers et de les servir en HTTP. Pas de PHP, pas de processus Node, pas de base de données — uniquement des fichiers. Cela a trois conséquences directes :</p>
+  <ul>
+    <li><strong>Vitesse</strong> — les fichiers se mettent en cache agressivement et se servent depuis l'edge, au plus près du visiteur.</li>
+    <li><strong>Coût</strong> — pas de serveur allumé en permanence à payer ; beaucoup de fournisseurs offrent un palier gratuit généreux.</li>
+    <li><strong>Fiabilité</strong> — moins de pièces mobiles, donc moins de choses susceptibles de casser sous la charge.</li>
+  </ul>
+
+  <h2>Générer votre dossier de sortie</h2>
+  <p>Chaque framework statique expose une commande de build. Le résultat est le dossier que vous téléversez ou vers lequel vous pointez votre hébergeur :</p>
+  <pre><code>{`# Astro
+npm run build        # génère ./dist
+
+# Vite
+npm run build        # génère ./dist
+
+# HTML brut
+# pas d'étape de build — votre dossier de fichiers .html est déjà la sortie`}</code></pre>
+  <p>Pour un site HTML brut, le « build » est simplement le dossier que vous avez déjà. Pour Astro ou Vite, c'est le répertoire <code>dist</code> qui est servi.</p>
+
+  <figure>
+    <img src="/img/static-website-hosting-inbody.jpg" alt="Une rangée de serveurs noirs montés en rack dans un datacenter" width="1280" height="853" loading="lazy" />
+    <figcaption>Derrière chaque site statique se cache une infrastructure physique — des baies de serveurs et des nœuds edge de CDN qui stockent et distribuent vos fichiers générés.</figcaption>
+  </figure>
+
+  <h2>Où héberger : CDN ou hébergement statique classique</h2>
+  <p>Vous avez deux grandes familles d'options :</p>
+  <h3>Plateformes edge / CDN</h3>
+  <p>Elles construisent votre projet depuis un dépôt Git et distribuent la sortie sur un réseau de diffusion de contenu. Un <abbr title="Content Delivery Network">CDN</abbr> stocke des copies de vos fichiers à de nombreux endroits dans le monde, si bien qu'un visiteur est servi depuis un nœud proche de lui. Cela réduit la latence et absorbe les pics de trafic. Les déploiements se déclenchent généralement par un <code>git push</code>.</p>
+  <h3>Hébergement classique / stockage objet</h3>
+  <p>Vous pouvez aussi servir un site statique depuis un hébergeur web traditionnel ou depuis du stockage objet avec un CDN devant. C'est pertinent quand vous avez déjà un hébergement pour d'autres projets, ou quand vous préférez gérer vous-même le téléversement via FTP/SSH ou un script de déploiement.</p>
+
+  <h2>Connecter un nom de domaine</h2>
+  <p>Quel que soit l'hébergeur, le câblage du domaine est le même dans son principe. Vous pointez les enregistrements DNS de votre domaine vers l'hébergeur :</p>
+  <ul>
+    <li>Un enregistrement <strong>A</strong> (ou <strong>AAAA</strong>) pointant le domaine apex (<code>example.com</code>) vers l'IP de l'hébergeur, ou</li>
+    <li>Un enregistrement <strong>CNAME</strong> pointant un sous-domaine (<code>www.example.com</code>) vers le nom d'hôte fourni par l'hébergeur.</li>
+  </ul>
+  <p>Beaucoup de plateformes acceptent aussi la <strong>délégation des serveurs de noms</strong>, où vous confiez entièrement la gestion DNS à l'hébergeur. Une fois les enregistrements propagés, l'hébergeur sert votre site sur votre propre domaine.</p>
+
+  <h2>HTTPS gratuit</h2>
+  <p>HTTPS n'est plus optionnel — les navigateurs signalent le HTTP simple comme « non sécurisé », et de nombreuses API de la plateforme web ne fonctionnent que dans un contexte sécurisé. Bonne nouvelle : la quasi-totalité des hébergeurs statiques modernes émettent et renouvellent les certificats TLS pour vous automatiquement, généralement via Let's Encrypt. Une fois votre domaine connecté, le certificat est provisionné sans aucune manipulation, et les renouvellements se font tout seuls.</p>
+
+  <h2>Référence rapide</h2>
+  <table>
+    <thead><tr><th>Étape</th><th>Ce que vous faites</th></tr></thead>
+    <tbody>
+      <tr><td>Build</td><td>Lancer <code>npm run build</code> (Astro/Vite) ou utiliser votre dossier HTML</td></tr>
+      <tr><td>Sortie</td><td>Servir le dossier <code>dist</code> / <code>_site</code></td></tr>
+      <tr><td>Hébergeur</td><td>Choisir une plateforme edge/CDN ou un hébergeur compatible statique</td></tr>
+      <tr><td>Domaine</td><td>Pointer les enregistrements A/AAAA ou CNAME vers l'hébergeur</td></tr>
+      <tr><td>HTTPS</td><td>Certificat TLS automatique, aucune configuration manuelle</td></tr>
+    </tbody>
+  </table>
+
+  <p>Tout l'intérêt de l'hébergement statique est de s'effacer : vous générez une fois, vous poussez, et les fichiers sont servis vite depuis l'edge. Réservez l'hébergement dynamique aux parties de votre projet qui ont réellement besoin de logique côté serveur — et gardez le frontend statique sur une infrastructure conçue pour livrer des fichiers rapidement.</p>
+</Article>

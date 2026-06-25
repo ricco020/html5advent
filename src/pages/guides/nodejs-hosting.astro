@@ -1,0 +1,97 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="nodejs-hosting"
+  title="How to host a Node.js app: VPS, PaaS and serverless"
+  description="The practical ways to deploy a Node.js application — VPS, managed PaaS, or serverless — plus PM2, a reverse proxy, environment variables and a sane deployment flow."
+  cat="hosting"
+  day={14}
+  hero="/img/nodejs-hosting-hero.jpg"
+  heroAlt="A hand inserting a server blade into a blue-lit rack of servers"
+  cluster="hosting"
+>
+  <p>Hosting a Node.js app is different from hosting a static site or a PHP page. Node runs a long-lived process that owns its own HTTP server, so the host has to <em>keep that process alive</em>, restart it on crash, and route public traffic to it. This guide walks through the three realistic options and the pieces you need regardless of which you pick.</p>
+
+  <h2>Three ways to host Node.js</h2>
+  <p>Almost every deployment falls into one of these models. The right choice depends on how much of the server you want to manage and how your traffic behaves.</p>
+  <ul>
+    <li><strong>VPS (self-managed)</strong> — you get a Linux machine and full root access. Maximum control and predictable cost, but you install and maintain Node, the process manager, the reverse proxy and TLS yourself.</li>
+    <li><strong>PaaS (platform-as-a-service)</strong> — you push code (often via Git) and the platform builds, runs and scales the process for you. Less control, faster to ship, usually metered.</li>
+    <li><strong>Serverless / functions</strong> — you deploy individual handlers instead of a running server. The platform starts them on demand. Great for spiky or low-traffic workloads, but stateless and subject to cold starts.</li>
+  </ul>
+
+  <h2>Keeping the process alive with PM2</h2>
+  <p>On a VPS, running <code>node server.js</code> in your shell stops the moment you log out, and nothing restarts it after a crash. A process manager solves both. <strong>PM2</strong> is the common choice:</p>
+  <pre><code>{`npm install -g pm2
+
+# start the app and name it
+pm2 start server.js --name web
+
+# restart automatically after a server reboot
+pm2 startup
+pm2 save
+
+# useful day-to-day commands
+pm2 list
+pm2 logs web
+pm2 restart web`}</code></pre>
+  <p>PM2 also runs your app in <em>cluster mode</em> to use every CPU core, which is the simplest way to scale a single box:</p>
+  <pre><code>{`pm2 start server.js --name web -i max`}</code></pre>
+
+  <figure>
+    <img src="/img/nodejs-hosting-inbody.jpg" alt="A row of rack-mounted servers in a data center" width="1280" height="853" loading="lazy" />
+    <figcaption>On a VPS your Node process runs on a physical or virtual machine like these; a process manager keeps it running and a reverse proxy exposes it to the web.</figcaption>
+  </figure>
+
+  <h2>A reverse proxy in front of Node</h2>
+  <p>Don't expose Node directly on port 80/443. Put a reverse proxy such as <strong>Nginx</strong> in front: it terminates TLS, serves static files efficiently, and can route several apps on one machine. A minimal Nginx server block that forwards traffic to a Node app listening on port 3000:</p>
+  <pre><code>{`server {
+  listen 80;
+  server_name example.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}`}</code></pre>
+  <p>The <code>Upgrade</code> and <code>Connection</code> headers matter if your app uses WebSockets. For HTTPS, the usual route is a free certificate from Let's Encrypt via <code>certbot</code>, which edits this config for you.</p>
+
+  <h2>Environment variables and configuration</h2>
+  <p>Never hard-code secrets (database URLs, API keys) in your source. Read them from the environment with <code>process.env</code>, and let the platform inject them:</p>
+  <pre><code>{`const port = process.env.PORT || 3000;
+const dbUrl = process.env.DATABASE_URL;
+
+app.listen(port, () => {
+  console.log(\`listening on \${port}\`);
+});`}</code></pre>
+  <p>On a VPS you can keep these in a <code>.env</code> file (loaded by a library, and excluded from Git) or pass them through PM2's ecosystem file. On a PaaS, you set them in the dashboard. Always read <code>process.env.PORT</code> — managed platforms assign the port for you.</p>
+
+  <h2>A sane deployment flow</h2>
+  <p>However you host, aim for a repeatable deploy rather than editing files on the server by hand:</p>
+  <ul>
+    <li>Pull the new code (<code>git pull</code> or a CI artifact).</li>
+    <li>Install only production dependencies: <code>npm ci --omit=dev</code>.</li>
+    <li>Run the build step if you have one (<code>npm run build</code>).</li>
+    <li>Reload the process with zero downtime: <code>pm2 reload web</code>.</li>
+  </ul>
+  <p>On a PaaS this whole sequence is triggered by a <code>git push</code>; on a VPS you can script it or wire it to a CI runner.</p>
+
+  <h2>Which option fits?</h2>
+  <table>
+    <thead><tr><th>Option</th><th>You manage</th><th>Best when</th></tr></thead>
+    <tbody>
+      <tr><td>VPS</td><td>OS, Node, PM2, Nginx, TLS</td><td>You want control and predictable cost</td></tr>
+      <tr><td>PaaS</td><td>Just your code + env vars</td><td>You want to ship fast and scale easily</td></tr>
+      <tr><td>Serverless</td><td>Individual handlers</td><td>Spiky or low traffic, stateless work</td></tr>
+    </tbody>
+  </table>
+
+  <p>If you're starting out, a single well-configured VPS with PM2 and Nginx will comfortably run most Node apps and teaches you what the managed platforms automate. Move to a PaaS or serverless when scaling or operational overhead becomes the bottleneck — not before.</p>
+</Article>

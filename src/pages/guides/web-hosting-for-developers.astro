@@ -1,0 +1,61 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="web-hosting-for-developers"
+  title="Web hosting for developers: the criteria that actually matter"
+  description="SSH access, Git deploys, runtimes, databases and staging — the hosting features developers genuinely need, and how shared, VPS and managed platforms compare."
+  cat="hosting"
+  day={13}
+  hero="/img/web-hosting-for-developers-hero.jpg"
+  heroAlt="A developer wearing headphones works at a desk in a dark room with code on a large monitor"
+  cluster="hosting"
+>
+  <p>Most hosting comparisons are written for people who want to click "install WordPress" and never open a terminal. As a developer, your needs are different: you want to deploy from Git, run your own stack, and reach the box over SSH when something breaks. This guide lists the criteria that actually matter when you host a project as a developer — and how the main hosting types stack up against them.</p>
+
+  <h2>The criteria that matter</h2>
+  <h3>SSH access</h3>
+  <p>Shell access is the dividing line between "developer-friendly" and "not". With SSH you can run build commands, inspect logs, manage processes, set up cron jobs and use command-line tools like <code>git</code>, <code>rsync</code> or <code>composer</code> directly on the server. Hosts that only give you a control panel and an FTP login will slow you down constantly.</p>
+  <h3>Git-based deploys</h3>
+  <p>Pushing to deploy is now the baseline workflow. Look for either a host that pulls from your repository on <code>git push</code>, or one where you can configure a deploy hook. A typical flow looks like this:</p>
+  <pre><code>{`# add the host as a remote, then deploy by pushing
+git remote add production ssh://user@host/~/repo.git
+git push production main
+
+# or trigger a build/deploy hook on push
+git push origin main   # CI runs build + rsync/scp to the server`}</code></pre>
+  <h3>Runtimes and versions</h3>
+  <p>Your app needs the right language runtime — Node.js, PHP, Python, Ruby — and crucially, the ability to <em>choose the version</em>. A host that pins you to one old PHP or Node release is a trap. Check that you can select and switch versions, ideally per project.</p>
+  <h3>Databases</h3>
+  <p>Most non-trivial projects need a database. Confirm which engines are available (PostgreSQL, MySQL/MariaDB, Redis for caching) and whether you get direct access — a connection string and the ability to run migrations — rather than only a limited admin panel.</p>
+  <h3>Staging environments</h3>
+  <p>A separate staging environment lets you test a deploy against production-like data before it goes live. Some hosts give you one-click staging clones; on a plain server you can replicate it yourself with a second virtual host and database. Either way, never make production your only environment.</p>
+
+  <figure>
+    <img src="/img/web-hosting-for-developers-inbody.jpg" alt="A laptop screen showing CSS source code open in a code editor" width="1280" height="853" loading="lazy" />
+    <figcaption>Developer-oriented hosting is judged by how well it fits a code-first workflow — editor, Git, SSH and a real runtime — not by how many one-click installers it ships.</figcaption>
+  </figure>
+
+  <h2>Types of hosting compared</h2>
+  <h3>Shared hosting</h3>
+  <p>Your site lives alongside many others on one server. It is the cheapest option and fine for small sites, but you share resources and have limited control. Better shared hosts for developers still offer SSH, Git deploys and version switching — that is the feature set to look for if you go this route.</p>
+  <h3>VPS</h3>
+  <p>A virtual private server gives you a dedicated slice of a machine with full root access. You install and configure the stack yourself, which means maximum control and the most responsibility. Ideal when you need a specific runtime, custom services, or root-level configuration.</p>
+  <h3>Managed / platform hosting</h3>
+  <p>Managed platforms (often called PaaS) handle the server for you: you push code, they build and run it. You trade some control for convenience and built-in scaling. Great when you want to focus on the app rather than the OS — at the cost of fitting into the platform's conventions.</p>
+
+  <h2>Quick reference</h2>
+  <table>
+    <thead><tr><th>Criterion</th><th>Why it matters</th></tr></thead>
+    <tbody>
+      <tr><td>SSH access</td><td>Run commands, read logs, manage the server directly</td></tr>
+      <tr><td>Git deploys</td><td>Push-to-deploy instead of manual FTP uploads</td></tr>
+      <tr><td>Runtime versions</td><td>Choose and switch Node/PHP/Python versions per project</td></tr>
+      <tr><td>Databases</td><td>Direct access to PostgreSQL/MySQL/Redis with a connection string</td></tr>
+      <tr><td>Staging</td><td>Test deploys safely before they reach production</td></tr>
+    </tbody>
+  </table>
+
+  <p>Pick the hosting type that matches your control-vs-convenience trade-off — shared for small sites, VPS for full control, managed for hands-off scaling — then verify it actually offers SSH, Git deploys, the runtimes you need, real database access and a staging path. Those five criteria, not the marketing, decide whether a host is genuinely developer-friendly.</p>
+</Article>

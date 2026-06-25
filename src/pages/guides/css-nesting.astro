@@ -1,0 +1,81 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="css-nesting"
+  title="Native CSS Nesting: the & selector, browser support, and Sass differences"
+  description="Write nested CSS without a preprocessor. How the & nesting selector works, where it differs from Sass, and which browsers support it today."
+  cat="css"
+  day={7}
+  hero="/img/css-nesting-hero.jpg"
+  heroAlt="A printed sheet of HTML markup with a pen resting on it"
+  cluster={null}
+>
+  <p><strong>CSS nesting</strong> lets you write rules inside other rules, so styles that belong together stay together. For years this was only possible with a preprocessor like Sass. It is now a native CSS feature, shipping in every modern browser — no build step required.</p>
+
+  <h2>The basic idea</h2>
+  <p>Instead of repeating the parent selector for every child, you nest the child rule inside it. These two blocks produce the same result:</p>
+  <pre><code>{`/* Flat, traditional CSS */
+.card { padding: 1rem; }
+.card h2 { margin: 0; }
+.card p { color: #555; }
+
+/* Nested */
+.card {
+  padding: 1rem;
+  h2 { margin: 0; }
+  p { color: #555; }
+}`}</code></pre>
+  <p>Each nested selector is read relative to its parent, so <code>.card p</code> is what the browser actually applies.</p>
+
+  <h2>The &amp; nesting selector</h2>
+  <p>The ampersand <code>&amp;</code> refers to the parent selector. You need it whenever the nested selector must attach directly to the parent rather than describe a descendant — pseudo-classes, modifier classes, and compound selectors:</p>
+  <pre><code>{`.btn {
+  background: #2563eb;
+
+  &:hover { background: #1d4ed8; }   /* .btn:hover */
+  &.is-active { background: #1e40af; } /* .btn.is-active */
+}`}</code></pre>
+  <p>Without the <code>&amp;</code>, a bare <code>:hover</code> would be treated as a descendant: <code>.btn *:hover</code>, which is almost never what you want. When you write a nested selector that starts with an element or class (like <code>p</code> above), the browser implicitly inserts a descendant combinator for you.</p>
+
+  <figure>
+    <img src="/img/css-nesting-inbody.jpg" alt="Source code on a dark editor showing function blocks nested inside curly braces" width="1280" height="853" loading="lazy" />
+    <figcaption>Nesting mirrors the structure already in your code: blocks placed inside curly braces, indented to show what belongs to what.</figcaption>
+  </figure>
+
+  <h2>Nesting media queries</h2>
+  <p>You can nest <code>@media</code> (and other at-rules) inside a selector, keeping responsive tweaks next to the rule they modify:</p>
+  <pre><code>{`.sidebar {
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 280px;
+  }
+}`}</code></pre>
+
+  <h2>Where it differs from Sass</h2>
+  <p>The syntax looks like Sass, but the two are not identical. The differences that bite most often:</p>
+  <ul>
+    <li><strong>Concatenation</strong>: Sass lets you build selectors like <code>&amp;__title</code> (BEM). Native CSS nesting does <em>not</em> concatenate — <code>&amp;__title</code> is invalid. You must write the full class name.</li>
+    <li><strong>No compile step</strong>: native nesting runs in the browser, so there is nothing to compile and no source maps to manage.</li>
+    <li><strong>Specificity of &amp;</strong>: in native CSS, <code>&amp;</code> behaves like <code>:is()</code> and takes the specificity of the most specific selector in the parent list, which can differ subtly from Sass output.</li>
+  </ul>
+
+  <h2>Browser support and fallback</h2>
+  <p>Native CSS nesting is supported in current versions of Chrome, Edge, Firefox and Safari. Early implementations required the nested selector to start with a symbol (so you wrote <code>&amp; p</code> instead of <code>p</code>); the relaxed syntax that allows a bare element selector is what ships in today's browsers. If you must support older engines, keep using Sass or PostCSS — the <code>postcss-nesting</code> plugin compiles native nesting down to flat CSS.</p>
+
+  <h2>Quick reference</h2>
+  <table>
+    <thead><tr><th>You want</th><th>Write</th></tr></thead>
+    <tbody>
+      <tr><td>Descendant</td><td><code>.card &#123; p &#123; ... &#125; &#125;</code></td></tr>
+      <tr><td>Pseudo-class</td><td><code>&amp;:hover &#123; ... &#125;</code></td></tr>
+      <tr><td>Modifier class</td><td><code>&amp;.is-active &#123; ... &#125;</code></td></tr>
+      <tr><td>Responsive</td><td><code>@media (...) &#123; ... &#125;</code> nested</td></tr>
+      <tr><td>BEM concatenation</td><td>not supported — write the full class</td></tr>
+    </tbody>
+  </table>
+
+  <p>Native nesting removes one of the last big reasons to reach for a preprocessor on a new project. Keep the nesting shallow — two or three levels — and your stylesheets stay readable while the relationships between selectors stay obvious.</p>
+</Article>

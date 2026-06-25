@@ -1,0 +1,76 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="fetch-api-javascript"
+  title="L'API Fetch en JavaScript : guide pratique"
+  description="Comment faire des requêtes HTTP dans le navigateur avec l'API Fetch — GET, JSON, POST, gestion des erreurs et annulation de requête — avec des exemples exécutables."
+  cat="apis"
+  day={1}
+  hero="/img/web-dev-code.jpg"
+  heroAlt="Un éditeur de code affichant du source HTML, CSS et JavaScript"
+  cluster={null}
+>
+  <p>L'<strong>API Fetch</strong> est la manière moderne, basée sur les promesses, de faire des requêtes HTTP depuis le navigateur. Elle remplace l'ancien <code>XMLHttpRequest</code> par une interface plus propre qui fonctionne naturellement avec <code>async</code>/<code>await</code> et les flux. Tous les navigateurs actuels la prennent en charge.</p>
+
+  <h2>Une première requête GET</h2>
+  <p><code>fetch()</code> renvoie une promesse qui se résout en un objet <code>Response</code>. Pour en lire le JSON, on appelle <code>response.json()</code>, qui renvoie elle-même une promesse :</p>
+  <pre><code>{`const res = await fetch('https://api.example.com/articles');
+const data = await res.json();
+console.log(data);`}</code></pre>
+  <p>La même chose sans <code>async</code>/<code>await</code>, avec des chaînes de <code>.then()</code> :</p>
+  <pre><code>{`fetch('https://api.example.com/articles')
+  .then((res) => res.json())
+  .then((data) => console.log(data));`}</code></pre>
+
+  <h2>Le piège : fetch ne rejette pas sur les erreurs HTTP</h2>
+  <p>C'est ce qui surprend presque tout le monde. Une réponse <code>404</code> ou <code>500</code> reste un fetch <em>réussi</em> — la promesse n'est rejetée que sur une défaillance <strong>réseau</strong> (hors ligne, DNS, CORS). Vous devez vérifier <code>response.ok</code> vous-même :</p>
+  <pre><code>{`const res = await fetch(url);
+if (!res.ok) {
+  throw new Error(\`HTTP \${res.status} \${res.statusText}\`);
+}
+const data = await res.json();`}</code></pre>
+
+  <figure>
+    <img src="/img/network-data.jpg" alt="Un commutateur réseau avec des câbles, représentant les données qui circulent entre client et serveur" width="1280" height="720" loading="lazy" />
+    <figcaption>Chaque appel <code>fetch()</code> envoie une requête HTTP à travers le réseau vers un serveur, puis attend que la réponse fasse le chemin retour.</figcaption>
+  </figure>
+
+  <h2>Envoyer des données avec POST</h2>
+  <p>Passez un second argument d'options pour définir la méthode, les en-têtes et le corps. Pour du JSON, sérialisez la charge utile et définissez le <code>Content-Type</code> :</p>
+  <pre><code>{`const res = await fetch('/api/articles', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ title: 'Bonjour', body: 'Monde' }),
+});
+const created = await res.json();`}</code></pre>
+
+  <h2>Annuler une requête</h2>
+  <p>Utilisez un <code>AbortController</code> pour annuler une requête — utile pour les délais d'attente ou quand un composant est démonté :</p>
+  <pre><code>{`const controller = new AbortController();
+const timeout = setTimeout(() => controller.abort(), 5000);
+
+try {
+  const res = await fetch(url, { signal: controller.signal });
+  const data = await res.json();
+} catch (err) {
+  if (err.name === 'AbortError') console.log('Requête expirée');
+} finally {
+  clearTimeout(timeout);
+}`}</code></pre>
+
+  <h2>Aide-mémoire</h2>
+  <table>
+    <thead><tr><th>Tâche</th><th>Comment</th></tr></thead>
+    <tbody>
+      <tr><td>Lire du JSON</td><td><code>await res.json()</code></td></tr>
+      <tr><td>Lire du texte</td><td><code>await res.text()</code></td></tr>
+      <tr><td>Vérifier le succès</td><td><code>res.ok</code> / <code>res.status</code></td></tr>
+      <tr><td>Envoyer du JSON</td><td><code>body: JSON.stringify(...)</code> + <code>Content-Type</code></td></tr>
+      <tr><td>Annuler</td><td><code>AbortController</code> + <code>signal</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>Cela couvre les cas du quotidien. L'API Fetch prend aussi en charge le streaming des corps de réponse, les envois <code>FormData</code> et le clonage requête/réponse — mais les patterns ci-dessus gèrent la grande majorité des appels réels.</p>
+</Article>

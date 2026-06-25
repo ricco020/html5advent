@@ -1,0 +1,104 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="intersection-observer-api"
+  title="The IntersectionObserver API: lazy-loading and scroll effects"
+  description="Use IntersectionObserver to lazy-load images, reveal elements on scroll and build infinite scroll — with threshold and rootMargin explained, plus runnable examples."
+  cat="apis"
+  day={10}
+  hero="/img/intersection-observer-api-hero.jpg"
+  heroAlt="An overhead view of a designer's desk with UI wireframe sketches, sticky notes, a smartphone and coloured markers"
+  cluster={null}
+>
+  <p>The <strong>IntersectionObserver API</strong> tells you when an element enters or leaves the viewport — without you wiring up a <code>scroll</code> listener and computing positions on every frame. The browser does the watching asynchronously and off the main thread, so it stays smooth even with hundreds of targets. Every current browser supports it.</p>
+
+  <h2>Why not just listen to scroll?</h2>
+  <p>A <code>scroll</code> handler fires constantly and forces you to call <code>getBoundingClientRect()</code> to know where things are — that reads layout and can cause jank. IntersectionObserver flips the model: you register the elements you care about, and the browser notifies you only when their visibility actually changes.</p>
+
+  <h2>The basic pattern</h2>
+  <p>Create an observer with a callback, then <code>observe()</code> one or more elements. The callback receives an array of <code>entry</code> objects; the key property is <code>entry.isIntersecting</code>:</p>
+  <pre><code>{`const observer = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    if (entry.isIntersecting) {
+      console.log('Now visible:', entry.target);
+    }
+  }
+});
+
+document.querySelectorAll('.watch').forEach((el) => observer.observe(el));`}</code></pre>
+
+  <h2>Lazy-loading images</h2>
+  <p>A classic use: only load an image once it is about to scroll into view. Store the real URL in <code>data-src</code>, swap it in when the element intersects, then stop observing it:</p>
+  <pre><code>{`const lazyImages = document.querySelectorAll('img[data-src]');
+
+const imgObserver = new IntersectionObserver((entries, observer) => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+    const img = entry.target;
+    img.src = img.dataset.src;
+    observer.unobserve(img); // load once, then stop watching
+  }
+}, { rootMargin: '200px' });
+
+lazyImages.forEach((img) => imgObserver.observe(img));`}</code></pre>
+  <p>Note: native lazy-loading via <code>&lt;img loading="lazy"&gt;</code> covers most cases now. Reach for IntersectionObserver when you need custom logic — placeholders, fade-ins, or loading non-image resources.</p>
+
+  <figure>
+    <img src="/img/intersection-observer-api-inbody.jpg" alt="A smartphone showing the Facebook login screen next to Scrabble tiles spelling the words SOCIAL MEDIA" width="1280" height="850" loading="lazy" />
+    <figcaption>Infinite-scroll feeds like social media apps are a textbook use of IntersectionObserver: watch a sentinel element near the bottom and load more content when it appears.</figcaption>
+  </figure>
+
+  <h2>Reveal elements on scroll</h2>
+  <p>Add a CSS class when an element first becomes visible, so it can animate in. Use the <code>threshold</code> option to decide <em>how much</em> of the element must be visible before the callback fires:</p>
+  <pre><code>{`const revealObserver = new IntersectionObserver((entries, observer) => {
+  for (const entry of entries) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    }
+  }
+}, { threshold: 0.2 }); // fire when 20% is on screen
+
+document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));`}</code></pre>
+
+  <h2>Infinite scroll</h2>
+  <p>Place an empty sentinel element after your list. When it enters the viewport, fetch and append the next page, then keep observing for the page after:</p>
+  <pre><code>{`const sentinel = document.querySelector('#sentinel');
+let page = 1;
+
+const loader = new IntersectionObserver(async (entries) => {
+  if (!entries[0].isIntersecting) return;
+  const items = await fetchPage(page++);
+  appendItems(items);
+});
+
+loader.observe(sentinel);`}</code></pre>
+
+  <h2>The options: threshold and rootMargin</h2>
+  <p>Two options shape when the callback fires:</p>
+  <ul>
+    <li><strong><code>threshold</code></strong> — a number (or array) from 0 to 1. <code>0</code> fires the moment one pixel is visible; <code>1</code> fires only when the whole element is visible. An array like <code>[0, 0.5, 1]</code> fires at each step, handy for scroll-progress effects.</li>
+    <li><strong><code>rootMargin</code></strong> — a CSS-style margin that grows or shrinks the area used for the test. <code>'200px'</code> triggers 200px <em>before</em> the element reaches the viewport — ideal for pre-loading.</li>
+    <li><strong><code>root</code></strong> — the element to use as the viewport. Defaults to the browser viewport; set it to a scrollable container to watch inside that instead.</li>
+  </ul>
+
+  <h2>Cleaning up</h2>
+  <p>Stop watching a single element with <code>observer.unobserve(el)</code>, or tear everything down with <code>observer.disconnect()</code> — important in single-page apps when a view unmounts, to avoid leaks.</p>
+
+  <h2>Quick reference</h2>
+  <table>
+    <thead><tr><th>Goal</th><th>Key option / call</th></tr></thead>
+    <tbody>
+      <tr><td>Detect visibility</td><td><code>entry.isIntersecting</code></td></tr>
+      <tr><td>Pre-load early</td><td><code>rootMargin: '200px'</code></td></tr>
+      <tr><td>Wait until X% visible</td><td><code>threshold: 0.5</code></td></tr>
+      <tr><td>Watch inside a container</td><td><code>root: containerEl</code></td></tr>
+      <tr><td>Stop watching one</td><td><code>observer.unobserve(el)</code></td></tr>
+      <tr><td>Tear down all</td><td><code>observer.disconnect()</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>IntersectionObserver replaces a whole category of fragile scroll math with a small, declarative API. Lazy images, scroll reveals and infinite lists all reduce to the same pattern: observe, react to <code>isIntersecting</code>, and unobserve when you're done.</p>
+</Article>

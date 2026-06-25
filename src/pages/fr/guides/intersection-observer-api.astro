@@ -1,0 +1,104 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="intersection-observer-api"
+  title="L'API IntersectionObserver : lazy-loading et effets au scroll"
+  description="Utilisez IntersectionObserver pour charger les images en différé, révéler des éléments au scroll et créer un défilement infini — threshold et rootMargin expliqués, avec des exemples exécutables."
+  cat="apis"
+  day={10}
+  hero="/img/intersection-observer-api-hero.jpg"
+  heroAlt="Vue de dessus d'un bureau de designer avec des croquis de maquettes d'interface, des post-it, un smartphone et des marqueurs de couleur"
+  cluster={null}
+>
+  <p>L'<strong>API IntersectionObserver</strong> vous indique quand un élément entre ou sort de la fenêtre d'affichage — sans avoir à brancher un écouteur <code>scroll</code> et à recalculer des positions à chaque image. Le navigateur effectue la surveillance de façon asynchrone et hors du thread principal, ce qui reste fluide même avec des centaines de cibles. Tous les navigateurs actuels la prennent en charge.</p>
+
+  <h2>Pourquoi ne pas simplement écouter le scroll ?</h2>
+  <p>Un gestionnaire <code>scroll</code> se déclenche en permanence et vous oblige à appeler <code>getBoundingClientRect()</code> pour savoir où se trouvent les éléments — ce qui lit le layout et peut provoquer des saccades. IntersectionObserver inverse le modèle : vous enregistrez les éléments qui vous intéressent, et le navigateur ne vous prévient que lorsque leur visibilité change réellement.</p>
+
+  <h2>Le schéma de base</h2>
+  <p>Créez un observateur avec une fonction de rappel, puis appelez <code>observe()</code> sur un ou plusieurs éléments. Le rappel reçoit un tableau d'objets <code>entry</code> ; la propriété clé est <code>entry.isIntersecting</code> :</p>
+  <pre><code>{`const observer = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    if (entry.isIntersecting) {
+      console.log('Visible maintenant :', entry.target);
+    }
+  }
+});
+
+document.querySelectorAll('.watch').forEach((el) => observer.observe(el));`}</code></pre>
+
+  <h2>Charger les images en différé (lazy-loading)</h2>
+  <p>Un usage classique : ne charger une image que lorsqu'elle est sur le point d'apparaître. Stockez l'URL réelle dans <code>data-src</code>, injectez-la quand l'élément intersecte, puis cessez de l'observer :</p>
+  <pre><code>{`const lazyImages = document.querySelectorAll('img[data-src]');
+
+const imgObserver = new IntersectionObserver((entries, observer) => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+    const img = entry.target;
+    img.src = img.dataset.src;
+    observer.unobserve(img); // charger une fois, puis arrêter
+  }
+}, { rootMargin: '200px' });
+
+lazyImages.forEach((img) => imgObserver.observe(img));`}</code></pre>
+  <p>À noter : le lazy-loading natif via <code>&lt;img loading="lazy"&gt;</code> couvre désormais la plupart des cas. Utilisez IntersectionObserver quand vous avez besoin de logique sur mesure — placeholders, fondus, ou chargement de ressources autres que des images.</p>
+
+  <figure>
+    <img src="/img/intersection-observer-api-inbody.jpg" alt="Un smartphone affichant l'écran de connexion Facebook à côté de lettres de Scrabble formant les mots SOCIAL MEDIA" width="1280" height="850" loading="lazy" />
+    <figcaption>Les fils à défilement infini comme les réseaux sociaux sont un cas d'école d'IntersectionObserver : on surveille une sentinelle proche du bas et on charge plus de contenu lorsqu'elle apparaît.</figcaption>
+  </figure>
+
+  <h2>Révéler des éléments au scroll</h2>
+  <p>Ajoutez une classe CSS lorsqu'un élément devient visible pour la première fois, afin qu'il puisse s'animer. L'option <code>threshold</code> décide <em>quelle part</em> de l'élément doit être visible avant le déclenchement :</p>
+  <pre><code>{`const revealObserver = new IntersectionObserver((entries, observer) => {
+  for (const entry of entries) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    }
+  }
+}, { threshold: 0.2 }); // déclenche quand 20% est à l'écran
+
+document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));`}</code></pre>
+
+  <h2>Défilement infini</h2>
+  <p>Placez un élément sentinelle vide après votre liste. Quand il entre dans la fenêtre, récupérez et ajoutez la page suivante, puis continuez à observer pour la suivante :</p>
+  <pre><code>{`const sentinel = document.querySelector('#sentinel');
+let page = 1;
+
+const loader = new IntersectionObserver(async (entries) => {
+  if (!entries[0].isIntersecting) return;
+  const items = await fetchPage(page++);
+  appendItems(items);
+});
+
+loader.observe(sentinel);`}</code></pre>
+
+  <h2>Les options : threshold et rootMargin</h2>
+  <p>Deux options déterminent le moment du déclenchement :</p>
+  <ul>
+    <li><strong><code>threshold</code></strong> — un nombre (ou un tableau) de 0 à 1. <code>0</code> déclenche dès qu'un pixel est visible ; <code>1</code> uniquement quand tout l'élément l'est. Un tableau comme <code>[0, 0.5, 1]</code> déclenche à chaque palier, pratique pour les effets de progression au scroll.</li>
+    <li><strong><code>rootMargin</code></strong> — une marge à la CSS qui agrandit ou réduit la zone de test. <code>'200px'</code> déclenche 200px <em>avant</em> que l'élément n'atteigne la fenêtre — idéal pour précharger.</li>
+    <li><strong><code>root</code></strong> — l'élément servant de fenêtre. Par défaut, la fenêtre du navigateur ; indiquez un conteneur défilable pour observer à l'intérieur de celui-ci.</li>
+  </ul>
+
+  <h2>Nettoyage</h2>
+  <p>Cessez de surveiller un seul élément avec <code>observer.unobserve(el)</code>, ou démantelez tout avec <code>observer.disconnect()</code> — important dans les applications monopage lorsqu'une vue est démontée, pour éviter les fuites.</p>
+
+  <h2>Aide-mémoire</h2>
+  <table>
+    <thead><tr><th>Objectif</th><th>Option / appel clé</th></tr></thead>
+    <tbody>
+      <tr><td>Détecter la visibilité</td><td><code>entry.isIntersecting</code></td></tr>
+      <tr><td>Précharger en avance</td><td><code>rootMargin: '200px'</code></td></tr>
+      <tr><td>Attendre X% visible</td><td><code>threshold: 0.5</code></td></tr>
+      <tr><td>Observer dans un conteneur</td><td><code>root: containerEl</code></td></tr>
+      <tr><td>Arrêter pour un élément</td><td><code>observer.unobserve(el)</code></td></tr>
+      <tr><td>Tout démanteler</td><td><code>observer.disconnect()</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>IntersectionObserver remplace toute une catégorie de calculs de scroll fragiles par une petite API déclarative. Images en différé, révélations au scroll et listes infinies se ramènent au même schéma : observer, réagir à <code>isIntersecting</code>, puis cesser d'observer quand c'est fini.</p>
+</Article>

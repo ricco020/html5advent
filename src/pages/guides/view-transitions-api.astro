@@ -1,0 +1,70 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="view-transitions-api"
+  title="The View Transitions API: smooth page and state transitions"
+  description="Animate between two DOM states with the View Transitions API. startViewTransition, view-transition-name, same-document and cross-document transitions explained."
+  cat="css"
+  day={9}
+  hero="/img/view-transitions-api-hero.jpg"
+  heroAlt="A glossy Google Chrome browser logo on a metallic ring"
+  cluster={null}
+>
+  <p>The <strong>View Transitions API</strong> animates the change between two states of a page — a list turning into a detail view, a theme toggling, an item being filtered out — with almost no animation code. The browser snapshots the old state, snapshots the new one, and cross-fades (or transforms) between them for you.</p>
+
+  <h2>Same-document transitions</h2>
+  <p>For state changes inside a single page — a single-page app updating the DOM — wrap the DOM update in <code>document.startViewTransition()</code>:</p>
+  <pre><code>{`function showDetail(item) {
+  if (!document.startViewTransition) {
+    updateDOM(item); // no support: just update, no animation
+    return;
+  }
+  document.startViewTransition(() => updateDOM(item));
+}`}</code></pre>
+  <p>The callback does your normal DOM work. The browser captures a "before" snapshot just before it runs and an "after" snapshot once it finishes, then animates between them. The default is a smooth cross-fade — already a nice upgrade for free.</p>
+
+  <h2>Customising the animation with CSS</h2>
+  <p>During a transition the browser builds a tree of pseudo-elements you can style. The simplest hook is the root transition group:</p>
+  <pre><code>{`::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}`}</code></pre>
+  <p>You target the outgoing snapshot with <code>::view-transition-old()</code> and the incoming one with <code>::view-transition-new()</code>, then apply any CSS animation you like.</p>
+
+  <figure>
+    <img src="/img/view-transitions-api-inbody.jpg" alt="A hand holding a phone showing an app profile screen in front of two desktop monitors" width="1280" height="853" loading="lazy" />
+    <figcaption>View transitions smooth the jump between screens — the kind of fluid navigation users expect from native apps, now achievable on the web.</figcaption>
+  </figure>
+
+  <h2>Animating a specific element across states</h2>
+  <p>To make one element appear to move and morph between the two states — a thumbnail growing into a full image — give it a shared <code>view-transition-name</code> in both states:</p>
+  <pre><code>{`.hero-image {
+  view-transition-name: hero;
+}`}</code></pre>
+  <p>The name must be <strong>unique</strong> on the page at any moment. When the browser finds the same name before and after, it tweens that element's position and size directly instead of cross-fading it, producing a continuous "shared element" effect.</p>
+
+  <h2>Cross-document transitions (MPA)</h2>
+  <p>Multi-page sites can transition between full page navigations too, with no JavaScript. Opt in from CSS in both pages:</p>
+  <pre><code>{`@view-transition {
+  navigation: auto;
+}`}</code></pre>
+  <p>With that single rule, same-origin navigations animate automatically. Matching <code>view-transition-name</code> values on both pages let an element — say a post's hero image — carry over from the list page to the article page.</p>
+
+  <h2>Quick reference</h2>
+  <table>
+    <thead><tr><th>Goal</th><th>API</th></tr></thead>
+    <tbody>
+      <tr><td>SPA state change</td><td><code>document.startViewTransition(cb)</code></td></tr>
+      <tr><td>MPA navigation</td><td><code>@view-transition &#123; navigation: auto &#125;</code></td></tr>
+      <tr><td>Style the fade</td><td><code>::view-transition-old/new(root)</code></td></tr>
+      <tr><td>Shared element</td><td><code>view-transition-name</code> (unique)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Support and progressive enhancement</h2>
+  <p>Same-document transitions ship in Chromium browsers and Safari; cross-document support is rolling out and Firefox is implementing both. Because you guard with <code>if (!document.startViewTransition)</code> and the cross-document version is a pure CSS opt-in, the API degrades gracefully: unsupported browsers simply update the page with no animation. That makes it safe to add today as a progressive enhancement.</p>
+
+  <p>Reach for view transitions when a jump between states feels abrupt. A small amount of motion gives users a sense of continuity — where things came from and where they went — without you hand-writing a single keyframe in most cases.</p>
+</Article>

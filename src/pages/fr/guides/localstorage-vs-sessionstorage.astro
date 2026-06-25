@@ -1,0 +1,79 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="localstorage-vs-sessionstorage"
+  title="localStorage vs sessionStorage : l'API Web Storage expliquée"
+  description="Quand utiliser localStorage plutôt que sessionStorage — durée de vie, portée, limites de taille, comment stocker du JSON proprement et réagir à l'événement storage."
+  cat="apis"
+  day={6}
+  hero="/img/localstorage-vs-sessionstorage-hero.jpg"
+  heroAlt="Une allée d'archives étroite bordée d'étagères de boîtes de rangement et de classeurs étiquetés"
+  cluster={null}
+>
+  <p>L'<strong>API Web Storage</strong> offre au navigateur deux magasins clé-valeur simples — <code>localStorage</code> et <code>sessionStorage</code> — pour conserver de petites quantités de données sur l'appareil de l'utilisateur. Les deux partagent exactement la même API ; ils ne diffèrent que par <em>la durée de vie des données</em> et <em>qui peut les voir</em>.</p>
+
+  <h2>L'API commune</h2>
+  <p>Les deux objets exposent les mêmes cinq méthodes, et tous deux stockent <strong>uniquement des chaînes</strong> :</p>
+  <pre><code>{`localStorage.setItem('theme', 'dark');
+const theme = localStorage.getItem('theme'); // 'dark'
+localStorage.removeItem('theme');
+localStorage.clear();                          // tout effacer
+console.log(localStorage.length);              // nombre de clés`}</code></pre>
+  <p>Lire une clé inexistante renvoie <code>null</code>, vous pouvez donc prévoir un repli avec <code>||</code> :</p>
+  <pre><code>{`const theme = localStorage.getItem('theme') || 'light';`}</code></pre>
+
+  <h2>La seule vraie différence : la durée de vie</h2>
+  <p>Toute la décision tient en une phrase. <code>localStorage</code> persiste <strong>jusqu'à ce que vous le supprimiez</strong> — il survit aux rechargements, à la fermeture des onglets et au redémarrage du navigateur. <code>sessionStorage</code> ne vit que le temps de <strong>l'onglet</strong> : fermez l'onglet et les données disparaissent, et un deuxième onglet sur le même site obtient son propre magasin distinct.</p>
+
+  <figure>
+    <img src="/img/localstorage-vs-sessionstorage-inbody.jpg" alt="Un écran affichant du code source JavaScript coloré qui lit l'objet window" width="1280" height="720" loading="lazy" />
+    <figcaption>Les deux magasins sont rattachés à l'objet global <code>window</code> : <code>localStorage</code> et <code>window.localStorage</code> désignent donc exactement la même chose.</figcaption>
+  </figure>
+
+  <h2>Stocker des objets : stringify et parse</h2>
+  <p>Comme le stockage ne contient que des chaînes, toute donnée structurée doit passer par JSON. Sérialisez à l'entrée, parsez à la sortie :</p>
+  <pre><code>{`const user = { name: 'Ada', loggedIn: true };
+
+// Sauvegarder
+localStorage.setItem('user', JSON.stringify(user));
+
+// Relire
+const saved = JSON.parse(localStorage.getItem('user'));
+console.log(saved.name); // 'Ada'`}</code></pre>
+  <p>Enveloppez <code>JSON.parse</code> dans un <code>try/catch</code> quand la valeur peut manquer ou être corrompue — parser <code>null</code> ou un texte invalide lève une erreur :</p>
+  <pre><code>{`function readJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}`}</code></pre>
+
+  <h2>Portée et limite de taille</h2>
+  <p>Le stockage est cloisonné par <strong>origine</strong> (schéma + hôte + port) : <code>https://example.com</code> et <code>http://example.com</code> ne partagent pas leurs données. Le quota est d'environ <strong>5&nbsp;Mo par origine</strong> dans la plupart des navigateurs — généreux pour des préférences et de petits caches, mais ce n'est pas une base de données. Le dépasser fait lever à <code>setItem</code> une <code>QuotaExceededError</code>, alors protégez les écritures volumineuses.</p>
+
+  <h2>Réagir aux changements entre onglets</h2>
+  <p>L'événement <code>storage</code> se déclenche sur les <em>autres</em> onglets de la même origine quand <code>localStorage</code> change — pratique pour synchroniser une déconnexion ou un changement de thème entre fenêtres ouvertes. Notez qu'il ne se déclenche <strong>pas</strong> dans l'onglet qui a fait la modification, et que <code>sessionStorage</code> ne le déclenche jamais :</p>
+  <pre><code>{`window.addEventListener('storage', (event) => {
+  if (event.key === 'theme') {
+    applyTheme(event.newValue);
+  }
+});`}</code></pre>
+
+  <h2>Lequel choisir ?</h2>
+  <table>
+    <thead><tr><th> </th><th>localStorage</th><th>sessionStorage</th></tr></thead>
+    <tbody>
+      <tr><td>Durée de vie</td><td>Jusqu'à effacement explicite</td><td>Jusqu'à fermeture de l'onglet</td></tr>
+      <tr><td>Partagé entre onglets</td><td>Oui (même origine)</td><td>Non (par onglet)</td></tr>
+      <tr><td>Survit au rechargement</td><td>Oui</td><td>Oui</td></tr>
+      <tr><td>Déclenche l'événement <code>storage</code></td><td>Oui</td><td>Non</td></tr>
+      <tr><td>Usage typique</td><td>Thème, réglages, « se souvenir de moi »</td><td>Brouillons de formulaire, étapes d'assistant</td></tr>
+    </tbody>
+  </table>
+
+  <p>Choisissez <code>localStorage</code> quand la donnée doit subsister d'une visite à l'autre, et <code>sessionStorage</code> quand elle n'a de sens que pour l'onglet courant. Pour tout ce qui est sensible — jetons, mots de passe, données personnelles — aucun des deux ne convient : ils sont lisibles par n'importe quel script de la page, alors gardez les secrets entièrement hors du Web Storage.</p>
+</Article>

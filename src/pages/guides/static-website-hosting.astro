@@ -1,0 +1,73 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="static-website-hosting"
+  title="Static website hosting: how to deploy an Astro, Vite or plain HTML site"
+  description="What static hosting is, how a CDN serves your build, and how to deploy an Astro, Vite or JAMstack site with a custom domain and free HTTPS."
+  cat="hosting"
+  day={12}
+  hero="/img/static-website-hosting-hero.jpg"
+  heroAlt="A technician's hand servicing a blue-lit server in a data center rack"
+  cluster="deploy"
+>
+  <p>A <strong>static website</strong> is a set of pre-built files — HTML, CSS, JavaScript and assets — that a server can hand to the browser as-is, with no code running per request. Tools like <strong>Astro</strong>, <strong>Vite</strong>, Eleventy or a hand-written HTML folder all produce this kind of output. Hosting it is simpler, cheaper and faster than hosting a dynamic app, because there is nothing to execute server-side.</p>
+
+  <h2>What "static hosting" actually means</h2>
+  <p>With static hosting, you run a build step locally or in CI, and it emits a folder of plain files (often called <code>dist</code> or <code>_site</code>). The host's only job is to store those files and serve them over HTTP. There is no PHP, no Node process, no database — just files. That has three direct consequences:</p>
+  <ul>
+    <li><strong>Speed</strong> — files can be cached aggressively and served from the edge, close to the visitor.</li>
+    <li><strong>Cost</strong> — no always-on server to pay for; many providers offer a generous free tier.</li>
+    <li><strong>Reliability</strong> — fewer moving parts means fewer things that can break under load.</li>
+  </ul>
+
+  <h2>Building your output folder</h2>
+  <p>Every static framework exposes a build command. The result is the folder you upload or point your host at:</p>
+  <pre><code>{`# Astro
+npm run build        # outputs to ./dist
+
+# Vite
+npm run build        # outputs to ./dist
+
+# Plain HTML
+# no build step — your folder of .html files is already the output`}</code></pre>
+  <p>For a plain HTML site, the "build" is just the folder you already have. For Astro or Vite, the <code>dist</code> directory is what gets served.</p>
+
+  <figure>
+    <img src="/img/static-website-hosting-inbody.jpg" alt="A row of black rack-mounted servers in a data center" width="1280" height="853" loading="lazy" />
+    <figcaption>Behind every static site is physical infrastructure — racks of servers and CDN edge nodes that store and distribute your built files.</figcaption>
+  </figure>
+
+  <h2>Where to host: CDN vs. classic static hosting</h2>
+  <p>You have two broad families of options:</p>
+  <h3>Edge / CDN platforms</h3>
+  <p>These build your project from a Git repository and distribute the output across a content delivery network. A <abbr title="Content Delivery Network">CDN</abbr> stores copies of your files in many locations worldwide, so a visitor is served from a node near them. This minimizes latency and absorbs traffic spikes. Deploys are usually triggered by a <code>git push</code>.</p>
+  <h3>Classic / object-storage hosting</h3>
+  <p>You can also serve a static site from a traditional web host or from object storage with a CDN in front of it. This is a good fit when you already have hosting for other projects, or when you prefer to manage the upload yourself over FTP/SSH or a deploy script.</p>
+
+  <h2>Connecting a custom domain</h2>
+  <p>Whichever host you choose, the domain wiring is the same in principle. You point your domain's DNS records at the host:</p>
+  <ul>
+    <li>An <strong>A</strong> (or <strong>AAAA</strong>) record pointing the apex domain (<code>example.com</code>) to the host's IP, or</li>
+    <li>A <strong>CNAME</strong> record pointing a subdomain (<code>www.example.com</code>) to the host's provided hostname.</li>
+  </ul>
+  <p>Many platforms also support <strong>nameserver delegation</strong>, where you hand DNS management to the host entirely. After the records propagate, the host serves your site on your own domain.</p>
+
+  <h2>HTTPS for free</h2>
+  <p>HTTPS is no longer optional — browsers flag plain HTTP as "not secure", and many web platform APIs only work in a secure context. The good news: virtually every modern static host issues and renews TLS certificates for you automatically, usually via Let's Encrypt. Once your domain is connected, the certificate is provisioned without any manual step, and renewals happen on their own.</p>
+
+  <h2>Quick reference</h2>
+  <table>
+    <thead><tr><th>Step</th><th>What you do</th></tr></thead>
+    <tbody>
+      <tr><td>Build</td><td>Run <code>npm run build</code> (Astro/Vite) or use your HTML folder</td></tr>
+      <tr><td>Output</td><td>Serve the <code>dist</code> / <code>_site</code> folder</td></tr>
+      <tr><td>Host</td><td>Pick an edge/CDN platform or a static-capable web host</td></tr>
+      <tr><td>Domain</td><td>Point A/AAAA or CNAME records at the host</td></tr>
+      <tr><td>HTTPS</td><td>Automatic TLS certificate, no manual setup</td></tr>
+    </tbody>
+  </table>
+
+  <p>The whole point of static hosting is that it gets out of your way: you build once, push, and the files are served fast from the edge. Reserve dynamic hosting for the parts of your project that genuinely need server-side logic — and keep the static frontend on infrastructure built to deliver files quickly.</p>
+</Article>

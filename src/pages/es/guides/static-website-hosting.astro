@@ -1,0 +1,73 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="static-website-hosting"
+  title="Alojamiento de sitios estáticos: desplegar un sitio Astro, Vite o HTML"
+  description="Qué es el alojamiento estático, cómo un CDN sirve tu build y cómo desplegar un sitio Astro, Vite o JAMstack con dominio propio y HTTPS gratis."
+  cat="hosting"
+  day={12}
+  hero="/img/static-website-hosting-hero.jpg"
+  heroAlt="La mano de un técnico manipulando un servidor iluminado en azul dentro de un rack de centro de datos"
+  cluster="deploy"
+>
+  <p>Un <strong>sitio estático</strong> es un conjunto de archivos pregenerados — HTML, CSS, JavaScript y recursos — que un servidor puede entregar tal cual al navegador, sin ejecutar código en cada petición. Herramientas como <strong>Astro</strong>, <strong>Vite</strong>, Eleventy o una carpeta HTML escrita a mano producen este tipo de salida. Alojarlo es más sencillo, más barato y más rápido que alojar una app dinámica, porque no hay nada que ejecutar en el servidor.</p>
+
+  <h2>Qué significa realmente «alojamiento estático»</h2>
+  <p>Con el alojamiento estático ejecutas un paso de build en local o en CI, y este genera una carpeta de archivos planos (a menudo llamada <code>dist</code> o <code>_site</code>). La única tarea del proveedor es almacenar esos archivos y servirlos por HTTP. No hay PHP, ni proceso de Node, ni base de datos — solo archivos. Eso tiene tres consecuencias directas:</p>
+  <ul>
+    <li><strong>Velocidad</strong> — los archivos se cachean de forma agresiva y se sirven desde el edge, cerca del visitante.</li>
+    <li><strong>Coste</strong> — no hay un servidor encendido permanentemente que pagar; muchos proveedores ofrecen un plan gratuito generoso.</li>
+    <li><strong>Fiabilidad</strong> — menos piezas móviles significan menos cosas que puedan fallar bajo carga.</li>
+  </ul>
+
+  <h2>Generar tu carpeta de salida</h2>
+  <p>Cada framework estático expone un comando de build. El resultado es la carpeta que subes o a la que apuntas tu proveedor:</p>
+  <pre><code>{`# Astro
+npm run build        # genera ./dist
+
+# Vite
+npm run build        # genera ./dist
+
+# HTML plano
+# sin paso de build — tu carpeta de archivos .html ya es la salida`}</code></pre>
+  <p>Para un sitio HTML plano, el «build» es simplemente la carpeta que ya tienes. Para Astro o Vite, el directorio <code>dist</code> es lo que se sirve.</p>
+
+  <figure>
+    <img src="/img/static-website-hosting-inbody.jpg" alt="Una fila de servidores negros montados en rack dentro de un centro de datos" width="1280" height="853" loading="lazy" />
+    <figcaption>Detrás de cada sitio estático hay infraestructura física — racks de servidores y nodos edge de CDN que almacenan y distribuyen tus archivos generados.</figcaption>
+  </figure>
+
+  <h2>Dónde alojar: CDN frente a alojamiento estático clásico</h2>
+  <p>Tienes dos grandes familias de opciones:</p>
+  <h3>Plataformas edge / CDN</h3>
+  <p>Construyen tu proyecto desde un repositorio Git y distribuyen la salida por una red de entrega de contenido. Un <abbr title="Content Delivery Network">CDN</abbr> almacena copias de tus archivos en muchas ubicaciones del mundo, de modo que un visitante se sirve desde un nodo cercano. Esto reduce la latencia y absorbe los picos de tráfico. Los despliegues suelen activarse con un <code>git push</code>.</p>
+  <h3>Alojamiento clásico / almacenamiento de objetos</h3>
+  <p>También puedes servir un sitio estático desde un alojamiento web tradicional o desde almacenamiento de objetos con un CDN por delante. Encaja bien cuando ya tienes alojamiento para otros proyectos, o cuando prefieres gestionar tú mismo la subida vía FTP/SSH o un script de despliegue.</p>
+
+  <h2>Conectar un dominio propio</h2>
+  <p>Sea cual sea el proveedor, el cableado del dominio es el mismo en principio. Apuntas los registros DNS de tu dominio al proveedor:</p>
+  <ul>
+    <li>Un registro <strong>A</strong> (o <strong>AAAA</strong>) que apunte el dominio apex (<code>example.com</code>) a la IP del proveedor, o</li>
+    <li>Un registro <strong>CNAME</strong> que apunte un subdominio (<code>www.example.com</code>) al nombre de host que facilita el proveedor.</li>
+  </ul>
+  <p>Muchas plataformas también admiten la <strong>delegación de servidores de nombres</strong>, donde entregas la gestión DNS por completo al proveedor. Una vez propagados los registros, el proveedor sirve tu sitio en tu propio dominio.</p>
+
+  <h2>HTTPS gratis</h2>
+  <p>HTTPS ya no es opcional — los navegadores marcan el HTTP simple como «no seguro», y muchas API de la plataforma web solo funcionan en un contexto seguro. La buena noticia: prácticamente todos los proveedores estáticos modernos emiten y renuevan los certificados TLS por ti automáticamente, normalmente vía Let's Encrypt. Una vez conectado tu dominio, el certificado se aprovisiona sin ningún paso manual, y las renovaciones ocurren solas.</p>
+
+  <h2>Referencia rápida</h2>
+  <table>
+    <thead><tr><th>Paso</th><th>Qué haces</th></tr></thead>
+    <tbody>
+      <tr><td>Build</td><td>Ejecutar <code>npm run build</code> (Astro/Vite) o usar tu carpeta HTML</td></tr>
+      <tr><td>Salida</td><td>Servir la carpeta <code>dist</code> / <code>_site</code></td></tr>
+      <tr><td>Proveedor</td><td>Elegir una plataforma edge/CDN o un alojamiento compatible con estáticos</td></tr>
+      <tr><td>Dominio</td><td>Apuntar los registros A/AAAA o CNAME al proveedor</td></tr>
+      <tr><td>HTTPS</td><td>Certificado TLS automático, sin configuración manual</td></tr>
+    </tbody>
+  </table>
+
+  <p>Todo el sentido del alojamiento estático es quitarse de en medio: construyes una vez, haces push y los archivos se sirven rápido desde el edge. Reserva el alojamiento dinámico para las partes de tu proyecto que de verdad necesitan lógica de servidor — y mantén el frontend estático sobre una infraestructura diseñada para entregar archivos con rapidez.</p>
+</Article>

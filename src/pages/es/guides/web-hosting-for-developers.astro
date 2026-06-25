@@ -1,0 +1,61 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="web-hosting-for-developers"
+  title="Alojamiento web para desarrolladores: los criterios que de verdad importan"
+  description="Acceso SSH, despliegues con Git, runtimes, bases de datos y staging — las funciones de alojamiento que un desarrollador necesita de verdad, y la comparación entre compartido, VPS y gestionado."
+  cat="hosting"
+  day={13}
+  hero="/img/web-hosting-for-developers-hero.jpg"
+  heroAlt="Un desarrollador con auriculares trabaja en su escritorio en una sala oscura, con código en un monitor grande"
+  cluster="hosting"
+>
+  <p>La mayoría de las comparativas de alojamiento están escritas para quien quiere pulsar «instalar WordPress» y no abrir jamás una terminal. Como desarrollador, tus necesidades son distintas: desplegar desde Git, ejecutar tu propio stack y llegar a la máquina por SSH cuando algo se rompe. Esta guía enumera los criterios que de verdad importan al alojar un proyecto siendo desarrollador — y cómo se comparan los principales tipos de alojamiento frente a ellos.</p>
+
+  <h2>Los criterios que importan</h2>
+  <h3>Acceso SSH</h3>
+  <p>El acceso a la shell es la línea que separa «apto para desarrolladores» de «no apto». Con SSH puedes ejecutar comandos de build, inspeccionar logs, gestionar procesos, configurar tareas cron y usar herramientas de línea de comandos como <code>git</code>, <code>rsync</code> o <code>composer</code> directamente en el servidor. Un proveedor que solo te da un panel de control y un acceso FTP te frenará constantemente.</p>
+  <h3>Despliegues con Git</h3>
+  <p>El «push para desplegar» es ya el flujo de base. Busca o bien un proveedor que tire de tu repositorio en cada <code>git push</code>, o bien la posibilidad de configurar un hook de despliegue. Un flujo típico se ve así:</p>
+  <pre><code>{`# añadir el proveedor como remoto y desplegar haciendo push
+git remote add production ssh://user@host/~/repo.git
+git push production main
+
+# o disparar un hook de build/despliegue en el push
+git push origin main   # la CI ejecuta el build + rsync/scp al servidor`}</code></pre>
+  <h3>Runtimes y versiones</h3>
+  <p>Tu aplicación necesita el runtime adecuado — Node.js, PHP, Python, Ruby — y, sobre todo, poder <em>elegir la versión</em>. Un proveedor que te fija a una versión antigua de PHP o Node es una trampa. Comprueba que puedes seleccionar y cambiar versiones, idealmente por proyecto.</p>
+  <h3>Bases de datos</h3>
+  <p>La mayoría de los proyectos no triviales necesitan una base de datos. Confirma qué motores están disponibles (PostgreSQL, MySQL/MariaDB, Redis para caché) y si tienes acceso directo — una cadena de conexión y la capacidad de ejecutar migraciones — en lugar de solo un panel de administración limitado.</p>
+  <h3>Entornos de staging</h3>
+  <p>Un entorno de staging separado te permite probar un despliegue contra datos parecidos a los de producción antes de publicarlo. Algunos proveedores ofrecen clones de staging en un clic; en un servidor sencillo lo replicas tú mismo con un segundo virtual host y una segunda base de datos. En cualquier caso, nunca conviertas producción en tu único entorno.</p>
+
+  <figure>
+    <img src="/img/web-hosting-for-developers-inbody.jpg" alt="La pantalla de un portátil mostrando código CSS abierto en un editor de código" width="1280" height="853" loading="lazy" />
+    <figcaption>Un alojamiento orientado a desarrolladores se juzga por lo bien que encaja en un flujo centrado en el código — editor, Git, SSH y un runtime real — no por cuántos instaladores de un clic incluye.</figcaption>
+  </figure>
+
+  <h2>Los tipos de alojamiento comparados</h2>
+  <h3>Alojamiento compartido</h3>
+  <p>Tu sitio convive con muchos otros en un mismo servidor. Es la opción más barata y vale para sitios pequeños, pero compartes recursos y tienes control limitado. Los mejores compartidos para desarrolladores ofrecen igualmente SSH, despliegues con Git y cambio de versión — ese es el conjunto de funciones que debes buscar si eliges este camino.</p>
+  <h3>VPS</h3>
+  <p>Un servidor privado virtual te da una porción dedicada de una máquina con acceso root completo. Instalas y configuras el stack tú mismo, lo que significa control máximo y la mayor responsabilidad. Ideal cuando necesitas un runtime concreto, servicios personalizados o configuración a nivel de root.</p>
+  <h3>Alojamiento gestionado / plataforma</h3>
+  <p>Las plataformas gestionadas (a menudo llamadas PaaS) se ocupan del servidor por ti: tú haces push del código, ellas lo construyen y lo ejecutan. Cambias algo de control por comodidad y escalado integrado. Estupendo cuando quieres centrarte en la aplicación en vez de en el sistema operativo — a cambio de adaptarte a las convenciones de la plataforma.</p>
+
+  <h2>Referencia rápida</h2>
+  <table>
+    <thead><tr><th>Criterio</th><th>Por qué importa</th></tr></thead>
+    <tbody>
+      <tr><td>Acceso SSH</td><td>Ejecutar comandos, leer logs, gestionar el servidor directamente</td></tr>
+      <tr><td>Despliegues Git</td><td>Push-to-deploy en lugar de subidas FTP manuales</td></tr>
+      <tr><td>Versiones de runtime</td><td>Elegir y cambiar versiones de Node/PHP/Python por proyecto</td></tr>
+      <tr><td>Bases de datos</td><td>Acceso directo a PostgreSQL/MySQL/Redis con cadena de conexión</td></tr>
+      <tr><td>Staging</td><td>Probar despliegues con seguridad antes de llegar a producción</td></tr>
+    </tbody>
+  </table>
+
+  <p>Elige el tipo de alojamiento que se ajuste a tu equilibrio entre control y comodidad — compartido para sitios pequeños, VPS para control total, gestionado para escalar sin administrar — y luego verifica que de verdad ofrece SSH, despliegues con Git, los runtimes que necesitas, acceso real a la base de datos y un camino de staging. Esos cinco criterios, y no el marketing, deciden si un proveedor es genuinamente apto para desarrolladores.</p>
+</Article>

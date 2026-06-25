@@ -1,0 +1,104 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="web-components"
+  title="Web Components : Custom Elements, Shadow DOM et templates"
+  description="Créez des éléments HTML réutilisables avec les API natives Web Components — définir un Custom Element, encapsuler les styles avec le Shadow DOM, cloner un &lt;template&gt; et passer des données par attributs."
+  cat="html"
+  day={5}
+  hero="/img/web-components-hero.jpg"
+  heroAlt="Un tas de briques de construction en plastique colorées et emboîtables de différentes formes"
+  cluster={null}
+>
+  <p>Les <strong>Web Components</strong> sont un ensemble d'API natives du navigateur qui permettent de créer vos propres éléments HTML réutilisables — sans aucun framework. Un composant que vous publiez fonctionne à l'identique en HTML pur, React, Vue ou Svelte, car c'est simplement un élément que le navigateur comprend. Trois API le rendent possible : les Custom Elements, le Shadow DOM et la balise <code>&lt;template&gt;</code>.</p>
+
+  <h2>Custom Elements</h2>
+  <p>Un Custom Element est une classe qui étend <code>HTMLElement</code>, enregistrée avec un nom de balise qui <strong>doit contenir un trait d'union</strong> (pour ne jamais entrer en collision avec une future balise native) :</p>
+  <pre><code>{`class GreetingCard extends HTMLElement {
+  connectedCallback() {
+    const p = document.createElement('p');
+    p.textContent = 'Bonjour depuis un custom element !';
+    this.append(p);
+  }
+}
+
+customElements.define('greeting-card', GreetingCard);`}</code></pre>
+  <p>Une fois défini, vous l'utilisez comme n'importe quelle balise :</p>
+  <pre><code>{`<greeting-card></greeting-card>`}</code></pre>
+  <p>La classe vous donne des <strong>callbacks de cycle de vie</strong>. Les plus utiles sont <code>connectedCallback</code> (l'élément a été ajouté à la page), <code>disconnectedCallback</code> (il a été retiré) et <code>attributeChangedCallback</code> (un attribut surveillé a changé).</p>
+
+  <h2>Réagir aux attributs</h2>
+  <p>Pour passer des données, lisez les attributs — exactement comme <code>src</code> sur une image. Déclarez ceux à surveiller avec un getter statique <code>observedAttributes</code>, puis répondez dans <code>attributeChangedCallback</code>. Construire le nœud avec <code>textContent</code> sécurise les valeurs fournies par l'utilisateur :</p>
+  <pre><code>{`class GreetingCard extends HTMLElement {
+  static get observedAttributes() {
+    return ['name'];
+  }
+  attributeChangedCallback(attr, oldVal, newVal) {
+    if (attr === 'name') this.render();
+  }
+  connectedCallback() {
+    this.render();
+  }
+  render() {
+    const name = this.getAttribute('name') || 'ami';
+    this.replaceChildren();
+    const p = document.createElement('p');
+    p.textContent = 'Bonjour, ' + name + ' !';
+    this.append(p);
+  }
+}
+customElements.define('greeting-card', GreetingCard);`}</code></pre>
+  <p>Désormais <code>&lt;greeting-card name="Ada"&gt;&lt;/greeting-card&gt;</code> affiche « Bonjour, Ada ! », et changer l'attribut en direct le redessine.</p>
+
+  <figure>
+    <img src="/img/web-components-inbody.jpg" alt="Une boîte à outils métallique ouverte avec des outils rangés dans des compartiments séparés" width="1280" height="720" loading="lazy" />
+    <figcaption>Un web component est comme un outil dans une boîte à outils : une unité autonome et étiquetée que l'on saisit et réutilise sur de nombreux projets sans la reconstruire à chaque fois.</figcaption>
+  </figure>
+
+  <h2>Le Shadow DOM : une vraie encapsulation</h2>
+  <p>Le Shadow DOM donne à un élément un sous-arbre privé dont les styles et le balisage sont <strong>isolés</strong> du reste de la page. Un <code>&lt;style&gt;</code> à l'intérieur ne peut jamais fuir, et le CSS extérieur ne peut jamais y pénétrer par accident. Construisez-le avec l'API DOM et un <code>&lt;slot&gt;</code> pour le contenu projeté :</p>
+  <pre><code>{`class FancyButton extends HTMLElement {
+  connectedCallback() {
+    const shadow = this.attachShadow({ mode: 'open' });
+
+    const style = document.createElement('style');
+    style.textContent =
+      'button { background:#2563eb; color:#fff; border:0;' +
+      ' border-radius:8px; padding:.6rem 1rem; }';
+
+    const button = document.createElement('button');
+    button.append(document.createElement('slot'));
+
+    shadow.append(style, button);
+  }
+}
+customElements.define('fancy-button', FancyButton);`}</code></pre>
+  <p>Le <code>&lt;slot&gt;</code> est un emplacement réservé : ce que vous placez entre les balises — <code>&lt;fancy-button&gt;Enregistrer&lt;/fancy-button&gt;</code> — est projeté à cet endroit, de sorte que le composant enveloppe votre contenu sans le remplacer.</p>
+
+  <h2>Templates : cloner une fois, réutiliser à bas coût</h2>
+  <p>L'élément <code>&lt;template&gt;</code> contient un balisage inerte, analysé mais non rendu tant que vous ne le clonez pas. C'est la façon efficace de répéter une structure :</p>
+  <pre><code>{`<template id="row-tpl">
+  <li><span class="label"></span></li>
+</template>
+
+<script>
+  const tpl = document.getElementById('row-tpl');
+  const node = tpl.content.cloneNode(true);
+  node.querySelector('.label').textContent = 'Élément 1';
+  document.querySelector('ul').append(node);
+<\/script>`}</code></pre>
+
+  <h2>Les trois pièces réunies</h2>
+  <table>
+    <thead><tr><th>API</th><th>Ce qu'elle apporte</th></tr></thead>
+    <tbody>
+      <tr><td>Custom Elements</td><td>Vos propres balises avec callbacks de cycle de vie</td></tr>
+      <tr><td>Shadow DOM</td><td>Encapsulation du style et du balisage, slots</td></tr>
+      <tr><td><code>&lt;template&gt;</code></td><td>Balisage inerte réutilisable et clonable</td></tr>
+    </tbody>
+  </table>
+
+  <p>Vous avez rarement besoin des trois à la fois. Un simple conteneur peut n'utiliser qu'un Custom Element ; un widget stylé et autonome combine un Custom Element avec le Shadow DOM et un slot. Comme le résultat est du DOM standard, il s'intègre à n'importe quelle stack et survit au framework à la mode l'année où vous l'avez écrit.</p>
+</Article>

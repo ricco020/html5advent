@@ -1,26 +1,54 @@
 // Single source of truth for published guides (home grid, hub, listings all derive from this).
-// Add an entry ONLY when the matching page exists under src/pages/{en|fr|es}/guides/<slug>.
-//   day     : Web Platform Advent door number (1–24)
-//   cat     : 'apis' | 'css' | 'js' | 'html' | 'hosting'
-//   cluster : CTA cluster ('hosting' | 'deploy') or null for pure-reference (no CTA)
-//   title/desc: per-locale (en/fr/es)
+//   day=Advent door (1–24) · cat='apis|css|js|html|hosting' · cluster='hosting'|'deploy'|null
+//   locales: which locales the page actually exists in (controls links → no 404s)
+const L = ['en', 'fr', 'es']; // bump to add 'de','it','pt' once those pages are written
 export const GUIDES = [
-  {
-    slug: 'fetch-api-javascript', day: 1, cat: 'apis', cluster: null, locales: ['en'],
-    title: {
-      en: 'The Fetch API in JavaScript', fr: 'L’API Fetch en JavaScript', es: 'La API Fetch en JavaScript',
-    },
-    desc: {
-      en: 'Make HTTP requests in the browser: GET, JSON, POST, error handling and aborting.',
-      fr: 'Faire des requêtes HTTP dans le navigateur : GET, JSON, POST, erreurs et annulation.',
-      es: 'Haz peticiones HTTP en el navegador: GET, JSON, POST, errores y cancelación.',
-    },
-  },
+  { slug: 'fetch-api-javascript', day: 1, cat: 'apis', cluster: null, locales: L,
+    title: { en: 'The Fetch API in JavaScript', fr: 'L’API Fetch en JavaScript', es: 'La API Fetch en JavaScript' },
+    desc: { en: 'Make HTTP requests in the browser: GET, JSON, POST, error handling and aborting.', fr: 'Faire des requêtes HTTP dans le navigateur : GET, JSON, POST, erreurs et annulation.', es: 'Haz peticiones HTTP en el navegador: GET, JSON, POST, errores y cancelación.' } },
+  { slug: 'javascript-promises', day: 2, cat: 'js', cluster: null, locales: L,
+    title: { en: 'JavaScript Promises: a practical guide', fr: 'Les promesses JavaScript : guide pratique', es: 'Promesas en JavaScript: guía práctica' },
+    desc: { en: 'Creating promises, then/catch/finally, chaining, and Promise.all/race/any/allSettled — with the common gotchas.', fr: 'Créer des promesses, then/catch/finally, le chaînage et Promise.all/race/any/allSettled — avec les pièges courants.', es: 'Crear promesas, then/catch/finally, encadenamiento y Promise.all/race/any/allSettled — con los errores comunes.' } },
+  { slug: 'async-await-javascript', day: 3, cat: 'js', cluster: null, locales: L,
+    title: { en: 'async/await in JavaScript: a practical guide', fr: 'async/await en JavaScript : guide pratique', es: 'async/await en JavaScript: guía práctica' },
+    desc: { en: 'How async/await relate to promises, try/catch, awaiting in loops, and the serial-vs-parallel gotcha.', fr: 'Le lien async/await avec les promesses, try/catch, await dans les boucles et le piège série-vs-parallèle.', es: 'La relación de async/await con las promesas, try/catch, await en bucles y el error serie-vs-paralelo.' } },
+  { slug: 'service-worker', day: 4, cat: 'apis', cluster: null, locales: L,
+    title: { en: 'Service Workers: caching, offline and updates', fr: 'Service Workers : cache, hors-ligne et mises à jour', es: 'Service Workers: caché, sin conexión y actualizaciones' },
+    desc: { en: 'Registering a service worker, the install/activate lifecycle, the Cache API, offline pages and safe updates.', fr: 'Enregistrer un service worker, le cycle install/activate, la Cache API, les pages hors-ligne et les mises à jour sûres.', es: 'Registrar un service worker, el ciclo install/activate, la Cache API, páginas sin conexión y actualizaciones seguras.' } },
+  { slug: 'web-components', day: 5, cat: 'html', cluster: null, locales: L,
+    title: { en: 'Web Components: Custom Elements, Shadow DOM and templates', fr: 'Web Components : Custom Elements, Shadow DOM et templates', es: 'Web Components: Custom Elements, Shadow DOM y plantillas' },
+    desc: { en: 'Build reusable HTML elements with Custom Elements, encapsulate styles with the Shadow DOM and clone templates.', fr: 'Créer des éléments HTML réutilisables avec les Custom Elements, encapsuler les styles avec le Shadow DOM et cloner des templates.', es: 'Crea elementos HTML reutilizables con Custom Elements, encapsula estilos con el Shadow DOM y clona plantillas.' } },
+  { slug: 'localstorage-vs-sessionstorage', day: 6, cat: 'apis', cluster: null, locales: L,
+    title: { en: 'localStorage vs sessionStorage: the Web Storage API', fr: 'localStorage vs sessionStorage : l’API Web Storage', es: 'localStorage vs sessionStorage: la API Web Storage' },
+    desc: { en: 'Lifetime and scope differences, size limits, storing JSON safely and the storage event.', fr: 'Différences de durée et de portée, limites de taille, stocker du JSON proprement et l’événement storage.', es: 'Diferencias de duración y alcance, límites de tamaño, guardar JSON con seguridad y el evento storage.' } },
+  { slug: 'css-nesting', day: 7, cat: 'css', cluster: null, locales: L,
+    title: { en: 'Native CSS Nesting: the & selector and Sass differences', fr: 'Imbrication CSS native : le sélecteur & et les différences avec Sass', es: 'Anidamiento CSS nativo: el selector & y diferencias con Sass' },
+    desc: { en: 'Write nested CSS without a preprocessor — how the & selector works and which browsers support it.', fr: 'Écrire du CSS imbriqué sans préprocesseur — le sélecteur & et les navigateurs qui le supportent.', es: 'Escribir CSS anidado sin preprocesador — el selector & y qué navegadores lo soportan.' } },
+  { slug: 'css-container-queries', day: 8, cat: 'css', cluster: null, locales: L,
+    title: { en: 'CSS Container Queries: style by container, not viewport', fr: 'Container queries CSS : styler par conteneur, pas par fenêtre', es: 'Container queries CSS: estilar por contenedor, no por ventana' },
+    desc: { en: 'container-type, @container and how container queries differ from media queries.', fr: 'container-type, @container et en quoi les container queries diffèrent des media queries.', es: 'container-type, @container y en qué se diferencian de las media queries.' } },
+  { slug: 'view-transitions-api', day: 9, cat: 'css', cluster: null, locales: L,
+    title: { en: 'The View Transitions API: smooth page transitions', fr: 'L’API View Transitions : des transitions de page fluides', es: 'La API View Transitions: transiciones de página suaves' },
+    desc: { en: 'Animate between DOM states with startViewTransition, view-transition-name, same- and cross-document.', fr: 'Animer entre deux états du DOM avec startViewTransition, view-transition-name, same- et cross-document.', es: 'Animar entre estados del DOM con startViewTransition, view-transition-name, same- y cross-document.' } },
+  { slug: 'intersection-observer-api', day: 10, cat: 'apis', cluster: null, locales: L,
+    title: { en: 'The IntersectionObserver API: lazy-loading and scroll effects', fr: 'L’API IntersectionObserver : lazy-loading et effets au scroll', es: 'La API IntersectionObserver: lazy-loading y efectos al scroll' },
+    desc: { en: 'Lazy-load images, reveal on scroll and build infinite scroll — threshold and rootMargin explained.', fr: 'Charger les images en différé, révéler au scroll et créer un défilement infini — threshold et rootMargin.', es: 'Cargar imágenes diferidas, revelar al scroll y crear scroll infinito — threshold y rootMargin.' } },
+  { slug: 'best-vps-for-web-hosting', day: 11, cat: 'hosting', cluster: 'hosting', locales: L,
+    title: { en: 'Choosing the best VPS for hosting a web project', fr: 'Choisir le meilleur VPS pour héberger un projet web', es: 'Elegir el mejor VPS para alojar un proyecto web' },
+    desc: { en: 'The criteria that matter (RAM, CPU, storage, bandwidth, location, price) and when a VPS beats shared hosting.', fr: 'Les critères qui comptent (RAM, CPU, stockage, bande passante, localisation, prix) et quand le VPS bat le mutualisé.', es: 'Los criterios que importan (RAM, CPU, almacenamiento, ancho de banda, ubicación, precio) y cuándo el VPS supera al compartido.' } },
+  { slug: 'static-website-hosting', day: 12, cat: 'hosting', cluster: 'deploy', locales: L,
+    title: { en: 'Static website hosting: deploy an Astro, Vite or HTML site', fr: 'Hébergement de site statique : déployer un site Astro, Vite ou HTML', es: 'Alojamiento de sitios estáticos: desplegar Astro, Vite o HTML' },
+    desc: { en: 'What static hosting is, how a CDN serves your build, and deploying with a custom domain and free HTTPS.', fr: 'Ce qu’est l’hébergement statique, comment un CDN sert votre build, et le déploiement avec domaine et HTTPS gratuit.', es: 'Qué es el alojamiento estático, cómo un CDN sirve tu build y desplegar con dominio propio y HTTPS gratis.' } },
+  { slug: 'web-hosting-for-developers', day: 13, cat: 'hosting', cluster: 'hosting', locales: L,
+    title: { en: 'Web hosting for developers: the criteria that matter', fr: 'Hébergement web pour développeurs : les critères qui comptent', es: 'Alojamiento web para desarrolladores: los criterios que importan' },
+    desc: { en: 'SSH access, Git deploys, runtimes, databases and staging — and how shared, VPS and managed compare.', fr: 'Accès SSH, déploiement Git, runtimes, bases de données et préprod — et la comparaison mutualisé/VPS/managé.', es: 'Acceso SSH, despliegues Git, runtimes, bases de datos y staging — y la comparación compartido/VPS/gestionado.' } },
+  { slug: 'nodejs-hosting', day: 14, cat: 'hosting', cluster: 'hosting', locales: L,
+    title: { en: 'How to host a Node.js app: VPS, PaaS and serverless', fr: 'Héberger une application Node.js : VPS, PaaS et serverless', es: 'Cómo alojar una app Node.js: VPS, PaaS y serverless' },
+    desc: { en: 'Deploy a Node.js app via VPS, managed PaaS or serverless — with PM2, a reverse proxy and env vars.', fr: 'Déployer une app Node.js via VPS, PaaS managé ou serverless — avec PM2, un reverse proxy et les variables d’env.', es: 'Desplegar una app Node.js vía VPS, PaaS gestionado o serverless — con PM2, un proxy inverso y variables de entorno.' } },
+  { slug: 'php-hosting', day: 15, cat: 'hosting', cluster: 'hosting', locales: L,
+    title: { en: 'PHP hosting explained: shared vs VPS, versions and performance', fr: 'Hébergement PHP : mutualisé vs VPS, versions et performances', es: 'Alojamiento PHP: compartido vs VPS, versiones y rendimiento' },
+    desc: { en: 'Shared vs VPS, PHP versions and extensions, deployment, .htaccess and performance with OPcache.', fr: 'Mutualisé vs VPS, versions et extensions PHP, déploiement, .htaccess et performances avec OPcache.', es: 'Compartido vs VPS, versiones y extensiones PHP, despliegue, .htaccess y rendimiento con OPcache.' } },
 ];
 
-export const guidesByDay = () => {
-  const m = {};
-  for (const g of GUIDES) m[g.day] = g;
-  return m;
-};
+export const guidesByDay = () => { const m = {}; for (const g of GUIDES) m[g.day] = g; return m; };
 export const guidesInCat = (cat) => GUIDES.filter((g) => g.cat === cat);

@@ -1,0 +1,75 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="css-container-queries"
+  title="CSS Container Queries: style components by their container, not the viewport"
+  description="container-type, @container and container-name explained. How container queries differ from media queries and why they make components truly reusable."
+  cat="css"
+  day={8}
+  hero="/img/css-container-queries-hero.jpg"
+  heroAlt="Flat icons of a desktop monitor, tablet, laptop and phone of different sizes"
+  cluster={null}
+>
+  <p><strong>Container queries</strong> let an element respond to the size of its <em>parent container</em> instead of the size of the whole viewport. That is the missing piece that finally makes a component reusable: the same card can lay out one way in a narrow sidebar and another way in a wide main column — on the same page, at the same screen width.</p>
+
+  <h2>Why media queries were not enough</h2>
+  <p>A media query asks one question: how wide is the viewport? But a component does not know how wide the viewport is — it knows how much room <em>it</em> was given. A card dropped into a 300px sidebar and the same card in a 900px grid cell need different layouts, yet the viewport width is identical. Container queries fix exactly this.</p>
+
+  <h2>Step 1: declare a containment context</h2>
+  <p>You query a container, so first you have to mark an element <em>as</em> a container with <code>container-type</code>:</p>
+  <pre><code>{`.card-wrapper {
+  container-type: inline-size;
+}`}</code></pre>
+  <p><code>inline-size</code> means "let me query the inline (usually horizontal) dimension" — the most common choice. <code>size</code> queries both dimensions, and <code>normal</code> turns containment off.</p>
+
+  <h2>Step 2: query it with @container</h2>
+  <p>Now any descendant of <code>.card-wrapper</code> can adapt based on the wrapper's width:</p>
+  <pre><code>{`.card {
+  display: grid;
+  gap: 1rem;
+}
+
+@container (min-width: 400px) {
+  .card {
+    grid-template-columns: 150px 1fr;
+  }
+}`}</code></pre>
+  <p>When the wrapper is at least 400px wide, the card switches to a two-column layout. Drop that same markup anywhere on the page and it adapts to wherever it lands — no page-level media queries needed.</p>
+
+  <figure>
+    <img src="/img/css-container-queries-inbody.jpg" alt="A smartphone resting on top of a tablet and a laptop, three screens of different sizes" width="1280" height="820" loading="lazy" />
+    <figcaption>The same component often has to fit very different amounts of space. Container queries let it adapt to its slot rather than to the device.</figcaption>
+  </figure>
+
+  <h2>Naming containers</h2>
+  <p>When containers are nested, give them names with <code>container-name</code> so a query targets the right one:</p>
+  <pre><code>{`.layout { container: layout / inline-size; } /* name / type shorthand */
+
+@container layout (min-width: 600px) {
+  .card { /* responds to .layout, not a closer container */ }
+}`}</code></pre>
+
+  <h2>Container query units</h2>
+  <p>Container queries also unlock units relative to the container instead of the viewport: <code>cqw</code> (1% of the container's width), <code>cqh</code>, <code>cqi</code> (inline) and <code>cqb</code> (block). Fluid typography that scales with its container becomes a one-liner:</p>
+  <pre><code>{`.card h2 {
+  font-size: clamp(1rem, 5cqi, 2rem);
+}`}</code></pre>
+
+  <h2>Container queries vs media queries</h2>
+  <table>
+    <thead><tr><th></th><th>Media query</th><th>Container query</th></tr></thead>
+    <tbody>
+      <tr><td>Measures</td><td>Viewport / device</td><td>Nearest sized ancestor</td></tr>
+      <tr><td>Setup needed</td><td>None</td><td><code>container-type</code> on a parent</td></tr>
+      <tr><td>Best for</td><td>Page-level layout</td><td>Reusable components</td></tr>
+      <tr><td>Units</td><td><code>vw</code>, <code>vh</code></td><td><code>cqw</code>, <code>cqi</code>, ...</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Browser support</h2>
+  <p>Size container queries are supported across current Chrome, Edge, Firefox and Safari. They are not a replacement for media queries — use media queries for the overall page structure and container queries for components that must be portable. The two work well together.</p>
+
+  <p>The mental shift is small but powerful: stop asking "how big is the screen?" and start asking "how much room does this component have?" That single change is what makes a design system's components genuinely drop-in anywhere.</p>
+</Article>

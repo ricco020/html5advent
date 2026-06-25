@@ -1,0 +1,97 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="javascript-promises"
+  title="JavaScript Promises: a practical guide"
+  description="Understand JavaScript promises — creating them, then/catch/finally, chaining, and combining many with Promise.all, race, any and allSettled — with runnable examples and the common gotchas."
+  cat="js"
+  day={2}
+  hero="/img/javascript-promises-hero.jpg"
+  heroAlt="A red jigsaw piece slotting into the last gap of a grey puzzle"
+  cluster={null}
+>
+  <p>A <strong>promise</strong> is an object that represents a value that isn't ready yet. It's the foundation of asynchronous JavaScript: <code>fetch()</code>, timers, file reads in Node, and most modern APIs return promises. A promise is always in one of three states — <em>pending</em>, <em>fulfilled</em>, or <em>rejected</em> — and once it settles it never changes again.</p>
+
+  <h2>Creating a promise</h2>
+  <p>Most of the time you <em>consume</em> promises that an API hands you. But you create one yourself with the <code>Promise</code> constructor, which takes an executor function receiving <code>resolve</code> and <code>reject</code>:</p>
+  <pre><code>{`const wait = (ms) => new Promise((resolve) => {
+  setTimeout(resolve, ms);
+});
+
+const fetchUser = (id) => new Promise((resolve, reject) => {
+  if (!id) reject(new Error('id is required'));
+  else resolve({ id, name: 'Ada' });
+});`}</code></pre>
+  <p>Calling <code>resolve(value)</code> fulfils the promise with that value; calling <code>reject(error)</code> rejects it. Anything thrown synchronously inside the executor also rejects the promise.</p>
+
+  <h2>then, catch and finally</h2>
+  <p>You read a promise's outcome with <code>.then()</code> for success, <code>.catch()</code> for failure, and <code>.finally()</code> for cleanup that runs either way:</p>
+  <pre><code>{`fetchUser(42)
+  .then((user) => console.log('Got', user.name))
+  .catch((err) => console.error('Failed:', err.message))
+  .finally(() => console.log('Done'));`}</code></pre>
+  <p><code>.then()</code> can take two arguments — <code>onFulfilled</code> and <code>onRejected</code> — but a separate <code>.catch()</code> at the end of the chain is clearer and also catches errors thrown inside earlier <code>.then()</code> handlers.</p>
+
+  <h2>Chaining: the real superpower</h2>
+  <p>Every <code>.then()</code> returns a <em>new</em> promise, so they chain. Whatever you return from a handler becomes the input to the next one. Crucially, if you return a promise, the chain waits for it to settle before continuing:</p>
+  <pre><code>{`fetch('/api/user')
+  .then((res) => res.json())          // returns a promise → chain waits
+  .then((user) => fetch('/api/posts?user=' + user.id))
+  .then((res) => res.json())
+  .then((posts) => console.log(posts.length, 'posts'))
+  .catch((err) => console.error(err));`}</code></pre>
+  <p>A single <code>.catch()</code> at the end handles a rejection from <em>any</em> step above it, which is why chaining beats nesting callbacks.</p>
+
+  <figure>
+    <img src="/img/javascript-promises-inbody.jpg" alt="Relay sprinters on a track passing the baton from one runner to the next" width="1280" height="853" loading="lazy" />
+    <figcaption>Like relay runners passing a baton, a promise chain hands each step's result to the next handler in sequence.</figcaption>
+  </figure>
+
+  <h2>Running promises together</h2>
+  <p>When tasks don't depend on each other, start them in parallel and combine the results. Four static methods cover the common cases:</p>
+  <ul>
+    <li><code>Promise.all([...])</code> — waits for <strong>all</strong> to fulfil; rejects as soon as <strong>one</strong> rejects. Returns an array of results in order.</li>
+    <li><code>Promise.allSettled([...])</code> — waits for all to finish and never rejects; returns an array of <code>&#123; status, value &#125;</code> or <code>&#123; status, reason &#125;</code> objects.</li>
+    <li><code>Promise.race([...])</code> — settles with the <strong>first</strong> promise to settle, whether it fulfils or rejects.</li>
+    <li><code>Promise.any([...])</code> — settles with the first promise to <strong>fulfil</strong>; only rejects if they all reject.</li>
+  </ul>
+  <pre><code>{`// Fetch three resources at once, fail if any fails
+const [user, posts, prefs] = await Promise.all([
+  fetch('/api/user').then((r) => r.json()),
+  fetch('/api/posts').then((r) => r.json()),
+  fetch('/api/prefs').then((r) => r.json()),
+]);
+
+// Same, but tolerate individual failures
+const results = await Promise.allSettled([taskA(), taskB(), taskC()]);
+results.forEach((r) => {
+  if (r.status === 'fulfilled') console.log('ok', r.value);
+  else console.warn('failed', r.reason);
+});`}</code></pre>
+
+  <h2>Common gotchas</h2>
+  <ul>
+    <li><strong>Forgetting to return.</strong> Inside a <code>.then()</code>, if you call a promise but don't <code>return</code> it, the chain won't wait for it — you lose ordering and error handling.</li>
+    <li><strong>Unhandled rejections.</strong> A promise without a <code>.catch()</code> (or a <code>try/catch</code> around <code>await</code>) produces an <code>unhandledrejection</code>. Always handle errors at the end of the chain.</li>
+    <li><strong>Mixing callbacks and promises.</strong> Don't call <code>resolve</code> twice or both <code>resolve</code> and <code>reject</code> — only the first call counts; the rest are silently ignored.</li>
+    <li><strong>The executor runs immediately.</strong> The function you pass to <code>new Promise()</code> runs synchronously, right away — only the <code>.then()</code> callbacks are deferred.</li>
+  </ul>
+
+  <h2>Quick reference</h2>
+  <table>
+    <thead><tr><th>Goal</th><th>Method</th></tr></thead>
+    <tbody>
+      <tr><td>Handle success</td><td><code>.then(onFulfilled)</code></td></tr>
+      <tr><td>Handle failure</td><td><code>.catch(onRejected)</code></td></tr>
+      <tr><td>Cleanup either way</td><td><code>.finally(fn)</code></td></tr>
+      <tr><td>All must succeed</td><td><code>Promise.all</code></td></tr>
+      <tr><td>Collect every outcome</td><td><code>Promise.allSettled</code></td></tr>
+      <tr><td>First to settle</td><td><code>Promise.race</code></td></tr>
+      <tr><td>First to succeed</td><td><code>Promise.any</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>Promises are the plumbing under <code>async</code>/<code>await</code>, which is just nicer syntax over the same objects. Once chaining and the four combinators feel natural, asynchronous JavaScript stops being intimidating.</p>
+</Article>

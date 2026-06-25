@@ -1,0 +1,81 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="css-nesting"
+  title="Imbrication CSS native : le sélecteur &amp;, le support navigateurs et les différences avec Sass"
+  description="Écrire du CSS imbriqué sans préprocesseur. Fonctionnement du sélecteur d'imbrication &amp;, différences avec Sass et navigateurs qui le supportent aujourd'hui."
+  cat="css"
+  day={7}
+  hero="/img/css-nesting-hero.jpg"
+  heroAlt="Une feuille imprimée de balisage HTML avec un stylo posé dessus"
+  cluster={null}
+>
+  <p>L'<strong>imbrication CSS</strong> permet d'écrire des règles à l'intérieur d'autres règles, pour garder ensemble les styles qui vont ensemble. Pendant des années, ce n'était possible qu'avec un préprocesseur comme Sass. C'est désormais une fonctionnalité native du CSS, présente dans tous les navigateurs modernes — sans étape de compilation.</p>
+
+  <h2>L'idée de base</h2>
+  <p>Au lieu de répéter le sélecteur parent pour chaque enfant, on imbrique la règle enfant à l'intérieur. Ces deux blocs produisent le même résultat :</p>
+  <pre><code>{`/* CSS plat, traditionnel */
+.card { padding: 1rem; }
+.card h2 { margin: 0; }
+.card p { color: #555; }
+
+/* Imbriqué */
+.card {
+  padding: 1rem;
+  h2 { margin: 0; }
+  p { color: #555; }
+}`}</code></pre>
+  <p>Chaque sélecteur imbriqué est lu relativement à son parent : c'est bien <code>.card p</code> que le navigateur applique au final.</p>
+
+  <h2>Le sélecteur d'imbrication &amp;</h2>
+  <p>L'esperluette <code>&amp;</code> désigne le sélecteur parent. Elle est nécessaire dès que le sélecteur imbriqué doit s'attacher directement au parent plutôt que décrire un descendant — pseudo-classes, classes modificatrices et sélecteurs composés :</p>
+  <pre><code>{`.btn {
+  background: #2563eb;
+
+  &:hover { background: #1d4ed8; }   /* .btn:hover */
+  &.is-active { background: #1e40af; } /* .btn.is-active */
+}`}</code></pre>
+  <p>Sans le <code>&amp;</code>, un simple <code>:hover</code> serait traité comme un descendant : <code>.btn *:hover</code>, ce qui n'est presque jamais l'effet voulu. Quand un sélecteur imbriqué commence par un élément ou une classe (comme <code>p</code> ci-dessus), le navigateur insère pour vous un combinateur de descendance implicite.</p>
+
+  <figure>
+    <img src="/img/css-nesting-inbody.jpg" alt="Du code source sur un éditeur sombre montrant des blocs de fonctions imbriqués entre accolades" width="1280" height="853" loading="lazy" />
+    <figcaption>L'imbrication reflète la structure déjà présente dans votre code : des blocs placés entre accolades, indentés pour montrer ce qui appartient à quoi.</figcaption>
+  </figure>
+
+  <h2>Imbriquer les media queries</h2>
+  <p>On peut imbriquer <code>@media</code> (et d'autres at-rules) dans un sélecteur, gardant les ajustements responsive à côté de la règle qu'ils modifient :</p>
+  <pre><code>{`.sidebar {
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 280px;
+  }
+}`}</code></pre>
+
+  <h2>Différences avec Sass</h2>
+  <p>La syntaxe ressemble à Sass, mais les deux ne sont pas identiques. Les différences qui surprennent le plus :</p>
+  <ul>
+    <li><strong>Concaténation</strong> : Sass permet de construire des sélecteurs comme <code>&amp;__title</code> (BEM). L'imbrication native CSS ne concatène <em>pas</em> — <code>&amp;__title</code> est invalide. Il faut écrire le nom de classe complet.</li>
+    <li><strong>Pas de compilation</strong> : l'imbrication native s'exécute dans le navigateur, donc rien à compiler et pas de source maps à gérer.</li>
+    <li><strong>Spécificité de &amp;</strong> : en CSS natif, <code>&amp;</code> se comporte comme <code>:is()</code> et prend la spécificité du sélecteur le plus spécifique de la liste parente, ce qui peut différer subtilement de la sortie Sass.</li>
+  </ul>
+
+  <h2>Support navigateurs et solution de repli</h2>
+  <p>L'imbrication CSS native est supportée dans les versions actuelles de Chrome, Edge, Firefox et Safari. Les premières implémentations exigeaient que le sélecteur imbriqué commence par un symbole (on écrivait <code>&amp; p</code> au lieu de <code>p</code>) ; la syntaxe assouplie autorisant un sélecteur d'élément nu est celle des navigateurs actuels. Si vous devez supporter des moteurs plus anciens, continuez avec Sass ou PostCSS — le plugin <code>postcss-nesting</code> compile l'imbrication native en CSS plat.</p>
+
+  <h2>Aide-mémoire</h2>
+  <table>
+    <thead><tr><th>Vous voulez</th><th>Écrivez</th></tr></thead>
+    <tbody>
+      <tr><td>Descendant</td><td><code>.card &#123; p &#123; ... &#125; &#125;</code></td></tr>
+      <tr><td>Pseudo-classe</td><td><code>&amp;:hover &#123; ... &#125;</code></td></tr>
+      <tr><td>Classe modificatrice</td><td><code>&amp;.is-active &#123; ... &#125;</code></td></tr>
+      <tr><td>Responsive</td><td><code>@media (...) &#123; ... &#125;</code> imbriqué</td></tr>
+      <tr><td>Concaténation BEM</td><td>non supportée — écrire la classe complète</td></tr>
+    </tbody>
+  </table>
+
+  <p>L'imbrication native supprime l'une des dernières grandes raisons de recourir à un préprocesseur sur un nouveau projet. Gardez l'imbrication peu profonde — deux ou trois niveaux — et vos feuilles de style restent lisibles tout en rendant évidentes les relations entre sélecteurs.</p>
+</Article>

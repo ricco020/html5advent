@@ -1,0 +1,104 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="web-components"
+  title="Web Components: Custom Elements, Shadow DOM and templates"
+  description="Build reusable HTML elements with the native Web Components APIs — define a Custom Element, encapsulate styles with the Shadow DOM, clone a &lt;template&gt;, and pass data with attributes."
+  cat="html"
+  day={5}
+  hero="/img/web-components-hero.jpg"
+  heroAlt="A pile of colourful interlocking plastic building blocks of different shapes"
+  cluster={null}
+>
+  <p><strong>Web Components</strong> are a set of native browser APIs that let you build your own reusable HTML elements — no framework required. A component you ship works the same in plain HTML, React, Vue or Svelte, because it is just an element the browser understands. Three APIs make it work: Custom Elements, the Shadow DOM, and the <code>&lt;template&gt;</code> tag.</p>
+
+  <h2>Custom Elements</h2>
+  <p>A Custom Element is a class extending <code>HTMLElement</code>, registered with a tag name that <strong>must contain a hyphen</strong> (so it can never collide with a future built-in tag):</p>
+  <pre><code>{`class GreetingCard extends HTMLElement {
+  connectedCallback() {
+    const p = document.createElement('p');
+    p.textContent = 'Hello from a custom element!';
+    this.append(p);
+  }
+}
+
+customElements.define('greeting-card', GreetingCard);`}</code></pre>
+  <p>Once defined, you use it like any other tag:</p>
+  <pre><code>{`<greeting-card></greeting-card>`}</code></pre>
+  <p>The class gives you <strong>lifecycle callbacks</strong>. The most useful are <code>connectedCallback</code> (the element was added to the page), <code>disconnectedCallback</code> (it was removed), and <code>attributeChangedCallback</code> (a watched attribute changed).</p>
+
+  <h2>Reacting to attributes</h2>
+  <p>To pass data in, read attributes — exactly like <code>src</code> on an image. Declare which ones to watch with a static <code>observedAttributes</code> getter, then respond in <code>attributeChangedCallback</code>. Building the node with <code>textContent</code> keeps user-supplied values safe:</p>
+  <pre><code>{`class GreetingCard extends HTMLElement {
+  static get observedAttributes() {
+    return ['name'];
+  }
+  attributeChangedCallback(attr, oldVal, newVal) {
+    if (attr === 'name') this.render();
+  }
+  connectedCallback() {
+    this.render();
+  }
+  render() {
+    const name = this.getAttribute('name') || 'friend';
+    this.replaceChildren();
+    const p = document.createElement('p');
+    p.textContent = 'Hello, ' + name + '!';
+    this.append(p);
+  }
+}
+customElements.define('greeting-card', GreetingCard);`}</code></pre>
+  <p>Now <code>&lt;greeting-card name="Ada"&gt;&lt;/greeting-card&gt;</code> renders "Hello, Ada!", and changing the attribute live re-renders it.</p>
+
+  <figure>
+    <img src="/img/web-components-inbody.jpg" alt="An open metal toolbox with neatly organised tools in separate compartments" width="1280" height="720" loading="lazy" />
+    <figcaption>A web component is like a tool in a toolbox: a self-contained, labelled unit you reach for and reuse across many projects without rebuilding it each time.</figcaption>
+  </figure>
+
+  <h2>The Shadow DOM: real encapsulation</h2>
+  <p>The Shadow DOM gives an element a private subtree whose styles and markup are <strong>isolated</strong> from the rest of the page. A <code>&lt;style&gt;</code> inside it can never leak out, and outside CSS can never reach in by accident. Build it with the DOM API and a <code>&lt;slot&gt;</code> for projected content:</p>
+  <pre><code>{`class FancyButton extends HTMLElement {
+  connectedCallback() {
+    const shadow = this.attachShadow({ mode: 'open' });
+
+    const style = document.createElement('style');
+    style.textContent =
+      'button { background:#2563eb; color:#fff; border:0;' +
+      ' border-radius:8px; padding:.6rem 1rem; }';
+
+    const button = document.createElement('button');
+    button.append(document.createElement('slot'));
+
+    shadow.append(style, button);
+  }
+}
+customElements.define('fancy-button', FancyButton);`}</code></pre>
+  <p>The <code>&lt;slot&gt;</code> is a placeholder: whatever you put between the tags — <code>&lt;fancy-button&gt;Save&lt;/fancy-button&gt;</code> — is projected into that spot, so the component wraps your content without replacing it.</p>
+
+  <h2>Templates: clone once, reuse cheaply</h2>
+  <p>The <code>&lt;template&gt;</code> element holds inert markup that is parsed but not rendered until you clone it. It is the efficient way to stamp out repeated structure:</p>
+  <pre><code>{`<template id="row-tpl">
+  <li><span class="label"></span></li>
+</template>
+
+<script>
+  const tpl = document.getElementById('row-tpl');
+  const node = tpl.content.cloneNode(true);
+  node.querySelector('.label').textContent = 'Item 1';
+  document.querySelector('ul').append(node);
+<\/script>`}</code></pre>
+
+  <h2>The three pieces together</h2>
+  <table>
+    <thead><tr><th>API</th><th>Gives you</th></tr></thead>
+    <tbody>
+      <tr><td>Custom Elements</td><td>Your own tags with lifecycle callbacks</td></tr>
+      <tr><td>Shadow DOM</td><td>Style and markup encapsulation, slots</td></tr>
+      <tr><td><code>&lt;template&gt;</code></td><td>Reusable, cloneable inert markup</td></tr>
+    </tbody>
+  </table>
+
+  <p>You rarely need all three at once. A simple wrapper might use only a Custom Element; a styled, self-contained widget combines a Custom Element with the Shadow DOM and a slot. Because the result is plain DOM, it drops into any stack and outlives whatever framework was popular the year you wrote it.</p>
+</Article>

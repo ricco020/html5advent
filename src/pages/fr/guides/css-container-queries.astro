@@ -1,0 +1,75 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="css-container-queries"
+  title="Container queries CSS : styler un composant selon son conteneur, pas la fenêtre"
+  description="container-type, @container et container-name expliqués. En quoi les container queries diffèrent des media queries et pourquoi elles rendent les composants vraiment réutilisables."
+  cat="css"
+  day={8}
+  hero="/img/css-container-queries-hero.jpg"
+  heroAlt="Icônes plates d'un écran de bureau, d'une tablette, d'un portable et d'un téléphone de tailles différentes"
+  cluster={null}
+>
+  <p>Les <strong>container queries</strong> permettent à un élément de réagir à la taille de son <em>conteneur parent</em> plutôt qu'à celle de la fenêtre entière. C'est la pièce manquante qui rend enfin un composant réutilisable : une même carte peut s'agencer d'une façon dans une barre latérale étroite et autrement dans une colonne principale large — sur la même page, à la même largeur d'écran.</p>
+
+  <h2>Pourquoi les media queries ne suffisaient pas</h2>
+  <p>Une media query pose une seule question : quelle est la largeur de la fenêtre ? Mais un composant ne connaît pas la largeur de la fenêtre — il connaît la place qu'<em>on</em> lui a donnée. Une carte placée dans une barre latérale de 300 px et la même carte dans une cellule de grille de 900 px ont besoin de mises en page différentes, alors que la largeur de la fenêtre est identique. Les container queries résolvent exactement cela.</p>
+
+  <h2>Étape 1 : déclarer un contexte de confinement</h2>
+  <p>On interroge un conteneur, il faut donc d'abord marquer un élément <em>comme</em> conteneur avec <code>container-type</code> :</p>
+  <pre><code>{`.card-wrapper {
+  container-type: inline-size;
+}`}</code></pre>
+  <p><code>inline-size</code> signifie « laisse-moi interroger la dimension en ligne (généralement horizontale) » — le choix le plus courant. <code>size</code> interroge les deux dimensions, et <code>normal</code> désactive le confinement.</p>
+
+  <h2>Étape 2 : l'interroger avec @container</h2>
+  <p>Désormais, tout descendant de <code>.card-wrapper</code> peut s'adapter selon la largeur du wrapper :</p>
+  <pre><code>{`.card {
+  display: grid;
+  gap: 1rem;
+}
+
+@container (min-width: 400px) {
+  .card {
+    grid-template-columns: 150px 1fr;
+  }
+}`}</code></pre>
+  <p>Quand le wrapper fait au moins 400 px de large, la carte passe à une mise en page sur deux colonnes. Placez ce même balisage n'importe où sur la page : il s'adapte à l'endroit où il atterrit — sans aucune media query au niveau de la page.</p>
+
+  <figure>
+    <img src="/img/css-container-queries-inbody.jpg" alt="Un smartphone posé sur une tablette et un portable, trois écrans de tailles différentes" width="1280" height="820" loading="lazy" />
+    <figcaption>Un même composant doit souvent occuper des espaces très différents. Les container queries lui permettent de s'adapter à son emplacement plutôt qu'à l'appareil.</figcaption>
+  </figure>
+
+  <h2>Nommer les conteneurs</h2>
+  <p>Quand des conteneurs sont imbriqués, nommez-les avec <code>container-name</code> pour qu'une requête vise le bon :</p>
+  <pre><code>{`.layout { container: layout / inline-size; } /* nom / type, syntaxe courte */
+
+@container layout (min-width: 600px) {
+  .card { /* réagit à .layout, pas à un conteneur plus proche */ }
+}`}</code></pre>
+
+  <h2>Unités de container query</h2>
+  <p>Les container queries débloquent aussi des unités relatives au conteneur plutôt qu'à la fenêtre : <code>cqw</code> (1 % de la largeur du conteneur), <code>cqh</code>, <code>cqi</code> (en ligne) et <code>cqb</code> (de bloc). Une typographie fluide qui s'adapte à son conteneur tient en une ligne :</p>
+  <pre><code>{`.card h2 {
+  font-size: clamp(1rem, 5cqi, 2rem);
+}`}</code></pre>
+
+  <h2>Container queries vs media queries</h2>
+  <table>
+    <thead><tr><th></th><th>Media query</th><th>Container query</th></tr></thead>
+    <tbody>
+      <tr><td>Mesure</td><td>Fenêtre / appareil</td><td>Ancêtre dimensionné le plus proche</td></tr>
+      <tr><td>Préparation</td><td>Aucune</td><td><code>container-type</code> sur un parent</td></tr>
+      <tr><td>Idéal pour</td><td>Mise en page de la page</td><td>Composants réutilisables</td></tr>
+      <tr><td>Unités</td><td><code>vw</code>, <code>vh</code></td><td><code>cqw</code>, <code>cqi</code>, ...</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Support navigateurs</h2>
+  <p>Les container queries de taille sont supportées dans les versions actuelles de Chrome, Edge, Firefox et Safari. Elles ne remplacent pas les media queries — utilisez les media queries pour la structure globale de la page et les container queries pour les composants qui doivent être portables. Les deux fonctionnent bien ensemble.</p>
+
+  <p>Le changement de mentalité est petit mais puissant : cessez de demander « quelle est la taille de l'écran ? » et demandez « combien de place ce composant a-t-il ? ». Ce seul changement rend les composants d'un design system vraiment réutilisables partout.</p>
+</Article>

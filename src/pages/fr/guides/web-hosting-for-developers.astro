@@ -1,0 +1,61 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="web-hosting-for-developers"
+  title="Hébergement web pour développeurs : les critères qui comptent vraiment"
+  description="Accès SSH, déploiement Git, runtimes, bases de données et préproduction — les fonctionnalités d'hébergement dont un développeur a réellement besoin, et la comparaison mutualisé/VPS/managé."
+  cat="hosting"
+  day={13}
+  hero="/img/web-hosting-for-developers-hero.jpg"
+  heroAlt="Un développeur au casque travaille à son bureau dans une pièce sombre, du code affiché sur un grand écran"
+  cluster="hosting"
+>
+  <p>La plupart des comparatifs d'hébergement s'adressent à des gens qui veulent cliquer sur « installer WordPress » sans jamais ouvrir un terminal. En tant que développeur, vos besoins sont différents : déployer depuis Git, faire tourner votre propre stack et atteindre la machine en SSH quand quelque chose casse. Ce guide liste les critères qui comptent vraiment quand on héberge un projet en tant que développeur — et comment les principaux types d'hébergement se comparent face à eux.</p>
+
+  <h2>Les critères qui comptent</h2>
+  <h3>Accès SSH</h3>
+  <p>L'accès shell est la ligne de partage entre « adapté aux développeurs » et « pas adapté ». Avec SSH, vous lancez vos commandes de build, inspectez les logs, gérez les processus, configurez des tâches cron et utilisez des outils en ligne de commande comme <code>git</code>, <code>rsync</code> ou <code>composer</code> directement sur le serveur. Un hébergeur qui ne vous donne qu'un panneau de contrôle et un accès FTP vous ralentira en permanence.</p>
+  <h3>Déploiement par Git</h3>
+  <p>Le « push pour déployer » est désormais le flux de base. Cherchez soit un hébergeur qui récupère votre dépôt à chaque <code>git push</code>, soit la possibilité de configurer un hook de déploiement. Un flux typique ressemble à ceci :</p>
+  <pre><code>{`# ajouter l'hébergeur comme remote, puis déployer en poussant
+git remote add production ssh://user@host/~/repo.git
+git push production main
+
+# ou déclencher un hook de build/déploiement au push
+git push origin main   # la CI lance le build + rsync/scp vers le serveur`}</code></pre>
+  <h3>Runtimes et versions</h3>
+  <p>Votre application a besoin du bon runtime — Node.js, PHP, Python, Ruby — et surtout, de pouvoir <em>choisir la version</em>. Un hébergeur qui vous fige sur une vieille version de PHP ou de Node est un piège. Vérifiez que vous pouvez sélectionner et changer les versions, idéalement par projet.</p>
+  <h3>Bases de données</h3>
+  <p>La plupart des projets non triviaux ont besoin d'une base de données. Confirmez les moteurs disponibles (PostgreSQL, MySQL/MariaDB, Redis pour le cache) et si vous avez un accès direct — une chaîne de connexion et la possibilité de lancer des migrations — plutôt qu'un simple panneau d'administration limité.</p>
+  <h3>Environnements de préproduction</h3>
+  <p>Un environnement de préproduction séparé vous permet de tester un déploiement sur des données proches de la production avant la mise en ligne. Certains hébergeurs proposent des clones de staging en un clic ; sur un serveur nu, vous le répliquez vous-même avec un second virtual host et une seconde base. Dans tous les cas, ne faites jamais de la production votre seul environnement.</p>
+
+  <figure>
+    <img src="/img/web-hosting-for-developers-inbody.jpg" alt="L'écran d'un ordinateur portable affichant du code CSS ouvert dans un éditeur" width="1280" height="853" loading="lazy" />
+    <figcaption>Un hébergement orienté développeur se juge à sa compatibilité avec un workflow centré sur le code — éditeur, Git, SSH et un vrai runtime — pas au nombre d'installateurs en un clic qu'il propose.</figcaption>
+  </figure>
+
+  <h2>Les types d'hébergement comparés</h2>
+  <h3>Hébergement mutualisé</h3>
+  <p>Votre site cohabite avec beaucoup d'autres sur un même serveur. C'est l'option la moins chère et elle convient aux petits sites, mais vous partagez les ressources et avez un contrôle limité. Les meilleurs mutualisés pour développeurs offrent tout de même SSH, le déploiement Git et le changement de version — c'est l'ensemble de fonctionnalités à rechercher si vous prenez cette voie.</p>
+  <h3>VPS</h3>
+  <p>Un serveur privé virtuel vous donne une part dédiée d'une machine avec un accès root complet. Vous installez et configurez la stack vous-même, ce qui signifie un contrôle maximal et la plus grande responsabilité. Idéal quand vous avez besoin d'un runtime précis, de services personnalisés ou d'une configuration au niveau root.</p>
+  <h3>Hébergement managé / plateforme</h3>
+  <p>Les plateformes managées (souvent appelées PaaS) gèrent le serveur à votre place : vous poussez le code, elles le buildent et l'exécutent. Vous échangez du contrôle contre de la simplicité et une mise à l'échelle intégrée. Parfait quand vous voulez vous concentrer sur l'application plutôt que sur l'OS — au prix de devoir entrer dans les conventions de la plateforme.</p>
+
+  <h2>Référence rapide</h2>
+  <table>
+    <thead><tr><th>Critère</th><th>Pourquoi c'est important</th></tr></thead>
+    <tbody>
+      <tr><td>Accès SSH</td><td>Lancer des commandes, lire les logs, gérer le serveur directement</td></tr>
+      <tr><td>Déploiement Git</td><td>Push-to-deploy au lieu de téléversements FTP manuels</td></tr>
+      <tr><td>Versions de runtime</td><td>Choisir et changer les versions Node/PHP/Python par projet</td></tr>
+      <tr><td>Bases de données</td><td>Accès direct à PostgreSQL/MySQL/Redis avec une chaîne de connexion</td></tr>
+      <tr><td>Préproduction</td><td>Tester les déploiements sans risque avant la production</td></tr>
+    </tbody>
+  </table>
+
+  <p>Choisissez le type d'hébergement qui correspond à votre arbitrage contrôle/simplicité — mutualisé pour les petits sites, VPS pour le contrôle total, managé pour une mise à l'échelle sans gestion — puis vérifiez qu'il offre réellement SSH, le déploiement Git, les runtimes nécessaires, un vrai accès base de données et un chemin de préproduction. Ce sont ces cinq critères, pas le marketing, qui déterminent si un hébergeur est vraiment adapté aux développeurs.</p>
+</Article>

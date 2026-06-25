@@ -1,0 +1,97 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="nodejs-hosting"
+  title="Cómo alojar una app Node.js: VPS, PaaS y serverless"
+  description="Las formas prácticas de desplegar una aplicación Node.js — VPS, PaaS gestionado o serverless — con PM2, un proxy inverso, variables de entorno y un flujo de despliegue ordenado."
+  cat="hosting"
+  day={14}
+  hero="/img/nodejs-hosting-hero.jpg"
+  heroAlt="Una mano inserta un servidor blade en un rack de servidores iluminado en azul"
+  cluster="hosting"
+>
+  <p>Alojar una app Node.js no se parece a alojar un sitio estático o una página PHP. Node ejecuta un proceso de larga duración que posee su propio servidor HTTP, así que el alojamiento debe <em>mantener vivo ese proceso</em>, reiniciarlo si se cae y enrutar el tráfico público hacia él. Esta guía repasa las tres opciones realistas y las piezas que necesitas elijas la que elijas.</p>
+
+  <h2>Tres formas de alojar Node.js</h2>
+  <p>Casi todos los despliegues encajan en uno de estos modelos. La elección correcta depende de cuánto del servidor quieras gestionar y de cómo se comporte tu tráfico.</p>
+  <ul>
+    <li><strong>VPS (autogestionado)</strong> — obtienes una máquina Linux con acceso root completo. Control máximo y coste previsible, pero instalas y mantienes tú mismo Node, el gestor de procesos, el proxy inverso y TLS.</li>
+    <li><strong>PaaS (platform-as-a-service)</strong> — subes el código (a menudo vía Git) y la plataforma construye, ejecuta y escala el proceso por ti. Menos control, despliegue más rápido, normalmente cobrado por uso.</li>
+    <li><strong>Serverless / funciones</strong> — despliegas handlers individuales en lugar de un servidor permanente. La plataforma los arranca bajo demanda. Ideal para tráfico irregular o bajo, pero sin estado y sujeto a arranques en frío.</li>
+  </ul>
+
+  <h2>Mantener el proceso vivo con PM2</h2>
+  <p>En un VPS, ejecutar <code>node server.js</code> en tu shell se detiene en cuanto cierras sesión, y nada lo reinicia tras un fallo. Un gestor de procesos resuelve ambas cosas. <strong>PM2</strong> es la opción habitual:</p>
+  <pre><code>{`npm install -g pm2
+
+# arrancar la app y darle nombre
+pm2 start server.js --name web
+
+# reinicio automático tras un reinicio del servidor
+pm2 startup
+pm2 save
+
+# comandos útiles del día a día
+pm2 list
+pm2 logs web
+pm2 restart web`}</code></pre>
+  <p>PM2 también ejecuta tu app en <em>modo cluster</em> para usar todos los núcleos de CPU, la forma más sencilla de escalar una sola máquina:</p>
+  <pre><code>{`pm2 start server.js --name web -i max`}</code></pre>
+
+  <figure>
+    <img src="/img/nodejs-hosting-inbody.jpg" alt="Una fila de servidores montados en rack en un centro de datos" width="1280" height="853" loading="lazy" />
+    <figcaption>En un VPS, tu proceso Node corre en una máquina física o virtual como estas; un gestor de procesos lo mantiene en marcha y un proxy inverso lo expone a la web.</figcaption>
+  </figure>
+
+  <h2>Un proxy inverso delante de Node</h2>
+  <p>No expongas Node directamente en el puerto 80/443. Coloca un proxy inverso como <strong>Nginx</strong> delante: termina TLS, sirve archivos estáticos de forma eficiente y puede enrutar varias apps en una sola máquina. Un bloque de servidor Nginx mínimo que reenvía el tráfico a una app Node que escucha en el puerto 3000:</p>
+  <pre><code>{`server {
+  listen 80;
+  server_name example.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}`}</code></pre>
+  <p>Las cabeceras <code>Upgrade</code> y <code>Connection</code> importan si tu app usa WebSockets. Para HTTPS, la vía habitual es un certificado gratuito de Let's Encrypt vía <code>certbot</code>, que edita esta configuración por ti.</p>
+
+  <h2>Variables de entorno y configuración</h2>
+  <p>Nunca pongas secretos en duro (URL de base de datos, claves de API) en tu código fuente. Léelos del entorno con <code>process.env</code>, y deja que la plataforma los inyecte:</p>
+  <pre><code>{`const port = process.env.PORT || 3000;
+const dbUrl = process.env.DATABASE_URL;
+
+app.listen(port, () => {
+  console.log(\`escuchando en \${port}\`);
+});`}</code></pre>
+  <p>En un VPS puedes guardarlos en un archivo <code>.env</code> (cargado por una librería, y excluido de Git) o pasarlos mediante el archivo ecosystem de PM2. En un PaaS, los defines en el panel. Lee siempre <code>process.env.PORT</code> — las plataformas gestionadas te asignan el puerto.</p>
+
+  <h2>Un flujo de despliegue ordenado</h2>
+  <p>Sea cual sea tu alojamiento, busca un despliegue reproducible en lugar de editar archivos en el servidor a mano:</p>
+  <ul>
+    <li>Trae el código nuevo (<code>git pull</code> o un artefacto de CI).</li>
+    <li>Instala solo las dependencias de producción: <code>npm ci --omit=dev</code>.</li>
+    <li>Ejecuta el paso de build si lo tienes (<code>npm run build</code>).</li>
+    <li>Recarga el proceso sin cortes: <code>pm2 reload web</code>.</li>
+  </ul>
+  <p>En un PaaS toda esta secuencia se dispara con un <code>git push</code>; en un VPS puedes scriptarla o conectarla a un runner de CI.</p>
+
+  <h2>¿Qué opción encaja?</h2>
+  <table>
+    <thead><tr><th>Opción</th><th>Gestionas</th><th>Ideal cuando</th></tr></thead>
+    <tbody>
+      <tr><td>VPS</td><td>SO, Node, PM2, Nginx, TLS</td><td>Quieres control y coste previsible</td></tr>
+      <tr><td>PaaS</td><td>Solo tu código + variables de entorno</td><td>Quieres desplegar rápido y escalar con facilidad</td></tr>
+      <tr><td>Serverless</td><td>Handlers individuales</td><td>Tráfico irregular o bajo, trabajo sin estado</td></tr>
+    </tbody>
+  </table>
+
+  <p>Si empiezas, un solo VPS bien configurado con PM2 y Nginx ejecutará cómodamente la mayoría de apps Node y te enseña lo que las plataformas gestionadas automatizan. Pasa a un PaaS o a serverless cuando el escalado o la carga operativa se convierta en el cuello de botella — no antes.</p>
+</Article>

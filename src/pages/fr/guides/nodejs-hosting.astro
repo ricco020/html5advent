@@ -1,0 +1,97 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="nodejs-hosting"
+  title="Héberger une application Node.js : VPS, PaaS et serverless"
+  description="Les façons concrètes de déployer une application Node.js — VPS, PaaS managé ou serverless — avec PM2, un reverse proxy, les variables d'environnement et un flux de déploiement propre."
+  cat="hosting"
+  day={14}
+  hero="/img/nodejs-hosting-hero.jpg"
+  heroAlt="Une main insère un serveur lame dans une baie de serveurs éclairée en bleu"
+  cluster="hosting"
+>
+  <p>Héberger une application Node.js ne ressemble pas à héberger un site statique ou une page PHP. Node fait tourner un processus de longue durée qui possède son propre serveur HTTP : l'hébergeur doit donc <em>maintenir ce processus en vie</em>, le redémarrer en cas de plantage, et router le trafic public vers lui. Ce guide passe en revue les trois options réalistes et les briques nécessaires quelle que soit celle que vous choisissez.</p>
+
+  <h2>Trois façons d'héberger Node.js</h2>
+  <p>Presque tous les déploiements relèvent de l'un de ces modèles. Le bon choix dépend de la part du serveur que vous voulez gérer et du comportement de votre trafic.</p>
+  <ul>
+    <li><strong>VPS (auto-géré)</strong> — vous obtenez une machine Linux avec un accès root complet. Contrôle maximal et coût prévisible, mais vous installez et maintenez vous-même Node, le gestionnaire de processus, le reverse proxy et TLS.</li>
+    <li><strong>PaaS (platform-as-a-service)</strong> — vous poussez le code (souvent via Git) et la plateforme construit, exécute et scale le processus pour vous. Moins de contrôle, mise en ligne plus rapide, généralement facturé à l'usage.</li>
+    <li><strong>Serverless / fonctions</strong> — vous déployez des handlers individuels plutôt qu'un serveur permanent. La plateforme les démarre à la demande. Idéal pour un trafic en pics ou faible, mais sans état et soumis aux démarrages à froid.</li>
+  </ul>
+
+  <h2>Maintenir le processus en vie avec PM2</h2>
+  <p>Sur un VPS, lancer <code>node server.js</code> dans votre shell s'arrête dès que vous vous déconnectez, et rien ne redémarre après un plantage. Un gestionnaire de processus résout les deux. <strong>PM2</strong> est le choix courant :</p>
+  <pre><code>{`npm install -g pm2
+
+# démarrer l'app et la nommer
+pm2 start server.js --name web
+
+# redémarrage automatique après un reboot serveur
+pm2 startup
+pm2 save
+
+# commandes utiles au quotidien
+pm2 list
+pm2 logs web
+pm2 restart web`}</code></pre>
+  <p>PM2 fait aussi tourner votre app en <em>mode cluster</em> pour utiliser tous les cœurs CPU, la façon la plus simple de scaler une seule machine :</p>
+  <pre><code>{`pm2 start server.js --name web -i max`}</code></pre>
+
+  <figure>
+    <img src="/img/nodejs-hosting-inbody.jpg" alt="Une rangée de serveurs montés en baie dans un centre de données" width="1280" height="853" loading="lazy" />
+    <figcaption>Sur un VPS, votre processus Node tourne sur une machine physique ou virtuelle comme celles-ci ; un gestionnaire de processus le maintient et un reverse proxy l'expose au web.</figcaption>
+  </figure>
+
+  <h2>Un reverse proxy devant Node</h2>
+  <p>N'exposez pas Node directement sur le port 80/443. Placez un reverse proxy comme <strong>Nginx</strong> devant : il termine TLS, sert efficacement les fichiers statiques et peut router plusieurs apps sur une seule machine. Un bloc serveur Nginx minimal qui transmet le trafic à une app Node écoutant sur le port 3000 :</p>
+  <pre><code>{`server {
+  listen 80;
+  server_name example.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}`}</code></pre>
+  <p>Les en-têtes <code>Upgrade</code> et <code>Connection</code> comptent si votre app utilise les WebSockets. Pour HTTPS, la voie habituelle est un certificat gratuit Let's Encrypt via <code>certbot</code>, qui modifie cette config pour vous.</p>
+
+  <h2>Variables d'environnement et configuration</h2>
+  <p>Ne codez jamais les secrets en dur (URL de base de données, clés d'API) dans votre source. Lisez-les depuis l'environnement avec <code>process.env</code>, et laissez la plateforme les injecter :</p>
+  <pre><code>{`const port = process.env.PORT || 3000;
+const dbUrl = process.env.DATABASE_URL;
+
+app.listen(port, () => {
+  console.log(\`écoute sur \${port}\`);
+});`}</code></pre>
+  <p>Sur un VPS, vous pouvez les garder dans un fichier <code>.env</code> (chargé par une bibliothèque, et exclu de Git) ou les passer via le fichier ecosystem de PM2. Sur un PaaS, vous les définissez dans le tableau de bord. Lisez toujours <code>process.env.PORT</code> — les plateformes managées vous attribuent le port.</p>
+
+  <h2>Un flux de déploiement propre</h2>
+  <p>Quel que soit votre hébergement, visez un déploiement reproductible plutôt que d'éditer les fichiers sur le serveur à la main :</p>
+  <ul>
+    <li>Récupérez le nouveau code (<code>git pull</code> ou un artefact CI).</li>
+    <li>Installez uniquement les dépendances de production : <code>npm ci --omit=dev</code>.</li>
+    <li>Lancez l'étape de build si vous en avez une (<code>npm run build</code>).</li>
+    <li>Rechargez le processus sans coupure : <code>pm2 reload web</code>.</li>
+  </ul>
+  <p>Sur un PaaS, toute cette séquence est déclenchée par un <code>git push</code> ; sur un VPS vous pouvez la scripter ou la brancher à un runner CI.</p>
+
+  <h2>Quelle option choisir ?</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Vous gérez</th><th>Idéal quand</th></tr></thead>
+    <tbody>
+      <tr><td>VPS</td><td>OS, Node, PM2, Nginx, TLS</td><td>Vous voulez le contrôle et un coût prévisible</td></tr>
+      <tr><td>PaaS</td><td>Juste votre code + variables d'env</td><td>Vous voulez livrer vite et scaler facilement</td></tr>
+      <tr><td>Serverless</td><td>Des handlers individuels</td><td>Trafic en pics ou faible, traitement sans état</td></tr>
+    </tbody>
+  </table>
+
+  <p>Si vous débutez, un seul VPS bien configuré avec PM2 et Nginx fera tourner confortablement la plupart des apps Node et vous apprend ce que les plateformes managées automatisent. Passez à un PaaS ou au serverless quand le scaling ou la charge opérationnelle devient le goulot d'étranglement — pas avant.</p>
+</Article>
