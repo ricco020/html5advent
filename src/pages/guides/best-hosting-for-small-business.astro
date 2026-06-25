@@ -1,0 +1,78 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="best-hosting-for-small-business"
+  title="Web hosting for a small business: what to look for"
+  description="A plain-English guide to choosing web hosting for a small business — the criteria that actually matter (uptime, support, email, security, room to grow) and how to judge any provider for yourself."
+  cat="hosting"
+  hero="/img/best-hosting-for-small-business-hero.jpg"
+  heroAlt="A person working on an HP laptop at a home-office desk, shot in black and white"
+  cluster="hosting"
+>
+  <p>Picking <strong>web hosting for a small business</strong> isn't about finding the single "best" host — it's about matching a provider to what your business actually does online. A local shop with a brochure site has very different needs from a studio running an online store. This guide walks through the criteria that matter so you can judge any provider for yourself, rather than trust a leaderboard or a discount banner.</p>
+
+  <h2>Start from what your site needs to do</h2>
+  <p>Before comparing plans, write down the job your site has to do. Most small-business sites fall into one of a few shapes, and the shape decides the hosting:</p>
+  <ul>
+    <li><strong>Brochure / presence site</strong> — a few pages, contact form, maybe a blog. Light, mostly static, low traffic. Modest hosting is plenty.</li>
+    <li><strong>Lead-generation site</strong> — forms, booking, a CMS like WordPress. Needs reliable uptime and decent support more than raw power.</li>
+    <li><strong>Online store</strong> — a shop platform, a database, checkout. Needs consistent performance, backups, and headroom for traffic peaks.</li>
+    <li><strong>Custom app</strong> — a bespoke tool or membership area. Often outgrows shared hosting and wants a VPS with full control.</li>
+  </ul>
+  <p>Sizing to the job keeps you from overpaying for a server you don't need — or, worse, from picking a plan that buckles the first time you get busy.</p>
+
+  <h2>The criteria that actually matter</h2>
+
+  <h3>Reliability and uptime</h3>
+  <p>If the site is down, it can't sell or capture leads. Look for a published <strong>uptime SLA</strong> (a concrete commitment) rather than vague "99.9%-ish" marketing. Reliability comes from the infrastructure and the network, not from the price tier — cheap doesn't have to mean flaky, but unmaintained does.</p>
+
+  <h3>Support you can actually reach</h3>
+  <p>When you don't have an in-house IT person, support <em>is</em> your IT department. Check the channels (chat, ticket, phone), the hours, and the languages. For a business, support that answers quickly during your working day is worth more than a slightly cheaper plan with email-only replies.</p>
+
+  <h3>Performance and speed</h3>
+  <p>Slow pages lose customers and rank worse in search. The practical levers are <strong>SSD/NVMe storage</strong>, enough memory and CPU for your platform, and a <strong>server location near your customers</strong> — physical distance adds latency to every request. A CDN can speed up static assets, but the origin still matters for dynamic pages and checkout.</p>
+
+  <figure>
+    <img src="/img/best-hosting-for-small-business-inbody.jpg" alt="A tidy white home-office desk with a laptop connected to an external monitor, a chair and a vase of dried flowers" width="1280" height="960" loading="lazy" />
+    <figcaption>Most small businesses run from a setup like this — which is exactly why reliable, low-maintenance hosting matters more than raw horsepower.</figcaption>
+  </figure>
+
+  <h3>Email and domain</h3>
+  <p>A professional address on your own domain (you@yourbusiness.com) builds trust far better than a free webmail address. Check whether business email is bundled, an add-on, or expected to come from a separate provider. Confirm you can register or transfer your domain, and that you keep control of it.</p>
+
+  <h3>Security</h3>
+  <p>At minimum you want a <strong>free TLS certificate</strong> (HTTPS), automatic platform updates where the host manages them, and sensible firewalling. For sites handling customer data or payments, ask about isolation and how the host responds to incidents. Security you have to bolt on yourself is a hidden cost.</p>
+
+  <h3>Backups and recovery</h3>
+  <p>Mistakes, bad updates and attacks happen. <strong>Automated, regular backups</strong> with an easy one-click restore are worth paying for — they turn a disaster into a five-minute fix. Confirm how far back backups go and whether restoring is self-service or a support request.</p>
+
+  <h3>Room to grow</h3>
+  <p>The plan that fits today should let you scale up without a painful migration. Can you upgrade resources, move from shared hosting to a VPS, or add storage on demand? Picking a provider with a clear upgrade path means your first move online isn't a dead end.</p>
+
+  <h3>Honest pricing</h3>
+  <p>Compare the <em>renewal</em> price, not just the promotional first term — intro rates often jump at renewal. Confirm what's bundled (email, TLS, backups, domain) versus billed separately. The cheapest sticker price frequently excludes things you'll end up buying anyway.</p>
+
+  <h2>Shared hosting vs VPS for a small business</h2>
+  <table>
+    <thead><tr><th>Question</th><th>Shared hosting</th><th>VPS</th></tr></thead>
+    <tbody>
+      <tr><td>Setup &amp; upkeep</td><td>Managed for you, minimal effort</td><td>More control, more responsibility (unless managed)</td></tr>
+      <tr><td>Performance</td><td>Shared with neighbours on the server</td><td>Dedicated, guaranteed resources</td></tr>
+      <tr><td>Custom software</td><td>Limited to what the host allows</td><td>Full root access, install anything</td></tr>
+      <tr><td>Best for</td><td>Brochure &amp; small CMS sites</td><td>Stores, custom apps, steady traffic</td></tr>
+    </tbody>
+  </table>
+  <p>Many businesses start on shared hosting and move to a <strong>VPS</strong> once traffic, a database-heavy store, or a custom stack outgrows it. A VPS gives you dedicated RAM and CPU plus full control of the environment — the right step up when shared hosting starts to pinch. Providers like <strong>Contabo</strong> are known for offering generous CPU and RAM at a reasonable price, which makes a VPS a realistic option even for a small budget.</p>
+
+  <h2>Who it's for</h2>
+  <ul>
+    <li><strong>A brochure or local-business site</strong> → managed shared hosting with good support, email and backups. Keep it simple.</li>
+    <li><strong>A growing store or lead-gen site</strong> → prioritise uptime, performance and automated backups; plan an upgrade path.</li>
+    <li><strong>A custom app or a store with steady traffic</strong> → a VPS for dedicated resources and full control.</li>
+  </ul>
+
+  <h2>How to decide</h2>
+  <p>Define the job your site does, then weight the criteria accordingly: a store leans on performance and backups, a brochure site leans on simplicity and support. Insist on a real uptime commitment, reachable support, HTTPS, automated backups and a server near your customers — and compare renewal prices on equivalent specs. Pick the smallest plan that covers your real workload with a little headroom and a clear path to upgrade, and you'll have hosting that grows with the business instead of holding it back.</p>
+</Article>

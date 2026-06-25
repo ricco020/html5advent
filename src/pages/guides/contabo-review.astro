@@ -1,0 +1,55 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="contabo-review"
+  title="Contabo review: is it a good VPS for web projects?"
+  description="An honest, no-hype look at Contabo as a VPS host for websites and apps — its resource-for-the-price positioning, the kind of offers it sells, the trade-offs to weigh, and who it actually suits."
+  cat="hosting"
+  hero="/img/contabo-review-hero.jpg"
+  heroAlt="Silver rack-mounted servers stacked in a cabinet, lit blue with one unit showing a red indicator light"
+  cluster="hosting"
+>
+  <p><strong>Contabo</strong> is a German hosting company that has built its reputation on one thing: a lot of raw resources for a low monthly price. If you've shopped for a VPS, you've probably seen its plans listed with noticeably more RAM, vCPUs and disk than similarly priced competitors. That positioning is real, but "more specs per euro" is only part of the story. This review looks at what Contabo actually offers, where it fits, and the trade-offs worth understanding before you commit — without inventing benchmarks or pretending we ran it for months.</p>
+
+  <h2>What Contabo is</h2>
+  <p>Contabo sells <strong>unmanaged virtual private servers</strong>, alongside storage-focused VPS plans, dedicated servers and object storage. It's a European provider headquartered in Germany, and it has expanded its datacenter footprint to several regions across Europe, North America, Asia and beyond over the years. The core proposition is consistent: generous CPU, memory and storage allocations at price points that tend to undercut the better-known names.</p>
+  <p>Because the VPS plans are unmanaged, you get a bare operating system and root access — and the responsibility for securing, patching and maintaining it is yours. That's normal for this category, but it's the first thing to be clear about: Contabo is aimed at people comfortable on the command line, not at someone who wants a fully hand-held, managed experience.</p>
+
+  <h2>The "resources for the price" angle</h2>
+  <p>The headline reason developers reach for Contabo is value. For a given budget, its plans generally hand you more memory and more disk than you'd get elsewhere, which is attractive when your workload is genuinely resource-hungry — a database alongside an application server, a self-hosted tool, a staging environment, or several small sites on one box.</p>
+  <p>A useful way to read this honestly: <em>more allocated resources is not the same as more performance in every dimension</em>. Generous RAM and storage are easy to quantify and easy to advertise. Things like sustained CPU behaviour under load, network throughput to your specific audience, and how a host treats noisy neighbours are harder to put on a spec sheet. Contabo gives you a lot of the easy-to-measure resources; whether that translates into the experience you need depends on your workload, so size the plan to what you'll actually run rather than to the biggest number.</p>
+
+  <figure>
+    <img src="/img/contabo-review-inbody.jpg" alt="A hand inserting a drive module into a blue-lit server chassis in a rack" width="1280" height="719" loading="lazy" />
+    <figcaption>A VPS is a slice of a physical server like these — the provider manages the hardware, you manage the OS on top.</figcaption>
+  </figure>
+
+  <h2>Storage and the storage-VPS line</h2>
+  <p>Beyond standard VPS plans, Contabo offers <strong>storage VPS</strong> tiers built for holding large amounts of data cheaply — backups, media libraries, archives. If your project is storage-heavy rather than compute-heavy, that's a distinct option worth knowing about. As always, check whether a given plan uses faster NVMe/SSD or larger but slower storage, because disk type shows up directly in database and file-read responsiveness. Match the storage class to what the workload demands: fast disk for a busy database, bulk capacity for an archive.</p>
+
+  <h2>Points to weigh honestly</h2>
+  <p>No host is right for everyone. These are the objective considerations to think through with Contabo — not verdicts, but the questions to ask before you buy:</p>
+  <ul>
+    <li><strong>Unmanaged means self-service.</strong> You handle OS setup, security hardening, updates and recovery. If you don't want to be your own sysadmin, an unmanaged budget VPS — Contabo included — is the wrong category.</li>
+    <li><strong>Support is community-and-ticket style.</strong> Budget unmanaged providers generally don't offer the deep, hands-on support of premium managed hosts. Factor in your own ability to troubleshoot.</li>
+    <li><strong>Datacenter location matters for latency.</strong> Contabo publishes the regions it operates in — pick one close to your audience, because physical distance adds latency on every dynamic request. Confirm the specific region is available for the plan you want.</li>
+    <li><strong>Setup and add-on details.</strong> Check whether there's a one-time setup fee on a plan, what's included by default (backups, additional IPs, control panel) and what costs extra, so the total isn't a surprise.</li>
+    <li><strong>Provisioning and resizing.</strong> Understand how you scale — whether you can resize in place or need to migrate — before your project outgrows its first plan.</li>
+  </ul>
+
+  <h2>Who Contabo suits — and who it doesn't</h2>
+  <table>
+    <thead><tr><th>Good fit if you…</th><th>Look elsewhere if you…</th></tr></thead>
+    <tbody>
+      <tr><td>Are comfortable administering a Linux server yourself</td><td>Want a fully managed, hands-held experience</td></tr>
+      <tr><td>Need lots of RAM/storage on a tight budget</td><td>Need premium 24/7 hands-on support included</td></tr>
+      <tr><td>Run self-hosted tools, staging, or several small sites on one box</td><td>Require a specific managed compliance/SLA package</td></tr>
+      <tr><td>Have an audience near one of its datacenter regions</td><td>Need a region Contabo doesn't serve</td></tr>
+    </tbody>
+  </table>
+
+  <h2>The honest verdict</h2>
+  <p>Contabo earns its reputation as a <strong>value-first, resource-rich, unmanaged VPS</strong> provider. If you can run your own server and your workload benefits from plenty of memory and disk per euro, it's a sensible candidate to shortlist. If you want managed convenience, premium support, or a guarantee that the biggest spec equals the best experience for your particular traffic, weigh it against managed alternatives instead. As with any host, the right move is to map your real workload — memory first, then CPU, then storage, then region — and pick the smallest plan that covers it with headroom, on a provider whose model matches how much of the maintenance you want to own.</p>
+</Article>

@@ -1,0 +1,115 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="wordpress-vps"
+  title="Running WordPress on a VPS: when and how"
+  description="When a VPS makes sense for WordPress instead of shared or managed hosting, the criteria that matter, and a clear walkthrough of the LEMP stack you need to run a site yourself."
+  cat="hosting"
+  hero="/img/wordpress-vps-hero.jpg"
+  heroAlt="A rose-gold laptop and a black DSLR camera with a strap resting on a bright white desk"
+  cluster="hosting"
+>
+  <p>Running <strong>WordPress on a VPS</strong> gives you full control of the stack — but it also hands you the responsibility of running a server. For some sites that trade is well worth it; for others, shared or managed WordPress hosting is the smarter call. This guide covers <em>when</em> a VPS makes sense and <em>how</em> to set one up, so you can decide with eyes open rather than follow a trend.</p>
+
+  <h2>When a VPS makes sense for WordPress</h2>
+  <p>WordPress runs happily on cheap shared hosting for small sites, and managed WordPress hosting removes the server work entirely. A <strong>VPS</strong> sits in between: dedicated resources and full root access, in exchange for doing the sysadmin yourself. Move to a VPS when:</p>
+  <ul>
+    <li>Your shared host throttles you or you hit CPU/process limits during traffic peaks.</li>
+    <li>You run a heavier site — WooCommerce, a membership platform, or lots of plugins — that needs guaranteed RAM and CPU.</li>
+    <li>You want control over the PHP version, web server config, caching layer, or to host several sites on one machine.</li>
+    <li>You need a specific stack or tuning (object cache, custom Nginx rules, your own TLS setup) the shared host won't allow.</li>
+  </ul>
+
+  <h2>When a VPS is the wrong choice</h2>
+  <p>Be honest about the trade-off. A VPS means <strong>you</strong> patch the OS, secure SSH, configure the web server, manage PHP, and own backups. If that's not work you want to do — or you'd be doing it badly — a managed WordPress host that handles updates, security and backups is usually the better value, even at a higher sticker price. A small brochure site rarely justifies the upkeep of a self-run server.</p>
+
+  <figure>
+    <img src="/img/wordpress-vps-inbody.jpg" alt="A developer wearing headphones sits with their back to the camera, facing a monitor displaying code in a dark blue-lit room" width="1280" height="853" loading="lazy" />
+    <figcaption>A VPS means owning the server: patching, securing and tuning it yourself — fine if you enjoy that work, a burden if you don't.</figcaption>
+  </figure>
+
+  <h2>What to look for in a VPS for WordPress</h2>
+  <h3>RAM</h3>
+  <p>The resource WordPress and its database run out of first, especially with WooCommerce, page builders or many plugins. Memory exhaustion is the usual cause of a site falling over under load, so size with headroom rather than to the bare minimum.</p>
+  <h3>CPU and storage</h3>
+  <p>A couple of vCPUs handle a typical site; CPU-bound work (SSR, image processing, busy carts) wants more, ideally <strong>dedicated</strong> rather than burstable. Insist on <strong>NVMe or SSD</strong> storage — disk speed shows up directly in database query times and admin responsiveness.</p>
+  <h3>Location, backups and support</h3>
+  <p>Pick a datacenter region near your audience to cut latency on every request. Make sure <strong>automated backups</strong> are included or affordable — a one-click restore turns a bad plugin update into a five-minute fix. On an unmanaged plan, support response time matters most when something breaks at 2am.</p>
+  <p>Providers known for generous resources-per-price, such as <strong>Contabo</strong>, make a self-run WordPress VPS realistic on a modest budget — you get the CPU and RAM headroom a database-backed site likes without paying dedicated-server money.</p>
+
+  <h2>How to set it up: the LEMP stack</h2>
+  <p>The common modern stack for WordPress on a VPS is <strong>LEMP</strong> — Linux, Nginx, MySQL/MariaDB and PHP. Here's the shape of a fresh install on Ubuntu.</p>
+
+  <h3>1. Harden the server first</h3>
+  <pre><code>{`sudo apt update && sudo apt upgrade -y
+sudo adduser deploy && sudo usermod -aG sudo deploy
+sudo ufw allow OpenSSH
+sudo ufw allow 80,443/tcp
+sudo ufw enable`}</code></pre>
+
+  <h3>2. Install Nginx, MariaDB and PHP</h3>
+  <pre><code>{`sudo apt install -y nginx mariadb-server \\
+  php-fpm php-mysql php-curl php-gd php-xml php-mbstring php-zip
+sudo mysql_secure_installation`}</code></pre>
+
+  <h3>3. Create the database and user</h3>
+  <pre><code>{`sudo mysql
+
+CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8mb4;
+CREATE USER 'wp_user'@'localhost' IDENTIFIED BY 'a-strong-password';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wp_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;`}</code></pre>
+
+  <h3>4. Download WordPress</h3>
+  <pre><code>{`cd /var/www
+sudo curl -O https://wordpress.org/latest.tar.gz
+sudo tar -xzf latest.tar.gz
+sudo chown -R www-data:www-data /var/www/wordpress`}</code></pre>
+
+  <h3>5. Point Nginx at the site</h3>
+  <p>A minimal server block tells Nginx to serve WordPress and pass PHP to PHP-FPM:</p>
+  <pre><code>{`server {
+    listen 80;
+    server_name example.com www.example.com;
+    root /var/www/wordpress;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \\.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php-fpm.sock;
+    }
+}`}</code></pre>
+  <p>Enable the config, reload Nginx, then finish the famous five-minute install in the browser:</p>
+  <pre><code>{`sudo ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx`}</code></pre>
+
+  <h3>6. Add HTTPS</h3>
+  <p>Free TLS via Let's Encrypt is a couple of commands and should never be skipped on a public WordPress site:</p>
+  <pre><code>{`sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d example.com -d www.example.com`}</code></pre>
+
+  <h2>After install: keep it healthy</h2>
+  <ul>
+    <li>Turn on <strong>automatic security updates</strong> for the OS and keep PHP on a supported version.</li>
+    <li>Set up <strong>off-server backups</strong> of files and the database — don't rely on a single host snapshot.</li>
+    <li>Add a <strong>caching layer</strong> (page cache plus an object cache like Redis) once traffic grows.</li>
+    <li>Harden WordPress itself: strong logins, fewer plugins, and prompt core/plugin updates.</li>
+  </ul>
+
+  <h2>Who it's for</h2>
+  <ul>
+    <li><strong>Developers and capable site owners</strong> who want control and don't mind sysadmin → a VPS is a great fit.</li>
+    <li><strong>Heavier sites</strong> (WooCommerce, membership, multiple sites) that have outgrown shared hosting → a VPS for dedicated resources.</li>
+    <li><strong>Small sites or anyone who'd rather not run a server</strong> → managed WordPress hosting is the better value.</li>
+  </ul>
+
+  <h2>How to decide</h2>
+  <p>Run WordPress on a VPS when you genuinely want — and will do — the control it offers: a heavier or growing site, a custom stack, or several sites on one box. Size RAM first, insist on NVMe storage and a nearby region, and treat automated backups and HTTPS as non-negotiable. If the server upkeep feels like a chore rather than a tool, choose managed hosting instead — the &#123;right&#125; answer is the one that matches how much of the stack you actually want to own.</p>
+</Article>

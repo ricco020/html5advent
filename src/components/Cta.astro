@@ -1,35 +1,55 @@
 ---
-// Affiliate CTA block — only renders when a page declares a hosting/deploy cluster.
-// ≤2 per article (caller controls). Honest, on-theme, points at /go/<slug>.
+// Commercial recommendation card — renders only on hosting/deploy pages. ≤2 per article (caller controls).
+// Honest: labelled as affiliate, on-theme, points at /go/<slug>.
 import { offerForCluster } from '../data/cta.js';
 const { cluster, locale = 'en' } = Astro.props;
 const offer = cluster ? offerForCluster(cluster) : null;
 const a = offer?.angle?.[locale] || offer?.angle?.en;
+
+const T = {
+  en: { reco: 'Recommended for this guide', btn: 'Visit', aff: 'Affiliate link — supports the site at no extra cost to you.' },
+  fr: { reco: 'Recommandé pour ce guide', btn: 'Voir', aff: 'Lien affilié — soutient le site, sans surcoût pour vous.' },
+  es: { reco: 'Recomendado para esta guía', btn: 'Ver', aff: 'Enlace de afiliado — apoya el sitio sin coste extra para ti.' },
+  de: { reco: 'Empfohlen für diese Anleitung', btn: 'Zu', aff: 'Affiliate-Link — unterstützt die Seite ohne Mehrkosten für dich.' },
+  it: { reco: 'Consigliato per questa guida', btn: 'Vai a', aff: 'Link di affiliazione — sostiene il sito senza costi extra per te.' },
+  pt: { reco: 'Recomendado para este guia', btn: 'Ver', aff: 'Link de afiliado — apoia o site sem custo extra para si.' },
+}[locale] || {};
 ---
 {offer && a && (
-  <aside class="cta">
-    <div class="cta__body">
-      <p class="cta__title">{a.title}</p>
-      <p class="cta__sub">{a.sub}</p>
+  <aside class="reco">
+    <span class="reco__badge">✓ {T.reco}</span>
+    <div class="reco__main">
+      <div class="reco__txt">
+        <p class="reco__q">{a.title}</p>
+        <p class="reco__sub">{a.sub}</p>
+      </div>
+      <a class="reco__btn" href={`/go/${offer.slug}`} rel="nofollow sponsored">{T.btn} {offer.label} →</a>
     </div>
-    <a class="cta__btn" href={`/go/${offer.slug}`} rel="nofollow sponsored">{offer.label} →</a>
+    <p class="reco__aff">{T.aff}</p>
   </aside>
 )}
 
 <style>
-  .cta {
-    display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;
-    margin: 2.5rem 0; padding: 1.25rem 1.5rem;
-    border: 1px solid var(--line); border-left: 3px solid var(--accent-amber);
-    border-radius: 10px; background: var(--surface);
+  .reco {
+    position: relative; margin: 2.5rem 0; padding: 1.5rem 1.5rem 1rem;
+    border: 1px solid var(--accent-amber); border-radius: 16px;
+    background: linear-gradient(135deg, rgba(245,165,36,.12), rgba(77,141,255,.06)), var(--surface);
+    box-shadow: 0 16px 40px -28px rgba(245,165,36,.8);
   }
-  .cta__title { font-weight: 600; margin: 0; color: var(--ink); }
-  .cta__sub { margin: .25rem 0 0; color: var(--muted); font-size: .92rem; }
-  .cta__btn {
-    flex: none; padding: .65rem 1.1rem; border-radius: 8px;
-    background: var(--accent-amber); color: #1a1205; font-weight: 600; text-decoration: none;
-    font-family: var(--mono); font-size: .9rem; white-space: nowrap;
+  .reco__badge {
+    position: absolute; top: -.7rem; left: 1.25rem; padding: .2rem .7rem;
+    font-family: var(--mono); font-size: .7rem; font-weight: 600; letter-spacing: .04em;
+    color: #1a1205; background: var(--accent-amber); border-radius: 20px;
+  }
+  .reco__main { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-top: .3rem; }
+  .reco__q { font-family: var(--display); font-weight: 700; font-size: 1.15rem; margin: 0; color: var(--ink); }
+  .reco__sub { margin: .3rem 0 0; color: var(--muted); font-size: .95rem; }
+  .reco__btn {
+    flex: none; padding: .8rem 1.4rem; border-radius: 10px; white-space: nowrap;
+    background: var(--accent-amber); color: #1a1205; font-weight: 700; text-decoration: none;
+    font-family: var(--mono); font-size: .92rem;
     transition: transform .15s ease, box-shadow .15s ease;
   }
-  .cta__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px -8px var(--accent-amber); }
+  .reco__btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px var(--accent-amber); }
+  .reco__aff { margin: 1rem 0 0; font-size: .72rem; color: var(--muted); font-family: var(--mono); }
 </style>

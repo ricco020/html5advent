@@ -1,0 +1,79 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="best-hosting-for-woocommerce"
+  title="Hosting for a WooCommerce store: the requirements that matter"
+  description="A practical guide to hosting a WooCommerce store — the performance, resources and scalability requirements that actually matter, plus how shared, managed and VPS hosting compare for an online shop."
+  cat="hosting"
+  hero="/img/best-hosting-for-woocommerce-hero.jpg"
+  heroAlt="A hand holding a red loyalty card in front of a laptop showing an online shopping store with discount badges"
+  cluster="hosting"
+>
+  <p><strong>WooCommerce</strong> turns WordPress into a full online store, which means your hosting now has to do two demanding jobs at once: serve a content-management system <em>and</em> run a transactional shop. A blog can tolerate a slow page; a store can't — a sluggish cart or a timeout at checkout costs you the sale. This guide walks through the requirements that genuinely affect a WooCommerce store so you can judge any host for yourself, instead of trusting a marketing leaderboard.</p>
+
+  <h2>Why a store is heavier than a blog</h2>
+  <p>A typical WordPress blog can cache almost every page and serve it as static HTML. A store can't do that for the pages that matter most. Cart, checkout, "my account" and any logged-in view are <strong>dynamic and per-user</strong>, so they bypass the page cache and hit PHP and the database on every request. Add product search, faceted filtering, coupon logic, stock checks and payment-gateway calls, and the server is doing real work on the exact pages where speed converts to revenue.</p>
+  <p>That is why a host that feels fine for a brochure site can struggle for a shop: the bottleneck moves from "can it serve HTML fast" to "can it run PHP and database queries fast, for many concurrent shoppers".</p>
+
+  <h2>The requirements that matter</h2>
+  <p>Compare hosts on these concrete dimensions rather than on adjectives like "blazing fast".</p>
+
+  <h3>PHP version and resources</h3>
+  <p>Run a <strong>currently supported PHP version</strong> — newer releases are meaningfully faster and still receive security fixes, while end-of-life versions do not. Beyond the version, two server-side limits bite WooCommerce stores directly:</p>
+  <ul>
+    <li><code>memory_limit</code> — WooCommerce recommends a generous PHP memory limit; importing products, generating reports or running many plugins can exhaust a tight one.</li>
+    <li><code>max_execution_time</code> and upload limits — long-running tasks (bulk product imports, large CSVs) fail silently when these are too low.</li>
+  </ul>
+  <p>Confirm the host lets you raise these, ideally per-site, rather than locking you to shared defaults.</p>
+
+  <h3>Database performance</h3>
+  <p>WooCommerce is database-heavy. Orders, products, sessions and especially the <code>wp_options</code> and metadata tables get queried constantly. Prefer a host on a modern MySQL or MariaDB with <strong>NVMe/SSD storage</strong> — disk speed shows up directly in query times and so in checkout latency. On larger catalogues, the ability to use WooCommerce's <strong>High-Performance Order Storage</strong> (custom order tables) helps the database scale; that's a WooCommerce setting, but it only pays off on a host that isn't already starved for CPU and I/O.</p>
+
+  <figure>
+    <img src="/img/best-hosting-for-woocommerce-inbody.jpg" alt="A person holding a bank card while typing on a laptop, completing an online payment" width="1280" height="853" loading="lazy" />
+    <figcaption>Checkout is dynamic and per-user: it bypasses the page cache and hits PHP and the database on every request, so server performance there directly affects whether the sale completes.</figcaption>
+  </figure>
+
+  <h3>RAM and CPU headroom</h3>
+  <p>Memory is usually the first resource a store runs out of. Each PHP worker handling a dynamic request consumes RAM, and a busy checkout means several workers at once. Too little memory and requests queue or get killed; the symptom shoppers see is a spinning cart. CPU matters for the same dynamic pages and for background work (cron, order emails, search indexing). Size both with headroom for traffic spikes — a flash sale or a feature in a newsletter can multiply concurrent users in minutes.</p>
+
+  <h3>Caching done right</h3>
+  <p>Caching is the biggest single lever for store speed, but it has to be <em>store-aware</em>:</p>
+  <ul>
+    <li><strong>Page cache</strong> for catalogue and content pages — fine to cache aggressively.</li>
+    <li><strong>Cache exclusions</strong> for cart, checkout and account pages — these must never be served stale, or a shopper sees someone else's cart.</li>
+    <li><strong>Object cache</strong> (Redis or Memcached) to cache database query results and PHP objects — this is what keeps dynamic pages fast at scale. Check whether the host offers a persistent object cache.</li>
+    <li><strong>Opcode cache</strong> (OPcache) enabled, so compiled PHP is reused between requests.</li>
+  </ul>
+
+  <h3>SSL, security and PCI considerations</h3>
+  <p>A store handles personal data and routes payments, so <strong>HTTPS is mandatory</strong>, not optional — most hosts include free automated certificates, so confirm that. If you take card details on-site you inherit PCI-DSS obligations; using a hosted payment gateway (where the card data is entered on the provider's side) keeps most of that burden off your server. Look for sensible defaults: a web application firewall, automated malware scanning, and isolation so a neighbour's breach can't reach your shop.</p>
+
+  <h3>Backups and staging</h3>
+  <p>An online shop is a live transactional system — losing the orders table is losing money and customer trust. Require <strong>automated daily backups</strong> that include both files and the database, with easy one-click restore. A <strong>staging environment</strong> is nearly as important: WooCommerce, WordPress and plugin updates can break checkout, so you want to test them on a copy before they touch real customers.</p>
+
+  <h3>Scalability</h3>
+  <p>Traffic to a store is spiky by nature — launches, sales, seasonal peaks. Ask how the plan scales: can you add RAM and CPU without rebuilding the site? Is there a clear upgrade path from a small plan to a larger one, or to a VPS, as the catalogue and orders grow? A host you can resize on demand beats one where growth means a painful migration.</p>
+
+  <h2>Shared vs managed WordPress vs VPS</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Best for</th><th>Watch out for</th></tr></thead>
+    <tbody>
+      <tr><td>Shared hosting</td><td>A brand-new shop with few products and low traffic, on a tight budget.</td><td>Noisy neighbours, CPU/process limits, often no object cache — outgrown quickly once orders pick up.</td></tr>
+      <tr><td>Managed WordPress/WooCommerce</td><td>Owners who want store-aware caching, staging and updates handled for them.</td><td>Higher price; sometimes plugin restrictions or per-visit pricing — read the limits.</td></tr>
+      <tr><td>VPS (self- or managed)</td><td>Growing stores that need guaranteed RAM/CPU, custom config and room to scale.</td><td>You (or a managed plan) own the server administration, tuning and security.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Who it's for</h2>
+  <ul>
+    <li><strong>Just launching, small catalogue:</strong> a quality shared or entry managed plan is enough — focus your budget on a supported PHP version, SSL and backups.</li>
+    <li><strong>Steady sales, growing catalogue:</strong> move to managed WooCommerce hosting or a small VPS so you get an object cache, staging and guaranteed resources.</li>
+    <li><strong>High traffic, flash sales, big catalogue:</strong> a VPS (or higher) with dedicated CPU/RAM, Redis object cache and a clear scaling path — the dynamic checkout pages need real headroom.</li>
+  </ul>
+
+  <h2>How to decide</h2>
+  <p>Start from the store, not from a "best host" list. Confirm a supported PHP version with a generous memory limit, NVMe/SSD database storage, store-aware caching with a persistent object cache, free SSL, automated file-and-database backups, a staging environment, and a clean path to scale up. Match those requirements to your real traffic and catalogue size, then pick the smallest plan that covers them with headroom — you can grow into a VPS or a larger tier as orders climb.</p>
+</Article>

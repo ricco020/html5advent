@@ -2,7 +2,7 @@
 import { t, localePath } from '../i18n/ui.js';
 import { GUIDES } from '../data/guides.js';
 const { lang = 'en' } = Astro.props;
-const avail = GUIDES.filter((g) => (g.locales || ['en']).includes(lang)).sort((a, b) => a.day - b.day);
+const avail = GUIDES.filter((g) => (g.locales || ['en']).includes(lang) && g.day).sort((a, b) => a.day - b.day);
 const blurb = {
   en: 'A calendar of the modern web platform. Behind each door: a tested, runnable guide to an HTML, CSS, JavaScript or Web API feature. New doors open as the series grows.',
   fr: 'Un calendrier de la plateforme web moderne. Derrière chaque porte : un guide testé et exécutable sur une fonctionnalité HTML, CSS, JavaScript ou Web API. De nouvelles portes s’ouvrent au fil de la série.',
