@@ -1,0 +1,71 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="vps-vs-cloud-hosting"
+  title="VPS vs hospedagem em cloud: qual escolher para o seu projeto?"
+  description="Uma comparação clara e honesta entre VPS e hospedagem em cloud — como funciona cada modelo, onde diferem (desempenho, escalabilidade, fiabilidade, preço) e como decidir qual se adapta ao seu projeto web."
+  cat="hosting"
+  hero="/img/vps-vs-cloud-hosting-hero.jpg"
+  heroAlt="Um corredor de data center com racks de servidores pretos, sobreposto a um diagrama de rede que liga ícones de cloud, base de dados e dispositivos"
+  cluster="hosting"
+>
+  <p>O <strong>VPS</strong> e a <strong>hospedagem em cloud</strong> são muitas vezes apresentados como intercambiáveis, mas baseiam-se em ideias diferentes. Um VPS dá-lhe uma fatia fixa de <em>um</em> servidor físico; a hospedagem em cloud distribui a sua carga por um <em>pool</em> de servidores ligados. Só esta distinção explica todas as diferenças práticas entre os dois — desempenho, escalabilidade, fiabilidade e faturação. Este guia compara-os com honestidade, sem benchmarks inventados, para que possa ajustar o modelo à sua carga real.</p>
+
+  <h2>A resposta curta</h2>
+  <p>Se quer um custo previsível e um conjunto fixo de recursos dedicados que controla, um <strong>VPS</strong> costuma ser a melhor escolha. Se o seu tráfego é irregular ou imprevisível e prefere pagar pelo uso enquanto a plataforma trata do failover e da escalabilidade, a <strong>hospedagem em cloud</strong> justifica o seu custo extra. Muitos projetos funcionam perfeitamente num VPS durante anos sem nunca precisarem do modelo cloud — e muitos adotam a cloud por resiliência, não por velocidade pura.</p>
+
+  <h2>O que é um VPS</h2>
+  <p>Um <strong>servidor privado virtual</strong> é uma porção virtualizada de uma única máquina física. Obtém RAM, vCPUs e armazenamento garantidos, acesso root completo e o seu próprio sistema operativo — isolados dos outros inquilinos dessa máquina. Comporta-se como um pequeno servidor dedicado: escolhe um plano, paga um preço mensal fixo e os recursos são seus, quer os use ou não. O compromisso: a máquina subjacente é um ponto único de falha, e para obter mais capacidade redimensiona o plano ou migra.</p>
+
+  <h2>O que é a hospedagem em cloud</h2>
+  <p>Na <strong>hospedagem em cloud</strong>, a virtualização distribui a sua carga por <strong>muitos servidores em rede</strong> em vez de um só. Se um nó falhar, outros assumem; se precisar de mais capacidade, a plataforma fornece-a a partir do pool, muitas vezes de forma automática. A faturação segue geralmente o uso em vez de uma máquina fixa. As duas propriedades que definem o modelo são a <strong>elasticidade</strong> (os recursos sobem e descem com a procura) e a <strong>redundância</strong> (nenhuma máquina isolada pode deixá-lo offline). Estas vantagens trazem mais peças móveis, faturas variáveis e, muitas vezes, mais complexidade operacional.</p>
+
+  <figure>
+    <img src="/img/vps-vs-cloud-hosting-inbody.jpg" alt="Uma nuvem multicolorida luminosa renderizada dentro de um cubo de vidro transparente sobre um pedestal escuro, uma ilustração estilizada da computação em cloud" width="1280" height="853" loading="lazy" />
+    <figcaption>Uma ilustração conceptual da computação em cloud: o modelo cloud agrupa recursos de muitas máquinas em vez de prender o seu site a um único servidor.</figcaption>
+  </figure>
+
+  <h2>VPS vs hospedagem em cloud, lado a lado</h2>
+  <table>
+    <thead><tr><th>Dimensão</th><th>VPS</th><th>Hospedagem em cloud</th></tr></thead>
+    <tbody>
+      <tr><td>Modelo subjacente</td><td>Uma fatia de um único servidor físico</td><td>Carga distribuída por um pool de servidores</td></tr>
+      <tr><td>Recursos</td><td>Fixos, dedicados e garantidos</td><td>Obtidos a pedido a partir do pool</td></tr>
+      <tr><td>Escalabilidade</td><td>Redimensionar o plano (muitas vezes reinício/migração)</td><td>Escalar para cima/baixo, muitas vezes automaticamente</td></tr>
+      <tr><td>Fiabilidade</td><td>Máquina única = ponto único de falha</td><td>Redundância integrada; um nó em falha faz failover</td></tr>
+      <tr><td>Preço</td><td>Mensalidade fixa e previsível</td><td>Normalmente por uso e variável</td></tr>
+      <tr><td>Controlo</td><td>Root completo, o seu OS e o seu stack</td><td>Variável — mais abstração da plataforma</td></tr>
+      <tr><td>Ideal para</td><td>Cargas estáveis e previsíveis, orçamento apertado</td><td>Tráfego irregular/imprevisível que exige resiliência</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Desempenho: sem vencedor claro</h2>
+  <p>É tentador supor que a cloud é mais rápida, mas isso não é intrínseco. Um VPS dá-lhe recursos dedicados que nenhum vizinho pode roubar, o que torna o desempenho <strong>constante</strong> para cargas estáveis. As plataformas cloud brilham quando a carga <em>varia</em> — adicionam capacidade durante os picos para que não caia, e retiram-na quando o tráfego desce. Para um site com tráfego estável e previsível, um VPS bem dimensionado costuma render igualmente bem por menos dinheiro. Para um que ocasionalmente se torna viral, a capacidade da cloud de absorver o pico é a verdadeira vantagem.</p>
+
+  <h2>Escalabilidade e fiabilidade</h2>
+  <p>É aqui que os modelos mais divergem. Num VPS escala <strong>verticalmente</strong>: escolhe um plano maior quando ultrapassa o atual. É simples e barato, mas há um teto e o redimensionamento pode implicar uma breve indisponibilidade. A hospedagem em cloud escala <strong>horizontal e elasticamente</strong>, adicionando nós a pedido — e como a carga já abrange várias máquinas, uma falha de hardware isolada não tem de o deixar offline. Se uma disponibilidade contínua perante falhas de hardware e picos de tráfego é um requisito firme, essa redundância é o argumento mais forte da cloud.</p>
+
+  <h2>Preço: previsível vs pagamento por uso</h2>
+  <p>Um VPS cobra uma <strong>mensalidade fixa</strong> independentemente da sua atividade — fácil de orçamentar e com excelente relação qualidade-preço se o uso for estável. A hospedagem em cloud costuma cobrar por <strong>uso</strong>, o que é eficiente para cargas variáveis mas pode surpreendê-lo num pico inesperado. Nenhuma é universalmente mais barata: uma carga previsível é quase sempre mais barata num VPS, enquanto uma carga maioritariamente inativa com picos ocasionais pode ser mais barata na cloud. Compare sempre em especificações equivalentes e leia as políticas de excesso e de largura de banda antes de se comprometer.</p>
+
+  <h2>Como decidir</h2>
+  <ul>
+    <li><strong>Tráfego previsível, orçamento apertado, quer controlo?</strong> Um VPS é a escolha simples e económica.</li>
+    <li><strong>Tráfego irregular ou imprevisível, disponibilidade crítica?</strong> A elasticidade e a redundância da cloud justificam o custo extra.</li>
+    <li><strong>Está a começar?</strong> Um VPS costuma ser o ponto de partida mais simples e barato — pode passar para a cloud mais tarde se realmente o ultrapassar.</li>
+    <li><strong>Quer aprender administração de servidores?</strong> Um VPS dá-lhe acesso root completo e um OS limpo para praticar.</li>
+  </ul>
+  <p>Parta da sua carga, não do rótulo: estime a sua carga típica e de pico, decida quanta variabilidade e indisponibilidade tolera, e escolha o modelo cujos pontos fortes correspondam. Um VPS bem dimensionado cobre confortavelmente a maioria dos projetos web; recorra à cloud quando a resiliência e a elasticidade forem requisitos reais, não apenas palavras da moda.</p>
+
+  <h2>FAQ</h2>
+  <h3>A hospedagem em cloud é sempre melhor do que um VPS?</h3>
+  <p>Não. A cloud é melhor para tráfego irregular e imprevisível e para projetos onde a redundância é crítica. Para cargas estáveis e previsíveis, um VPS costuma oferecer desempenho equivalente a um custo mais baixo e previsível.</p>
+  <h3>Um VPS é mais barato do que a hospedagem em cloud?</h3>
+  <p>Para uma carga estável, quase sempre — um VPS cobra uma mensalidade fixa sem surpresas. A cloud só é mais barata quando o seu uso está maioritariamente inativo com picos ocasionais, porque paga pelo que usa.</p>
+  <h3>Posso passar de um VPS para a cloud mais tarde?</h3>
+  <p>Sim. Muitos projetos começam num VPS por simplicidade e custo, e depois migram para uma configuração cloud se ultrapassarem a capacidade de um único servidor ou precisarem de failover integrado. Manter o stack portável (contentores, infraestrutura como código) torna essa mudança mais fácil.</p>
+  <h3>Um VPS cai se o servidor falhar?</h3>
+  <p>Um VPS reside numa única máquina física, por isso uma falha de hardware dessa máquina pode deixá-lo offline até ser restaurado ou migrado. A hospedagem em cloud distribui a carga por várias máquinas, pelo que a falha de um único nó não causa necessariamente uma interrupção — é a sua principal vantagem de fiabilidade.</p>
+</Article>
