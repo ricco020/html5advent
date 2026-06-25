@@ -1,0 +1,76 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="vps-vs-dedicated-server"
+  title="VPS vs dedicated server: which one does your project need?"
+  description="How a VPS and a dedicated server really differ — on performance, isolation, scaling, control and price — and a clear way to decide which one fits your website or app."
+  cat="hosting"
+  hero="/img/vps-vs-dedicated-server-hero.jpg"
+  heroAlt="A technician's hand sliding a server module out of a blue-lit rack in a datacenter"
+  cluster="hosting"
+>
+  <p>A <strong>VPS</strong> (Virtual Private Server) and a <strong>dedicated server</strong> sit next to each other on the hosting ladder, and it's easy to confuse them. The difference is simple: a VPS gives you a <em>guaranteed slice</em> of a physical machine that you share with other isolated tenants; a dedicated server gives you the <em>entire</em> physical machine, with no neighbours at all. That one fact drives every practical trade-off below — performance ceiling, isolation, scaling, control and price. This guide compares them honestly, without invented benchmarks, so you can match the model to your real workload.</p>
+
+  <h2>How each model works</h2>
+  <p>On a <strong>VPS</strong>, a hypervisor splits one physical server into several virtual machines. Each VM gets its own operating system, root access and a reserved share of RAM, CPU and storage. You're isolated from the other tenants, but the host's hardware is shared — and on some plans CPU is burstable rather than fully reserved.</p>
+  <p>A <strong>dedicated server</strong> is a whole physical machine rented to you alone. Every core, every gigabyte of RAM and every disk is yours, with no virtualization layer between your workload and the hardware. You get the full performance of the box and complete control over it — and you pay for the whole box whether you use it fully or not.</p>
+
+  <h2>The differences that matter</h2>
+
+  <h3>Performance</h3>
+  <p>A dedicated server has a higher and more consistent performance ceiling: no hypervisor overhead, no possibility of a noisy neighbour, and full access to the CPU and disk. A good VPS performs very well for the vast majority of web projects, but its ceiling is the slice you bought. If your workload is CPU- or I/O-bound at sustained high load, dedicated removes the cap.</p>
+
+  <h3>Isolation and security</h3>
+  <p>Both isolate you from other customers at the OS level. A dedicated server adds <em>hardware</em> isolation — nothing else runs on the machine — which some compliance and high-security requirements call for. For most sites, VPS-level isolation is already sufficient.</p>
+
+  <figure>
+    <img src="/img/vps-vs-dedicated-server-inbody.jpg" alt="A full server cabinet packed with Cat6 patch panels and blue ethernet cables wired to numbered ports" width="720" height="1280" loading="lazy" />
+    <figcaption>A dedicated server gives you the whole physical machine and its full network capacity; a VPS gives you an isolated, guaranteed slice of one.</figcaption>
+  </figure>
+
+  <h3>Scaling</h3>
+  <p>A VPS is usually easier to scale: many hosts let you resize the plan — more RAM, more vCPUs — in a few minutes, sometimes without a rebuild. A dedicated server scales in bigger, slower steps: you upgrade hardware or migrate to a larger box, which takes more planning. If you expect to grow gradually, the VPS's flexibility is an advantage.</p>
+
+  <h3>Control</h3>
+  <p>Both give you full root access and let you install whatever stack you want. A dedicated server adds lower-level control — you can choose specific hardware, tune the bare metal, and avoid any virtualization quirks. For typical web stacks (a web server, a database, a cache, some background jobs), a VPS already gives you all the control you need.</p>
+
+  <h3>Price</h3>
+  <p>This is the clearest split. A VPS costs a fraction of a dedicated server because the underlying hardware is shared across several tenants. A dedicated server costs more because you're paying for an entire physical machine. For context, a provider like <strong>Contabo</strong> lists Cloud VPS plans starting around 5–6&nbsp;€/month and scaling to roughly 25&nbsp;€/month for its larger VPS tiers (12-month terms, ex. VAT, fair-use unlimited traffic, prices as of June&nbsp;2026), while dedicated servers sit well above that range. Always confirm current pricing and the renewal term on the provider's own page before deciding.</p>
+
+  <h2>VPS vs dedicated server at a glance</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>VPS</th><th>Dedicated server</th></tr></thead>
+    <tbody>
+      <tr><td>Hardware</td><td>Shared, virtualized; you get an isolated slice</td><td>Entire physical machine, yours alone</td></tr>
+      <tr><td>Performance ceiling</td><td>The slice you bought; excellent for most sites</td><td>Full machine; highest and most consistent</td></tr>
+      <tr><td>Isolation</td><td>OS-level (isolated from other tenants)</td><td>OS-level + full hardware isolation</td></tr>
+      <tr><td>Scaling</td><td>Fast, often resize in minutes</td><td>Bigger steps; hardware upgrade or migration</td></tr>
+      <tr><td>Control</td><td>Full root; configure the stack freely</td><td>Full root + bare-metal/hardware control</td></tr>
+      <tr><td>Price</td><td>A fraction of a dedicated box</td><td>Higher — you pay for the whole machine</td></tr>
+      <tr><td>Best for</td><td>Most websites and apps, growing projects</td><td>Heavy, sustained load; strict isolation needs</td></tr>
+    </tbody>
+  </table>
+
+  <h2>How to decide</h2>
+  <p>Start from your workload, not from a label:</p>
+  <ul>
+    <li><strong>Choose a VPS</strong> if you're running a typical website or app, want low cost and easy scaling, and a generous slice of a machine comfortably covers your load. This is the right answer for the large majority of projects.</li>
+    <li><strong>Choose a dedicated server</strong> if you have sustained, high CPU/I/O load that maxes out large VPS plans, you need hardware-level isolation for compliance, or you require specific bare-metal control.</li>
+    <li><strong>Still unsure?</strong> Start on a VPS. It's cheaper, it scales up quickly, and if you genuinely outgrow the largest VPS tier you can move to dedicated later — most projects never need to.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <h3>Is a dedicated server always faster than a VPS?</h3>
+  <p>It has a higher performance ceiling because there's no virtualization layer and no shared hardware, but for most web workloads a well-sized VPS is already fast enough. Dedicated only pulls clearly ahead when your load is heavy and sustained enough to saturate a large VPS.</p>
+
+  <h3>Can I upgrade from a VPS to a dedicated server later?</h3>
+  <p>Yes. Most providers offer both, and migrating means provisioning the dedicated box and moving your stack over. Starting on a VPS and upgrading only if you outgrow it is a sensible, low-risk path.</p>
+
+  <h3>Which is cheaper, a VPS or a dedicated server?</h3>
+  <p>A VPS is cheaper, often by a large margin, because the physical hardware is shared across several isolated tenants. A dedicated server costs more because you rent the entire machine.</p>
+
+  <h3>Do both give me root access?</h3>
+  <p>Yes. Both a VPS and a dedicated server give you full root access and let you install and configure your own operating system and software stack. The dedicated server additionally lets you control the underlying hardware.</p>
+</Article>
