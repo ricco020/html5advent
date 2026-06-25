@@ -58,7 +58,7 @@ const year = 2026;
         <span class="brand__name">HTML5<span class="brand__accent">Advent</span></span>
       </a>
       <nav class="nav">
-        <a href={`${localePath(lang)}#advent`}>{t(lang, 'advent')}</a>
+        <a href={localePath(lang, 'advent')}>{t(lang, 'advent')}</a>
         <a href={localePath(lang, 'guides')}>{t(lang, 'guides')}</a>
       </nav>
       <div class="langs" aria-label="Language">
@@ -72,8 +72,33 @@ const year = 2026;
 
     <footer class="site-foot">
       <p class="disclosure">{t(lang, 'disclosure')}</p>
-      <p class="meta">© {year} HTML5 Advent · <a href={`${localePath(lang)}#advent`}>{t(lang, 'advent')}</a></p>
+      <p class="meta">© {year} HTML5 Advent · <a href={localePath(lang, 'advent')}>{t(lang, 'advent')}</a></p>
     </footer>
+
+    <script is:inline>
+      (function () {
+        var SUP = ['fr', 'es', 'de', 'it', 'pt']; // non-default locales we serve
+        function cookie(n) { var m = document.cookie.split('; ').find(function (r) { return r.indexOf(n + '=') === 0; }); return m ? m.split('=')[1] : ''; }
+        // Remember manual language choice (so detection never overrides it)
+        var sw = document.querySelectorAll('.langs a');
+        for (var j = 0; j < sw.length; j++) {
+          sw[j].addEventListener('click', function () {
+            try { document.cookie = 'h5a_lang=' + this.getAttribute('hreflang') + ';path=/;max-age=31536000;samesite=lax'; } catch (e) {}
+          });
+        }
+        // Auto-detect browser language on the canonical EN root only
+        if (location.pathname === '/' || location.pathname === '') {
+          var c = cookie('h5a_lang');
+          if (c) { if (c !== 'en') location.replace('/' + c); return; }
+          var langs = navigator.languages || [navigator.language || 'en'];
+          for (var i = 0; i < langs.length; i++) {
+            var two = (langs[i] || '').slice(0, 2).toLowerCase();
+            if (two === 'en') return;            // EN default → stay
+            if (SUP.indexOf(two) >= 0) { location.replace('/' + two); return; }
+          }
+        }
+      })();
+    </script>
 
     <style is:global>
       :root {

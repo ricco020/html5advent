@@ -1,47 +1,59 @@
 ---
-import { t, localePath } from '../i18n/ui.js';
-import { GUIDES, guidesByDay } from '../data/guides.js';
+import { t, localePath, UI } from '../i18n/ui.js';
+import { GUIDES } from '../data/guides.js';
 const { lang = 'en' } = Astro.props;
 const avail = GUIDES.filter((g) => (g.locales || ['en']).includes(lang));
-const byDay = {};
-for (const g of avail) byDay[g.day] = g;
-const doors = Array.from({ length: 24 }, (_, i) => i + 1);
-const soon = { en: 'Soon', fr: 'Bientôt', es: 'Pronto' }[lang];
-const featured = avail.slice(0, 6);
+
+// Group by category, in editorial order
+const CATS = [
+  { key: 'js',      label: { en: 'JavaScript', fr: 'JavaScript', es: 'JavaScript', de: 'JavaScript', it: 'JavaScript', pt: 'JavaScript' } },
+  { key: 'css',     label: { en: 'CSS', fr: 'CSS', es: 'CSS', de: 'CSS', it: 'CSS', pt: 'CSS' } },
+  { key: 'apis',    label: { en: 'Web APIs', fr: 'Web APIs', es: 'Web APIs', de: 'Web-APIs', it: 'Web API', pt: 'Web APIs' } },
+  { key: 'html',    label: { en: 'HTML', fr: 'HTML', es: 'HTML', de: 'HTML', it: 'HTML', pt: 'HTML' } },
+  { key: 'hosting', label: { en: 'Hosting & deploy', fr: 'Hébergement', es: 'Alojamiento', de: 'Hosting', it: 'Hosting', pt: 'Hospedagem' } },
+];
+const groups = CATS.map((c) => ({ ...c, items: avail.filter((g) => g.cat === c.key) })).filter((c) => c.items.length);
+const adventCount = avail.length;
+const adventLabel = { en: 'See the calendar', fr: 'Voir le calendrier', es: 'Ver el calendario', de: 'Zum Kalender', it: 'Vedi il calendario', pt: 'Ver o calendário' }[lang];
+const adventBlurb = {
+  en: `An advent-style calendar of the web platform — ${adventCount} runnable demos and deep-dives, one door at a time.`,
+  fr: `Un calendrier de l’avent de la plateforme web — ${adventCount} démos et plongées exécutables, une porte à la fois.`,
+  es: `Un calendario de adviento de la plataforma web — ${adventCount} demos y análisis ejecutables, una puerta a la vez.`,
+  de: `Ein Adventskalender der Web-Plattform — ${adventCount} lauffähige Demos und Deep-Dives, ein Türchen nach dem anderen.`,
+  it: `Un calendario dell’avvento della piattaforma web — ${adventCount} demo e approfondimenti eseguibili, una casella alla volta.`,
+  pt: `Um calendário do advento da plataforma web — ${adventCount} demos e análises executáveis, uma porta de cada vez.`,
+}[lang];
 ---
 <section class="hero">
-  <p class="kicker">// {t(lang, 'advent')}</p>
-  <h1 class="hero__h1">HTML5 <span class="amber">Advent</span></h1>
-  <p class="hero__tag">{t(lang, 'tagline')}</p>
-  <p class="hero__intro">{t(lang, 'intro')}</p>
+  <div class="hero__text">
+    <p class="kicker">&lt;/&gt; html5advent.com · est. 2010</p>
+    <h1 class="hero__h1">The modern <span class="grad">web platform</span>, decoded.</h1>
+    <p class="hero__tag">{t(lang, 'tagline')}</p>
+    <p class="hero__intro">{t(lang, 'intro')}</p>
+    <a class="hero__cta" href={localePath(lang, 'guides')}>{t(lang, 'guides')} →</a>
+  </div>
+  <pre class="hero__code" aria-hidden="true">{`const res = await fetch('/api');
+const data = await res.json();
+
+@container (min-width: 30rem) {
+  .card { grid-template: …; }
+}
+
+navigator.serviceWorker
+  .register('/sw.js');`}</pre>
 </section>
 
-<section class="advent" id="advent" aria-label={t(lang, 'advent')}>
-  <ol class="grid">
-    {doors.map((d) => {
-      const g = byDay[d];
-      return g ? (
-        <li class="door door--open">
-          <a href={localePath(lang, `guides/${g.slug}`)}>
-            <span class="door__num">{d}</span>
-            <span class="door__title">{g.title[lang] || g.title.en}</span>
-          </a>
-        </li>
-      ) : (
-        <li class="door door--soon"><span class="door__num">{d}</span><span class="door__soon">{soon}</span></li>
-      );
-    })}
-  </ol>
-</section>
-
-{featured.length > 0 && (
-  <section class="latest">
-    <h2>{t(lang, 'guides')}</h2>
+{groups.map((group) => (
+  <section class="cat">
+    <div class="cat__head">
+      <h2>{group.label[lang] || group.label.en}</h2>
+      <span class="cat__count">{group.items.length}</span>
+    </div>
     <ul class="cards">
-      {featured.map((g) => (
+      {group.items.map((g) => (
         <li class="card">
           <a href={localePath(lang, `guides/${g.slug}`)}>
-            <span class="card__cat">{g.cat}</span>
+            <span class="card__cat">{g.cat}{g.cluster ? ' · €' : ''}</span>
             <span class="card__title">{g.title[lang] || g.title.en}</span>
             <span class="card__desc">{(g.desc?.[lang] || g.desc?.en) ?? ''}</span>
             <span class="card__more">{t(lang, 'readMore')} →</span>
@@ -50,39 +62,61 @@ const featured = avail.slice(0, 6);
       ))}
     </ul>
   </section>
-)}
+))}
+
+<aside class="advent-teaser">
+  <div>
+    <p class="advent-teaser__k">✦ {t(lang, 'advent')}</p>
+    <p class="advent-teaser__b">{adventBlurb}</p>
+  </div>
+  <a class="advent-teaser__cta" href={localePath(lang, 'advent')}>{adventLabel} →</a>
+</aside>
 
 <style>
-  .hero { padding: 2rem 0 1rem; max-width: 720px; }
-  .kicker { font-family: var(--mono); color: var(--accent-blue); font-size: .85rem; margin: 0 0 .5rem; }
-  .hero__h1 { font-size: clamp(2.6rem, 7vw, 4.5rem); margin: 0; }
-  .amber { color: var(--accent-amber); }
-  .hero__tag { font-family: var(--display); font-size: 1.4rem; color: var(--ink); margin: .75rem 0 0; }
-  .hero__intro { color: var(--muted); margin: 1rem 0 0; max-width: 60ch; }
+  /* HERO */
+  .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 2.5rem; align-items: center;
+    padding: 2rem 0 3.5rem; border-bottom: 1px solid var(--line); }
+  .kicker { font-family: var(--mono); color: var(--accent-blue); font-size: .82rem; margin: 0 0 1rem; letter-spacing: .02em; }
+  .hero__h1 { font-size: clamp(2.4rem, 5.5vw, 4rem); margin: 0; line-height: 1.04; }
+  .grad { background: linear-gradient(100deg, var(--accent-amber), var(--accent-blue)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero__tag { font-family: var(--display); font-size: 1.25rem; color: var(--ink); margin: 1.1rem 0 0; }
+  .hero__intro { color: var(--muted); margin: .9rem 0 1.6rem; max-width: 52ch; }
+  .hero__cta { display: inline-block; font-family: var(--mono); font-size: .9rem; font-weight: 600;
+    color: #1a1205; background: var(--accent-amber); padding: .7rem 1.3rem; border-radius: 8px; text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease; }
+  .hero__cta:hover { transform: translateY(-2px); box-shadow: 0 10px 30px -10px var(--accent-amber); }
+  .hero__code { margin: 0; padding: 1.4rem 1.5rem; background: #0a0c12; border: 1px solid var(--line);
+    border-radius: 14px; font-family: var(--mono); font-size: .82rem; line-height: 1.7; color: #b8c2da;
+    overflow: hidden; box-shadow: 0 24px 60px -30px rgba(77,141,255,.5); }
 
-  .advent { margin: 3rem 0; }
-  .grid { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
-  .door { aspect-ratio: 1; border: 1px solid var(--line); border-radius: 10px;
-    background: var(--surface); position: relative; overflow: hidden; }
-  .door__num { position: absolute; top: .5rem; left: .6rem; font-family: var(--display);
-    font-weight: 700; font-size: 1.4rem; color: var(--accent-amber); opacity: .9; }
-  .door--soon { display: grid; place-items: end center; }
-  .door__soon { font-family: var(--mono); font-size: .7rem; color: var(--muted); padding-bottom: .6rem; }
-  .door--open a { display: flex; flex-direction: column; justify-content: flex-end; height: 100%;
-    padding: .6rem; text-decoration: none; color: var(--ink); transition: background .2s ease; }
-  .door--open { border-color: var(--accent-blue); }
-  .door--open a:hover { background: rgba(77,141,255,.10); }
-  .door__title { font-family: var(--display); font-size: .82rem; line-height: 1.15; }
-
-  .latest { margin: 3rem 0; }
-  .latest h2 { font-size: 1.6rem; }
+  /* CATEGORY SECTIONS */
+  .cat { margin: 3rem 0 0; }
+  .cat__head { display: flex; align-items: baseline; gap: .75rem; border-bottom: 1px solid var(--line); padding-bottom: .5rem; }
+  .cat__head h2 { font-size: 1.5rem; margin: 0; }
+  .cat__count { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
   .cards { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-  .card { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
-  .card a { display: flex; flex-direction: column; gap: .5rem; padding: 1.25rem; text-decoration: none; height: 100%; }
-  .card__cat { font-family: var(--mono); font-size: .72rem; color: var(--accent-blue); text-transform: uppercase; }
-  .card__title { font-family: var(--display); font-weight: 600; font-size: 1.1rem; color: var(--ink); }
-  .card__desc { color: var(--muted); font-size: .9rem; }
-  .card__more { margin-top: auto; color: var(--accent-amber); font-size: .85rem; }
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .card { border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+  .card:hover { transform: translateY(-4px); border-color: var(--accent-blue); box-shadow: 0 18px 40px -24px rgba(77,141,255,.6); }
+  .card a { display: flex; flex-direction: column; gap: .5rem; padding: 1.3rem; text-decoration: none; height: 100%; }
+  .card__cat { font-family: var(--mono); font-size: .7rem; color: var(--accent-blue); text-transform: uppercase; letter-spacing: .06em; }
+  .card__title { font-family: var(--display); font-weight: 600; font-size: 1.12rem; color: var(--ink); line-height: 1.2; }
+  .card__desc { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+  .card__more { margin-top: auto; color: var(--accent-amber); font-size: .85rem; font-family: var(--mono); }
+
+  /* ADVENT TEASER (secondary) */
+  .advent-teaser { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+    margin: 3.5rem 0 1rem; padding: 1.5rem 1.75rem; border-radius: 16px;
+    border: 1px solid var(--line);
+    background: linear-gradient(120deg, rgba(245,165,36,.10), rgba(77,141,255,.08)); }
+  .advent-teaser__k { font-family: var(--mono); color: var(--accent-amber); font-size: .85rem; margin: 0 0 .35rem; }
+  .advent-teaser__b { margin: 0; color: var(--ink); max-width: 60ch; }
+  .advent-teaser__cta { flex: none; font-family: var(--mono); font-size: .88rem; color: var(--accent-blue); text-decoration: none; white-space: nowrap; font-weight: 600; }
+  .advent-teaser__cta:hover { text-decoration: underline; }
+
+  @media (max-width: 780px) {
+    .hero { grid-template-columns: 1fr; gap: 1.5rem; }
+    .hero__code { display: none; }
+  }
 </style>

@@ -1,0 +1,63 @@
+---
+import { t, localePath } from '../i18n/ui.js';
+import { GUIDES } from '../data/guides.js';
+const { lang = 'en' } = Astro.props;
+const avail = GUIDES.filter((g) => (g.locales || ['en']).includes(lang));
+const byDay = {}; for (const g of avail) byDay[g.day] = g;
+const doors = Array.from({ length: 24 }, (_, i) => i + 1);
+const blurb = {
+  en: 'A calendar of the modern web platform. Behind each open door: a tested, runnable guide to an HTML, CSS, JavaScript or Web API feature. New doors open as the series grows.',
+  fr: 'Un calendrier de la plateforme web moderne. Derrière chaque porte ouverte : un guide testé et exécutable sur une fonctionnalité HTML, CSS, JavaScript ou Web API. De nouvelles portes s’ouvrent au fil de la série.',
+  es: 'Un calendario de la plataforma web moderna. Tras cada puerta abierta: una guía probada y ejecutable sobre una función de HTML, CSS, JavaScript o Web API. Se abren nuevas puertas a medida que crece la serie.',
+  de: 'Ein Kalender der modernen Web-Plattform. Hinter jedem offenen Türchen: eine getestete, lauffähige Anleitung zu einem HTML-, CSS-, JavaScript- oder Web-API-Feature. Neue Türchen öffnen sich, während die Serie wächst.',
+  it: 'Un calendario della piattaforma web moderna. Dietro ogni casella aperta: una guida testata ed eseguibile su una funzionalità HTML, CSS, JavaScript o Web API. Nuove caselle si aprono man mano che la serie cresce.',
+  pt: 'Um calendário da plataforma web moderna. Atrás de cada porta aberta: um guia testado e executável sobre um recurso de HTML, CSS, JavaScript ou Web API. Novas portas abrem à medida que a série cresce.',
+}[lang];
+---
+<section class="advent-page">
+  <p class="kicker">✦ {t(lang, 'advent')}</p>
+  <h1>Web Platform Advent</h1>
+  <p class="blurb">{blurb}</p>
+
+  <ol class="grid">
+    {doors.map((d) => {
+      const g = byDay[d];
+      return g ? (
+        <li class="door door--open">
+          <a href={localePath(lang, `guides/${g.slug}`)}>
+            <span class="num">{d}</span>
+            <span class="cat">{g.cat}</span>
+            <span class="title">{g.title[lang] || g.title.en}</span>
+          </a>
+        </li>
+      ) : (
+        <li class="door door--locked"><span class="num">{d}</span></li>
+      );
+    })}
+  </ol>
+</section>
+
+<style>
+  .advent-page { max-width: 980px; margin: 0 auto; }
+  .kicker { font-family: var(--mono); color: var(--accent-amber); font-size: .85rem; margin: 0 0 .5rem; }
+  h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); margin: 0; }
+  .blurb { color: var(--muted); max-width: 64ch; margin: 1rem 0 0; }
+  .grid { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: .7rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .door { aspect-ratio: 1; border-radius: 14px; position: relative; overflow: hidden; }
+  .num { position: absolute; top: .6rem; left: .75rem; font-family: var(--display); font-weight: 700; font-size: 1.7rem; }
+
+  .door--locked { border: 1px dashed var(--line); background: rgba(255,255,255,.015); }
+  .door--locked .num { color: var(--line); }
+
+  .door--open { border: 1px solid var(--line);
+    background: linear-gradient(155deg, rgba(245,165,36,.08), rgba(77,141,255,.06)), var(--surface);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .door--open:hover { transform: translateY(-4px); border-color: var(--accent-amber);
+    box-shadow: 0 18px 40px -22px rgba(245,165,36,.7); }
+  .door--open a { display: flex; flex-direction: column; justify-content: flex-end; gap: .25rem;
+    height: 100%; padding: .9rem; text-decoration: none; }
+  .door--open .num { color: var(--accent-amber); }
+  .door--open .cat { font-family: var(--mono); font-size: .64rem; color: var(--accent-blue); text-transform: uppercase; letter-spacing: .06em; }
+  .door--open .title { font-family: var(--display); font-weight: 600; font-size: .9rem; line-height: 1.15; color: var(--ink); }
+</style>
