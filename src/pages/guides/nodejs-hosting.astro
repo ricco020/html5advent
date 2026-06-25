@@ -11,6 +11,7 @@ import Article from '../../layouts/Article.astro';
   hero="/img/nodejs-hosting-hero.jpg"
   heroAlt="A hand inserting a server blade into a blue-lit rack of servers"
   cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo' }}
 >
   <p>Hosting a Node.js app is different from hosting a static site or a PHP page. Node runs a long-lived process that owns its own HTTP server, so the host has to <em>keep that process alive</em>, restart it on crash, and route public traffic to it. This guide walks through the three realistic options and the pieces you need regardless of which you pick.</p>
 

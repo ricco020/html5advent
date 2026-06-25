@@ -10,6 +10,7 @@ import Article from '../../layouts/Article.astro';
   hero="/img/contabo-review-hero.jpg"
   heroAlt="Silver rack-mounted servers stacked in a cabinet, lit blue with one unit showing a red indicator light"
   cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo', software: true, offers: true }}
 >
   <p><strong>Contabo</strong> is a German hosting company that has built its reputation on one thing: a lot of raw resources for a low monthly price. If you've shopped for a VPS, you've probably seen its plans listed with noticeably more RAM, vCPUs and disk than similarly priced competitors. That positioning is real, but "more specs per euro" is only part of the story. This review looks at what Contabo actually offers, where it fits, and the trade-offs worth understanding before you commit — without inventing benchmarks or pretending we ran it for months.</p>
 
@@ -49,6 +50,19 @@ import Article from '../../layouts/Article.astro';
       <tr><td>Have an audience near one of its datacenter regions</td><td>Need a region Contabo doesn't serve</td></tr>
     </tbody>
   </table>
+
+  <h2>What it costs</h2>
+  <p>To make the value angle concrete, here are Contabo's published <strong>Cloud VPS</strong> list prices (12-month term, prices ex. VAT, in EUR per month, as observed in June 2026 — always confirm the current price on Contabo's own site before buying):</p>
+  <table>
+    <thead><tr><th>Plan</th><th>Price (€/month)</th></tr></thead>
+    <tbody>
+      <tr><td>Cloud VPS 10</td><td>5.50</td></tr>
+      <tr><td>Cloud VPS 20</td><td>7.50</td></tr>
+      <tr><td>Cloud VPS 30</td><td>14.00</td></tr>
+      <tr><td>Cloud VPS 40</td><td>25.00</td></tr>
+    </tbody>
+  </table>
+  <p>A one-time setup fee can apply on some terms, and longer commitments lower the monthly rate — so read the order summary carefully. The figures above are list prices at a point in time, not a promise; treat them as a reference point and verify the live price for your region and term.</p>
 
   <h2>The honest verdict</h2>
   <p>Contabo earns its reputation as a <strong>value-first, resource-rich, unmanaged VPS</strong> provider. If you can run your own server and your workload benefits from plenty of memory and disk per euro, it's a sensible candidate to shortlist. If you want managed convenience, premium support, or a guarantee that the biggest spec equals the best experience for your particular traffic, weigh it against managed alternatives instead. As with any host, the right move is to map your real workload — memory first, then CPU, then storage, then region — and pick the smallest plan that covers it with headroom, on a provider whose model matches how much of the maintenance you want to own.</p>

@@ -10,6 +10,7 @@ import Article from '../../../layouts/Article.astro';
   hero="/img/contabo-review-hero.jpg"
   heroAlt="Serveurs argentés montés en rack empilés dans une armoire, éclairés en bleu, une unité affichant un voyant rouge"
   cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo', software: true, offers: true }}
 >
   <p><strong>Contabo</strong> est une entreprise d'hébergement allemande qui a bâti sa réputation sur une seule chose : beaucoup de ressources brutes pour un prix mensuel bas. Si vous avez déjà cherché un VPS, vous avez sans doute vu ses offres affichées avec sensiblement plus de RAM, de vCPU et de disque que des concurrents au tarif comparable. Ce positionnement est réel, mais « plus de specs par euro » n'est qu'une partie de l'histoire. Cet avis examine ce que Contabo propose réellement, où il s'inscrit et les compromis qu'il vaut la peine de comprendre avant de s'engager — sans inventer de benchmarks ni prétendre l'avoir utilisé pendant des mois.</p>
 
@@ -49,6 +50,19 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Avez une audience proche de l'une de ses régions de centre de données</td><td>Avez besoin d'une région que Contabo ne dessert pas</td></tr>
     </tbody>
   </table>
+
+  <h2>Ce que ça coûte</h2>
+  <p>Pour rendre l'argument du rapport qualité-prix concret, voici les tarifs catalogue des <strong>Cloud VPS</strong> de Contabo (engagement 12 mois, prix HT, en € par mois, relevés en juin 2026 — vérifiez toujours le prix actuel sur le site de Contabo avant d'acheter) :</p>
+  <table>
+    <thead><tr><th>Offre</th><th>Prix (€/mois)</th></tr></thead>
+    <tbody>
+      <tr><td>Cloud VPS 10</td><td>5,50</td></tr>
+      <tr><td>Cloud VPS 20</td><td>7,50</td></tr>
+      <tr><td>Cloud VPS 30</td><td>14,00</td></tr>
+      <tr><td>Cloud VPS 40</td><td>25,00</td></tr>
+    </tbody>
+  </table>
+  <p>Des frais d'installation ponctuels peuvent s'appliquer selon la durée, et un engagement plus long réduit le tarif mensuel — lisez bien le récapitulatif de commande. Les chiffres ci-dessus sont des tarifs catalogue à un instant donné, pas une promesse ; prenez-les comme repère et vérifiez le prix en vigueur pour votre région et votre durée.</p>
 
   <h2>Le verdict honnête</h2>
   <p>Contabo mérite sa réputation de fournisseur de <strong>VPS non managé, riche en ressources et axé sur la valeur</strong>. Si vous savez faire tourner votre propre serveur et que votre charge de travail profite d'abondance de mémoire et de disque par euro, c'est un candidat sensé à présélectionner. Si vous voulez la commodité du managé, un support premium, ou la garantie que la plus grosse spec équivaut à la meilleure expérience pour votre trafic particulier, pesez-le plutôt face aux alternatives managées. Comme pour tout hébergeur, le bon réflexe est de cartographier votre charge de travail réelle — mémoire d'abord, puis CPU, puis stockage, puis région — et de choisir la plus petite offre qui la couvre avec de la marge, chez un fournisseur dont le modèle correspond à la part de maintenance que vous voulez assumer.</p>

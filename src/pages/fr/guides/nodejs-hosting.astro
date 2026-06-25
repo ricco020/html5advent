@@ -11,6 +11,7 @@ import Article from '../../../layouts/Article.astro';
   hero="/img/nodejs-hosting-hero.jpg"
   heroAlt="Une main insère un serveur lame dans une baie de serveurs éclairée en bleu"
   cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo' }}
 >
   <p>Héberger une application Node.js ne ressemble pas à héberger un site statique ou une page PHP. Node fait tourner un processus de longue durée qui possède son propre serveur HTTP : l'hébergeur doit donc <em>maintenir ce processus en vie</em>, le redémarrer en cas de plantage, et router le trafic public vers lui. Ce guide passe en revue les trois options réalistes et les briques nécessaires quelle que soit celle que vous choisissez.</p>
 

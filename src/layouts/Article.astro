@@ -2,17 +2,23 @@
 import Base from './Base.astro';
 import Cta from '../components/Cta.astro';
 import { t, localePath } from '../i18n/ui.js';
+import { productNode, itemListNode } from '../data/products.js';
 
 const {
   title, description, lang = 'en', slug,
   cat, day, hero, heroAlt, updated = '2026-06-25',
   cluster = null,            // 'hosting' | 'deploy' → renders CTA; null = no CTA (reference)
+  // Optional honest commerce schema (Product / SoftwareApplication / ItemList + Offer).
+  // Shapes:
+  //   { type: 'product', key: 'contabo', software: true, offers: true }  → single product/review
+  //   { type: 'itemlist', name: '…', keys: ['contabo','hetzner',…] }      → comparison / best-of list
+  // `offers: true` is HONEST ONLY when the price is visible in the page body (see products.js).
+  commerce = null,
 } = Astro.props;
 
 const path = `guides/${slug}`;
 const url = 'https://html5advent.com' + localePath(lang, path);
-const schema = {
-  '@context': 'https://schema.org',
+const article = {
   '@type': 'TechArticle',
   headline: title,
   description,
@@ -24,6 +30,22 @@ const schema = {
   mainEntityOfPage: url,
   image: hero ? `https://html5advent.com${hero}` : undefined,
 };
+
+// Build honest commerce node(s) from the `commerce` prop. No rating is ever emitted.
+let commerceNode = null;
+if (commerce && commerce.type === 'product' && commerce.key) {
+  commerceNode = productNode(commerce.key, {
+    withOffers: commerce.offers === true,
+    asSoftwareApplication: commerce.software === true,
+  });
+} else if (commerce && commerce.type === 'itemlist' && Array.isArray(commerce.keys)) {
+  commerceNode = itemListNode(commerce.keys, commerce.name || title);
+}
+
+// Emit a single JSON-LD: keep TechArticle, add commerce via @graph when present.
+const schema = commerceNode
+  ? { '@context': 'https://schema.org', '@graph': [article, commerceNode] }
+  : { '@context': 'https://schema.org', ...article };
 ---
 <Base title={`${title} — HTML5 Advent`} description={description} lang={lang} path={path} schema={schema} ogType="article">
   <article class="article">
