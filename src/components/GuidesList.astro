@@ -1,0 +1,36 @@
+---
+import { t, localePath } from '../i18n/ui.js';
+import { GUIDES } from '../data/guides.js';
+const { lang = 'en' } = Astro.props;
+const avail = GUIDES.filter((g) => (g.locales || ['en']).includes(lang)).sort((a, b) => a.day - b.day);
+const empty = { en: 'Guides are being published — check back soon.', fr: 'Les guides arrivent — revenez bientôt.', es: 'Las guías se están publicando — vuelve pronto.' }[lang];
+---
+<h1>{t(lang, 'guides')}</h1>
+{avail.length === 0 ? (
+  <p class="muted">{empty}</p>
+) : (
+  <ul class="cards">
+    {avail.map((g) => (
+      <li class="card">
+        <a href={localePath(lang, `guides/${g.slug}`)}>
+          <span class="card__cat">{g.cat}</span>
+          <span class="card__title">{g.title[lang] || g.title.en}</span>
+          <span class="card__desc">{(g.desc?.[lang] || g.desc?.en) ?? ''}</span>
+          <span class="card__more">{t(lang, 'readMore')} →</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+<style>
+  h1 { font-size: clamp(2rem, 5vw, 3rem); }
+  .muted { color: var(--muted); }
+  .cards { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .card { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  .card a { display: flex; flex-direction: column; gap: .5rem; padding: 1.25rem; text-decoration: none; height: 100%; }
+  .card__cat { font-family: var(--mono); font-size: .72rem; color: var(--accent-blue); text-transform: uppercase; }
+  .card__title { font-family: var(--display); font-weight: 600; font-size: 1.1rem; color: var(--ink); }
+  .card__desc { color: var(--muted); font-size: .9rem; }
+  .card__more { margin-top: auto; color: var(--accent-amber); font-size: .85rem; }
+</style>

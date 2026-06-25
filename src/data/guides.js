@@ -5,8 +5,17 @@
 //   cluster : CTA cluster ('hosting' | 'deploy') or null for pure-reference (no CTA)
 //   title/desc: per-locale (en/fr/es)
 export const GUIDES = [
-  // e.g. { slug:'web-storage-api', day:1, cat:'apis', cluster:null,
-  //        title:{en:'…',fr:'…',es:'…'}, desc:{en:'…',fr:'…',es:'…'} },
+  {
+    slug: 'fetch-api-javascript', day: 1, cat: 'apis', cluster: null, locales: ['en'],
+    title: {
+      en: 'The Fetch API in JavaScript', fr: 'L’API Fetch en JavaScript', es: 'La API Fetch en JavaScript',
+    },
+    desc: {
+      en: 'Make HTTP requests in the browser: GET, JSON, POST, error handling and aborting.',
+      fr: 'Faire des requêtes HTTP dans le navigateur : GET, JSON, POST, erreurs et annulation.',
+      es: 'Haz peticiones HTTP en el navegador: GET, JSON, POST, errores y cancelación.',
+    },
+  },
 ];
 
 export const guidesByDay = () => {

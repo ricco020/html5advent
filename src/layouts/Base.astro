@@ -58,7 +58,7 @@ const year = 2026;
         <span class="brand__name">HTML5<span class="brand__accent">Advent</span></span>
       </a>
       <nav class="nav">
-        <a href={localePath(lang, 'advent')}>{t(lang, 'advent')}</a>
+        <a href={`${localePath(lang)}#advent`}>{t(lang, 'advent')}</a>
         <a href={localePath(lang, 'guides')}>{t(lang, 'guides')}</a>
       </nav>
       <div class="langs" aria-label="Language">
@@ -72,7 +72,7 @@ const year = 2026;
 
     <footer class="site-foot">
       <p class="disclosure">{t(lang, 'disclosure')}</p>
-      <p class="meta">© {year} HTML5 Advent · <a href={localePath(lang, 'advent')}>{t(lang, 'advent')}</a></p>
+      <p class="meta">© {year} HTML5 Advent · <a href={`${localePath(lang)}#advent`}>{t(lang, 'advent')}</a></p>
     </footer>
 
     <style is:global>

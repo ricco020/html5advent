@@ -2,10 +2,12 @@
 import { t, localePath } from '../i18n/ui.js';
 import { GUIDES, guidesByDay } from '../data/guides.js';
 const { lang = 'en' } = Astro.props;
-const byDay = guidesByDay();
+const avail = GUIDES.filter((g) => (g.locales || ['en']).includes(lang));
+const byDay = {};
+for (const g of avail) byDay[g.day] = g;
 const doors = Array.from({ length: 24 }, (_, i) => i + 1);
 const soon = { en: 'Soon', fr: 'Bientôt', es: 'Pronto' }[lang];
-const featured = GUIDES.slice(0, 6);
+const featured = avail.slice(0, 6);
 ---
 <section class="hero">
   <p class="kicker">// {t(lang, 'advent')}</p>
@@ -14,7 +16,7 @@ const featured = GUIDES.slice(0, 6);
   <p class="hero__intro">{t(lang, 'intro')}</p>
 </section>
 
-<section class="advent" aria-label={t(lang, 'advent')}>
+<section class="advent" id="advent" aria-label={t(lang, 'advent')}>
   <ol class="grid">
     {doors.map((d) => {
       const g = byDay[d];

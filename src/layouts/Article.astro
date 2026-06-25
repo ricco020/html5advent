@@ -1,0 +1,75 @@
+---
+import Base from './Base.astro';
+import Cta from '../components/Cta.astro';
+import { t, localePath } from '../i18n/ui.js';
+
+const {
+  title, description, lang = 'en', slug,
+  cat, day, hero, heroAlt, updated = '2026-06-25',
+  cluster = null,            // 'hosting' | 'deploy' → renders CTA; null = no CTA (reference)
+} = Astro.props;
+
+const path = `guides/${slug}`;
+const url = 'https://html5advent.com' + localePath(lang, path);
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: title,
+  description,
+  inLanguage: lang,
+  datePublished: updated,
+  dateModified: updated,
+  author: { '@type': 'Organization', name: 'HTML5 Advent' },
+  publisher: { '@type': 'Organization', name: 'HTML5 Advent', url: 'https://html5advent.com' },
+  mainEntityOfPage: url,
+  image: hero ? `https://html5advent.com${hero}` : undefined,
+};
+---
+<Base title={`${title} — HTML5 Advent`} description={description} lang={lang} path={path} schema={schema} ogType="article">
+  <article class="article">
+    <nav class="crumb" aria-label="Breadcrumb">
+      <a href={localePath(lang)}>{t(lang, 'home')}</a> ›
+      <a href={localePath(lang, 'guides')}>{t(lang, 'guides')}</a> ›
+      <span>{title}</span>
+    </nav>
+
+    <header class="art-head">
+      <p class="kicker">// {cat}{day ? ` · ${t(lang, 'advent')} #${day}` : ''}</p>
+      <h1>{title}</h1>
+      <p class="lede">{description}</p>
+    </header>
+
+    {hero && <img class="hero-img" src={hero} alt={heroAlt} width="1280" height="720" loading="eager" />}
+
+    <div class="prose"><slot /></div>
+
+    {cluster && <Cta cluster={cluster} locale={lang} />}
+  </article>
+
+  <style>
+    .article { max-width: 760px; margin: 0 auto; }
+    .crumb { font-family: var(--mono); font-size: .78rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .crumb a { color: var(--accent-blue); text-decoration: none; }
+    .kicker { font-family: var(--mono); color: var(--accent-blue); font-size: .82rem; margin: 0 0 .5rem; }
+    .art-head h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0; }
+    .lede { color: var(--muted); font-size: 1.1rem; margin: 1rem 0 0; }
+    .hero-img { width: 100%; height: auto; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--line); }
+    .prose { font-size: 1.02rem; }
+    .prose :global(h2) { font-size: 1.6rem; margin: 2.5rem 0 .75rem; }
+    .prose :global(h3) { font-size: 1.2rem; margin: 1.75rem 0 .5rem; }
+    .prose :global(p) { margin: 1rem 0; }
+    .prose :global(a) { color: var(--accent-blue); }
+    .prose :global(ul), .prose :global(ol) { padding-left: 1.25rem; }
+    .prose :global(li) { margin: .4rem 0; }
+    .prose :global(pre) { background: #0a0c12; border: 1px solid var(--line); border-radius: 10px;
+      padding: 1rem 1.25rem; overflow-x: auto; font-family: var(--mono); font-size: .88rem; line-height: 1.6; }
+    .prose :global(code) { font-family: var(--mono); font-size: .9em; }
+    .prose :global(:not(pre) > code) { background: var(--surface); padding: .1rem .35rem; border-radius: 5px; color: var(--accent-amber); }
+    .prose :global(figure) { margin: 2rem 0; }
+    .prose :global(figure img) { width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); }
+    .prose :global(figcaption) { color: var(--muted); font-size: .85rem; margin-top: .5rem; text-align: center; }
+    .prose :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: .92rem; }
+    .prose :global(th), .prose :global(td) { border: 1px solid var(--line); padding: .55rem .75rem; text-align: left; }
+    .prose :global(th) { background: var(--surface); font-family: var(--display); }
+  </style>
+</Base>

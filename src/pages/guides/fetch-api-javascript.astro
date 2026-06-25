@@ -1,0 +1,76 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="fetch-api-javascript"
+  title="The Fetch API in JavaScript: a practical guide"
+  description="How to make HTTP requests in the browser with the Fetch API — GET, JSON, POST, error handling, and aborting requests — with runnable examples."
+  cat="apis"
+  day={1}
+  hero="/img/web-dev-code.jpg"
+  heroAlt="A code editor on screen showing HTML, CSS and JavaScript source"
+  cluster={null}
+>
+  <p>The <strong>Fetch API</strong> is the modern, promise-based way to make HTTP requests from the browser. It replaces the older <code>XMLHttpRequest</code> with a cleaner interface that works naturally with <code>async</code>/<code>await</code> and streams. Every current browser supports it.</p>
+
+  <h2>A first GET request</h2>
+  <p><code>fetch()</code> returns a promise that resolves to a <code>Response</code> object. To read JSON from it, call <code>response.json()</code>, which itself returns a promise:</p>
+  <pre><code>{`const res = await fetch('https://api.example.com/articles');
+const data = await res.json();
+console.log(data);`}</code></pre>
+  <p>The same thing without <code>async</code>/<code>await</code>, using <code>.then()</code> chains:</p>
+  <pre><code>{`fetch('https://api.example.com/articles')
+  .then((res) => res.json())
+  .then((data) => console.log(data));`}</code></pre>
+
+  <h2>The gotcha: fetch does not reject on HTTP errors</h2>
+  <p>This trips up almost everyone. A <code>404</code> or <code>500</code> response is still a <em>successful</em> fetch — the promise only rejects on a <strong>network</strong> failure (offline, DNS, CORS). You must check <code>response.ok</code> yourself:</p>
+  <pre><code>{`const res = await fetch(url);
+if (!res.ok) {
+  throw new Error(\`HTTP \${res.status} \${res.statusText}\`);
+}
+const data = await res.json();`}</code></pre>
+
+  <figure>
+    <img src="/img/network-data.jpg" alt="A network switch with cables, representing data travelling between client and server" width="1280" height="720" loading="lazy" />
+    <figcaption>Every <code>fetch()</code> call sends an HTTP request across the network to a server and waits for the response to travel back.</figcaption>
+  </figure>
+
+  <h2>Sending data with POST</h2>
+  <p>Pass a second options argument to set the method, headers and body. For JSON, stringify the payload and set the <code>Content-Type</code>:</p>
+  <pre><code>{`const res = await fetch('/api/articles', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ title: 'Hello', body: 'World' }),
+});
+const created = await res.json();`}</code></pre>
+
+  <h2>Aborting a request</h2>
+  <p>Use an <code>AbortController</code> to cancel a request — useful for timeouts or when a component unmounts:</p>
+  <pre><code>{`const controller = new AbortController();
+const timeout = setTimeout(() => controller.abort(), 5000);
+
+try {
+  const res = await fetch(url, { signal: controller.signal });
+  const data = await res.json();
+} catch (err) {
+  if (err.name === 'AbortError') console.log('Request timed out');
+} finally {
+  clearTimeout(timeout);
+}`}</code></pre>
+
+  <h2>Quick reference</h2>
+  <table>
+    <thead><tr><th>Task</th><th>How</th></tr></thead>
+    <tbody>
+      <tr><td>Read JSON</td><td><code>await res.json()</code></td></tr>
+      <tr><td>Read text</td><td><code>await res.text()</code></td></tr>
+      <tr><td>Check success</td><td><code>res.ok</code> / <code>res.status</code></td></tr>
+      <tr><td>Send JSON</td><td><code>body: JSON.stringify(...)</code> + <code>Content-Type</code></td></tr>
+      <tr><td>Cancel</td><td><code>AbortController</code> + <code>signal</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>That covers the everyday cases. The Fetch API also supports streaming response bodies, <code>FormData</code> uploads, and request/response cloning — but the patterns above handle the vast majority of real-world calls.</p>
+</Article>
