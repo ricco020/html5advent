@@ -3,6 +3,7 @@ import Base from './Base.astro';
 import Cta from '../components/Cta.astro';
 import { t, localePath } from '../i18n/ui.js';
 import { productNode, itemListNode } from '../data/products.js';
+import { GUIDES } from '../data/guides.js';
 
 const {
   title, description, lang = 'en', slug,
@@ -46,6 +47,12 @@ if (commerce && commerce.type === 'product' && commerce.key) {
 const schema = commerceNode
   ? { '@context': 'https://schema.org', '@graph': [article, commerceNode] }
   : { '@context': 'https://schema.org', ...article };
+
+// Related guides — internal links so every guide is cross-linked (crawl paths, not a dead end).
+// Same category first, then fill with others; only guides that exist in this locale (no 404s).
+const REL_LABEL = { en: 'Related guides', fr: 'Guides liés', es: 'Guías relacionadas', de: 'Verwandte Guides', it: 'Guide correlate', pt: 'Guias relacionados' };
+const inLang = GUIDES.filter((g) => g.slug !== slug && (g.locales || ['en']).includes(lang));
+const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) => g.cat !== cat)].slice(0, 4);
 ---
 <Base title={`${title} — HTML5 Advent`} description={description} lang={lang} path={path} schema={schema} ogType="article">
   <article class="article">
@@ -68,6 +75,17 @@ const schema = commerceNode
     <div class="prose"><slot /></div>
 
     {cluster && <Cta cluster={cluster} locale={lang} />}
+
+    {related.length > 0 && (
+      <aside class="related" aria-label={REL_LABEL[lang] || REL_LABEL.en}>
+        <h2>{REL_LABEL[lang] || REL_LABEL.en}</h2>
+        <ul>
+          {related.map((g) => (
+            <li><a href={localePath(lang, `guides/${g.slug}`)}>{(g.title && (g.title[lang] || g.title.en)) || g.slug}</a></li>
+          ))}
+        </ul>
+      </aside>
+    )}
   </article>
 
   <style>
@@ -95,5 +113,10 @@ const schema = commerceNode
     .prose :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: .92rem; }
     .prose :global(th), .prose :global(td) { border: 1px solid var(--line); padding: .55rem .75rem; text-align: left; }
     .prose :global(th) { background: var(--surface); font-family: var(--display); }
+    .related { max-width: 760px; margin: 3rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+    .related h2 { font-size: 1.2rem; font-family: var(--mono); color: var(--accent-blue); margin: 0 0 .75rem; }
+    .related ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+    .related a { color: var(--accent-blue); text-decoration: none; }
+    .related a:hover { text-decoration: underline; }
   </style>
 </Base>
