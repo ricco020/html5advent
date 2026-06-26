@@ -1,0 +1,67 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="css-grid-vs-flexbox"
+  title="CSS Grid vs Flexbox: cuál usar (y cuándo usar ambos)"
+  description="Flexbox distribuye en una dimensión, Grid en dos. La diferencia honesta entre CSS Grid y Flexbox, una comparación lado a lado y por qué la mayoría de los diseños reales usan ambos juntos."
+  cat="css"
+  hero="/img/css-grid-vs-flexbox-hero.jpg"
+  heroAlt="La pantalla de un portátil mostrando código CSS en un editor de código"
+  cluster={null}
+>
+  <p><strong>Grid vs Flexbox</strong> es la pregunta más frecuente sobre maquetación en CSS, y la respuesta honesta es que no son rivales. Resuelven problemas distintos: <strong>Flexbox distribuye contenido en una dimensión</strong> (una fila <em>o</em> una columna), mientras que <strong>CSS Grid distribuye contenido en dos dimensiones</strong> (filas <em>y</em> columnas a la vez). Cuando eso encaja, elegir entre los dos deja de ser una adivinanza.</p>
+
+  <h2>La respuesta en una línea</h2>
+  <p>Si estás colocando elementos a lo largo de una sola línea — una barra de navegación, una fila de botones, etiquetas que se ajustan al envolver — recurre a <strong>Flexbox</strong>. Si estás organizando elementos en una verdadera estructura bidimensional — el diseño de una página, una galería de fotos, un panel de tarjetas alineadas en filas y columnas — recurre a <strong>Grid</strong>. La mayoría de las páginas no triviales usan ambos, y ese es el diseño previsto, no una concesión.</p>
+
+  <h2>En qué se diferencian realmente</h2>
+  <table>
+    <thead>
+      <tr><th>Aspecto</th><th>Flexbox</th><th>CSS Grid</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Dimensiones</td><td>Una (fila o columna)</td><td>Dos (filas y columnas)</td></tr>
+      <tr><td>Impulsado por</td><td>El contenido (los tamaños surgen de los elementos)</td><td>El diseño (defines las pistas primero)</td></tr>
+      <tr><td>Ideal para</td><td>Componentes: barras de navegación, barras de herramientas, listas, repartir espacio en una línea</td><td>Diseños de página y de sección, galerías, cuadrículas de tarjetas, superposición</td></tr>
+      <tr><td>Espaciado</td><td><code>gap</code> compatible</td><td><code>gap</code> compatible (nació aquí)</td></tr>
+      <tr><td>Alineación</td><td>Excelente a lo largo del eje principal/cruzado</td><td>Excelente en ambos ejes, además de colocación por línea/área</td></tr>
+      <tr><td>Superposición</td><td>En realidad no</td><td>Sí — los elementos pueden compartir celdas</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <img src="/img/css-grid-vs-flexbox-inbody.jpg" alt="Primer plano de código CSS mostrado en un monitor de ordenador" width="1280" height="853" loading="lazy" />
+    <figcaption>Tanto Grid como Flexbox se escriben en CSS puro, sin necesidad de framework ni preprocesador. La elección depende de la forma del diseño, no de las herramientas.</figcaption>
+  </figure>
+
+  <h2>Cuándo usar Flexbox</h2>
+  <p>Flexbox brilla cuando tienes un conjunto de elementos y quieres repartir el espacio <em>entre</em> ellos a lo largo de un eje. Una barra de navegación con el logo a la izquierda y los enlaces a la derecha, el pie de una tarjeta que empuja un botón hacia abajo, una fila de etiquetas que se ajusta cuando se queda sin sitio: todos son problemas unidimensionales. El patrón clásico es una sola declaración:</p>
+  <pre><code>.nav &#123;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+&#125;</code></pre>
+  <p>Como Flexbox se rige por el contenido, los elementos se dimensionan solos y tú los ajustas con <code>flex-grow</code>, <code>flex-shrink</code> y <code>flex-basis</code>. Eso lo hace ideal para componentes cuyo contenido no controlas del todo.</p>
+
+  <h2>Cuándo usar Grid</h2>
+  <p>Grid brilla cuando defines la estructura primero y colocas los elementos dentro de ella. Una página con encabezado, barra lateral, área principal y pie; una galería que debe mantener filas <em>y</em> columnas limpias; un conjunto responsive de tarjetas que se reorganiza con <code>auto-fill</code>: son problemas bidimensionales. Declaras las pistas y los elementos aterrizan en ellas:</p>
+  <pre><code>.gallery &#123;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+&#125;</code></pre>
+  <p>Esa única regla produce una cuadrícula de tarjetas responsive que añade y quita columnas por sí sola, sin media queries; algo que Flexbox no puede hacer con limpieza porque solo conoce un eje a la vez.</p>
+
+  <h2>La respuesta real: úsalos juntos</h2>
+  <p>En una página real casi siempre usas ambos, anidados. Grid se ocupa del cuadro general — el esqueleto global de la página o sección — y Flexbox del detalle dentro de cada región: alinear los elementos de una tarjeta, un encabezado o una barra de herramientas. Recurrir a Grid no significa abandonar Flexbox; son capas del mismo sistema.</p>
+  <p>Un modelo mental sencillo: <strong>Grid es para el diseño, Flexbox para los componentes.</strong> Si estás posicionando regiones de una página, eso es Grid. Si estás alineando el contenido de una región, eso es Flexbox. Cuando dudes, pregúntate si el problema es genuinamente bidimensional: si las columnas y las filas tienen que alinearse entre sí, es Grid; si solo es una línea de cosas, es Flexbox.</p>
+
+  <h2>Compatibilidad con navegadores</h2>
+  <p>Ambos cuentan con soporte completo en todos los navegadores modernos desde hace años, así que la compatibilidad no es un factor decisivo en 2026. Elige según la forma del problema, no según la compatibilidad. Para un estilado de componentes más profundo puedes combinar cualquiera de los dos con el <a href="/es/guides/css-nesting">anidamiento nativo de CSS</a> y las <a href="/es/guides/css-container-queries">container queries</a>, que permiten que un componente responda al espacio que realmente recibe.</p>
+
+  <h2>En resumen</h2>
+  <p>Grid vs Flexbox es un planteamiento equivocado. <strong>Flexbox es unidimensional y se rige por el contenido; Grid es bidimensional y se rige por el diseño.</strong> Elige Flexbox para líneas de elementos y componentes, elige Grid para verdaderos diseños 2D, y cuenta con anidarlos en cualquier página con estructura real. Saber qué pregunta responde cada uno es toda la destreza.</p>
+</Article>
