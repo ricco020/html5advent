@@ -1,0 +1,86 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="how-much-does-a-vps-cost"
+  title="Was kostet ein VPS? Eine ehrliche Preisaufschlüsselung"
+  description="Was ein VPS pro Monat wirklich kostet, was den Preis treibt (RAM, vCPU, Speicher, managed vs. unmanaged), die versteckten Zusatzkosten und echte datierte Beispielpreise — für eine ehrliche Budgetplanung."
+  cat="hosting"
+  hero="/img/how-much-does-a-vps-cost-hero.jpg"
+  heroAlt="Ein Taschenrechner auf Euro-Münzen und einem Geldschein, um ein Monatsbudget zu kalkulieren"
+  cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo', offers: true }}
+>
+  <p>Die ehrliche Antwort: <strong>ein VPS kostet für ein typisches Webprojekt meist zwischen etwa 4 und 40 € im Monat</strong>, und wo du in dieser Spanne landest, hängt davon ab, wie viel RAM, CPU und Speicher du brauchst — und ob du den Server selbst verwaltest oder jemanden dafür bezahlst. Diese Anleitung schlüsselt den Preis Posten für Posten auf, zeigt die Kosten, die nicht im angezeigten Betrag stehen, und nennt echte datierte Beispielpreise, damit du ein realistisches Budget aufstellst statt zu raten.</p>
+
+  <h2>Die kurze Antwort, nach Projektgröße</h2>
+  <p>VPS-Tarife werden fast vollständig nach den garantierten Ressourcen bepreist. Als grobe Orientierung pro Monat, für einen <em>unmanaged</em> Linux-VPS:</p>
+  <table>
+    <thead><tr><th>Projekt</th><th>Typische Ausstattung</th><th>Grobe Monatskosten</th></tr></thead>
+    <tbody>
+      <tr><td>Kleine Website / Hobby-App</td><td>~1–2 vCPU, 2–4 GB RAM, NVMe</td><td>~4–8 €</td></tr>
+      <tr><td>Dynamische App + Datenbank</td><td>~3–6 vCPU, 8–16 GB RAM</td><td>~8–20 €</td></tr>
+      <tr><td>App + DB + Cache, gleichmäßige Last</td><td>~6–8 vCPU, 16–32 GB RAM</td><td>~20–40 €</td></tr>
+      <tr><td>Hoher Traffic / dedizierte vCPU</td><td>Dedizierte Kerne, 32 GB+ RAM</td><td>40 € und mehr</td></tr>
+    </tbody>
+  </table>
+  <p>Das sind Richtwerte bei gängigen Anbietern, kein Angebot — die genaue Zahl hängt vom Anbieter, der Region und davon ab, ob die vCPU geteilt oder dediziert sind. Ein <strong>managed</strong> VPS kostet deutlich mehr (siehe unten).</p>
+
+  <h2>Was den Preis wirklich treibt</h2>
+  <p>Fünf Dinge bewegen die Zahl eines VPS-Tarifs. Sie zu verstehen heißt, jede Preisliste ehrlich lesen zu können.</p>
+
+  <h3>RAM</h3>
+  <p>Speicher ist die Ressource, die dir am ehesten ausgeht, und meist der größte einzelne Preistreiber. Den RAM eines Tarifs zu verdoppeln, verdoppelt oft etwa die Kosten. Dimensioniere ihn für deine reale Last mit Reserve — eine Datenbank, ein Anwendungsserver und ein Cache zusammen brauchen weit mehr als eine statische Website.</p>
+
+  <h3>CPU: geteilte vs. dedizierte vCPU</h3>
+  <p>Die gleiche Anzahl vCPU kann je nach Typ sehr unterschiedlich kosten. <strong>Geteilte (burstable)</strong> vCPU sind günstig und für spitze, leichte Lasten gut geeignet. <strong>Dedizierte</strong> vCPU garantieren gleichbleibende Leistung bei konstanter Last und kosten mehr — bei gleicher Kernzahl manchmal ein Mehrfaches. Ein scheinbar teurer Tarif verkauft vielleicht einfach dedizierte Kerne.</p>
+
+  <h3>Speichertyp und -menge</h3>
+  <p>NVMe ist schneller als SSD, die wiederum schneller ist als ältere mechanische Festplatten — und der Preis folgt sowohl Geschwindigkeit als auch Kapazität. Manche Anbieter liefern schon im Einstieg großzügigen Speicher; andere berechnen jeden zusätzlichen Block. Logs, Uploads und Datenbankwachstum summieren sich, also plane nicht nur für die heutige Größe.</p>
+
+  <figure>
+    <img src="/img/how-much-does-a-vps-cost-inbody.jpg" alt="Reihen von Servern in einem Rechenzentrums-Rack mit Netzwerkverkabelung" width="1280" height="853" loading="lazy" />
+    <figcaption>Der Preis eines VPS spiegelt einen echten Anteil an Rechenzentrums-Hardware wider — garantierter RAM, CPU-Kerne und Speicher auf physischen Servern wie diesen.</figcaption>
+  </figure>
+
+  <h3>Managed vs. unmanaged</h3>
+  <p>Das ist der größte Hebel bei den Gesamtkosten. Ein <strong>unmanaged</strong> VPS gibt dir ein nacktes Betriebssystem zu den oben genannten niedrigen Preisen — du patchst, sicherst und wartest selbst. Ein <strong>managed</strong> VPS ergänzt Updates, Monitoring, Sicherheitshärtung und Support und kostet bei gleicher Hardware meist <strong>ein Mehrfaches</strong>. Wer sich auf der Kommandozeile wohlfühlt, spart mit unmanaged viel; wer keine Systemadministration machen will, kauft sich mit managed Zeit zurück.</p>
+
+  <h3>Bandbreite und Region</h3>
+  <p>Die meisten VPS-Tarife enthalten ein monatliches Transfervolumen; medienlastige Sites können es überschreiten und zahlen drauf. Auch die Rechenzentrumsregion kann den Preis verschieben, und manche Anbieter berechnen eine dedizierte IPv4-Adresse separat, da IPv4 inzwischen knapp ist.</p>
+
+  <h2>Die versteckten Zusatzkosten</h2>
+  <p>Der angezeigte Preis deckt selten alles ab. Prüfe jeden dieser Punkte, bevor du dich festlegst:</p>
+  <ul>
+    <li><strong>Backups / Snapshots</strong> — oft ein kostenpflichtiger Zusatz statt inklusive; automatische Backups sind den Posten wert.</li>
+    <li><strong>Control-Panel</strong> — cPanel-/Plesk-Lizenzen können mehrere Euro im Monat kosten, wenn du eine grafische Oberfläche willst.</li>
+    <li><strong>Dedizierte IPv4</strong> — wird mitunter separat berechnet.</li>
+    <li><strong>Verlängerungspreis</strong> — prüfe den Preis nach einer etwaigen Aktionslaufzeit; der angezeigte Betrag ist oft ein Einstiegspreis.</li>
+    <li><strong>Bandbreiten-Überschreitung</strong> — lies die Regelung, wenn du viele Medien ausspielst.</li>
+  </ul>
+
+  <h2>Echte Beispielpreise (datiert)</h2>
+  <p>Damit die Spannen greifbar werden, hier echte veröffentlichte Listenpreise von <strong>Contabo</strong>, einem deutschen Anbieter, der für großzügige Ressourcen zu niedrigen Kosten bekannt ist. Es handelt sich um Cloud-VPS-Tarife mit 12-Monats-Laufzeit, ohne MwSt., beobachtet im <strong>Juni 2026</strong> — prüfe immer die aktuelle Anbieterseite, da sich Preise ändern:</p>
+  <table>
+    <thead><tr><th>Tarif</th><th>Ressourcen</th><th>Preis / Monat</th></tr></thead>
+    <tbody>
+      <tr><td>Cloud VPS 10</td><td>4 vCPU, 8 GB RAM, 75 GB NVMe, unbegrenzter Traffic (Fair Use)</td><td>5,50 €</td></tr>
+      <tr><td>Cloud VPS 20</td><td>Mehr vCPU/RAM als VPS 10</td><td>7,50 €</td></tr>
+      <tr><td>Cloud VPS 30</td><td>Höhere Stufe</td><td>14,00 €</td></tr>
+      <tr><td>Cloud VPS 40</td><td>Höchste Cloud-VPS-Stufe</td><td>25,00 €</td></tr>
+    </tbody>
+  </table>
+  <p>Das sind unmanaged Tarife — der niedrige Preis spiegelt wider, dass du den Server selbst betreibst. Sie zeigen das untere Ende des Marktes; US-orientierte oder vollständig managed Anbieter liegen bei vergleichbarer Ausstattung höher.</p>
+
+  <h2>So budgetierst du, ohne zu viel zu zahlen</h2>
+  <p>Rechne von unten nach oben anhand deiner tatsächlichen Last, statt einen Tarif aus einer „Beste"-Liste zu wählen:</p>
+  <ol>
+    <li><strong>Schätze zuerst den RAM</strong> — er ist der übliche Engpass und der Haupt-Preistreiber. Plane Reserve ein, dimensioniere nicht aufs Minimum.</li>
+    <li><strong>Entscheide geteilte vs. dedizierte vCPU</strong> — spitze, leichte Last reicht mit geteilt; gleichmäßige Produktionslast braucht dediziert.</li>
+    <li><strong>Wähle NVMe/SSD und genug Speicher</strong> für Wachstum, nicht nur für heute.</li>
+    <li><strong>Entscheide managed oder unmanaged</strong> — das ist der größte Kostenhebel. Sei ehrlich, ob du die Systemadministration übernimmst.</li>
+    <li><strong>Addiere die Extras</strong> — Backups, Control-Panel, IPv4 — und vergleiche den <em>Verlängerungspreis</em>, nicht den Einstiegspreis.</li>
+  </ol>
+  <p>Für die meisten kleinen bis mittleren Webprojekte, betreut von jemandem, der mit einem Terminal umgehen kann, deckt ein unmanaged VPS im Bereich <strong>5–15 €/Monat</strong> viel ab, mit Luft zum Wachsen. Beginne mit dem kleinsten Tarif, der deine Last mit etwas Reserve abdeckt — du kannst fast immer später hochskalieren.</p>
+</Article>

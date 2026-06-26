@@ -1,0 +1,86 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="how-much-does-a-vps-cost"
+  title="Quanto custa um VPS? Um detalhe honesto dos preços"
+  description="Quanto custa realmente um VPS por mês, o que faz variar o preço (RAM, vCPU, armazenamento, gerido ou não gerido), os custos ocultos e preços de exemplo reais e datados — para orçamentar com honestidade."
+  cat="hosting"
+  hero="/img/how-much-does-a-vps-cost-hero.jpg"
+  heroAlt="Uma calculadora pousada sobre moedas de euro e uma nota, para estimar um orçamento mensal"
+  cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo', offers: true }}
+>
+  <p>A resposta honesta: <strong>um VPS costuma custar entre cerca de 4 e 40 € por mês</strong> para um projeto web típico, e onde você fica nessa faixa depende de quanta RAM, CPU e armazenamento precisa — e de gerir o servidor você mesmo ou pagar a alguém para o fazer. Este guia decompõe o preço peça a peça, mostra os custos que não aparecem no valor anunciado e dá preços de exemplo reais e datados, para montar um orçamento realista em vez de adivinhar.</p>
+
+  <h2>A resposta curta, por tamanho do projeto</h2>
+  <p>Os planos VPS são tarifados quase totalmente conforme os recursos garantidos. Como guia orientativo por mês, para um VPS Linux <em>não gerido</em>:</p>
+  <table>
+    <thead><tr><th>Projeto</th><th>Especificação típica</th><th>Custo mensal aproximado</th></tr></thead>
+    <tbody>
+      <tr><td>Site pequeno / app de hobby</td><td>~1–2 vCPU, 2–4 GB RAM, NVMe</td><td>~4–8 €</td></tr>
+      <tr><td>App dinâmica + base de dados</td><td>~3–6 vCPU, 8–16 GB RAM</td><td>~8–20 €</td></tr>
+      <tr><td>App + BD + cache, carga estável</td><td>~6–8 vCPU, 16–32 GB RAM</td><td>~20–40 €</td></tr>
+      <tr><td>Muito tráfego / vCPU dedicadas</td><td>Núcleos dedicados, 32 GB+ de RAM</td><td>40 € e mais</td></tr>
+    </tbody>
+  </table>
+  <p>São faixas orientativas entre fornecedores generalistas, não um orçamento — o valor exato depende do fornecedor, da região e de as vCPU serem partilhadas ou dedicadas. Um VPS <strong>gerido</strong> custa bastante mais (ver abaixo).</p>
+
+  <h2>O que faz variar realmente o preço</h2>
+  <p>Cinco fatores movem o valor de um plano VPS. Compreendê-los é o que permite ler com honestidade qualquer tabela de preços.</p>
+
+  <h3>A RAM</h3>
+  <p>A memória é o recurso que mais provavelmente vai esgotar e costuma ser o maior fator de preço. Duplicar a RAM de um plano costuma duplicar mais ou menos o custo. Dimensione-a para a sua carga real com margem — uma base de dados, um servidor de aplicações e uma cache juntos pedem muito mais do que um site estático.</p>
+
+  <h3>CPU: vCPU partilhadas vs dedicadas</h3>
+  <p>O mesmo número de vCPU pode custar de forma muito diferente conforme o tipo. As vCPU <strong>partilhadas (burstable)</strong> são baratas e adequadas a cargas leves e irregulares. As vCPU <strong>dedicadas</strong> garantem desempenho constante para cargas estáveis e custam mais — por vezes várias vezes mais para o mesmo número de núcleos. Um plano que parece caro talvez venda apenas núcleos dedicados.</p>
+
+  <h3>Tipo e quantidade de armazenamento</h3>
+  <p>O NVMe é mais rápido que o SSD, que por sua vez é mais rápido que os antigos discos mecânicos — e o preço acompanha tanto a velocidade como a capacidade. Alguns fornecedores incluem armazenamento generoso já na gama de entrada; outros cobram por cada bloco extra. Registos, ficheiros carregados e o crescimento da base de dados acumulam-se, por isso não orce apenas para o tamanho de hoje.</p>
+
+  <figure>
+    <img src="/img/how-much-does-a-vps-cost-inbody.jpg" alt="Filas de servidores montados num rack de centro de dados com a sua cablagem de rede" width="1280" height="853" loading="lazy" />
+    <figcaption>O preço de um VPS reflete uma fatia real de hardware de centro de dados — RAM, núcleos de CPU e armazenamento garantidos em servidores físicos como estes.</figcaption>
+  </figure>
+
+  <h3>Gerido vs não gerido</h3>
+  <p>É a maior diferença no custo total. Um VPS <strong>não gerido</strong> entrega-lhe um sistema operativo nu aos preços baixos citados acima — é você que faz patches, segurança e manutenção. Um VPS <strong>gerido</strong> acrescenta atualizações, monitorização, reforço de segurança e suporte, e costuma custar <strong>várias vezes mais</strong> pelo mesmo hardware. Se está à vontade na linha de comandos, o não gerido poupa muito; se prefere não fazer de sysadmin, o gerido devolve-lhe tempo.</p>
+
+  <h3>Largura de banda e região</h3>
+  <p>A maioria dos planos VPS inclui um volume de transferência mensal; sites com muitos média podem ultrapassá-lo e pagar o excedente. A região do centro de dados também pode mover o preço, e alguns fornecedores cobram à parte um endereço IPv4 dedicado, agora que o IPv4 é escasso.</p>
+
+  <h2>Os custos ocultos a prever</h2>
+  <p>O preço anunciado raramente cobre tudo. Verifique cada um destes pontos antes de se comprometer:</p>
+  <ul>
+    <li><strong>Backups / snapshots</strong> — muitas vezes um extra pago em vez de incluído; os backups automáticos valem a rubrica de orçamento.</li>
+    <li><strong>Painel de controlo</strong> — as licenças cPanel/Plesk podem somar vários euros por mês se quiser uma interface gráfica.</li>
+    <li><strong>IPv4 dedicado</strong> — por vezes faturado em separado.</li>
+    <li><strong>Preço de renovação</strong> — confirme a tarifa após qualquer primeiro período promocional; o preço anunciado é muitas vezes uma tarifa de entrada.</li>
+    <li><strong>Excedente de largura de banda</strong> — leia a política se servir muitos média.</li>
+  </ul>
+
+  <h2>Preços de exemplo reais (datados)</h2>
+  <p>Para tornar estas faixas concretas, aqui estão preços de tabela públicos reais da <strong>Contabo</strong>, um fornecedor alemão conhecido por recursos generosos a baixo custo. São planos Cloud VPS com compromisso de 12 meses, sem IVA, observados em <strong>junho de 2026</strong> — verifique sempre a página atual do fornecedor, pois os preços mudam:</p>
+  <table>
+    <thead><tr><th>Plano</th><th>Recursos</th><th>Preço / mês</th></tr></thead>
+    <tbody>
+      <tr><td>Cloud VPS 10</td><td>4 vCPU, 8 GB RAM, 75 GB NVMe, tráfego ilimitado (uso justo)</td><td>5,50 €</td></tr>
+      <tr><td>Cloud VPS 20</td><td>Mais vCPU/RAM do que o VPS 10</td><td>7,50 €</td></tr>
+      <tr><td>Cloud VPS 30</td><td>Nível superior</td><td>14,00 €</td></tr>
+      <tr><td>Cloud VPS 40</td><td>Nível Cloud VPS mais alto</td><td>25,00 €</td></tr>
+    </tbody>
+  </table>
+  <p>São planos não geridos — o preço baixo reflete que gere o servidor você mesmo. Ilustram a parte baixa do mercado; os fornecedores orientados aos EUA ou totalmente geridos situam-se mais acima para especificações comparáveis.</p>
+
+  <h2>Como orçamentar sem pagar a mais</h2>
+  <p>Raciocine de baixo para cima a partir da sua carga real, em vez de escolher um plano de uma lista dos «melhores»:</p>
+  <ol>
+    <li><strong>Estime primeiro a RAM</strong> — é o estrangulamento habitual e o principal fator de preço. Acrescente margem, não dimensione ao mínimo.</li>
+    <li><strong>Decida vCPU partilhadas ou dedicadas</strong> — uma carga leve e irregular fica bem com partilhadas; uma carga de produção estável pede dedicadas.</li>
+    <li><strong>Escolha NVMe/SSD e armazenamento suficiente</strong> para o crescimento, não só para hoje.</li>
+    <li><strong>Decida gerido ou não gerido</strong> — é a maior alavanca de custo. Seja honesto sobre se vai fazer de sysadmin.</li>
+    <li><strong>Some os extras</strong> — backups, painel de controlo, IPv4 — e compare o preço de <em>renovação</em>, não a tarifa de entrada.</li>
+  </ol>
+  <p>Para a maioria dos projetos web pequenos a médios geridos por alguém à vontade com um terminal, um VPS não gerido na faixa de <strong>5–15 €/mês</strong> cobre muito, com espaço para crescer. Comece pelo plano mais pequeno que cubra a sua carga com alguma margem — quase sempre poderá escalar mais tarde.</p>
+</Article>

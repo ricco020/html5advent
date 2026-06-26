@@ -1,0 +1,86 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="how-much-does-a-vps-cost"
+  title="Combien coûte un VPS ? Le vrai détail des prix"
+  description="Ce que coûte réellement un VPS par mois, ce qui fait varier le prix (RAM, vCPU, stockage, infogéré ou non), les frais cachés et de vrais prix d'exemple datés — pour budgéter honnêtement."
+  cat="hosting"
+  hero="/img/how-much-does-a-vps-cost-hero.jpg"
+  heroAlt="Une calculatrice posée sur des pièces en euros et un billet, pour estimer un budget mensuel"
+  cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo', offers: true }}
+>
+  <p>La réponse honnête : <strong>un VPS coûte en général entre 4 et 40 € par mois environ</strong> pour un projet web courant, et votre position dans cette fourchette dépend de la RAM, du CPU et du stockage dont vous avez besoin — et du fait que vous gériez le serveur vous-même ou que vous payiez quelqu'un pour le faire. Ce guide décompose le prix poste par poste, montre les frais qui n'apparaissent pas dans le tarif affiché et donne de vrais prix d'exemple datés, pour bâtir un budget réaliste plutôt que de deviner.</p>
+
+  <h2>La réponse courte, selon la taille du projet</h2>
+  <p>Les offres VPS sont tarifées presque entièrement selon les ressources garanties. À titre indicatif, par mois, pour un VPS Linux <em>non infogéré</em> :</p>
+  <table>
+    <thead><tr><th>Projet</th><th>Fiche technique typique</th><th>Coût mensuel approximatif</th></tr></thead>
+    <tbody>
+      <tr><td>Petit site / appli perso</td><td>~1–2 vCPU, 2–4 Go RAM, NVMe</td><td>~4–8 €</td></tr>
+      <tr><td>Appli dynamique + base de données</td><td>~3–6 vCPU, 8–16 Go RAM</td><td>~8–20 €</td></tr>
+      <tr><td>Appli + base + cache, charge régulière</td><td>~6–8 vCPU, 16–32 Go RAM</td><td>~20–40 €</td></tr>
+      <tr><td>Fort trafic / vCPU dédiés</td><td>Cœurs dédiés, 32 Go+ de RAM</td><td>40 € et plus</td></tr>
+    </tbody>
+  </table>
+  <p>Ce sont des fourchettes indicatives chez les hébergeurs grand public, pas un devis — le chiffre exact dépend de l'hébergeur, de la région et du fait que les vCPU soient partagés ou dédiés. Un VPS <strong>infogéré</strong> coûte nettement plus cher (voir plus bas).</p>
+
+  <h2>Ce qui fait vraiment varier le prix</h2>
+  <p>Cinq éléments déplacent le chiffre d'une offre VPS. Les comprendre, c'est savoir lire honnêtement n'importe quelle grille tarifaire.</p>
+
+  <h3>La RAM</h3>
+  <p>La mémoire est la ressource que vous risquez le plus d'épuiser, et c'est souvent le principal levier de prix. Doubler la RAM d'une offre revient souvent à peu près à doubler le coût. Dimensionnez-la pour votre charge réelle, avec de la marge — une base de données, un serveur applicatif et un cache réclament ensemble bien plus qu'un site statique.</p>
+
+  <h3>Le CPU : vCPU partagés ou dédiés</h3>
+  <p>Un même nombre de vCPU peut coûter très différemment selon le type. Les vCPU <strong>partagés (burstables)</strong> sont bon marché et parfaits pour des charges légères et irrégulières. Les vCPU <strong>dédiés</strong> garantissent une performance constante pour des charges régulières et coûtent plus cher — parfois plusieurs fois plus pour le même nombre de cœurs. Une offre qui paraît chère vend peut-être simplement des cœurs dédiés.</p>
+
+  <h3>Type et quantité de stockage</h3>
+  <p>Le NVMe est plus rapide que le SSD, lui-même plus rapide que les anciens disques mécaniques — et le prix suit à la fois la vitesse et la capacité. Certains hébergeurs incluent un stockage généreux dès l'entrée de gamme ; d'autres facturent chaque bloc supplémentaire. Journaux, fichiers envoyés et croissance de la base s'accumulent, alors ne budgétez pas pour la taille d'aujourd'hui seulement.</p>
+
+  <figure>
+    <img src="/img/how-much-does-a-vps-cost-inbody.jpg" alt="Des rangées de serveurs montés dans une baie de datacenter avec leur câblage réseau" width="1280" height="853" loading="lazy" />
+    <figcaption>Le prix d'un VPS correspond à une vraie part de matériel de datacenter — RAM, cœurs CPU et stockage garantis sur des serveurs physiques comme ceux-ci.</figcaption>
+  </figure>
+
+  <h3>Infogéré ou non infogéré</h3>
+  <p>C'est le plus grand écart de coût total. Un VPS <strong>non infogéré</strong> vous livre un OS nu aux prix bas cités plus haut — vous patchez, sécurisez et maintenez. Un VPS <strong>infogéré</strong> ajoute mises à jour, supervision, durcissement de la sécurité et support, et coûte généralement <strong>plusieurs fois plus cher</strong> pour le même matériel. Si vous êtes à l'aise en ligne de commande, le non infogéré fait économiser gros ; sinon, l'infogéré vous rachète du temps.</p>
+
+  <h3>Bande passante et région</h3>
+  <p>La plupart des offres VPS incluent un volume de transfert mensuel ; les sites riches en médias peuvent le dépasser et payer le surplus. La région du datacenter peut aussi faire bouger le prix, et certains hébergeurs facturent à part une adresse IPv4 dédiée, désormais que l'IPv4 se raréfie.</p>
+
+  <h2>Les frais cachés à prévoir</h2>
+  <p>Le prix affiché couvre rarement tout. Vérifiez chacun de ces points avant de vous engager :</p>
+  <ul>
+    <li><strong>Sauvegardes / snapshots</strong> — souvent une option payante plutôt qu'incluse ; les sauvegardes automatiques valent la ligne de budget.</li>
+    <li><strong>Panneau de contrôle</strong> — les licences cPanel/Plesk peuvent ajouter plusieurs euros par mois si vous voulez une interface graphique.</li>
+    <li><strong>IPv4 dédiée</strong> — parfois facturée séparément.</li>
+    <li><strong>Prix de renouvellement</strong> — vérifiez le tarif après toute première période promotionnelle ; le prix affiché est souvent un tarif d'appel.</li>
+    <li><strong>Dépassement de bande passante</strong> — lisez la politique si vous servez beaucoup de médias.</li>
+  </ul>
+
+  <h2>Vrais prix d'exemple (datés)</h2>
+  <p>Pour rendre ces fourchettes concrètes, voici de véritables prix publics affichés par <strong>Contabo</strong>, un hébergeur allemand connu pour ses ressources généreuses à bas coût. Ce sont des offres Cloud VPS sur un engagement de 12 mois, hors TVA, telles qu'observées en <strong>juin 2026</strong> — vérifiez toujours la page actuelle du fournisseur, car les prix évoluent :</p>
+  <table>
+    <thead><tr><th>Offre</th><th>Ressources</th><th>Prix / mois</th></tr></thead>
+    <tbody>
+      <tr><td>Cloud VPS 10</td><td>4 vCPU, 8 Go RAM, 75 Go NVMe, trafic illimité (usage raisonnable)</td><td>5,50 €</td></tr>
+      <tr><td>Cloud VPS 20</td><td>Plus de vCPU/RAM que le VPS 10</td><td>7,50 €</td></tr>
+      <tr><td>Cloud VPS 30</td><td>Palier supérieur</td><td>14,00 €</td></tr>
+      <tr><td>Cloud VPS 40</td><td>Palier Cloud VPS le plus élevé</td><td>25,00 €</td></tr>
+    </tbody>
+  </table>
+  <p>Ce sont des offres non infogérées — le prix bas reflète le fait que vous gérez le serveur vous-même. Elles illustrent le bas du marché ; les hébergeurs orientés États-Unis ou entièrement infogérés se situent plus haut pour des fiches techniques comparables.</p>
+
+  <h2>Comment budgéter sans payer trop</h2>
+  <p>Raisonnez du bas vers le haut à partir de votre charge réelle plutôt que de choisir une offre dans une liste des « meilleurs » :</p>
+  <ol>
+    <li><strong>Estimez d'abord la RAM</strong> — c'est le goulot habituel et le principal levier de prix. Ajoutez de la marge, ne dimensionnez pas au minimum.</li>
+    <li><strong>Choisissez vCPU partagés ou dédiés</strong> — une charge légère et irrégulière se contente du partagé ; une charge de production régulière réclame du dédié.</li>
+    <li><strong>Prenez du NVMe/SSD et assez de stockage</strong> pour la croissance, pas seulement pour aujourd'hui.</li>
+    <li><strong>Tranchez infogéré ou non</strong> — c'est le plus grand levier de coût. Soyez honnête sur votre capacité à faire le sysadmin.</li>
+    <li><strong>Ajoutez les options</strong> — sauvegardes, panneau de contrôle, IPv4 — et comparez le prix de <em>renouvellement</em>, pas le tarif d'appel.</li>
+  </ol>
+  <p>Pour la plupart des projets web petits à moyens gérés par quelqu'un à l'aise avec un terminal, un VPS non infogéré dans la tranche <strong>5–15 €/mois</strong> couvre beaucoup de terrain avec de la marge pour grandir. Commencez par la plus petite offre qui couvre votre charge avec un peu de marge — vous pourrez presque toujours monter en gamme plus tard.</p>
+</Article>

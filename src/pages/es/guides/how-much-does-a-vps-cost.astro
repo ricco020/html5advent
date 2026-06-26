@@ -1,0 +1,86 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="how-much-does-a-vps-cost"
+  title="¿Cuánto cuesta un VPS? El desglose real de precios"
+  description="Lo que cuesta realmente un VPS al mes, qué hace variar el precio (RAM, vCPU, almacenamiento, gestionado o no), los costes ocultos y precios de ejemplo reales con fecha — para presupuestar con honestidad."
+  cat="hosting"
+  hero="/img/how-much-does-a-vps-cost-hero.jpg"
+  heroAlt="Una calculadora apoyada sobre monedas de euro y un billete, para estimar un presupuesto mensual"
+  cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo', offers: true }}
+>
+  <p>La respuesta honesta: <strong>un VPS suele costar entre unos 4 y 40 € al mes</strong> para un proyecto web habitual, y dónde te sitúes en ese rango depende de cuánta RAM, CPU y almacenamiento necesites — y de si gestionas el servidor tú mismo o pagas a alguien para que lo haga. Esta guía desglosa el precio pieza a pieza, muestra los costes que no aparecen en la cifra anunciada y da precios de ejemplo reales y fechados, para que armes un presupuesto realista en vez de adivinar.</p>
+
+  <h2>La respuesta corta, según el tamaño del proyecto</h2>
+  <p>Los planes VPS se tarifan casi por completo según los recursos que garantizan. Como guía orientativa al mes, para un VPS Linux <em>no gestionado</em>:</p>
+  <table>
+    <thead><tr><th>Proyecto</th><th>Especificación típica</th><th>Coste mensual aproximado</th></tr></thead>
+    <tbody>
+      <tr><td>Web pequeña / app personal</td><td>~1–2 vCPU, 2–4 GB RAM, NVMe</td><td>~4–8 €</td></tr>
+      <tr><td>App dinámica + base de datos</td><td>~3–6 vCPU, 8–16 GB RAM</td><td>~8–20 €</td></tr>
+      <tr><td>App + BD + caché, carga estable</td><td>~6–8 vCPU, 16–32 GB RAM</td><td>~20–40 €</td></tr>
+      <tr><td>Mucho tráfico / vCPU dedicados</td><td>Núcleos dedicados, 32 GB+ de RAM</td><td>40 € y más</td></tr>
+    </tbody>
+  </table>
+  <p>Son rangos orientativos entre proveedores generalistas, no un presupuesto — la cifra exacta depende del proveedor, la región y de si los vCPU son compartidos o dedicados. Un VPS <strong>gestionado</strong> cuesta bastante más (ver más abajo).</p>
+
+  <h2>Qué hace variar realmente el precio</h2>
+  <p>Cinco factores mueven la cifra de un plan VPS. Entenderlos es lo que te permite leer con honestidad cualquier lista de precios.</p>
+
+  <h3>La RAM</h3>
+  <p>La memoria es el recurso que más probablemente agotes, y suele ser el mayor motor del precio. Duplicar la RAM de un plan suele duplicar más o menos el coste. Dimensiónala para tu carga real con margen — una base de datos, un servidor de aplicaciones y una caché juntos piden mucho más que un sitio estático.</p>
+
+  <h3>CPU: vCPU compartidos vs dedicados</h3>
+  <p>El mismo número de vCPU puede costar muy distinto según el tipo. Los vCPU <strong>compartidos (burstables)</strong> son baratos y van bien para cargas ligeras e irregulares. Los vCPU <strong>dedicados</strong> garantizan un rendimiento constante para cargas estables y cuestan más — a veces varias veces más para el mismo número de núcleos. Un plan que parece caro quizá solo venda núcleos dedicados.</p>
+
+  <h3>Tipo y cantidad de almacenamiento</h3>
+  <p>El NVMe es más rápido que el SSD, que a su vez es más rápido que los discos mecánicos antiguos — y el precio sigue tanto a la velocidad como a la capacidad. Algunos proveedores incluyen almacenamiento generoso en la gama de entrada; otros cobran por cada bloque extra. Registros, archivos subidos y el crecimiento de la base de datos se acumulan, así que no presupuestes solo para el tamaño de hoy.</p>
+
+  <figure>
+    <img src="/img/how-much-does-a-vps-cost-inbody.jpg" alt="Filas de servidores montados en un rack de centro de datos con su cableado de red" width="1280" height="853" loading="lazy" />
+    <figcaption>El precio de un VPS refleja una porción real de hardware de centro de datos — RAM, núcleos de CPU y almacenamiento garantizados en servidores físicos como estos.</figcaption>
+  </figure>
+
+  <h3>Gestionado vs no gestionado</h3>
+  <p>Esta es la mayor diferencia en el coste total. Un VPS <strong>no gestionado</strong> te entrega un SO desnudo a los precios bajos citados arriba — tú parcheas, aseguras y mantienes. Un VPS <strong>gestionado</strong> añade actualizaciones, supervisión, refuerzo de seguridad y soporte, y suele costar <strong>varias veces más</strong> por el mismo hardware. Si te manejas con la línea de comandos, el no gestionado ahorra mucho; si prefieres no hacer de sysadmin, el gestionado te devuelve tiempo.</p>
+
+  <h3>Ancho de banda y región</h3>
+  <p>La mayoría de los planes VPS incluyen un volumen de transferencia mensual; los sitios con muchos medios pueden superarlo y pagar el exceso. La región del centro de datos también puede mover el precio, y algunos proveedores cobran aparte una dirección IPv4 dedicada, ahora que el IPv4 escasea.</p>
+
+  <h2>Los costes ocultos que debes prever</h2>
+  <p>El precio anunciado rara vez lo cubre todo. Revisa cada uno de estos puntos antes de comprometerte:</p>
+  <ul>
+    <li><strong>Copias de seguridad / snapshots</strong> — a menudo un extra de pago en lugar de incluido; las copias automáticas merecen la línea de presupuesto.</li>
+    <li><strong>Panel de control</strong> — las licencias de cPanel/Plesk pueden sumar varios euros al mes si quieres una interfaz gráfica.</li>
+    <li><strong>IPv4 dedicada</strong> — a veces se factura por separado.</li>
+    <li><strong>Precio de renovación</strong> — confirma la tarifa tras cualquier primer periodo promocional; el precio anunciado suele ser de captación.</li>
+    <li><strong>Exceso de ancho de banda</strong> — lee la política si sirves muchos medios.</li>
+  </ul>
+
+  <h2>Precios de ejemplo reales (con fecha)</h2>
+  <p>Para hacer concretos estos rangos, aquí van precios públicos reales de <strong>Contabo</strong>, un proveedor alemán conocido por sus recursos generosos a bajo coste. Son planes Cloud VPS con compromiso de 12 meses, sin IVA, observados en <strong>junio de 2026</strong> — comprueba siempre la página actual del proveedor, porque los precios cambian:</p>
+  <table>
+    <thead><tr><th>Plan</th><th>Recursos</th><th>Precio / mes</th></tr></thead>
+    <tbody>
+      <tr><td>Cloud VPS 10</td><td>4 vCPU, 8 GB RAM, 75 GB NVMe, tráfico ilimitado (uso justo)</td><td>5,50 €</td></tr>
+      <tr><td>Cloud VPS 20</td><td>Más vCPU/RAM que el VPS 10</td><td>7,50 €</td></tr>
+      <tr><td>Cloud VPS 30</td><td>Nivel superior</td><td>14,00 €</td></tr>
+      <tr><td>Cloud VPS 40</td><td>Nivel Cloud VPS más alto</td><td>25,00 €</td></tr>
+    </tbody>
+  </table>
+  <p>Son planes no gestionados — el precio bajo refleja que gestionas el servidor tú mismo. Ilustran la parte baja del mercado; los proveedores orientados a EE. UU. o totalmente gestionados se sitúan más arriba para especificaciones comparables.</p>
+
+  <h2>Cómo presupuestar sin pagar de más</h2>
+  <p>Razona de abajo arriba a partir de tu carga real en vez de elegir un plan de una lista de los «mejores»:</p>
+  <ol>
+    <li><strong>Estima primero la RAM</strong> — es el cuello de botella habitual y el principal motor del precio. Añade margen, no dimensiones al mínimo.</li>
+    <li><strong>Decide vCPU compartidos o dedicados</strong> — una carga ligera e irregular va bien con compartidos; una carga de producción estable pide dedicados.</li>
+    <li><strong>Elige NVMe/SSD y suficiente almacenamiento</strong> para el crecimiento, no solo para hoy.</li>
+    <li><strong>Decide gestionado o no</strong> — es la mayor palanca de coste. Sé honesto sobre si harás el sysadmin.</li>
+    <li><strong>Suma los extras</strong> — copias, panel de control, IPv4 — y compara el precio de <em>renovación</em>, no la tarifa de captación.</li>
+  </ol>
+  <p>Para la mayoría de proyectos web pequeños y medianos gestionados por alguien que se maneja con una terminal, un VPS no gestionado en la franja de <strong>5–15 €/mes</strong> cubre mucho terreno con margen para crecer. Empieza por el plan más pequeño que cubra tu carga con algo de margen — casi siempre podrás escalar después.</p>
+</Article>
