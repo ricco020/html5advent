@@ -1,0 +1,49 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="what-is-the-event-loop"
+  title="O que é o event loop em JavaScript? O assíncrono explicado"
+  description="O JavaScript roda em uma única thread e, ainda assim, lida com timers, rede e cliques sem travar. O event loop é a chave: a call stack, as filas de tasks e microtasks, e por que as promises rodam antes do setTimeout."
+  cat="js"
+  hero="/img/what-is-the-event-loop-hero.jpg"
+  heroAlt="Código JavaScript colorido exibido na tela de um computador"
+  cluster={null}
+>
+  <p>O JavaScript tem uma peculiaridade famosa: ele executa seu código em uma <strong>única thread</strong>, fazendo uma coisa de cada vez — e, mesmo assim, consegue aguardar uma requisição de rede, rodar um timer e responder a cliques sem nunca travar. O que torna isso possível é o <strong>event loop</strong>. Entendê-lo é o que transforma o JavaScript assíncrono de confuso em óbvio.</p>
+
+  <h2>Uma thread, uma call stack</h2>
+  <p>O JavaScript executa o código em uma única <strong>call stack</strong> (pilha de chamadas): as funções são empilhadas quando chamadas e desempilhadas quando retornam, uma de cada vez. Como só existe uma pilha, apenas um trecho de código roda a qualquer momento. Se uma função demora muito, nada mais — nem mesmo o clique em um botão — pode rodar até que ela termine. É por isso que um laço pesado «trava» a página.</p>
+  <p>Então, como o JavaScript aguarda um timer de 2 segundos ou um download lento sem bloquear tudo? O truque é que ele não aguarda de jeito nenhum. Ele entrega essas tarefas ao ambiente que o cerca e segue em frente.</p>
+
+  <h2>É o ambiente que aguarda</h2>
+  <p>O navegador (e o Node.js) dá ao JavaScript poderes adicionais que <em>não</em> fazem parte da linguagem em si: timers, requisições de rede, acesso a arquivos, listeners de eventos. Quando você chama <code>setTimeout</code> ou <code>fetch</code>, o motor entrega essa tarefa ao ambiente e segue adiante imediatamente. O ambiente aguarda em segundo plano e, quando o trabalho termina, coloca seu callback em uma <strong>fila</strong> (queue) — e não diretamente de volta na pilha.</p>
+
+  <h2>O que o event loop realmente faz</h2>
+  <p>É aqui que entra o event loop. Sua tarefa é simples de enunciar: <strong>sempre que a call stack estiver vazia, pegar o próximo callback da fila e empilhá-lo para executar.</strong> Ele roda em laço indefinidamente, verificando «a pilha está vazia? há algo aguardando?» e injetando os callbacks da fila um de cada vez. Essa única regra é todo o mecanismo por trás do JavaScript assíncrono.</p>
+  <p>A consequência fundamental: seus callbacks na fila só rodam <em>depois</em> que todo o código síncrono atual termina. Um <code>setTimeout(fn, 0)</code> não roda «agora» — ele roda assim que a pilha fica livre, mesmo que isso seja mais tarde do que você espera.</p>
+
+  <figure>
+    <img src="/img/what-is-the-event-loop-inbody.jpg" alt="Código JavaScript exibido em uma tela" width="1280" height="853" loading="lazy" />
+    <figcaption>O código síncrono roda primeiro até o fim; só quando a call stack se esvazia é que o event loop começa a injetar os callbacks da fila.</figcaption>
+  </figure>
+
+  <h2>Microtasks vs macrotasks: por que as promises vencem</h2>
+  <p>Não há uma única fila, mas (pelo menos) duas, e a diferença explica a pegadinha mais comum em entrevistas. As <strong>macrotasks</strong> incluem coisas como <code>setTimeout</code> e callbacks de I/O. As <strong>microtasks</strong> incluem callbacks de <a href="/pt/guides/javascript-promises">promises</a> resolvidas (<code>.then</code>) e <code>queueMicrotask</code>. A regra é que, após cada macrotask, o event loop esvazia a fila de microtasks <em>inteira</em> antes de prosseguir.</p>
+  <p>É por isso que isto imprime <code>start</code>, <code>end</code>, <code>promise</code>, <code>timeout</code> — a promise roda antes do timer, mesmo que ele esteja definido como 0:</p>
+  <pre><code>console.log('start');
+setTimeout(() =&gt; console.log('timeout'), 0);
+Promise.resolve().then(() =&gt; console.log('promise'));
+console.log('end');</code></pre>
+  <p>As duas chamadas a <code>console.log</code> são síncronas e rodam primeiro. O callback da promise é uma microtask e roda assim que a pilha se libera. O timeout é uma macrotask e aguarda sua vez após as microtasks.</p>
+
+  <h2>Por que isso importa na prática</h2>
+  <p>O event loop explica os comportamentos que fazem as pessoas tropeçarem: por que <code>setTimeout(fn, 0)</code> significa «o mais cedo possível» e não «imediatamente», por que um cálculo síncrono longo deixa a página inteira sem resposta, e por que o código <a href="/pt/guides/async-await-javascript">async/await</a> só retoma depois que o trabalho síncrono ao redor termina. Assim que você visualiza a pilha se esvaziando e o loop injetando os callbacks da fila, o JavaScript assíncrono deixa de ser um mistério.</p>
+
+  <h2>Node.js vs o navegador</h2>
+  <p>O conceito é o mesmo no Node.js, mas o host é diferente: em vez das Web APIs do navegador, o Node usa uma biblioteca chamada libuv para lidar com timers, sistema de arquivos e rede fora da thread principal. O loop do Node tem algumas fases extras (e o <code>process.nextTick</code> fica até antes das microtasks normais), mas o modelo mental é idêntico — uma thread, um ambiente que aguarda e um loop que reinjeta o trabalho concluído.</p>
+
+  <h2>Conclusão</h2>
+  <p>O event loop é como o JavaScript de thread única se mantém responsivo: o código síncrono roda na call stack, o trabalho lento é entregue ao ambiente, e os callbacks concluídos aguardam em filas até que a pilha esteja vazia. As microtasks (promises) rodam antes das macrotasks (timers), e nada de assíncrono jamais interrompe um código que já está rodando. Guarde essa imagem e o resto do JavaScript assíncrono — promises, async/await, timers — se encaixa no lugar.</p>
+</Article>

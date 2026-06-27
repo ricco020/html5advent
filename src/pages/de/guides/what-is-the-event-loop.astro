@@ -1,0 +1,49 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="what-is-the-event-loop"
+  title="Was ist die Event Loop in JavaScript? Asynchronität erklärt"
+  description="JavaScript läuft in einem einzigen Thread und bewältigt dennoch Timer, Netzwerk und Klicks, ohne einzufrieren. Die Event Loop macht es möglich: der Call Stack, die Task- und Microtask-Queues und warum Promises vor setTimeout laufen."
+  cat="js"
+  hero="/img/what-is-the-event-loop-hero.jpg"
+  heroAlt="Bunter JavaScript-Code auf einem Computerbildschirm"
+  cluster={null}
+>
+  <p>JavaScript hat eine berühmte Eigenart: Es führt deinen Code in einem <strong>einzigen Thread</strong> aus, immer nur eine Sache auf einmal — und kann trotzdem auf eine Netzwerkanfrage warten, einen Timer laufen lassen und auf Klicks reagieren, ohne jemals einzufrieren. Möglich macht das die <strong>Event Loop</strong>. Sie zu verstehen ist das, was asynchrones JavaScript von verwirrend zu offensichtlich werden lässt.</p>
+
+  <h2>Ein Thread, ein Call Stack</h2>
+  <p>JavaScript führt Code auf einem einzigen <strong>Call Stack</strong> (Aufrufstapel) aus: Funktionen werden beim Aufruf darauf abgelegt und beim Zurückkehren wieder entfernt, immer eine nach der anderen. Da es nur einen Stack gibt, läuft in jedem Moment nur ein Stück Code. Wenn eine Funktion lange dauert, kann nichts anderes — nicht einmal ein Klick auf einen Button — laufen, bis sie fertig ist. Deshalb „friert“ eine rechenintensive Schleife die Seite ein.</p>
+  <p>Wie wartet JavaScript also auf einen 2-Sekunden-Timer oder einen langsamen Download, ohne alles zu blockieren? Der Trick ist: Es wartet gar nicht. Es übergibt diese Aufgaben an die umgebende Umgebung und macht weiter.</p>
+
+  <h2>Die Umgebung übernimmt das Warten</h2>
+  <p>Der Browser (und Node.js) gibt JavaScript zusätzliche Fähigkeiten, die <em>nicht</em> Teil der Sprache selbst sind: Timer, Netzwerkanfragen, Dateizugriff, Event-Listener. Wenn du <code>setTimeout</code> oder <code>fetch</code> aufrufst, übergibt die Engine diese Aufgabe an die Umgebung und macht sofort weiter. Die Umgebung wartet im Hintergrund, und wenn die Arbeit erledigt ist, legt sie deinen Callback in eine <strong>Queue</strong> (Warteschlange) — nicht direkt zurück auf den Stack.</p>
+
+  <h2>Was die Event Loop tatsächlich tut</h2>
+  <p>Hier kommt die Event Loop ins Spiel. Ihre Aufgabe ist einfach formuliert: <strong>Sobald der Call Stack leer ist, nimm den nächsten Callback aus der Queue und lege ihn zum Ausführen auf den Stack.</strong> Sie läuft endlos in einer Schleife und prüft „Ist der Stack leer? Wartet etwas?“ und schiebt die Callbacks aus der Queue einen nach dem anderen hinein. Diese eine Regel ist der gesamte Mechanismus hinter asynchronem JavaScript.</p>
+  <p>Die entscheidende Folge: Deine Callbacks in der Queue laufen erst, <em>nachdem</em> der gesamte aktuelle synchrone Code fertig ist. Ein <code>setTimeout(fn, 0)</code> läuft nicht „jetzt“ — es läuft, sobald der Stack frei ist, auch wenn das später ist, als du erwartest.</p>
+
+  <figure>
+    <img src="/img/what-is-the-event-loop-inbody.jpg" alt="JavaScript-Code auf einem Bildschirm" width="1280" height="853" loading="lazy" />
+    <figcaption>Synchroner Code läuft zuerst vollständig durch; erst wenn sich der Call Stack leert, beginnt die Event Loop, die Callbacks aus der Queue einzuspeisen.</figcaption>
+  </figure>
+
+  <h2>Microtasks vs. Macrotasks: Warum Promises gewinnen</h2>
+  <p>Es gibt nicht nur eine Queue, sondern (mindestens) zwei, und der Unterschied erklärt die häufigste Fangfrage im Bewerbungsgespräch. <strong>Macrotasks</strong> umfassen Dinge wie <code>setTimeout</code> und I/O-Callbacks. <strong>Microtasks</strong> umfassen Callbacks aufgelöster <a href="/de/guides/javascript-promises">Promises</a> (<code>.then</code>) und <code>queueMicrotask</code>. Die Regel lautet: Nach jedem Macrotask leert die Event Loop die <em>gesamte</em> Microtask-Queue, bevor sie weitermacht.</p>
+  <p>Deshalb gibt dies <code>start</code>, <code>end</code>, <code>promise</code>, <code>timeout</code> aus — die Promise läuft vor dem Timer, obwohl der Timer auf 0 gesetzt war:</p>
+  <pre><code>console.log('start');
+setTimeout(() =&gt; console.log('timeout'), 0);
+Promise.resolve().then(() =&gt; console.log('promise'));
+console.log('end');</code></pre>
+  <p>Die beiden <code>console.log</code>-Aufrufe sind synchron und laufen zuerst. Der Promise-Callback ist ein Microtask und läuft, sobald sich der Stack leert. Der Timeout ist ein Macrotask und wartet nach den Microtasks auf seinen Zug.</p>
+
+  <h2>Warum das in der Praxis wichtig ist</h2>
+  <p>Die Event Loop erklärt das Verhalten, das viele stolpern lässt: warum <code>setTimeout(fn, 0)</code> „so bald wie möglich“ statt „sofort“ bedeutet, warum eine lange synchrone Berechnung die ganze Seite unbrauchbar macht und warum <a href="/de/guides/async-await-javascript">async/await</a>-Code erst weiterläuft, wenn die umgebende synchrone Arbeit erledigt ist. Sobald du dir vorstellst, wie sich der Stack leert und die Loop die Callbacks aus der Queue einspeist, hört asynchrones JavaScript auf, ein Rätsel zu sein.</p>
+
+  <h2>Node.js vs. der Browser</h2>
+  <p>Das Konzept ist in Node.js dasselbe, aber der Host ist ein anderer: Statt der Web-APIs des Browsers nutzt Node eine Bibliothek namens libuv, um Timer, Dateisystem und Netzwerk außerhalb des Haupt-Threads abzuwickeln. Nodes Loop hat ein paar zusätzliche Phasen (und <code>process.nextTick</code> steht sogar vor den normalen Microtasks), aber das mentale Modell ist identisch — ein Thread, eine Umgebung, die wartet, und eine Loop, die fertige Arbeit wieder einspeist.</p>
+
+  <h2>Fazit</h2>
+  <p>Die Event Loop ist, wie einsträngiges JavaScript reaktionsfähig bleibt: Synchroner Code läuft auf dem Call Stack, langsame Arbeit wird an die Umgebung übergeben, und fertige Callbacks warten in Queues, bis der Stack leer ist. Microtasks (Promises) laufen vor Macrotasks (Timer), und nichts Asynchrones unterbricht jemals Code, der bereits läuft. Behalte dieses Bild im Kopf, und der Rest des asynchronen JavaScripts — Promises, async/await, Timer — fügt sich von selbst zusammen.</p>
+</Article>

@@ -1,0 +1,49 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="what-is-the-event-loop"
+  title="What Is the Event Loop in JavaScript? Async Explained"
+  description="JavaScript runs on one thread, yet handles timers, network and clicks without freezing. The event loop is how: the call stack, the task and microtask queues, and why promises run before setTimeout."
+  cat="js"
+  hero="/img/what-is-the-event-loop-hero.jpg"
+  heroAlt="Colourful JavaScript code displayed on a computer screen"
+  cluster={null}
+>
+  <p>JavaScript has a famous quirk: it runs your code on a <strong>single thread</strong>, doing one thing at a time — and yet it can wait for a network request, run a timer, and respond to clicks without ever freezing. The thing that makes that possible is the <strong>event loop</strong>. Understanding it is what turns asynchronous JavaScript from confusing to obvious.</p>
+
+  <h2>One thread, one call stack</h2>
+  <p>JavaScript executes code on a single <strong>call stack</strong>: functions are pushed on when called and popped off when they return, one at a time. Because there is only one stack, only one piece of code runs at any moment. If a function takes a long time, nothing else — not even a button click — can run until it finishes. That is why a heavy loop "freezes" the page.</p>
+  <p>So how does JavaScript wait for a 2-second timer or a slow download without blocking everything? The trick is that it does not wait at all. It hands those jobs to the surrounding environment and keeps going.</p>
+
+  <h2>The environment does the waiting</h2>
+  <p>The browser (and Node.js) gives JavaScript extra powers that are <em>not</em> part of the language itself: timers, network requests, file access, event listeners. When you call <code>setTimeout</code> or <code>fetch</code>, the engine hands that task to the environment and immediately moves on. The environment does the waiting in the background, and when the job is done it places your callback into a <strong>queue</strong> — not back onto the stack directly.</p>
+
+  <h2>What the event loop actually does</h2>
+  <p>This is where the event loop comes in. Its job is simple to state: <strong>whenever the call stack is empty, take the next callback from the queue and push it onto the stack to run.</strong> It loops forever, checking "is the stack empty? is there anything waiting?" and feeding queued callbacks in one at a time. That single rule is the whole mechanism behind asynchronous JavaScript.</p>
+  <p>The key consequence: your queued callbacks only run <em>after</em> all the current synchronous code has finished. A <code>setTimeout(fn, 0)</code> does not run "now" — it runs once the stack is clear, even if that is later than you expect.</p>
+
+  <figure>
+    <img src="/img/what-is-the-event-loop-inbody.jpg" alt="JavaScript code displayed on a screen" width="1280" height="853" loading="lazy" />
+    <figcaption>Synchronous code runs first to completion; only when the call stack empties does the event loop start feeding in queued callbacks.</figcaption>
+  </figure>
+
+  <h2>Microtasks vs macrotasks: why promises win</h2>
+  <p>There is not one queue but (at least) two, and the difference explains the most common interview gotcha. <strong>Macrotasks</strong> include things like <code>setTimeout</code> and I/O callbacks. <strong>Microtasks</strong> include resolved <a href="/guides/javascript-promises">promise</a> callbacks (<code>.then</code>) and <code>queueMicrotask</code>. The rule is that after each macrotask, the event loop drains the <em>entire</em> microtask queue before moving on.</p>
+  <p>That is why this prints <code>start</code>, <code>end</code>, <code>promise</code>, <code>timeout</code> — the promise runs before the timer even though the timer was set to 0:</p>
+  <pre><code>console.log('start');
+setTimeout(() =&gt; console.log('timeout'), 0);
+Promise.resolve().then(() =&gt; console.log('promise'));
+console.log('end');</code></pre>
+  <p>The two <code>console.log</code> calls are synchronous and run first. The promise callback is a microtask and runs as soon as the stack clears. The timeout is a macrotask and waits its turn after the microtasks.</p>
+
+  <h2>Why this matters in practice</h2>
+  <p>The event loop explains the behaviour that trips people up: why <code>setTimeout(fn, 0)</code> is "as soon as possible" rather than "immediately", why a long synchronous calculation makes the whole page unresponsive, and why <a href="/guides/async-await-javascript">async/await</a> code resumes only after the surrounding synchronous work is done. Once you picture the stack emptying and the loop feeding in queued callbacks, asynchronous JavaScript stops being mysterious.</p>
+
+  <h2>Node.js vs the browser</h2>
+  <p>The concept is the same in Node.js, but the host is different: instead of browser Web APIs, Node uses a library called libuv to handle timers, file system and network work off the main thread. Node's loop has a few extra phases (and <code>process.nextTick</code> sits even ahead of normal microtasks), but the mental model is identical — one thread, an environment doing the waiting, and a loop feeding finished work back in.</p>
+
+  <h2>The bottom line</h2>
+  <p>The event loop is how single-threaded JavaScript stays responsive: synchronous code runs on the call stack, slow work is handed to the environment, and finished callbacks wait in queues until the stack is empty. Microtasks (promises) run before macrotasks (timers), and nothing async ever interrupts code that is already running. Hold that picture and the rest of async JavaScript — promises, async/await, timers — falls into place.</p>
+</Article>
