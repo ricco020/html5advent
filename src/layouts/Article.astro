@@ -15,6 +15,8 @@ const {
   //   { type: 'itemlist', name: '…', keys: ['contabo','hetzner',…] }      → comparison / best-of list
   // `offers: true` is HONEST ONLY when the price is visible in the page body (see products.js).
   commerce = null,
+  // Optional FAQ: array of { q, a } — renders a visible FAQ section + FAQPage JSON-LD (GEO).
+  faq = null,
 } = Astro.props;
 
 const path = `guides/${slug}`;
@@ -43,10 +45,18 @@ if (commerce && commerce.type === 'product' && commerce.key) {
   commerceNode = itemListNode(commerce.keys, commerce.name || title);
 }
 
-// Emit a single JSON-LD: keep TechArticle, add commerce via @graph when present.
-const schema = commerceNode
-  ? { '@context': 'https://schema.org', '@graph': [article, commerceNode] }
+// Optional FAQPage node (GEO / rich result). Honest: only the Q&A actually shown in the page.
+const faqNode = (Array.isArray(faq) && faq.length)
+  ? { '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }
+  : null;
+
+// Emit a single JSON-LD: keep TechArticle, add commerce + FAQ via @graph when present.
+const graph = [article, commerceNode, faqNode].filter(Boolean);
+const schema = graph.length > 1
+  ? { '@context': 'https://schema.org', '@graph': graph }
   : { '@context': 'https://schema.org', ...article };
+
+const FAQ_LABEL = { en: 'Frequently asked questions', fr: 'Questions fréquentes', es: 'Preguntas frecuentes', de: 'Häufige Fragen', it: 'Domande frequenti', pt: 'Perguntas frequentes' };
 
 // Related guides — internal links so every guide is cross-linked (crawl paths, not a dead end).
 // Same category first, then fill with others; only guides that exist in this locale (no 404s).
@@ -75,6 +85,20 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
     <div class="prose"><slot /></div>
 
     {cluster && <Cta cluster={cluster} locale={lang} />}
+
+    {Array.isArray(faq) && faq.length > 0 && (
+      <section class="faq" aria-label={FAQ_LABEL[lang] || FAQ_LABEL.en}>
+        <h2>{FAQ_LABEL[lang] || FAQ_LABEL.en}</h2>
+        <dl>
+          {faq.map((f) => (
+            <div class="faq-item">
+              <dt>{f.q}</dt>
+              <dd>{f.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )}
 
     {related.length > 0 && (
       <aside class="related" aria-label={REL_LABEL[lang] || REL_LABEL.en}>
@@ -113,6 +137,12 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
     .prose :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: .92rem; }
     .prose :global(th), .prose :global(td) { border: 1px solid var(--line); padding: .55rem .75rem; text-align: left; }
     .prose :global(th) { background: var(--surface); font-family: var(--display); }
+    .faq { max-width: 760px; margin: 3rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+    .faq h2 { font-size: 1.4rem; margin: 0 0 1rem; }
+    .faq dl { margin: 0; }
+    .faq-item { margin: 0 0 1.25rem; }
+    .faq dt { font-weight: 600; font-size: 1.05rem; margin: 0 0 .35rem; }
+    .faq dd { margin: 0; color: var(--muted); }
     .related { max-width: 760px; margin: 3rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
     .related h2 { font-size: 1.2rem; font-family: var(--mono); color: var(--accent-blue); margin: 0 0 .75rem; }
     .related ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
