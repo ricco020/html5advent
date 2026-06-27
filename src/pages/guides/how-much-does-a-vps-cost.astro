@@ -11,6 +11,12 @@ import Article from '../../layouts/Article.astro';
   heroAlt="A calculator resting on euro coins and a banknote, used to work out a monthly budget"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo', offers: true }}
+  faq={[
+    { q: 'How much does a VPS cost per month?', a: 'Entry-level unmanaged VPS plans usually start at a few dollars per month; mid-range plans tend to fall in roughly the $10–40 range depending on vCPU, RAM, storage and bandwidth, and managed VPS costs more because support and maintenance are included. RAM and vCPU are the main price drivers.' },
+    { q: 'What makes one VPS more expensive than another?', a: 'The biggest drivers are RAM and vCPU, then storage type and amount (NVMe costs more than SATA), the bandwidth allowance, and whether the plan is managed. Backups, DDoS protection and some locations can add extra on top.' },
+    { q: 'Is a cheap VPS worth it?', a: "A low price is fine when the provider is transparent about resources and you don't need hand-holding; the risk is over-subscribed hardware, thin bandwidth or paid extras that erase the saving. Judge value by the actual resources and terms, not the headline figure." },
+    { q: 'Should I pay for a managed VPS?', a: "Choose unmanaged if you're comfortable administering the server yourself, since it's cheaper; pay for managed if you'd rather the provider handle updates, security and support, which suits teams without a sysadmin." },
+  ]}
 >
   <p>The honest answer is: <strong>a VPS usually costs between roughly €4 and €40 a month</strong> for a typical web project, and where you land in that range depends on how much RAM, CPU and storage you need — and whether you manage the server yourself or pay someone to do it. This guide breaks the price down piece by piece, shows the extras that don't appear on the headline figure, and gives real dated example prices so you can build a realistic budget instead of guessing.</p>
 

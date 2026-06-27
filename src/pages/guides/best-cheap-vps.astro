@@ -11,6 +11,12 @@ import Article from '../../layouts/Article.astro';
   heroAlt="A close-up of a server's drive bays filled with 1.92TB SATA SSDs under blue lighting"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
+  faq={[
+    { q: 'Can a cheap VPS still be good?', a: "Yes. Price alone doesn't determine quality — a cheap VPS can be solid when the provider is honest about resources and you match the plan to your real needs. The danger is over-subscribed hardware or hidden limits, not the low price itself." },
+    { q: "What corners are safe to cut on a cheap VPS?", a: "It's usually safe to start with modest RAM and an unmanaged plan and to skip premium add-ons you don't need yet. What's risky to cut is backups, adequate bandwidth and a reputable provider — those failures cost more than they save." },
+    { q: 'How do I read a low-priced VPS plan honestly?', a: 'Look past the headline price at the actual vCPU, RAM, storage type and amount, the bandwidth cap, and whether backups or support cost extra. A clear, complete spec sheet is a better signal of value than the price tag.' },
+    { q: 'How much RAM do I need on a cheap VPS?', a: 'For a small site or a single app, 1–2 GB is often enough to start; databases and heavier stacks want 4 GB or more. Pick the smallest size that comfortably runs your workload, since you can usually scale up later.' },
+  ]}
 >
   <p>A <strong>cheap VPS</strong> can be excellent value or a false economy — and the price tag alone won't tell you which. The goal isn't to spend as little as possible; it's to get the resources and reliability your project needs at the lowest honest price. This guide explains how to read low-cost plans, which corners are safe to cut, and which ones will cost you more later.</p>
 

@@ -11,6 +11,12 @@ import Article from '../../layouts/Article.astro';
   heroAlt="A datacenter aisle of black server racks overlaid with a network diagram linking cloud, database and device icons"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
+  faq={[
+    { q: "What's the difference between VPS and cloud hosting?", a: 'A VPS is a fixed slice of one physical server with set resources and a predictable monthly price; cloud hosting spreads your workload across many machines, scales on demand and usually bills pay-as-you-go. VPS is simpler and steadier, cloud is more elastic.' },
+    { q: 'Is cloud hosting faster than a VPS?', a: "Not inherently. A well-provisioned VPS can match or beat cloud for steady workloads; cloud's advantage is absorbing sudden spikes by scaling out, not raw speed. Performance depends on the resources and provider, not the model alone." },
+    { q: 'Which is cheaper, VPS or cloud hosting?', a: "A VPS gives a predictable flat monthly cost, usually cheaper for steady, known workloads. Cloud's pay-as-you-go can be cheaper for spiky or short-lived workloads but can cost more when traffic is constant and high." },
+    { q: 'Should I choose a VPS or cloud hosting?', a: 'Choose a VPS for steady, predictable projects where a fixed price and simple setup matter; choose cloud when you need to scale quickly with demand or want elastic, managed infrastructure. Many projects start on a VPS and move to cloud only when scaling forces it.' },
+  ]}
 >
   <p><strong>VPS</strong> and <strong>cloud hosting</strong> are often pitched as interchangeable, but they're built on different ideas. A VPS gives you a fixed slice of <em>one</em> physical server; cloud hosting spreads your workload across a <em>pool</em> of connected servers. That single distinction drives every practical difference between them — performance, scaling, reliability and how you're billed. This guide compares the two honestly, without invented benchmarks, so you can match the model to your real workload.</p>
 
