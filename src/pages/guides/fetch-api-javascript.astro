@@ -11,6 +11,12 @@ import Article from '../../layouts/Article.astro';
   hero="/img/web-dev-code.jpg"
   heroAlt="A code editor on screen showing HTML, CSS and JavaScript source"
   cluster={null}
+  faq={[
+    { q: 'How do you make a request with the Fetch API?', a: 'Call fetch with a URL; it returns a promise that resolves to a Response object. Read the body with a method like response.json() or response.text(), which also return promises, so you typically await fetch and then await the parsing.' },
+    { q: "Why doesn't fetch reject on a 404 or 500?", a: 'fetch only rejects on network failures, not on HTTP error statuses. A 404 or 500 still resolves successfully, so you must check response.ok (or response.status) yourself and throw or handle the error when it is false.' },
+    { q: 'How do you send JSON with a POST request?', a: 'Pass a second options object with method set to POST, a Content-Type: application/json header, and body set to JSON.stringify(yourData). The server then receives a JSON request body it can parse.' },
+    { q: 'How do you cancel a fetch request?', a: "Create an AbortController, pass its signal to fetch in the options, and call controller.abort() to cancel; the fetch promise then rejects with an AbortError you can catch. It's useful for timeouts or superseding an in-flight request." },
+  ]}
 >
   <p>The <strong>Fetch API</strong> is the modern, promise-based way to make HTTP requests from the browser. It replaces the older <code>XMLHttpRequest</code> with a cleaner interface that works naturally with <code>async</code>/<code>await</code> and streams. Every current browser supports it.</p>
 

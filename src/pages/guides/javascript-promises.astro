@@ -11,6 +11,12 @@ import Article from '../../layouts/Article.astro';
   hero="/img/javascript-promises-hero.jpg"
   heroAlt="A red jigsaw piece slotting into the last gap of a grey puzzle"
   cluster={null}
+  faq={[
+    { q: 'What is a promise in JavaScript?', a: 'A promise is an object representing the eventual result of an asynchronous operation. It starts pending and then settles as either fulfilled with a value or rejected with an error, and once it settles it never changes again. You react to the outcome with then, catch and finally.' },
+    { q: "What's the difference between Promise.all, race, any and allSettled?", a: 'Promise.all resolves when every promise fulfils and rejects on the first rejection; allSettled waits for all of them and reports each outcome; race settles as soon as the first promise settles either way; any resolves on the first fulfilment and rejects only if all of them fail.' },
+    { q: 'How do you handle errors in a promise chain?', a: 'Add a single .catch at the end of the chain — it catches a rejection from any earlier step, because errors propagate down the chain until something handles them. A .finally then runs afterwards regardless of success or failure.' },
+    { q: 'Why chain promises instead of nesting them?', a: 'Returning a value or promise from a then handler passes it to the next then, so steps stay flat and readable and errors funnel into one catch. Nesting promises recreates the "callback hell" that promises were designed to avoid.' },
+  ]}
 >
   <p>A <strong>promise</strong> is an object that represents a value that isn't ready yet. It's the foundation of asynchronous JavaScript: <code>fetch()</code>, timers, file reads in Node, and most modern APIs return promises. A promise is always in one of three states — <em>pending</em>, <em>fulfilled</em>, or <em>rejected</em> — and once it settles it never changes again.</p>
 

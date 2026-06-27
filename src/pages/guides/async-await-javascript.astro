@@ -11,6 +11,12 @@ import Article from '../../layouts/Article.astro';
   hero="/img/async-await-javascript-hero.jpg"
   heroAlt="A developer's hands typing on a keyboard with colourful source code on the monitor"
   cluster={null}
+  faq={[
+    { q: 'What is async/await in JavaScript?', a: 'async/await is syntax that lets you write promise-based asynchronous code as if it were synchronous. Marking a function async makes it return a promise, and await pauses inside that function until a promise settles, so you read the logic top to bottom instead of chaining .then calls.' },
+    { q: 'Is async/await better than promises?', a: "They're the same thing underneath — async/await is built on promises and just reads more clearly for sequential steps and try/catch error handling. Promise combinators like Promise.all are still the right tool for running work in parallel, so you mix both." },
+    { q: 'How do you handle errors with async/await?', a: 'Wrap the awaited calls in a try/catch block; a rejected promise throws at the await, so catch handles it like any synchronous error. From the caller side you can also add a .catch on the promise the async function returns.' },
+    { q: 'Why is awaiting in a loop slow?', a: 'Awaiting each item one after another runs them serially — each waits for the previous to finish. If the tasks are independent, start them all first and await Promise.all on the array instead, which runs them in parallel and is far faster.' },
+  ]}
 >
   <p>The <code>async</code> and <code>await</code> keywords are syntax over promises. They let you write asynchronous code that reads top-to-bottom like synchronous code, while still being non-blocking under the hood. If you know promises, you already know async/await — it just removes the <code>.then()</code> ceremony.</p>
 
