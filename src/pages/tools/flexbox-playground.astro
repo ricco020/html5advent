@@ -1,0 +1,143 @@
+---
+import Base from '../../layouts/Base.astro';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Flexbox Playground',
+  url: 'https://html5advent.com/tools/flexbox-playground',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Any (web browser)',
+  description: 'A free, interactive CSS Flexbox playground: change flex-direction, justify-content, align-items, wrap and gap, see the layout update live, and copy the generated CSS.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  isAccessibleForFree: true,
+  publisher: { '@type': 'Organization', name: 'HTML5 Advent', url: 'https://html5advent.com' },
+};
+---
+<Base
+  lang="en"
+  title="Flexbox Playground — interactive CSS Flexbox generator"
+  description="A free, interactive CSS Flexbox playground. Change flex-direction, justify-content, align-items, wrap and gap, watch the layout update live, and copy the generated CSS."
+  path="tools/flexbox-playground"
+  schema={schema}
+  ogType="website"
+>
+  <main class="fp-wrap">
+    <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/tools/">Tools</a> › Flexbox Playground</nav>
+    <header class="fp-head">
+      <p class="kicker">// css · tool</p>
+      <h1>Flexbox Playground</h1>
+      <p class="lede">Change the Flexbox properties below and watch the layout react in real time. Copy the generated CSS when it looks right — no sign-up, nothing stored. New to Flexbox? Start with <a href="/guides/css-grid-vs-flexbox">CSS Grid vs Flexbox</a>.</p>
+    </header>
+
+    <div class="fp-grid">
+      <section class="fp-controls" aria-label="Flexbox controls">
+        <label>flex-direction
+          <select id="c-direction">
+            <option>row</option><option>row-reverse</option><option>column</option><option>column-reverse</option>
+          </select>
+        </label>
+        <label>justify-content
+          <select id="c-justify">
+            <option>flex-start</option><option>flex-end</option><option>center</option><option>space-between</option><option>space-around</option><option>space-evenly</option>
+          </select>
+        </label>
+        <label>align-items
+          <select id="c-align">
+            <option>stretch</option><option>flex-start</option><option>flex-end</option><option>center</option><option>baseline</option>
+          </select>
+        </label>
+        <label>flex-wrap
+          <select id="c-wrap">
+            <option>nowrap</option><option>wrap</option><option>wrap-reverse</option>
+          </select>
+        </label>
+        <label>align-content
+          <select id="c-content">
+            <option>stretch</option><option>flex-start</option><option>flex-end</option><option>center</option><option>space-between</option><option>space-around</option>
+          </select>
+        </label>
+        <label>gap (px): <span id="c-gap-val">12</span>
+          <input id="c-gap" type="range" min="0" max="48" value="12" />
+        </label>
+        <label>items: <span id="c-count-val">5</span>
+          <input id="c-count" type="range" min="1" max="10" value="5" />
+        </label>
+      </section>
+
+      <section class="fp-preview-wrap" aria-label="Live preview">
+        <div id="fp-preview" class="fp-preview"></div>
+      </section>
+    </div>
+
+    <section class="fp-output">
+      <div class="fp-output-head"><span>Generated CSS</span><button id="fp-copy" type="button">Copy</button></div>
+      <pre><code id="fp-code"></code></pre>
+    </section>
+
+    <section class="fp-explain">
+      <h2>How Flexbox works in one minute</h2>
+      <p><strong>Flexbox</strong> lays out items along a single axis. <code>flex-direction</code> sets that axis (a row or a column). <code>justify-content</code> distributes the items <em>along</em> the axis, while <code>align-items</code> aligns them across it. Turn on <code>flex-wrap</code> and items spill onto new lines, at which point <code>align-content</code> spaces those lines. <code>gap</code> adds consistent spacing without margins. For two-dimensional layouts (rows <em>and</em> columns at once), reach for CSS Grid instead — the trade-offs are covered in <a href="/guides/css-grid-vs-flexbox">CSS Grid vs Flexbox</a>.</p>
+    </section>
+  </main>
+
+  <style>
+    .fp-wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+    .crumb { font-family: var(--mono, monospace); font-size: .78rem; color: var(--muted, #8a7d6e); margin-bottom: 1.25rem; }
+    .crumb a { color: var(--accent-blue, #2b6cb0); text-decoration: none; }
+    .fp-head .kicker { font-family: var(--mono, monospace); color: var(--accent-blue, #2b6cb0); font-size: .82rem; margin: 0 0 .4rem; }
+    .fp-head h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0; }
+    .lede { color: var(--muted, #5b5046); font-size: 1.1rem; margin: 1rem 0 0; }
+    .lede a, .fp-explain a { color: var(--accent-blue, #2b6cb0); }
+    .fp-grid { display: grid; grid-template-columns: 260px 1fr; gap: 24px; margin: 2rem 0; align-items: start; }
+    @media (max-width: 720px) { .fp-grid { grid-template-columns: 1fr; } }
+    .fp-controls { display: grid; gap: 14px; background: var(--soft, #f4ede1); border: 1px solid var(--border, #e0d6c6); border-radius: 12px; padding: 18px; }
+    .fp-controls label { display: grid; gap: 6px; font-family: var(--mono, monospace); font-size: .8rem; color: var(--ink, #211b17); font-weight: 600; }
+    .fp-controls select, .fp-controls input[type=range] { width: 100%; font-family: inherit; }
+    .fp-controls select { padding: 6px 8px; border: 1px solid var(--border, #d6c7b1); border-radius: 6px; background: #fffdf9; }
+    .fp-preview-wrap { border: 1px solid var(--border, #e0d6c6); border-radius: 12px; padding: 16px; background: repeating-linear-gradient(45deg, #fbf7f0, #fbf7f0 10px, #f4ede1 10px, #f4ede1 20px); min-height: 320px; }
+    .fp-preview { display: flex; min-height: 288px; }
+    .fp-preview .item { background: var(--accent-blue, #2b6cb0); color: #fff; border-radius: 8px; padding: 18px 22px; font-family: var(--mono, monospace); font-weight: 700; box-shadow: 0 4px 12px -6px rgba(0,0,0,.4); }
+    .fp-output { margin: 1.5rem 0; }
+    .fp-output-head { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono, monospace); font-size: .8rem; color: var(--muted, #5b5046); margin-bottom: 6px; }
+    #fp-copy { cursor: pointer; background: var(--accent-blue, #2b6cb0); color: #fff; border: 0; border-radius: 6px; padding: 5px 12px; font-family: var(--mono, monospace); font-size: .78rem; }
+    #fp-copy.ok { background: #2f855a; }
+    .fp-output pre { background: #222d37; color: #eef1f4; border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-family: var(--mono, monospace); font-size: .9rem; line-height: 1.6; margin: 0; }
+    .fp-explain { margin: 2.5rem 0; }
+    .fp-explain h2 { font-size: 1.5rem; }
+    .fp-explain code { font-family: var(--mono, monospace); background: var(--pill, #f4ede1); padding: 1px 6px; border-radius: 5px; }
+  </style>
+
+  <script is:inline>
+    (function () {
+      var $ = function (id) { return document.getElementById(id); };
+      var preview = $('fp-preview'), code = $('fp-code');
+      var ctrl = { direction: $('c-direction'), justify: $('c-justify'), align: $('c-align'), wrap: $('c-wrap'), content: $('c-content'), gap: $('c-gap'), count: $('c-count') };
+      function buildItems(n) {
+        while (preview.firstChild) preview.removeChild(preview.firstChild);
+        for (var i = 1; i <= n; i++) { var d = document.createElement('div'); d.className = 'item'; d.textContent = String(i); preview.appendChild(d); }
+      }
+      function render() {
+        var g = ctrl.gap.value, n = parseInt(ctrl.count.value, 10);
+        $('c-gap-val').textContent = g; $('c-count-val').textContent = String(n);
+        preview.style.flexDirection = ctrl.direction.value;
+        preview.style.justifyContent = ctrl.justify.value;
+        preview.style.alignItems = ctrl.align.value;
+        preview.style.flexWrap = ctrl.wrap.value;
+        preview.style.alignContent = ctrl.content.value;
+        preview.style.gap = g + 'px';
+        if (preview.children.length !== n) buildItems(n);
+        var css = '.container {\n  display: flex;\n  flex-direction: ' + ctrl.direction.value + ';\n  justify-content: ' + ctrl.justify.value + ';\n  align-items: ' + ctrl.align.value + ';\n  flex-wrap: ' + ctrl.wrap.value + ';\n  align-content: ' + ctrl.content.value + ';\n  gap: ' + g + 'px;\n}';
+        code.textContent = css;
+      }
+      Object.keys(ctrl).forEach(function (k) { ctrl[k].addEventListener('input', render); });
+      $('fp-copy').addEventListener('click', function () {
+        var btn = this;
+        navigator.clipboard.writeText(code.textContent).then(function () {
+          btn.textContent = 'Copied'; btn.classList.add('ok');
+          setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1400);
+        });
+      });
+      buildItems(5); render();
+    })();
+  </script>
+</Base>

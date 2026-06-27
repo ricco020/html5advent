@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Web platform tools',
+  url: 'https://html5advent.com/tools',
+  description: 'Free, interactive front-end tools — visual CSS generators and playgrounds that run entirely in your browser.',
+};
+const tools = [
+  { href: '/tools/flexbox-playground', title: 'Flexbox Playground', desc: 'Toggle flex-direction, justify-content, align-items, wrap and gap; see the layout live and copy the CSS.' },
+];
+---
+<Base
+  lang="en"
+  title="Web platform tools — free interactive CSS & front-end playgrounds"
+  description="Free, interactive front-end tools: visual CSS generators and playgrounds that run entirely in your browser, no sign-up."
+  path="tools"
+  schema={schema}
+>
+  <main class="tools-wrap">
+    <header class="tools-head">
+      <p class="kicker">// tools</p>
+      <h1>Web platform tools</h1>
+      <p class="lede">Free, interactive front-end tools that run entirely in your browser — nothing stored, no sign-up. Built to pair with our <a href="/guides">guides</a>.</p>
+    </header>
+    <ul class="tools-list">
+      {tools.map((tl) => (
+        <li><a href={tl.href}><strong>{tl.title}</strong><span>{tl.desc}</span></a></li>
+      ))}
+    </ul>
+  </main>
+  <style>
+    .tools-wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+    .tools-head .kicker { font-family: var(--mono, monospace); color: var(--accent-blue, #2b6cb0); font-size: .82rem; margin: 0 0 .4rem; }
+    .tools-head h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0; }
+    .lede { color: var(--muted, #5b5046); font-size: 1.1rem; margin: 1rem 0 2rem; }
+    .lede a { color: var(--accent-blue, #2b6cb0); }
+    .tools-list { list-style: none; padding: 0; display: grid; gap: 14px; }
+    .tools-list a { display: grid; gap: 4px; padding: 18px 20px; border: 1px solid var(--border, #e0d6c6); border-radius: 12px; background: var(--soft, #f4ede1); text-decoration: none; color: var(--ink, #211b17); transition: transform .12s ease, box-shadow .12s ease; }
+    .tools-list a:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -12px rgba(0,0,0,.5); }
+    .tools-list strong { font-size: 1.15rem; }
+    .tools-list span { color: var(--muted, #5b5046); font-size: .95rem; }
+  </style>
+</Base>
