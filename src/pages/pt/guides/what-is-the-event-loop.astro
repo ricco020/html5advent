@@ -10,6 +10,12 @@ import Article from '../../../layouts/Article.astro';
   hero="/img/what-is-the-event-loop-hero.jpg"
   heroAlt="Código JavaScript colorido exibido na tela de um computador"
   cluster={null}
+  faq={[
+    { q: `O que é o event loop em JavaScript?`, a: `É o mecanismo que mantém o JavaScript, de thread única, responsivo: assim que a call stack fica vazia, o event loop pega o próximo callback na fila e o executa. O trabalho lento (timers, requisições de rede) é entregue ao ambiente, que enfileira o seu callback quando termina.` },
+    { q: `Por que uma promise roda antes do setTimeout?`, a: `Os callbacks de promise são microtasks e os timers são macrotasks. Depois de cada macrotask, o event loop esvazia primeiro toda a fila de microtasks, então o .then de uma promise resolvida roda antes de um callback setTimeout(…, 0), mesmo que o timer estivesse em zero.` },
+    { q: `O setTimeout(fn, 0) roda imediatamente?`, a: `Não. Ele roda assim que a call stack fica livre e depois de quaisquer microtasks pendentes, não instantaneamente. Zero significa o mais rápido possível, o que ainda é depois de o código síncrono atual terminar.` },
+    { q: `O event loop é igual no Node.js e no navegador?`, a: `O modelo mental é o mesmo — uma thread, o ambiente espera e um loop reinjeta os callbacks concluídos. O Node.js usa libuv e tem algumas fases extras (e process.nextTick vem antes dos microtasks normais), mas a ideia central é idêntica.` },
+  ]}
 >
   <p>O JavaScript tem uma peculiaridade famosa: ele executa seu código em uma <strong>única thread</strong>, fazendo uma coisa de cada vez — e, mesmo assim, consegue aguardar uma requisição de rede, rodar um timer e responder a cliques sem nunca travar. O que torna isso possível é o <strong>event loop</strong>. Entendê-lo é o que transforma o JavaScript assíncrono de confuso em óbvio.</p>
 

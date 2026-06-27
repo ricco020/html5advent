@@ -10,6 +10,12 @@ import Article from '../../../layouts/Article.astro';
   hero="/img/css-grid-vs-flexbox-hero.jpg"
   heroAlt="Ein Laptop-Bildschirm zeigt CSS-Quellcode in einem Code-Editor"
   cluster={null}
+  faq={[
+    { q: `Sollte ich Flexbox oder Grid verwenden?`, a: `Verwende Flexbox, um Elemente in einer einzigen Richtung anzuordnen (eine Zeile oder eine Spalte) und den Inhalt einer Komponente auszurichten; greife zu CSS Grid, wenn du Zeilen und Spalten gleichzeitig steuern musst, etwa für das Grundgerüst einer Seite oder eine Galerie, die beide Achsen ausgerichtet hält.` },
+    { q: `Kann man CSS Grid und Flexbox zusammen verwenden?`, a: `Ja, und das ist der Normalfall. Grid übernimmt meist die übergeordnete Seiten- oder Abschnittsstruktur, während Flexbox die Elemente innerhalb jedes Bereichs ausrichtet (Karten, Header, Toolbars). Sie sind Schichten desselben Layoutsystems, keine Konkurrenten.` },
+    { q: `Ist CSS Grid besser als Flexbox?`, a: `Keines ist besser; sie lösen unterschiedliche Probleme. Flexbox ist eindimensional und inhaltsgetrieben, Grid ist zweidimensional und layoutgetrieben. Entscheide danach, ob dein Layout wirklich zweidimensional ist.` },
+    { q: `Ist die Browserunterstützung 2026 ein Problem?`, a: `Nein. Sowohl Flexbox als auch CSS Grid werden seit Jahren von allen modernen Browsern unterstützt, daher ist die Kompatibilität kein entscheidender Faktor — wähle nach der Art des Problems.` },
+  ]}
 >
   <p><strong>Grid vs. Flexbox</strong> ist die meistgestellte Frage zum CSS-Layout — und die ehrliche Antwort lautet: Es sind keine Rivalen. Sie lösen unterschiedliche Probleme: <strong>Flexbox ordnet Inhalte in einer Dimension</strong> (eine Zeile <em>oder</em> eine Spalte), während <strong>CSS Grid Inhalte in zwei Dimensionen ordnet</strong> (Zeilen <em>und</em> Spalten zugleich). Wenn das einmal sitzt, ist die Wahl zwischen beiden kein Raten mehr.</p>
 

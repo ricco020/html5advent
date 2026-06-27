@@ -10,6 +10,12 @@ import Article from '../../../layouts/Article.astro';
   hero="/img/what-is-the-event-loop-hero.jpg"
   heroAlt="Codice JavaScript colorato mostrato sullo schermo di un computer"
   cluster={null}
+  faq={[
+    { q: `Cos'è l'event loop in JavaScript?`, a: `È il meccanismo che permette a JavaScript, a thread singolo, di restare reattivo: appena il call stack è vuoto, l'event loop prende il prossimo callback in coda e lo esegue. Il lavoro lento (timer, richieste di rete) viene affidato all'ambiente, che mette il tuo callback in coda quando ha finito.` },
+    { q: `Perché una promise viene eseguita prima di setTimeout?`, a: `I callback delle promise sono microtask e i timer sono macrotask. Dopo ogni macrotask, l'event loop svuota prima l'intera coda dei microtask, quindi il .then di una promise risolta viene eseguito prima di un callback setTimeout(…, 0), anche se il timer era impostato a zero.` },
+    { q: `setTimeout(fn, 0) viene eseguito immediatamente?`, a: `No. Viene eseguito appena il call stack è libero e dopo gli eventuali microtask in sospeso, non istantaneamente. Zero significa il prima possibile, che è comunque dopo la fine del codice sincrono in corso.` },
+    { q: `L'event loop è uguale in Node.js e nel browser?`, a: `Il modello mentale è lo stesso — un solo thread, l'ambiente attende e un loop reinserisce i callback completati. Node.js usa libuv e ha qualche fase aggiuntiva (e process.nextTick viene prima dei normali microtask), ma l'idea centrale è identica.` },
+  ]}
 >
   <p>JavaScript ha una particolarità famosa: esegue il tuo codice su un <strong>singolo thread</strong>, facendo una cosa alla volta — eppure può attendere una richiesta di rete, far girare un timer e rispondere ai clic senza mai bloccarsi. Ciò che lo rende possibile è l'<strong>event loop</strong>. Comprenderlo è ciò che trasforma il JavaScript asincrono da confuso a ovvio.</p>
 
