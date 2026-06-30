@@ -5,21 +5,21 @@ import Article from '../../../layouts/Article.astro';
   lang="es"
   slug="cloud-hosting"
   title="El hosting en la nube explicado: cuándo tiene sentido para un proyecto web"
-  description="Qué significa realmente el hosting en la nube, en qué se diferencia de un VPS único o del hosting compartido, sus verdaderas fortalezas y contrapartidas, y los tipos de proyectos web a los que se adapta — sin precios ni benchmarks inventados."
+  description="Qué significa realmente el hosting en la nube, en qué se diferencia de un VPS único o del hosting compartido, sus verdaderas fortalezas y contrapartidas, y los tipos de proyectos web a los que se adapta - sin precios ni benchmarks inventados."
   cat="hosting"
   hero="/img/cloud-hosting-hero.jpg"
   heroAlt="Una mano señalando una nube blanca sobre un cielo azul superpuesta con una malla de red conectada"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>El <strong>hosting en la nube</strong> ejecuta tu sitio o aplicación en un conjunto de servidores conectados en lugar de en una sola máquina. En vez de estar atado a una única caja, tu carga de trabajo extrae recursos de un clúster, de modo que la capacidad puede añadirse o retirarse bajo demanda y un solo fallo de hardware no tiene por qué dejarte fuera de línea. Ese modelo aporta ventajas reales — y contrapartidas reales. Esta guía explica qué es el hosting en la nube, cómo se compara con el hosting compartido y con un VPS único, y cuándo es realmente la elección correcta para un proyecto web.</p>
+  <p>El <strong>hosting en la nube</strong> ejecuta tu sitio o aplicación en un conjunto de servidores conectados en lugar de en una sola máquina. En vez de estar atado a una única caja, tu carga de trabajo extrae recursos de un clúster, de modo que la capacidad puede añadirse o retirarse bajo demanda y un solo fallo de hardware no tiene por qué dejarte fuera de línea. Ese modelo aporta ventajas reales - y contrapartidas reales. Esta guía explica qué es el hosting en la nube, cómo se compara con el hosting compartido y con un VPS único, y cuándo es realmente la elección correcta para un proyecto web.</p>
 
   <h2>Qué significa realmente el hosting en la nube</h2>
   <p>En el hosting tradicional tu sitio vive en un solo servidor físico (compartido) o en una única porción virtual de uno (un VPS). En el hosting en la nube, la virtualización reparte la carga entre <strong>muchos servidores en red</strong>. Si un nodo falla, otros asumen el trabajo; si necesitas más capacidad, la plataforma la aprovisiona desde el conjunto. Se te factura por lo que usas en lugar de por una caja fija.</p>
   <p>Dos propiedades definen el modelo:</p>
   <ul>
-    <li><strong>Elasticidad</strong> — los recursos suben y bajan para ajustarse a la demanda, a menudo de forma automática.</li>
-    <li><strong>Redundancia</strong> — la carga de trabajo no está anclada a un único punto de fallo, así que la plataforma puede tolerar la caída de un nodo.</li>
+    <li><strong>Elasticidad</strong> - los recursos suben y bajan para ajustarse a la demanda, a menudo de forma automática.</li>
+    <li><strong>Redundancia</strong> - la carga de trabajo no está anclada a un único punto de fallo, así que la plataforma puede tolerar la caída de un nodo.</li>
   </ul>
 
   <h2>Nube vs compartido vs VPS</h2>
@@ -31,7 +31,7 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Hosting en la nube</td><td>Un conjunto de servidores en red</td><td>Elástico, a menudo automático</td><td>A menudo basado en el uso</td></tr>
     </tbody>
   </table>
-  <p>Un VPS único te da recursos garantizados y aislados en una sola máquina — predecible y simple. El hosting en la nube cambia esa simplicidad por elasticidad y resiliencia al repartirte entre muchas máquinas. Ninguno es «mejor»; resuelven problemas distintos.</p>
+  <p>Un VPS único te da recursos garantizados y aislados en una sola máquina - predecible y simple. El hosting en la nube cambia esa simplicidad por elasticidad y resiliencia al repartirte entre muchas máquinas. Ninguno es «mejor»; resuelven problemas distintos.</p>
 
   <figure>
     <img src="/img/cloud-hosting-inbody.jpg" alt="Racks de servidores en el pasillo de un datacenter con un diagrama superpuesto que conecta un icono de nube con teléfonos, pantallas y una base de datos" width="1280" height="720" loading="lazy" />
@@ -41,26 +41,26 @@ import Article from '../../../layouts/Article.astro';
   <h2>Cuándo tiene sentido el hosting en la nube</h2>
   <p>El modelo se gana su sitio en situaciones concretas:</p>
   <ul>
-    <li><strong>Tráfico impredecible o con picos</strong> — un lanzamiento, una publicación viral o picos estacionales. El escalado elástico absorbe el pico en lugar de colapsar bajo él, y luego se reduce cuando pasa.</li>
-    <li><strong>El tiempo de actividad es crítico</strong> — cuando la caída cuesta dinero o confianza reales, la redundancia integrada de múltiples nodos es valiosa.</li>
-    <li><strong>Crecimiento rápido</strong> — no sabes cuál será la carga del próximo trimestre y prefieres no sobredimensionar una caja fija hoy.</li>
-    <li><strong>Usuarios distribuidos</strong> — las plataformas en la nube facilitan funcionar en varias regiones para mantener baja la latencia para una audiencia global.</li>
+    <li><strong>Tráfico impredecible o con picos</strong> - un lanzamiento, una publicación viral o picos estacionales. El escalado elástico absorbe el pico en lugar de colapsar bajo él, y luego se reduce cuando pasa.</li>
+    <li><strong>El tiempo de actividad es crítico</strong> - cuando la caída cuesta dinero o confianza reales, la redundancia integrada de múltiples nodos es valiosa.</li>
+    <li><strong>Crecimiento rápido</strong> - no sabes cuál será la carga del próximo trimestre y prefieres no sobredimensionar una caja fija hoy.</li>
+    <li><strong>Usuarios distribuidos</strong> - las plataformas en la nube facilitan funcionar en varias regiones para mantener baja la latencia para una audiencia global.</li>
   </ul>
 
   <h2>Cuándo es excesivo</h2>
   <p>El hosting en la nube no es automáticamente la respuesta correcta.</p>
   <ul>
-    <li><strong>Tráfico estable y predecible</strong> — si tu carga es plana, un VPS único es más simple y normalmente más barato que la nube basada en el uso.</li>
-    <li><strong>Sitios pequeños o estáticos</strong> — un blog o un sitio de presentación se sirve mejor con hosting compartido o un host estático.</li>
-    <li><strong>Presupuestos ajustados y fijos</strong> — la facturación basada en el uso puede ser impredecible; un VPS de tarifa plana hace que los costes sean fáciles de prever.</li>
-    <li><strong>Quieres simplicidad</strong> — las plataformas en la nube añaden conceptos (balanceadores de carga, autoescalado, servicios gestionados) que son una sobrecarga si no los necesitas.</li>
+    <li><strong>Tráfico estable y predecible</strong> - si tu carga es plana, un VPS único es más simple y normalmente más barato que la nube basada en el uso.</li>
+    <li><strong>Sitios pequeños o estáticos</strong> - un blog o un sitio de presentación se sirve mejor con hosting compartido o un host estático.</li>
+    <li><strong>Presupuestos ajustados y fijos</strong> - la facturación basada en el uso puede ser impredecible; un VPS de tarifa plana hace que los costes sean fáciles de prever.</li>
+    <li><strong>Quieres simplicidad</strong> - las plataformas en la nube añaden conceptos (balanceadores de carga, autoescalado, servicios gestionados) que son una sobrecarga si no los necesitas.</li>
   </ul>
 
   <h2>Pros y contras</h2>
   <h3>Ventajas</h3>
   <ul>
-    <li>Escalado elástico — gestiona los picos de tráfico sin reconstruir.</li>
-    <li>Resiliencia — ningún servidor por sí solo es un único punto de fallo.</li>
+    <li>Escalado elástico - gestiona los picos de tráfico sin reconstruir.</li>
+    <li>Resiliencia - ningún servidor por sí solo es un único punto de fallo.</li>
     <li>Paga por lo que usas (cuando el tráfico es genuinamente variable).</li>
     <li>Despliegues multirregión más fáciles para una audiencia global.</li>
   </ul>
@@ -72,7 +72,7 @@ import Article from '../../../layouts/Article.astro';
   </ul>
 
   <h2>Un camino intermedio práctico</h2>
-  <p>Muchos proyectos no necesitan toda la elasticidad de la nube desde el primer día. Un enfoque común y rentable es empezar en un <strong>VPS</strong> bien dimensionado con precios mensuales predecibles, y luego avanzar hacia una configuración en la nube solo cuando el tráfico se vuelva genuinamente variable o se endurezcan los requisitos de tiempo de actividad. Para la etapa de VPS, los proveedores centrados en una buena relación recursos-precio — como <strong>Contabo</strong>, conocido por su CPU y RAM generosos a un bajo coste mensual — te dan mucho margen mientras creces, sin comprometerte con la facturación basada en el uso antes de necesitarla.</p>
+  <p>Muchos proyectos no necesitan toda la elasticidad de la nube desde el primer día. Un enfoque común y rentable es empezar en un <strong>VPS</strong> bien dimensionado con precios mensuales predecibles, y luego avanzar hacia una configuración en la nube solo cuando el tráfico se vuelva genuinamente variable o se endurezcan los requisitos de tiempo de actividad. Para la etapa de VPS, los proveedores centrados en una buena relación recursos-precio - como <strong>Contabo</strong>, conocido por su CPU y RAM generosos a un bajo coste mensual - te dan mucho margen mientras creces, sin comprometerte con la facturación basada en el uso antes de necesitarla.</p>
 
   <h2>Cómo decidir</h2>
   <p>Pregúntate si tu tráfico es variable y si la caída es costosa. Si ambas respuestas son sí, la elasticidad y la redundancia del hosting en la nube justifican la complejidad adicional. Si tu carga es estable y tu presupuesto fijo, un VPS único es más simple y más fácil de prever. Si estás valorando la opción del VPS, consulta nuestras guías sobre <a href="/es/guides/vps-hosting">qué es un VPS y cómo elegir uno</a> y sobre <a href="/es/guides/best-vps-for-web-hosting">elegir el mejor VPS para un proyecto web</a>.</p>

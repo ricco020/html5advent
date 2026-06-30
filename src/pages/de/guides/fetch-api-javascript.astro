@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="de"
   slug="fetch-api-javascript"
   title="Die Fetch-API in JavaScript: ein praktischer Leitfaden"
-  description="Wie man im Browser mit der Fetch-API HTTP-Anfragen stellt — GET, JSON, POST, Fehlerbehandlung und das Abbrechen von Anfragen — mit ausführbaren Beispielen."
+  description="Wie man im Browser mit der Fetch-API HTTP-Anfragen stellt - GET, JSON, POST, Fehlerbehandlung und das Abbrechen von Anfragen - mit ausführbaren Beispielen."
   cat="apis"
   day={1}
   hero="/img/web-dev-code.jpg"
@@ -25,7 +25,7 @@ console.log(data);`}</code></pre>
   .then((data) => console.log(data));`}</code></pre>
 
   <h2>Der Haken: fetch lehnt bei HTTP-Fehlern nicht ab</h2>
-  <p>Das bringt fast jeden ins Stolpern. Eine <code>404</code>- oder <code>500</code>-Antwort ist immer noch ein <em>erfolgreicher</em> Fetch — das Promise wird nur bei einem <strong>Netzwerk</strong>fehler abgelehnt (offline, DNS, CORS). Sie müssen <code>response.ok</code> selbst prüfen:</p>
+  <p>Das bringt fast jeden ins Stolpern. Eine <code>404</code>- oder <code>500</code>-Antwort ist immer noch ein <em>erfolgreicher</em> Fetch - das Promise wird nur bei einem <strong>Netzwerk</strong>fehler abgelehnt (offline, DNS, CORS). Sie müssen <code>response.ok</code> selbst prüfen:</p>
   <pre><code>{`const res = await fetch(url);
 if (!res.ok) {
   throw new Error(\`HTTP \${res.status} \${res.statusText}\`);
@@ -47,7 +47,7 @@ const data = await res.json();`}</code></pre>
 const created = await res.json();`}</code></pre>
 
   <h2>Eine Anfrage abbrechen</h2>
-  <p>Verwenden Sie einen <code>AbortController</code>, um eine Anfrage abzubrechen — nützlich für Zeitlimits oder wenn eine Komponente entfernt wird:</p>
+  <p>Verwenden Sie einen <code>AbortController</code>, um eine Anfrage abzubrechen - nützlich für Zeitlimits oder wenn eine Komponente entfernt wird:</p>
   <pre><code>{`const controller = new AbortController();
 const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -72,5 +72,5 @@ try {
     </tbody>
   </table>
 
-  <p>Das deckt die alltäglichen Fälle ab. Die Fetch-API unterstützt außerdem das Streamen von Antwort-Bodies, <code>FormData</code>-Uploads sowie das Klonen von Anfrage/Antwort — aber die obigen Muster bewältigen die große Mehrheit realer Aufrufe.</p>
+  <p>Das deckt die alltäglichen Fälle ab. Die Fetch-API unterstützt außerdem das Streamen von Antwort-Bodies, <code>FormData</code>-Uploads sowie das Klonen von Anfrage/Antwort - aber die obigen Muster bewältigen die große Mehrheit realer Aufrufe.</p>
 </Article>

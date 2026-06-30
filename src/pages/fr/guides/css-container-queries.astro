@@ -12,17 +12,17 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="Icônes plates d'un écran de bureau, d'une tablette, d'un portable et d'un téléphone de tailles différentes"
   cluster={null}
 >
-  <p>Les <strong>container queries</strong> permettent à un élément de réagir à la taille de son <em>conteneur parent</em> plutôt qu'à celle de la fenêtre entière. C'est la pièce manquante qui rend enfin un composant réutilisable : une même carte peut s'agencer d'une façon dans une barre latérale étroite et autrement dans une colonne principale large — sur la même page, à la même largeur d'écran.</p>
+  <p>Les <strong>container queries</strong> permettent à un élément de réagir à la taille de son <em>conteneur parent</em> plutôt qu'à celle de la fenêtre entière. C'est la pièce manquante qui rend enfin un composant réutilisable : une même carte peut s'agencer d'une façon dans une barre latérale étroite et autrement dans une colonne principale large - sur la même page, à la même largeur d'écran.</p>
 
   <h2>Pourquoi les media queries ne suffisaient pas</h2>
-  <p>Une media query pose une seule question : quelle est la largeur de la fenêtre ? Mais un composant ne connaît pas la largeur de la fenêtre — il connaît la place qu'<em>on</em> lui a donnée. Une carte placée dans une barre latérale de 300 px et la même carte dans une cellule de grille de 900 px ont besoin de mises en page différentes, alors que la largeur de la fenêtre est identique. Les container queries résolvent exactement cela.</p>
+  <p>Une media query pose une seule question : quelle est la largeur de la fenêtre ? Mais un composant ne connaît pas la largeur de la fenêtre - il connaît la place qu'<em>on</em> lui a donnée. Une carte placée dans une barre latérale de 300 px et la même carte dans une cellule de grille de 900 px ont besoin de mises en page différentes, alors que la largeur de la fenêtre est identique. Les container queries résolvent exactement cela.</p>
 
   <h2>Étape 1 : déclarer un contexte de confinement</h2>
   <p>On interroge un conteneur, il faut donc d'abord marquer un élément <em>comme</em> conteneur avec <code>container-type</code> :</p>
   <pre><code>{`.card-wrapper {
   container-type: inline-size;
 }`}</code></pre>
-  <p><code>inline-size</code> signifie « laisse-moi interroger la dimension en ligne (généralement horizontale) » — le choix le plus courant. <code>size</code> interroge les deux dimensions, et <code>normal</code> désactive le confinement.</p>
+  <p><code>inline-size</code> signifie « laisse-moi interroger la dimension en ligne (généralement horizontale) » - le choix le plus courant. <code>size</code> interroge les deux dimensions, et <code>normal</code> désactive le confinement.</p>
 
   <h2>Étape 2 : l'interroger avec @container</h2>
   <p>Désormais, tout descendant de <code>.card-wrapper</code> peut s'adapter selon la largeur du wrapper :</p>
@@ -36,7 +36,7 @@ import Article from '../../../layouts/Article.astro';
     grid-template-columns: 150px 1fr;
   }
 }`}</code></pre>
-  <p>Quand le wrapper fait au moins 400 px de large, la carte passe à une mise en page sur deux colonnes. Placez ce même balisage n'importe où sur la page : il s'adapte à l'endroit où il atterrit — sans aucune media query au niveau de la page.</p>
+  <p>Quand le wrapper fait au moins 400 px de large, la carte passe à une mise en page sur deux colonnes. Placez ce même balisage n'importe où sur la page : il s'adapte à l'endroit où il atterrit - sans aucune media query au niveau de la page.</p>
 
   <figure>
     <img src="/img/css-container-queries-inbody.jpg" alt="Un smartphone posé sur une tablette et un portable, trois écrans de tailles différentes" width="1280" height="820" loading="lazy" />
@@ -69,7 +69,7 @@ import Article from '../../../layouts/Article.astro';
   </table>
 
   <h2>Support navigateurs</h2>
-  <p>Les container queries de taille sont supportées dans les versions actuelles de Chrome, Edge, Firefox et Safari. Elles ne remplacent pas les media queries — utilisez les media queries pour la structure globale de la page et les container queries pour les composants qui doivent être portables. Les deux fonctionnent bien ensemble.</p>
+  <p>Les container queries de taille sont supportées dans les versions actuelles de Chrome, Edge, Firefox et Safari. Elles ne remplacent pas les media queries - utilisez les media queries pour la structure globale de la page et les container queries pour les composants qui doivent être portables. Les deux fonctionnent bien ensemble.</p>
 
   <p>Le changement de mentalité est petit mais puissant : cessez de demander « quelle est la taille de l'écran ? » et demandez « combien de place ce composant a-t-il ? ». Ce seul changement rend les composants d'un design system vraiment réutilisables partout.</p>
 </Article>

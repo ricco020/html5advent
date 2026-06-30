@@ -1,29 +1,29 @@
 ---
 import Article from '../../../layouts/Article.astro';
-export const prerender = true; // force static — overrides the prerender=false string shown in a code example below
+export const prerender = true; // force static - overrides the prerender=false string shown in a code example below
 ---
 <Article
   lang="fr"
   slug="astro-hosting"
   title="Comment héberger un site Astro : options statiques et SSR"
-  description="Un guide pratique pour déployer un site Astro — la différence entre la sortie statique et la sortie serveur (SSR), le fonctionnement des adaptateurs, les commandes de build, et comment choisir un hébergeur pour chaque mode."
+  description="Un guide pratique pour déployer un site Astro - la différence entre la sortie statique et la sortie serveur (SSR), le fonctionnement des adaptateurs, les commandes de build, et comment choisir un hébergeur pour chaque mode."
   cat="hosting"
   hero="/img/astro-hosting-hero.jpg"
   heroAlt="Code source HTML avec des balises d'ancre et d'élément de liste affichées en couleur sur un écran sombre"
   cluster="deploy"
 >
-  <p><strong>Astro</strong> peut livrer votre site de deux façons très différentes, et celle que vous choisissez décide où et comment vous l'hébergez. Par défaut, Astro construit un dossier de simples fichiers HTML, CSS et JS — des fichiers que n'importe quel hébergeur statique peut servir. Mais Astro peut aussi tourner sur un serveur, rendant les pages à la demande (SSR) pour des choses comme l'authentification, les formulaires ou les données par requête. Ce guide explique les deux modes de sortie, les commandes de build qui les sous-tendent, comment les adaptateurs s'y intègrent, et comment choisir un hébergeur pour chacun.</p>
+  <p><strong>Astro</strong> peut livrer votre site de deux façons très différentes, et celle que vous choisissez décide où et comment vous l'hébergez. Par défaut, Astro construit un dossier de simples fichiers HTML, CSS et JS - des fichiers que n'importe quel hébergeur statique peut servir. Mais Astro peut aussi tourner sur un serveur, rendant les pages à la demande (SSR) pour des choses comme l'authentification, les formulaires ou les données par requête. Ce guide explique les deux modes de sortie, les commandes de build qui les sous-tendent, comment les adaptateurs s'y intègrent, et comment choisir un hébergeur pour chacun.</p>
 
   <h2>Statique vs serveur : la décision centrale</h2>
   <p>Tout choix d'hébergement pour Astro découle d'une question : votre site a-t-il besoin d'un serveur en fonctionnement au moment de la requête ?</p>
   <ul>
-    <li><strong>Statique (le défaut).</strong> Les pages sont rendues une fois, au moment du build, en fichiers HTML. Il n'y a pas de processus serveur — vous téléversez le dossier construit sur un CDN ou un hébergeur statique et il sert les fichiers. Le plus rapide, le moins cher, le plus simple. Idéal pour les blogs, la documentation, les sites vitrines et la plupart des sites de contenu.</li>
+    <li><strong>Statique (le défaut).</strong> Les pages sont rendues une fois, au moment du build, en fichiers HTML. Il n'y a pas de processus serveur - vous téléversez le dossier construit sur un CDN ou un hébergeur statique et il sert les fichiers. Le plus rapide, le moins cher, le plus simple. Idéal pour les blogs, la documentation, les sites vitrines et la plupart des sites de contenu.</li>
     <li><strong>Serveur / SSR.</strong> Les pages sont rendues à chaque requête par un processus Node (ou edge). Nécessaire quand le contenu dépend de la requête : utilisateurs connectés, traitement de formulaires, personnalisation à la volée, ou données qui doivent être fraîches à chaque chargement.</li>
   </ul>
   <p>Vous pouvez aussi mélanger les deux : garder le site majoritairement statique et faire basculer certaines routes spécifiques en rendu à la demande. L'idée est de rendre statiquement partout où vous le pouvez, et de ne payer un serveur que là où vous en avez réellement besoin.</p>
 
   <h2>Les commandes de build</h2>
-  <p>Quel que soit le mode, le flux de travail tient aux deux mêmes commandes — installer, puis construire :</p>
+  <p>Quel que soit le mode, le flux de travail tient aux deux mêmes commandes - installer, puis construire :</p>
   <pre><code>{`# install dependencies
 npm install
 
@@ -32,11 +32,11 @@ npm run build
 
 # preview the production build locally before deploying
 npm run preview`}</code></pre>
-  <p>Par défaut, <code>npm run build</code> écrit un site statique dans le dossier <code>dist/</code>. Ce dossier est l'intégralité de votre site déployable en mode statique — il n'y a rien d'autre à exécuter.</p>
+  <p>Par défaut, <code>npm run build</code> écrit un site statique dans le dossier <code>dist/</code>. Ce dossier est l'intégralité de votre site déployable en mode statique - il n'y a rien d'autre à exécuter.</p>
 
   <h2>Configurer le mode de sortie</h2>
-  <p>Vous contrôlez le mode dans <code>astro.config.mjs</code>. Le statique est le défaut, donc une configuration minimale n'a besoin de rien de particulier. Pour rendre côté serveur, vous ajoutez un <strong>adaptateur</strong> — un petit paquet qui apprend à Astro comment tourner sur une plateforme spécifique (Node, ou un runtime edge/serverless) :</p>
-  <pre><code>{`// astro.config.mjs — server (SSR) output with the Node adapter
+  <p>Vous contrôlez le mode dans <code>astro.config.mjs</code>. Le statique est le défaut, donc une configuration minimale n'a besoin de rien de particulier. Pour rendre côté serveur, vous ajoutez un <strong>adaptateur</strong> - un petit paquet qui apprend à Astro comment tourner sur une plateforme spécifique (Node, ou un runtime edge/serverless) :</p>
+  <pre><code>{`// astro.config.mjs - server (SSR) output with the Node adapter
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 
@@ -49,13 +49,13 @@ export default defineConfig({
 node ./dist/server/entry.mjs`}</code></pre>
   <p>Si vous n'avez besoin que d'une poignée de routes dynamiques, gardez la sortie statique par défaut et sortez certaines pages individuelles du prérendu au lieu de basculer tout le site en mode serveur :</p>
   <pre><code>{`---
-// src/pages/dashboard.astro — render this page per request
+// src/pages/dashboard.astro - render this page per request
 export const prerender = false;
 ---`}</code></pre>
 
   <figure>
     <img src="/img/astro-hosting-inbody.jpg" alt="Code source JavaScript avec coloration syntaxique affiché sur un écran d'éditeur sombre" width="1280" height="720" loading="lazy" />
-    <figcaption>Du JavaScript dans un éditeur de code — l'étape de build transforme vos composants Astro en HTML et JS qui sont déployés.</figcaption>
+    <figcaption>Du JavaScript dans un éditeur de code - l'étape de build transforme vos composants Astro en HTML et JS qui sont déployés.</figcaption>
   </figure>
 
   <h2>Choisir un hébergeur selon le mode</h2>
@@ -63,12 +63,12 @@ export const prerender = false;
   <p>Pour la sortie statique, il vous faut simplement un endroit pour servir le contenu de <code>dist/</code> en HTTPS, idéalement depuis un CDN. Les réglages de build/publication sont simples :</p>
   <pre><code>{`Build command:    npm run build
 Publish/output:   dist`}</code></pre>
-  <p>De nombreuses plateformes le font — hébergeurs statiques managés, stockage objet derrière un CDN, ou un hébergeur polyvalent capable de servir un dossier. Comme il n'y a pas de serveur à maintenir en vie, l'hébergement statique est bon marché et sans effort à mettre à l'échelle. Héberger sur une infrastructure européenne est un bon choix ici lorsque votre audience ou vos besoins de résidence des données pointent dans cette direction.</p>
+  <p>De nombreuses plateformes le font - hébergeurs statiques managés, stockage objet derrière un CDN, ou un hébergeur polyvalent capable de servir un dossier. Comme il n'y a pas de serveur à maintenir en vie, l'hébergement statique est bon marché et sans effort à mettre à l'échelle. Héberger sur une infrastructure européenne est un bon choix ici lorsque votre audience ou vos besoins de résidence des données pointent dans cette direction.</p>
 
   <h3>Hébergement serveur (SSR)</h3>
   <p>Le SSR a besoin d'un runtime qui maintient un processus en vie. Deux grandes voies :</p>
   <ul>
-    <li><strong>Un hébergeur Node / VPS.</strong> Avec l'adaptateur Node, vous construisez un serveur standalone et le faites tourner comme n'importe quel service Node. Un VPS vous donne le contrôle total sur le processus, l'environnement et la mise à l'échelle — pratique si vous y faites déjà tourner d'autres services.</li>
+    <li><strong>Un hébergeur Node / VPS.</strong> Avec l'adaptateur Node, vous construisez un serveur standalone et le faites tourner comme n'importe quel service Node. Un VPS vous donne le contrôle total sur le processus, l'environnement et la mise à l'échelle - pratique si vous y faites déjà tourner d'autres services.</li>
     <li><strong>Serverless / edge.</strong> Des adaptateurs spécifiques à chaque plateforme empaquettent votre application pour la faire tourner sous forme de fonctions. Moins à gérer, mais vous êtes lié au modèle de cette plateforme.</li>
   </ul>
   <p>Une façon simple de faire tourner le build Node sur votre propre serveur est un gestionnaire de processus pour qu'il redémarre en cas de crash ou de redémarrage :</p>
@@ -88,5 +88,5 @@ pm2 save`}</code></pre>
   </table>
 
   <h2>Comment décider</h2>
-  <p>Commencez en statique — c'est le défaut pour une raison : moins cher, plus rapide et plus simple à héberger. Ne recourez à l'adaptateur serveur que lorsqu'un vrai besoin (état connecté, traitement de formulaires, données toujours fraîches) impose un rendu par requête, et même là, envisagez de ne sortir que ces routes du prérendu plutôt que de faire tourner tout le site sur un serveur. Adaptez l'hébergeur au mode que vous obtenez au final : un hébergeur statique adossé à un CDN pour les fichiers construits, ou un VPS / plateforme serverless capable de Node lorsque vous avez réellement besoin d'un serveur.</p>
+  <p>Commencez en statique - c'est le défaut pour une raison : moins cher, plus rapide et plus simple à héberger. Ne recourez à l'adaptateur serveur que lorsqu'un vrai besoin (état connecté, traitement de formulaires, données toujours fraîches) impose un rendu par requête, et même là, envisagez de ne sortir que ces routes du prérendu plutôt que de faire tourner tout le site sur un serveur. Adaptez l'hébergeur au mode que vous obtenez au final : un hébergeur statique adossé à un CDN pour les fichiers construits, ou un VPS / plateforme serverless capable de Node lorsque vous avez réellement besoin d'un serveur.</p>
 </Article>

@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="fr"
   slug="web-components"
   title="Web Components : Custom Elements, Shadow DOM et templates"
-  description="Créez des éléments HTML réutilisables avec les API natives Web Components — définir un Custom Element, encapsuler les styles avec le Shadow DOM, cloner un &lt;template&gt; et passer des données par attributs."
+  description="Créez des éléments HTML réutilisables avec les API natives Web Components - définir un Custom Element, encapsuler les styles avec le Shadow DOM, cloner un &lt;template&gt; et passer des données par attributs."
   cat="html"
   day={5}
   hero="/img/web-components-hero.jpg"
   heroAlt="Un tas de briques de construction en plastique colorées et emboîtables de différentes formes"
   cluster={null}
 >
-  <p>Les <strong>Web Components</strong> sont un ensemble d'API natives du navigateur qui permettent de créer vos propres éléments HTML réutilisables — sans aucun framework. Un composant que vous publiez fonctionne à l'identique en HTML pur, React, Vue ou Svelte, car c'est simplement un élément que le navigateur comprend. Trois API le rendent possible : les Custom Elements, le Shadow DOM et la balise <code>&lt;template&gt;</code>.</p>
+  <p>Les <strong>Web Components</strong> sont un ensemble d'API natives du navigateur qui permettent de créer vos propres éléments HTML réutilisables - sans aucun framework. Un composant que vous publiez fonctionne à l'identique en HTML pur, React, Vue ou Svelte, car c'est simplement un élément que le navigateur comprend. Trois API le rendent possible : les Custom Elements, le Shadow DOM et la balise <code>&lt;template&gt;</code>.</p>
 
   <h2>Custom Elements</h2>
   <p>Un Custom Element est une classe qui étend <code>HTMLElement</code>, enregistrée avec un nom de balise qui <strong>doit contenir un trait d'union</strong> (pour ne jamais entrer en collision avec une future balise native) :</p>
@@ -30,7 +30,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   <p>La classe vous donne des <strong>callbacks de cycle de vie</strong>. Les plus utiles sont <code>connectedCallback</code> (l'élément a été ajouté à la page), <code>disconnectedCallback</code> (il a été retiré) et <code>attributeChangedCallback</code> (un attribut surveillé a changé).</p>
 
   <h2>Réagir aux attributs</h2>
-  <p>Pour passer des données, lisez les attributs — exactement comme <code>src</code> sur une image. Déclarez ceux à surveiller avec un getter statique <code>observedAttributes</code>, puis répondez dans <code>attributeChangedCallback</code>. Construire le nœud avec <code>textContent</code> sécurise les valeurs fournies par l'utilisateur :</p>
+  <p>Pour passer des données, lisez les attributs - exactement comme <code>src</code> sur une image. Déclarez ceux à surveiller avec un getter statique <code>observedAttributes</code>, puis répondez dans <code>attributeChangedCallback</code>. Construire le nœud avec <code>textContent</code> sécurise les valeurs fournies par l'utilisateur :</p>
   <pre><code>{`class GreetingCard extends HTMLElement {
   static get observedAttributes() {
     return ['name'];
@@ -75,7 +75,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   }
 }
 customElements.define('fancy-button', FancyButton);`}</code></pre>
-  <p>Le <code>&lt;slot&gt;</code> est un emplacement réservé : ce que vous placez entre les balises — <code>&lt;fancy-button&gt;Enregistrer&lt;/fancy-button&gt;</code> — est projeté à cet endroit, de sorte que le composant enveloppe votre contenu sans le remplacer.</p>
+  <p>Le <code>&lt;slot&gt;</code> est un emplacement réservé : ce que vous placez entre les balises - <code>&lt;fancy-button&gt;Enregistrer&lt;/fancy-button&gt;</code> - est projeté à cet endroit, de sorte que le composant enveloppe votre contenu sans le remplacer.</p>
 
   <h2>Templates : cloner une fois, réutiliser à bas coût</h2>
   <p>L'élément <code>&lt;template&gt;</code> contient un balisage inerte, analysé mais non rendu tant que vous ne le clonez pas. C'est la façon efficace de répéter une structure :</p>

@@ -5,20 +5,20 @@ import Article from '../../../layouts/Article.astro';
   lang="de"
   slug="vps-vs-cloud-hosting"
   title="VPS vs Cloud-Hosting: Was passt zu deinem Projekt?"
-  description="Ein klarer, ehrlicher Vergleich von VPS und Cloud-Hosting — wie jedes Modell funktioniert, worin sie sich unterscheiden (Leistung, Skalierung, Zuverlässigkeit, Preis) und wie du entscheidest, was zu deinem Webprojekt passt."
+  description="Ein klarer, ehrlicher Vergleich von VPS und Cloud-Hosting - wie jedes Modell funktioniert, worin sie sich unterscheiden (Leistung, Skalierung, Zuverlässigkeit, Preis) und wie du entscheidest, was zu deinem Webprojekt passt."
   cat="hosting"
   hero="/img/vps-vs-cloud-hosting-hero.jpg"
   heroAlt="Ein Rechenzentrumsgang mit schwarzen Server-Racks, überlagert von einem Netzwerkdiagramm, das Cloud-, Datenbank- und Geräte-Symbole verbindet"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p><strong>VPS</strong> und <strong>Cloud-Hosting</strong> werden oft als austauschbar dargestellt, beruhen aber auf unterschiedlichen Ideen. Ein VPS gibt dir einen festen Anteil an <em>einem</em> physischen Server; Cloud-Hosting verteilt deine Last auf einen <em>Pool</em> verbundener Server. Allein dieser Unterschied erklärt jeden praktischen Unterschied zwischen beiden — Leistung, Skalierung, Zuverlässigkeit und Abrechnung. Dieser Leitfaden vergleicht sie ehrlich, ohne erfundene Benchmarks, damit du das Modell an deine reale Last anpassen kannst.</p>
+  <p><strong>VPS</strong> und <strong>Cloud-Hosting</strong> werden oft als austauschbar dargestellt, beruhen aber auf unterschiedlichen Ideen. Ein VPS gibt dir einen festen Anteil an <em>einem</em> physischen Server; Cloud-Hosting verteilt deine Last auf einen <em>Pool</em> verbundener Server. Allein dieser Unterschied erklärt jeden praktischen Unterschied zwischen beiden - Leistung, Skalierung, Zuverlässigkeit und Abrechnung. Dieser Leitfaden vergleicht sie ehrlich, ohne erfundene Benchmarks, damit du das Modell an deine reale Last anpassen kannst.</p>
 
   <h2>Die kurze Antwort</h2>
-  <p>Wenn du planbare Kosten und einen festen Satz dedizierter Ressourcen willst, die du kontrollierst, ist ein <strong>VPS</strong> meist die bessere Wahl. Wenn dein Traffic unregelmäßig oder unvorhersehbar ist und du lieber nach Nutzung zahlst, während die Plattform Failover und Skalierung übernimmt, rechtfertigt <strong>Cloud-Hosting</strong> seinen Aufpreis. Viele Projekte laufen jahrelang einwandfrei auf einem VPS und brauchen nie das Cloud-Modell — und viele setzen auf die Cloud wegen Resilienz, nicht wegen roher Geschwindigkeit.</p>
+  <p>Wenn du planbare Kosten und einen festen Satz dedizierter Ressourcen willst, die du kontrollierst, ist ein <strong>VPS</strong> meist die bessere Wahl. Wenn dein Traffic unregelmäßig oder unvorhersehbar ist und du lieber nach Nutzung zahlst, während die Plattform Failover und Skalierung übernimmt, rechtfertigt <strong>Cloud-Hosting</strong> seinen Aufpreis. Viele Projekte laufen jahrelang einwandfrei auf einem VPS und brauchen nie das Cloud-Modell - und viele setzen auf die Cloud wegen Resilienz, nicht wegen roher Geschwindigkeit.</p>
 
   <h2>Was ein VPS ist</h2>
-  <p>Ein <strong>Virtual Private Server</strong> ist ein virtualisierter Anteil einer einzelnen physischen Maschine. Du erhältst garantierten RAM, vCPUs und Speicher, vollen Root-Zugriff und dein eigenes Betriebssystem — isoliert von den anderen Mietern auf dieser Maschine. Er verhält sich wie ein kleiner dedizierter Server: Du wählst einen Tarif, zahlst einen festen monatlichen Preis, und die Ressourcen gehören dir, ob du sie nutzt oder nicht. Der Kompromiss: Die zugrunde liegende Maschine ist ein Single Point of Failure, und für mehr Kapazität vergrößerst du den Tarif oder migrierst.</p>
+  <p>Ein <strong>Virtual Private Server</strong> ist ein virtualisierter Anteil einer einzelnen physischen Maschine. Du erhältst garantierten RAM, vCPUs und Speicher, vollen Root-Zugriff und dein eigenes Betriebssystem - isoliert von den anderen Mietern auf dieser Maschine. Er verhält sich wie ein kleiner dedizierter Server: Du wählst einen Tarif, zahlst einen festen monatlichen Preis, und die Ressourcen gehören dir, ob du sie nutzt oder nicht. Der Kompromiss: Die zugrunde liegende Maschine ist ein Single Point of Failure, und für mehr Kapazität vergrößerst du den Tarif oder migrierst.</p>
 
   <h2>Was Cloud-Hosting ist</h2>
   <p>Beim <strong>Cloud-Hosting</strong> verteilt die Virtualisierung deine Last auf <strong>viele vernetzte Server</strong> statt auf einen einzigen. Fällt ein Knoten aus, übernehmen andere; brauchst du mehr Kapazität, stellt die Plattform sie aus dem Pool bereit, oft automatisch. Die Abrechnung folgt meist der Nutzung statt einer festen Maschine. Die beiden Eigenschaften, die das Modell definieren, sind <strong>Elastizität</strong> (Ressourcen steigen und sinken mit der Nachfrage) und <strong>Redundanz</strong> (keine einzelne Maschine kann dich offline nehmen). Diese Stärken bringen mehr bewegliche Teile, variable Rechnungen und oft mehr Betriebskomplexität mit sich.</p>
@@ -37,25 +37,25 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Skalierung</td><td>Tarif vergrößern (oft Reboot/Migration)</td><td>Hoch-/runterskalieren, oft automatisch</td></tr>
       <tr><td>Zuverlässigkeit</td><td>Einzelne Maschine = Single Point of Failure</td><td>Eingebaute Redundanz; ausgefallener Knoten failt über</td></tr>
       <tr><td>Preis</td><td>Feste, planbare monatliche Gebühr</td><td>Meist nutzungsbasiert und variabel</td></tr>
-      <tr><td>Kontrolle</td><td>Voller Root, eigenes OS und eigener Stack</td><td>Unterschiedlich — mehr Plattform-Abstraktion</td></tr>
+      <tr><td>Kontrolle</td><td>Voller Root, eigenes OS und eigener Stack</td><td>Unterschiedlich - mehr Plattform-Abstraktion</td></tr>
       <tr><td>Ideal für</td><td>Stetige, planbare Lasten mit knappem Budget</td><td>Unregelmäßiger/unvorhersehbarer Traffic mit Resilienzbedarf</td></tr>
     </tbody>
   </table>
 
   <h2>Leistung: kein klarer Sieger</h2>
-  <p>Man nimmt gern an, die Cloud sei schneller, doch das ist nicht inhärent. Ein VPS gibt dir dedizierte Ressourcen, die kein Nachbar abgreifen kann, was die Leistung bei stetigen Lasten <strong>konstant</strong> macht. Cloud-Plattformen glänzen, wenn die Last <em>schwankt</em> — sie fügen bei Spitzen Kapazität hinzu, damit du nicht zusammenbrichst, und entfernen sie, wenn der Traffic sinkt. Für eine Website mit stabilem, planbarem Traffic liefert ein passend dimensionierter VPS oft genauso gute Leistung für weniger Geld. Für eine, die gelegentlich viral geht, ist die Fähigkeit der Cloud, die Spitze abzufangen, der eigentliche Vorteil.</p>
+  <p>Man nimmt gern an, die Cloud sei schneller, doch das ist nicht inhärent. Ein VPS gibt dir dedizierte Ressourcen, die kein Nachbar abgreifen kann, was die Leistung bei stetigen Lasten <strong>konstant</strong> macht. Cloud-Plattformen glänzen, wenn die Last <em>schwankt</em> - sie fügen bei Spitzen Kapazität hinzu, damit du nicht zusammenbrichst, und entfernen sie, wenn der Traffic sinkt. Für eine Website mit stabilem, planbarem Traffic liefert ein passend dimensionierter VPS oft genauso gute Leistung für weniger Geld. Für eine, die gelegentlich viral geht, ist die Fähigkeit der Cloud, die Spitze abzufangen, der eigentliche Vorteil.</p>
 
   <h2>Skalierung und Zuverlässigkeit</h2>
-  <p>Hier unterscheiden sich die Modelle am stärksten. Bei einem VPS skalierst du <strong>vertikal</strong>: einen größeren Tarif wählen, wenn du den aktuellen übersteigst. Das ist einfach und günstig, aber es gibt eine Obergrenze, und das Vergrößern kann kurze Ausfallzeit bedeuten. Cloud-Hosting skaliert <strong>horizontal und elastisch</strong> und fügt bei Bedarf Knoten hinzu — und da die Last bereits über mehrere Maschinen verteilt ist, muss ein einzelner Hardwarefehler dich nicht offline nehmen. Wenn durchgehende Verfügbarkeit trotz Hardwarefehlern und Traffic-Spitzen eine harte Anforderung ist, ist diese Redundanz das stärkste Argument der Cloud.</p>
+  <p>Hier unterscheiden sich die Modelle am stärksten. Bei einem VPS skalierst du <strong>vertikal</strong>: einen größeren Tarif wählen, wenn du den aktuellen übersteigst. Das ist einfach und günstig, aber es gibt eine Obergrenze, und das Vergrößern kann kurze Ausfallzeit bedeuten. Cloud-Hosting skaliert <strong>horizontal und elastisch</strong> und fügt bei Bedarf Knoten hinzu - und da die Last bereits über mehrere Maschinen verteilt ist, muss ein einzelner Hardwarefehler dich nicht offline nehmen. Wenn durchgehende Verfügbarkeit trotz Hardwarefehlern und Traffic-Spitzen eine harte Anforderung ist, ist diese Redundanz das stärkste Argument der Cloud.</p>
 
   <h2>Preis: planbar vs nutzungsbasiert</h2>
-  <p>Ein VPS berechnet eine <strong>feste monatliche Gebühr</strong>, egal wie ausgelastet du bist — leicht zu budgetieren und ein hervorragendes Preis-Leistungs-Verhältnis bei stetiger Nutzung. Cloud-Hosting rechnet meist nach <strong>Nutzung</strong> ab, was bei variablen Lasten effizient ist, dich aber bei einer unerwarteten Spitze überraschen kann. Keines ist universell günstiger: Eine planbare Last ist fast immer auf einem VPS günstiger, während eine Last, die meist im Leerlauf ist und gelegentlich Spitzen hat, in der Cloud günstiger sein kann. Vergleiche immer auf gleichwertigen Specs und lies die Overage- und Bandbreiten-Richtlinien, bevor du dich bindest.</p>
+  <p>Ein VPS berechnet eine <strong>feste monatliche Gebühr</strong>, egal wie ausgelastet du bist - leicht zu budgetieren und ein hervorragendes Preis-Leistungs-Verhältnis bei stetiger Nutzung. Cloud-Hosting rechnet meist nach <strong>Nutzung</strong> ab, was bei variablen Lasten effizient ist, dich aber bei einer unerwarteten Spitze überraschen kann. Keines ist universell günstiger: Eine planbare Last ist fast immer auf einem VPS günstiger, während eine Last, die meist im Leerlauf ist und gelegentlich Spitzen hat, in der Cloud günstiger sein kann. Vergleiche immer auf gleichwertigen Specs und lies die Overage- und Bandbreiten-Richtlinien, bevor du dich bindest.</p>
 
   <h2>Wie du entscheidest</h2>
   <ul>
     <li><strong>Planbarer Traffic, knappes Budget, Kontrolle gewünscht?</strong> Ein VPS ist die unkomplizierte, kosteneffiziente Wahl.</li>
     <li><strong>Unregelmäßiger oder unvorhersehbarer Traffic, Verfügbarkeit kritisch?</strong> Elastizität und Redundanz der Cloud rechtfertigen den Aufpreis.</li>
-    <li><strong>Gerade am Anfang?</strong> Ein VPS ist meist der einfachere, günstigere Einstieg — du kannst später in die Cloud wechseln, wenn du ihn wirklich übersteigst.</li>
+    <li><strong>Gerade am Anfang?</strong> Ein VPS ist meist der einfachere, günstigere Einstieg - du kannst später in die Cloud wechseln, wenn du ihn wirklich übersteigst.</li>
     <li><strong>Server-Administration lernen wollen?</strong> Ein VPS gibt dir vollen Root-Zugriff und ein sauberes OS zum Üben.</li>
   </ul>
   <p>Geh von deiner Last aus, nicht vom Etikett: schätze deine typische und Spitzenlast, entscheide, wie viel Variabilität und Ausfallzeit du tolerierst, und wähle das Modell, dessen Stärken passen. Ein passend dimensionierter VPS deckt die meisten Webprojekte bequem ab; greif zur Cloud, wenn Resilienz und Elastizität echte Anforderungen sind, nicht nur Schlagwörter.</p>
@@ -64,9 +64,9 @@ import Article from '../../../layouts/Article.astro';
   <h3>Ist Cloud-Hosting immer besser als ein VPS?</h3>
   <p>Nein. Die Cloud ist besser für unregelmäßigen, unvorhersehbaren Traffic und für Projekte, bei denen Redundanz kritisch ist. Für stetige, planbare Lasten liefert ein VPS meist gleichwertige Leistung zu niedrigeren, planbareren Kosten.</p>
   <h3>Ist ein VPS günstiger als Cloud-Hosting?</h3>
-  <p>Bei stetiger Last fast immer — ein VPS berechnet eine feste monatliche Gebühr ohne Überraschungen. Die Cloud ist nur dann günstiger, wenn deine Nutzung meist im Leerlauf ist und nur gelegentlich Spitzen hat, weil du nach Verbrauch zahlst.</p>
+  <p>Bei stetiger Last fast immer - ein VPS berechnet eine feste monatliche Gebühr ohne Überraschungen. Die Cloud ist nur dann günstiger, wenn deine Nutzung meist im Leerlauf ist und nur gelegentlich Spitzen hat, weil du nach Verbrauch zahlst.</p>
   <h3>Kann ich später von einem VPS zur Cloud wechseln?</h3>
   <p>Ja. Viele Projekte starten aus Einfachheit und Kostengründen auf einem VPS und migrieren dann zu einem Cloud-Setup, wenn sie die Kapazität eines einzelnen Servers übersteigen oder eingebautes Failover brauchen. Ein portabler Stack (Container, Infrastructure-as-Code) erleichtert diesen Wechsel.</p>
   <h3>Geht ein VPS aus, wenn der Server ausfällt?</h3>
-  <p>Ein VPS lebt auf einer einzelnen physischen Maschine, daher kann ein Hardwarefehler dieser Maschine ihn offline nehmen, bis er wiederhergestellt oder migriert ist. Cloud-Hosting verteilt die Last auf mehrere Maschinen, sodass der Ausfall eines einzelnen Knotens nicht zwangsläufig einen Ausfall verursacht — das ist sein wichtigster Zuverlässigkeitsvorteil.</p>
+  <p>Ein VPS lebt auf einer einzelnen physischen Maschine, daher kann ein Hardwarefehler dieser Maschine ihn offline nehmen, bis er wiederhergestellt oder migriert ist. Cloud-Hosting verteilt die Last auf mehrere Maschinen, sodass der Ausfall eines einzelnen Knotens nicht zwangsläufig einen Ausfall verursacht - das ist sein wichtigster Zuverlässigkeitsvorteil.</p>
 </Article>

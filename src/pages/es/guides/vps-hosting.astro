@@ -5,27 +5,27 @@ import Article from '../../../layouts/Article.astro';
   lang="es"
   slug="vps-hosting"
   title="El hosting VPS explicado: qué es y cómo elegirlo"
-  description="Qué es realmente un VPS, en qué se diferencia del hosting compartido y dedicado, los criterios que importan al elegir uno y para quién es la opción adecuada — sin benchmarks inventados, solo los hechos."
+  description="Qué es realmente un VPS, en qué se diferencia del hosting compartido y dedicado, los criterios que importan al elegir uno y para quién es la opción adecuada - sin benchmarks inventados, solo los hechos."
   cat="hosting"
   hero="/img/vps-hosting-hero.jpg"
   heroAlt="Primer plano de servidores de montaje en rack apilados mostrando LED de estado, puertos USB y bahías de disco en un armario"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>Un <strong>VPS</strong> — servidor privado virtual — es un servidor físico particionado en varias máquinas virtuales aisladas, cada una con su propio sistema operativo, recursos garantizados y acceso root. Obtienes la mayor parte del control de una máquina dedicada por una fracción del coste, mientras un hipervisor mantiene tu porción separada de la de los demás. Esta guía explica qué es realmente un VPS, cómo se compara con las alternativas y los criterios concretos para juzgar a cualquier proveedor — para que no tengas que fiarte de una clasificación.</p>
+  <p>Un <strong>VPS</strong> - servidor privado virtual - es un servidor físico particionado en varias máquinas virtuales aisladas, cada una con su propio sistema operativo, recursos garantizados y acceso root. Obtienes la mayor parte del control de una máquina dedicada por una fracción del coste, mientras un hipervisor mantiene tu porción separada de la de los demás. Esta guía explica qué es realmente un VPS, cómo se compara con las alternativas y los criterios concretos para juzgar a cualquier proveedor - para que no tengas que fiarte de una clasificación.</p>
 
   <h2>Qué es realmente un VPS</h2>
-  <p>El software de virtualización (el <em>hipervisor</em>) divide un potente servidor físico en varios servidores virtuales. Cada VPS se comporta como su propia máquina: arranca su propio SO, tiene su propia dirección IP y se le asigna una cantidad fija de RAM, CPU y almacenamiento que los vecinos no pueden quitarte. Ese aislamiento es la diferencia clave con el hosting compartido — tu rendimiento ya no depende de lo que esté haciendo el sitio de al lado.</p>
-  <p>Como normalmente obtienes <strong>acceso root (administrador)</strong>, puedes instalar cualquier pila de software, configurar tú mismo el servidor web, ejecutar procesos en segundo plano, contenedores o el motor de base de datos que prefieras — cosas que un hosting compartido gestionado simplemente no te permitirá hacer.</p>
+  <p>El software de virtualización (el <em>hipervisor</em>) divide un potente servidor físico en varios servidores virtuales. Cada VPS se comporta como su propia máquina: arranca su propio SO, tiene su propia dirección IP y se le asigna una cantidad fija de RAM, CPU y almacenamiento que los vecinos no pueden quitarte. Ese aislamiento es la diferencia clave con el hosting compartido - tu rendimiento ya no depende de lo que esté haciendo el sitio de al lado.</p>
+  <p>Como normalmente obtienes <strong>acceso root (administrador)</strong>, puedes instalar cualquier pila de software, configurar tú mismo el servidor web, ejecutar procesos en segundo plano, contenedores o el motor de base de datos que prefieras - cosas que un hosting compartido gestionado simplemente no te permitirá hacer.</p>
 
   <h2>VPS vs compartido vs dedicado</h2>
   <p>Los tres niveles habituales se sitúan en un espectro de control, aislamiento y coste.</p>
   <table>
     <thead><tr><th>Tipo</th><th>Recursos</th><th>Control</th><th>Ideal para</th></tr></thead>
     <tbody>
-      <tr><td>Hosting compartido</td><td>Agrupados, límites informales</td><td>Bajo — sin root, pila fija</td><td>Sitios pequeños, blogs, sitios de presentación</td></tr>
-      <tr><td>VPS</td><td>Porción garantizada (RAM/CPU/disco)</td><td>Alto — acceso root, pila personalizada</td><td>Aplicaciones en crecimiento, runtimes personalizados, proyectos personales con tráfico real</td></tr>
-      <tr><td>Servidor dedicado</td><td>Una máquina física completa</td><td>Total — pero lo gestionas todo</td><td>Cargas pesadas y estables que necesitan el máximo aislamiento</td></tr>
+      <tr><td>Hosting compartido</td><td>Agrupados, límites informales</td><td>Bajo - sin root, pila fija</td><td>Sitios pequeños, blogs, sitios de presentación</td></tr>
+      <tr><td>VPS</td><td>Porción garantizada (RAM/CPU/disco)</td><td>Alto - acceso root, pila personalizada</td><td>Aplicaciones en crecimiento, runtimes personalizados, proyectos personales con tráfico real</td></tr>
+      <tr><td>Servidor dedicado</td><td>Una máquina física completa</td><td>Total - pero lo gestionas todo</td><td>Cargas pesadas y estables que necesitan el máximo aislamiento</td></tr>
     </tbody>
   </table>
   <p>Un VPS es el término medio: más potencia y libertad que el hosting compartido, mucho más barato y de menor mantenimiento que alquilar una máquina física completa.</p>
@@ -33,48 +33,48 @@ import Article from '../../../layouts/Article.astro';
   <h2>Gestionado vs no gestionado</h2>
   <p>Esta es la elección que más sorprende a la gente.</p>
   <ul>
-    <li><strong>VPS no gestionado</strong> — obtienes un SO desnudo y eres tú el administrador de sistemas: lo parcheas, lo aseguras, configuras el servidor web, montas las copias de seguridad y lo arreglas cuando falla. Más barato y con la máxima flexibilidad, pero da por sentado que te manejas con soltura en la línea de comandos.</li>
-    <li><strong>VPS gestionado</strong> — el proveedor se encarga de las actualizaciones del SO, el endurecimiento de la seguridad, la monitorización y el soporte, normalmente con un panel de control. Cuesta más, pero te devuelve tu tiempo si prefieres no administrar un servidor.</li>
+    <li><strong>VPS no gestionado</strong> - obtienes un SO desnudo y eres tú el administrador de sistemas: lo parcheas, lo aseguras, configuras el servidor web, montas las copias de seguridad y lo arreglas cuando falla. Más barato y con la máxima flexibilidad, pero da por sentado que te manejas con soltura en la línea de comandos.</li>
+    <li><strong>VPS gestionado</strong> - el proveedor se encarga de las actualizaciones del SO, el endurecimiento de la seguridad, la monitorización y el soporte, normalmente con un panel de control. Cuesta más, pero te devuelve tu tiempo si prefieres no administrar un servidor.</li>
   </ul>
 
   <figure>
     <img src="/img/vps-hosting-inbody.jpg" alt="Cables de red agrupados conectados a switches y routers montados en rack dentro de un armario de servidores" width="1280" height="853" loading="lazy" />
-    <figcaption>Un VPS no gestionado pone la configuración de la red, el SO y la pila en tus manos — cómodo si quieres control total, más trabajo si no lo quieres.</figcaption>
+    <figcaption>Un VPS no gestionado pone la configuración de la red, el SO y la pila en tus manos - cómodo si quieres control total, más trabajo si no lo quieres.</figcaption>
   </figure>
 
   <h2>Los criterios que importan al elegir</h2>
   <p>Ignora los superlativos del marketing y compara a los proveedores en estas dimensiones concretas.</p>
 
   <h3>RAM y CPU</h3>
-  <p>La <strong>RAM</strong> es lo primero que se te agotará — una base de datos más un servidor de aplicaciones más una caché quieren todos memoria, y el SO también necesita su parte. Los <strong>vCPU</strong> (CPU virtuales) gestionan las peticiones simultáneas y el trabajo intensivo en CPU como el procesamiento de imágenes o el renderizado en el servidor. Vigila la diferencia entre los vCPU <em>compartidos/burstables</em> (bien para cargas ligeras y con picos) y los vCPU <em>dedicados</em> (rendimiento constante, precio más alto).</p>
+  <p>La <strong>RAM</strong> es lo primero que se te agotará - una base de datos más un servidor de aplicaciones más una caché quieren todos memoria, y el SO también necesita su parte. Los <strong>vCPU</strong> (CPU virtuales) gestionan las peticiones simultáneas y el trabajo intensivo en CPU como el procesamiento de imágenes o el renderizado en el servidor. Vigila la diferencia entre los vCPU <em>compartidos/burstables</em> (bien para cargas ligeras y con picos) y los vCPU <em>dedicados</em> (rendimiento constante, precio más alto).</p>
 
   <h3>Tipo de almacenamiento</h3>
-  <p>Prefiere <strong>NVMe o SSD</strong> frente a los discos mecánicos — la velocidad del disco se nota directamente en los tiempos de consulta de la base de datos y en la construcción de páginas. Comprueba también la cantidad: los logs, las subidas y el crecimiento de la base de datos se acumulan más rápido de lo que esperarías.</p>
+  <p>Prefiere <strong>NVMe o SSD</strong> frente a los discos mecánicos - la velocidad del disco se nota directamente en los tiempos de consulta de la base de datos y en la construcción de páginas. Comprueba también la cantidad: los logs, las subidas y el crecimiento de la base de datos se acumulan más rápido de lo que esperarías.</p>
 
   <h3>Ancho de banda y ubicación</h3>
-  <p>El «ancho de banda» esconde dos cifras: el <strong>límite mensual de transferencia de datos</strong> y la <strong>velocidad del puerto</strong>. Los sitios con muchos medios consumen sus cuotas de transferencia, así que lee la política de exceso. Y elige una <strong>región de datacenter cercana a tu audiencia</strong> — la distancia física añade latencia a cada petición dinámica.</p>
+  <p>El «ancho de banda» esconde dos cifras: el <strong>límite mensual de transferencia de datos</strong> y la <strong>velocidad del puerto</strong>. Los sitios con muchos medios consumen sus cuotas de transferencia, así que lee la política de exceso. Y elige una <strong>región de datacenter cercana a tu audiencia</strong> - la distancia física añade latencia a cada petición dinámica.</p>
 
   <h3>Copias de seguridad, escalado y soporte</h3>
   <ul>
-    <li><strong>Copias de seguridad</strong> — ¿snapshots incluidos o un complemento de pago? Las copias de seguridad automatizadas merecen la pena.</li>
-    <li><strong>Escalado</strong> — ¿puedes redimensionar el plan (más RAM/CPU) sin reconstruir desde cero?</li>
-    <li><strong>Soporte</strong> — los tiempos de respuesta importan sobre todo en los planes no gestionados cuando algo se rompe a las 2 de la madrugada.</li>
+    <li><strong>Copias de seguridad</strong> - ¿snapshots incluidos o un complemento de pago? Las copias de seguridad automatizadas merecen la pena.</li>
+    <li><strong>Escalado</strong> - ¿puedes redimensionar el plan (más RAM/CPU) sin reconstruir desde cero?</li>
+    <li><strong>Soporte</strong> - los tiempos de respuesta importan sobre todo en los planes no gestionados cuando algo se rompe a las 2 de la madrugada.</li>
   </ul>
 
   <h3>Precio</h3>
-  <p>Compara el precio de <em>renovación</em>, no solo la tarifa promocional del primer periodo, y confirma qué está incluido (copias de seguridad, ancho de banda, una dirección IPv4, un panel de control). Entre los proveedores que apuestan por una buena relación recursos-precio, <strong>Contabo</strong> es una opción muy conocida por su CPU y RAM generosos a un bajo coste mensual — útil cuando quieres margen sin pagar tarifas premium. Como siempre, ajusta las especificaciones a tu carga de trabajo real y no a un precio de escaparate.</p>
+  <p>Compara el precio de <em>renovación</em>, no solo la tarifa promocional del primer periodo, y confirma qué está incluido (copias de seguridad, ancho de banda, una dirección IPv4, un panel de control). Entre los proveedores que apuestan por una buena relación recursos-precio, <strong>Contabo</strong> es una opción muy conocida por su CPU y RAM generosos a un bajo coste mensual - útil cuando quieres margen sin pagar tarifas premium. Como siempre, ajusta las especificaciones a tu carga de trabajo real y no a un precio de escaparate.</p>
 
   <h2>Pros y contras de un VPS</h2>
   <h3>Ventajas</h3>
   <ul>
-    <li>Recursos garantizados y aislados — sin vecinos ruidosos.</li>
-    <li>Acceso root y pila personalizada — instala cualquier cosa, ajusta todo.</li>
+    <li>Recursos garantizados y aislados - sin vecinos ruidosos.</li>
+    <li>Acceso root y pila personalizada - instala cualquier cosa, ajusta todo.</li>
     <li>Mucho más barato que un servidor dedicado, con un control similar.</li>
     <li>Normalmente escalable bajo demanda (redimensiona el plan a medida que creces).</li>
   </ul>
   <h3>Contrapartidas</h3>
   <ul>
-    <li>Más responsabilidad — un VPS no gestionado significa que tú te ocupas de la seguridad y el mantenimiento.</li>
+    <li>Más responsabilidad - un VPS no gestionado significa que tú te ocupas de la seguridad y el mantenimiento.</li>
     <li>Excesivo para un pequeño sitio estático que un hosting compartido o estático serviría más barato.</li>
     <li>Requiere cierta soltura con Linux/la línea de comandos, salvo que pagues por uno gestionado.</li>
   </ul>

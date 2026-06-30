@@ -5,18 +5,18 @@ import Article from '../../../layouts/Article.astro';
   lang="de"
   slug="vps-vs-dedicated-server"
   title="VPS vs dedizierter Server: was braucht dein Projekt?"
-  description="Worin sich ein VPS und ein dedizierter Server wirklich unterscheiden — Leistung, Isolation, Skalierung, Kontrolle und Preis — und ein klarer Weg, das passende Modell für deine Website oder App zu wählen."
+  description="Worin sich ein VPS und ein dedizierter Server wirklich unterscheiden - Leistung, Isolation, Skalierung, Kontrolle und Preis - und ein klarer Weg, das passende Modell für deine Website oder App zu wählen."
   cat="hosting"
   hero="/img/vps-vs-dedicated-server-hero.jpg"
   heroAlt="Die Hand eines Technikers zieht ein Servermodul aus einem blau beleuchteten Rack in einem Rechenzentrum"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>Ein <strong>VPS</strong> (Virtual Private Server) und ein <strong>dedizierter Server</strong> stehen auf der Hosting-Leiter direkt nebeneinander und werden leicht verwechselt. Der Unterschied ist einfach: Ein VPS gibt dir einen <em>garantierten Anteil</em> einer physischen Maschine, die du mit anderen isolierten Mietern teilst; ein dedizierter Server gibt dir die <em>gesamte</em> physische Maschine, ganz ohne Nachbarn. Diese eine Tatsache erklärt alle Abwägungen unten — Leistungsgrenze, Isolation, Skalierung, Kontrolle und Preis. Dieser Leitfaden vergleicht sie ehrlich, ohne erfundene Benchmarks, damit du das Modell an deine reale Last anpasst.</p>
+  <p>Ein <strong>VPS</strong> (Virtual Private Server) und ein <strong>dedizierter Server</strong> stehen auf der Hosting-Leiter direkt nebeneinander und werden leicht verwechselt. Der Unterschied ist einfach: Ein VPS gibt dir einen <em>garantierten Anteil</em> einer physischen Maschine, die du mit anderen isolierten Mietern teilst; ein dedizierter Server gibt dir die <em>gesamte</em> physische Maschine, ganz ohne Nachbarn. Diese eine Tatsache erklärt alle Abwägungen unten - Leistungsgrenze, Isolation, Skalierung, Kontrolle und Preis. Dieser Leitfaden vergleicht sie ehrlich, ohne erfundene Benchmarks, damit du das Modell an deine reale Last anpasst.</p>
 
   <h2>Wie jedes Modell funktioniert</h2>
-  <p>Bei einem <strong>VPS</strong> teilt ein Hypervisor einen physischen Server in mehrere virtuelle Maschinen auf. Jede VM hat ihr eigenes Betriebssystem, Root-Zugriff und einen reservierten Anteil an RAM, CPU und Speicher. Du bist von den anderen Mietern isoliert, doch die Hardware des Hosts wird geteilt — und bei manchen Tarifen ist die CPU „burstable" statt vollständig reserviert.</p>
-  <p>Ein <strong>dedizierter Server</strong> ist eine ganze physische Maschine, die nur an dich vermietet wird. Jeder Kern, jedes Gigabyte RAM und jede Festplatte gehört dir, ohne Virtualisierungsschicht zwischen deiner Last und der Hardware. Du erhältst die volle Leistung der Maschine und komplette Kontrolle — und du zahlst die ganze Maschine, ob du sie voll auslastest oder nicht.</p>
+  <p>Bei einem <strong>VPS</strong> teilt ein Hypervisor einen physischen Server in mehrere virtuelle Maschinen auf. Jede VM hat ihr eigenes Betriebssystem, Root-Zugriff und einen reservierten Anteil an RAM, CPU und Speicher. Du bist von den anderen Mietern isoliert, doch die Hardware des Hosts wird geteilt - und bei manchen Tarifen ist die CPU „burstable" statt vollständig reserviert.</p>
+  <p>Ein <strong>dedizierter Server</strong> ist eine ganze physische Maschine, die nur an dich vermietet wird. Jeder Kern, jedes Gigabyte RAM und jede Festplatte gehört dir, ohne Virtualisierungsschicht zwischen deiner Last und der Hardware. Du erhältst die volle Leistung der Maschine und komplette Kontrolle - und du zahlst die ganze Maschine, ob du sie voll auslastest oder nicht.</p>
 
   <h2>Die Unterschiede, die zählen</h2>
 
@@ -24,7 +24,7 @@ import Article from '../../../layouts/Article.astro';
   <p>Ein dedizierter Server hat eine höhere und konstantere Leistungsgrenze: kein Hypervisor-Overhead, kein möglicher lauter Nachbar und voller Zugriff auf CPU und Festplatte. Ein guter VPS leistet für die große Mehrheit der Webprojekte sehr viel, doch seine Grenze ist der gekaufte Anteil. Ist deine Last bei dauerhaft hoher Auslastung CPU- oder I/O-gebunden, hebt der dedizierte Server diese Grenze auf.</p>
 
   <h3>Isolation und Sicherheit</h3>
-  <p>Beide isolieren dich auf Betriebssystemebene von anderen Kunden. Ein dedizierter Server fügt <em>Hardware</em>-Isolation hinzu — nichts anderes läuft auf der Maschine — was manche Compliance- oder Hochsicherheitsanforderungen verlangen. Für die meisten Websites genügt die Isolation auf VPS-Ebene bereits.</p>
+  <p>Beide isolieren dich auf Betriebssystemebene von anderen Kunden. Ein dedizierter Server fügt <em>Hardware</em>-Isolation hinzu - nichts anderes läuft auf der Maschine - was manche Compliance- oder Hochsicherheitsanforderungen verlangen. Für die meisten Websites genügt die Isolation auf VPS-Ebene bereits.</p>
 
   <figure>
     <img src="/img/vps-vs-dedicated-server-inbody.jpg" alt="Ein voller Serverschrank mit Cat6-Patchpanels und blauen Ethernet-Kabeln, die an nummerierte Ports angeschlossen sind" width="720" height="1280" loading="lazy" />
@@ -32,10 +32,10 @@ import Article from '../../../layouts/Article.astro';
   </figure>
 
   <h3>Skalierung</h3>
-  <p>Ein VPS ist meist einfacher zu skalieren: Viele Hoster lassen dich den Tarif — mehr RAM, mehr vCPUs — in wenigen Minuten anpassen, manchmal ohne Neuaufbau. Ein dedizierter Server skaliert in größeren, langsameren Schritten: Du rüstest Hardware auf oder migrierst auf eine größere Maschine, was mehr Planung erfordert. Wenn du allmählich wachsen willst, ist die Flexibilität des VPS ein Vorteil.</p>
+  <p>Ein VPS ist meist einfacher zu skalieren: Viele Hoster lassen dich den Tarif - mehr RAM, mehr vCPUs - in wenigen Minuten anpassen, manchmal ohne Neuaufbau. Ein dedizierter Server skaliert in größeren, langsameren Schritten: Du rüstest Hardware auf oder migrierst auf eine größere Maschine, was mehr Planung erfordert. Wenn du allmählich wachsen willst, ist die Flexibilität des VPS ein Vorteil.</p>
 
   <h3>Kontrolle</h3>
-  <p>Beide bieten vollen Root-Zugriff und erlauben jede gewünschte Stack-Installation. Ein dedizierter Server fügt Kontrolle auf tieferer Ebene hinzu — bestimmte Hardware wählen, das Bare-Metal feintunen und Virtualisierungs-Eigenheiten vermeiden. Für typische Web-Stacks (Webserver, Datenbank, Cache, Hintergrund-Jobs) gibt ein VPS bereits die nötige Kontrolle.</p>
+  <p>Beide bieten vollen Root-Zugriff und erlauben jede gewünschte Stack-Installation. Ein dedizierter Server fügt Kontrolle auf tieferer Ebene hinzu - bestimmte Hardware wählen, das Bare-Metal feintunen und Virtualisierungs-Eigenheiten vermeiden. Für typische Web-Stacks (Webserver, Datenbank, Cache, Hintergrund-Jobs) gibt ein VPS bereits die nötige Kontrolle.</p>
 
   <h3>Preis</h3>
   <p>Das ist der klarste Unterschied. Ein VPS kostet einen Bruchteil eines dedizierten Servers, weil die zugrunde liegende Hardware auf mehrere Mieter verteilt wird. Ein dedizierter Server kostet mehr, weil du eine ganze physische Maschine bezahlst. Zur Orientierung: Ein Anbieter wie <strong>Contabo</strong> bietet Cloud-VPS ab etwa 5–6&nbsp;€/Monat bis rund 25&nbsp;€/Monat für die größeren VPS-Stufen (12-Monats-Laufzeit, zzgl. MwSt., unbegrenzter Fair-Use-Traffic, Preise Stand Juni&nbsp;2026), während dedizierte Server deutlich darüber liegen. Prüfe vor der Entscheidung stets den aktuellen Preis und den Verlängerungstarif auf der Anbieterseite.</p>
@@ -49,7 +49,7 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Isolation</td><td>Auf OS-Ebene (von anderen Mietern isoliert)</td><td>OS-Ebene + volle Hardware-Isolation</td></tr>
       <tr><td>Skalierung</td><td>Schnell, oft in Minuten anpassbar</td><td>Größere Schritte; Upgrade oder Migration</td></tr>
       <tr><td>Kontrolle</td><td>Voller Root; freie Stack-Wahl</td><td>Voller Root + Bare-Metal-/Hardware-Kontrolle</td></tr>
-      <tr><td>Preis</td><td>Ein Bruchteil eines dedizierten</td><td>Höher — die ganze Maschine</td></tr>
+      <tr><td>Preis</td><td>Ein Bruchteil eines dedizierten</td><td>Höher - die ganze Maschine</td></tr>
       <tr><td>Ideal für</td><td>Die meisten Sites/Apps, wachsende Projekte</td><td>Schwere, dauerhafte Last; strenge Isolation</td></tr>
     </tbody>
   </table>
@@ -59,7 +59,7 @@ import Article from '../../../layouts/Article.astro';
   <ul>
     <li><strong>Wähle einen VPS</strong>, wenn du eine typische Website oder App betreibst, niedrige Kosten und einfache Skalierung willst und ein großzügiger Maschinenanteil deine Last bequem abdeckt. Das ist die richtige Antwort für die überwiegende Mehrheit der Projekte.</li>
     <li><strong>Wähle einen dedizierten Server</strong>, wenn du dauerhaft hohe CPU-/I/O-Last hast, die große VPS-Tarife auslastet, du Hardware-Isolation für Compliance brauchst oder spezifische Bare-Metal-Kontrolle benötigst.</li>
-    <li><strong>Noch unsicher?</strong> Starte mit einem VPS. Er ist günstiger, skaliert schnell, und wenn du die größte VPS-Stufe wirklich überschreitest, migrierst du später auf dediziert — die meisten Projekte brauchen das nie.</li>
+    <li><strong>Noch unsicher?</strong> Starte mit einem VPS. Er ist günstiger, skaliert schnell, und wenn du die größte VPS-Stufe wirklich überschreitest, migrierst du später auf dediziert - die meisten Projekte brauchen das nie.</li>
   </ul>
 
   <h2>FAQ</h2>

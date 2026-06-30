@@ -5,21 +5,21 @@ import Article from '../../../layouts/Article.astro';
   lang="pt"
   slug="cloud-hosting"
   title="Hospedagem em nuvem explicada: quando faz sentido para um projeto web"
-  description="O que a hospedagem em nuvem realmente significa, em que se diferencia de um único VPS ou da hospedagem compartilhada, seus reais pontos fortes e contrapartidas, e os tipos de projetos web a que se adapta — sem preços ou benchmarks inventados."
+  description="O que a hospedagem em nuvem realmente significa, em que se diferencia de um único VPS ou da hospedagem compartilhada, seus reais pontos fortes e contrapartidas, e os tipos de projetos web a que se adapta - sem preços ou benchmarks inventados."
   cat="hosting"
   hero="/img/cloud-hosting-hero.jpg"
   heroAlt="Uma mão apontando para uma nuvem branca contra um céu azul sobreposta a uma malha de rede conectada"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>A <strong>hospedagem em nuvem</strong> executa seu site ou aplicação em um conjunto de servidores conectados em vez de em uma única máquina. Em vez de ficar preso a uma caixa só, sua carga de trabalho extrai recursos de um cluster, de modo que a capacidade pode ser adicionada ou removida sob demanda e uma única falha de hardware não precisa derrubá-lo. Esse modelo traz vantagens reais — e contrapartidas reais. Este guia explica o que é a hospedagem em nuvem, como ela se compara à hospedagem compartilhada e a um único VPS, e quando ela é realmente a escolha certa para um projeto web.</p>
+  <p>A <strong>hospedagem em nuvem</strong> executa seu site ou aplicação em um conjunto de servidores conectados em vez de em uma única máquina. Em vez de ficar preso a uma caixa só, sua carga de trabalho extrai recursos de um cluster, de modo que a capacidade pode ser adicionada ou removida sob demanda e uma única falha de hardware não precisa derrubá-lo. Esse modelo traz vantagens reais - e contrapartidas reais. Este guia explica o que é a hospedagem em nuvem, como ela se compara à hospedagem compartilhada e a um único VPS, e quando ela é realmente a escolha certa para um projeto web.</p>
 
   <h2>O que a hospedagem em nuvem realmente significa</h2>
   <p>Na hospedagem tradicional, seu site vive em um servidor físico (compartilhado) ou em uma única fatia virtual dele (um VPS). Na hospedagem em nuvem, a virtualização distribui a carga por <strong>muitos servidores em rede</strong>. Se um nó falha, outros assumem o trabalho; se você precisa de mais capacidade, a plataforma a provisiona a partir do conjunto. Você é cobrado pelo que usa em vez de por uma caixa fixa.</p>
   <p>Duas propriedades definem o modelo:</p>
   <ul>
-    <li><strong>Elasticidade</strong> — os recursos aumentam e diminuem para acompanhar a demanda, muitas vezes de forma automática.</li>
-    <li><strong>Redundância</strong> — a carga de trabalho não fica presa a um único ponto de falha, então a plataforma pode tolerar a queda de um nó.</li>
+    <li><strong>Elasticidade</strong> - os recursos aumentam e diminuem para acompanhar a demanda, muitas vezes de forma automática.</li>
+    <li><strong>Redundância</strong> - a carga de trabalho não fica presa a um único ponto de falha, então a plataforma pode tolerar a queda de um nó.</li>
   </ul>
 
   <h2>Nuvem vs compartilhado vs VPS</h2>
@@ -31,7 +31,7 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Hospedagem em nuvem</td><td>Um conjunto de servidores em rede</td><td>Elástica, muitas vezes automática</td><td>Frequentemente baseada no uso</td></tr>
     </tbody>
   </table>
-  <p>Um único VPS lhe dá recursos garantidos e isolados em uma máquina — previsível e simples. A hospedagem em nuvem troca essa simplicidade por elasticidade e resiliência ao distribuí-lo por muitas máquinas. Nenhuma é «melhor»; elas resolvem problemas diferentes.</p>
+  <p>Um único VPS lhe dá recursos garantidos e isolados em uma máquina - previsível e simples. A hospedagem em nuvem troca essa simplicidade por elasticidade e resiliência ao distribuí-lo por muitas máquinas. Nenhuma é «melhor»; elas resolvem problemas diferentes.</p>
 
   <figure>
     <img src="/img/cloud-hosting-inbody.jpg" alt="Racks de servidores no corredor de um datacenter com um diagrama sobreposto ligando um ícone de nuvem a telefones, telas e um banco de dados" width="1280" height="720" loading="lazy" />
@@ -41,26 +41,26 @@ import Article from '../../../layouts/Article.astro';
   <h2>Quando a hospedagem em nuvem faz sentido</h2>
   <p>O modelo prova seu valor em situações específicas:</p>
   <ul>
-    <li><strong>Tráfego imprevisível ou com picos</strong> — um lançamento, uma publicação viral ou picos sazonais. O escalonamento elástico absorve o pico em vez de colapsar sob ele, e depois reduz quando ele passa.</li>
-    <li><strong>O tempo de atividade é crítico</strong> — quando a indisponibilidade custa dinheiro ou confiança reais, a redundância integrada de múltiplos nós é valiosa.</li>
-    <li><strong>Crescimento rápido</strong> — você não sabe qual será a carga do próximo trimestre e prefere não superdimensionar uma caixa fixa hoje.</li>
-    <li><strong>Usuários distribuídos</strong> — as plataformas em nuvem facilitam operar em várias regiões para manter a latência baixa para um público global.</li>
+    <li><strong>Tráfego imprevisível ou com picos</strong> - um lançamento, uma publicação viral ou picos sazonais. O escalonamento elástico absorve o pico em vez de colapsar sob ele, e depois reduz quando ele passa.</li>
+    <li><strong>O tempo de atividade é crítico</strong> - quando a indisponibilidade custa dinheiro ou confiança reais, a redundância integrada de múltiplos nós é valiosa.</li>
+    <li><strong>Crescimento rápido</strong> - você não sabe qual será a carga do próximo trimestre e prefere não superdimensionar uma caixa fixa hoje.</li>
+    <li><strong>Usuários distribuídos</strong> - as plataformas em nuvem facilitam operar em várias regiões para manter a latência baixa para um público global.</li>
   </ul>
 
   <h2>Quando é exagero</h2>
   <p>A hospedagem em nuvem não é automaticamente a resposta certa.</p>
   <ul>
-    <li><strong>Tráfego estável e previsível</strong> — se sua carga é plana, um único VPS é mais simples e geralmente mais barato do que a nuvem baseada no uso.</li>
-    <li><strong>Sites pequenos ou estáticos</strong> — um blog ou site institucional é melhor servido por hospedagem compartilhada ou por um host estático.</li>
-    <li><strong>Orçamentos apertados e fixos</strong> — a cobrança baseada no uso pode ser imprevisível; um VPS de tarifa fixa torna os custos fáceis de prever.</li>
-    <li><strong>Você quer simplicidade</strong> — as plataformas em nuvem adicionam conceitos (balanceadores de carga, autoescalonamento, serviços gerenciados) que são sobrecarga se você não precisar deles.</li>
+    <li><strong>Tráfego estável e previsível</strong> - se sua carga é plana, um único VPS é mais simples e geralmente mais barato do que a nuvem baseada no uso.</li>
+    <li><strong>Sites pequenos ou estáticos</strong> - um blog ou site institucional é melhor servido por hospedagem compartilhada ou por um host estático.</li>
+    <li><strong>Orçamentos apertados e fixos</strong> - a cobrança baseada no uso pode ser imprevisível; um VPS de tarifa fixa torna os custos fáceis de prever.</li>
+    <li><strong>Você quer simplicidade</strong> - as plataformas em nuvem adicionam conceitos (balanceadores de carga, autoescalonamento, serviços gerenciados) que são sobrecarga se você não precisar deles.</li>
   </ul>
 
   <h2>Prós e contras</h2>
   <h3>Vantagens</h3>
   <ul>
-    <li>Escalonamento elástico — lide com picos de tráfego sem reconstruir.</li>
-    <li>Resiliência — nenhum servidor isolado é um único ponto de falha.</li>
+    <li>Escalonamento elástico - lide com picos de tráfego sem reconstruir.</li>
+    <li>Resiliência - nenhum servidor isolado é um único ponto de falha.</li>
     <li>Pague pelo que usa (quando o tráfego é genuinamente variável).</li>
     <li>Implantações multirregião mais fáceis para um público global.</li>
   </ul>
@@ -72,7 +72,7 @@ import Article from '../../../layouts/Article.astro';
   </ul>
 
   <h2>Um caminho intermediário prático</h2>
-  <p>Muitos projetos não precisam de toda a elasticidade da nuvem no primeiro dia. Uma abordagem comum e econômica é começar em um <strong>VPS</strong> bem dimensionado com preços mensais previsíveis e, depois, avançar para uma configuração em nuvem apenas quando o tráfego se tornar genuinamente variável ou os requisitos de tempo de atividade ficarem mais rígidos. Para a etapa do VPS, provedores focados numa boa relação recursos-preço — como a <strong>Contabo</strong>, conhecida por CPU e RAM generosos a um baixo custo mensal — lhe dão bastante folga enquanto você cresce, sem se comprometer com a cobrança baseada no uso antes de precisar.</p>
+  <p>Muitos projetos não precisam de toda a elasticidade da nuvem no primeiro dia. Uma abordagem comum e econômica é começar em um <strong>VPS</strong> bem dimensionado com preços mensais previsíveis e, depois, avançar para uma configuração em nuvem apenas quando o tráfego se tornar genuinamente variável ou os requisitos de tempo de atividade ficarem mais rígidos. Para a etapa do VPS, provedores focados numa boa relação recursos-preço - como a <strong>Contabo</strong>, conhecida por CPU e RAM generosos a um baixo custo mensal - lhe dão bastante folga enquanto você cresce, sem se comprometer com a cobrança baseada no uso antes de precisar.</p>
 
   <h2>Como decidir</h2>
   <p>Pergunte-se se o seu tráfego é variável e se a indisponibilidade é cara. Se ambas as respostas forem sim, a elasticidade e a redundância da hospedagem em nuvem justificam a complexidade extra. Se a sua carga é estável e o orçamento fixo, um único VPS é mais simples e mais fácil de prever. Se você está avaliando a opção do VPS, veja nossos guias sobre <a href="/pt/guides/vps-hosting">o que é um VPS e como escolher um</a> e sobre <a href="/pt/guides/best-vps-for-web-hosting">como escolher o melhor VPS para um projeto web</a>.</p>

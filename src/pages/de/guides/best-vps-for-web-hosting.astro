@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="de"
   slug="best-vps-for-web-hosting"
   title="Den besten VPS für ein Webprojekt auswählen"
-  description="Ein praktischer, nüchterner Leitfaden zur Auswahl eines VPS für eine Website oder App — die Kriterien, die zählen (RAM, CPU, Speicher, Bandbreite, Standort, Preis) und wann ein VPS besser ist als Shared Hosting."
+  description="Ein praktischer, nüchterner Leitfaden zur Auswahl eines VPS für eine Website oder App - die Kriterien, die zählen (RAM, CPU, Speicher, Bandbreite, Standort, Preis) und wann ein VPS besser ist als Shared Hosting."
   cat="hosting"
   day={11}
   hero="/img/best-vps-for-web-hosting-hero.jpg"
@@ -13,10 +13,10 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>Ein <strong>VPS</strong> (Virtual Private Server) gibt dir einen Teil eines physischen Servers mit garantierten Ressourcen, Root-Zugriff und einem eigenen Betriebssystem — ohne die Kosten einer dedizierten Maschine. Für ein Webprojekt, das dem Shared Hosting entwachsen ist, aber keinen kompletten Server braucht, ist das meist der richtige Mittelweg. Dieser Leitfaden geht die Kriterien durch, die wirklich zählen, damit du jeden Anbieter selbst beurteilen kannst, statt einer Rangliste zu vertrauen.</p>
+  <p>Ein <strong>VPS</strong> (Virtual Private Server) gibt dir einen Teil eines physischen Servers mit garantierten Ressourcen, Root-Zugriff und einem eigenen Betriebssystem - ohne die Kosten einer dedizierten Maschine. Für ein Webprojekt, das dem Shared Hosting entwachsen ist, aber keinen kompletten Server braucht, ist das meist der richtige Mittelweg. Dieser Leitfaden geht die Kriterien durch, die wirklich zählen, damit du jeden Anbieter selbst beurteilen kannst, statt einer Rangliste zu vertrauen.</p>
 
   <h2>VPS vs. Shared Hosting: wann der Wechsel sinnvoll ist</h2>
-  <p>Shared Hosting bringt viele Websites auf einem Server unter und teilt die Ressourcen informell auf — günstig und wartungsfrei, aber deine Leistung hängt von den Nachbarn ab, und du kannst keine eigene Software installieren. Ein VPS gibt dir <strong>dediziertes, garantiertes RAM und CPU</strong>, vollen Root-Zugriff und die Freiheit, den Stack so zu konfigurieren, wie du möchtest.</p>
+  <p>Shared Hosting bringt viele Websites auf einem Server unter und teilt die Ressourcen informell auf - günstig und wartungsfrei, aber deine Leistung hängt von den Nachbarn ab, und du kannst keine eigene Software installieren. Ein VPS gibt dir <strong>dediziertes, garantiertes RAM und CPU</strong>, vollen Root-Zugriff und die Freiheit, den Stack so zu konfigurieren, wie du möchtest.</p>
   <p>Praktische Anzeichen, dass es Zeit für einen VPS ist:</p>
   <ul>
     <li>Dein Shared-Host drosselt dich oder du stößt bei Traffic-Spitzen an CPU-/Prozess-Limits.</li>
@@ -29,13 +29,13 @@ import Article from '../../../layouts/Article.astro';
   <p>Ignoriere Marketing-Superlative und vergleiche Anbieter anhand dieser konkreten Dimensionen.</p>
 
   <h3>RAM</h3>
-  <p>Die Ressource, die dir am ehesten ausgeht. Eine statische Website oder kleine App kommt mit bescheidenem Speicher aus; eine Datenbank plus Anwendungsserver plus Cache will mehr Spielraum. Speicher wird unter Last zuerst erschöpft, also bemiss ihn nicht auf das absolute Minimum — lass Raum für Traffic-Spitzen und für das Betriebssystem selbst.</p>
+  <p>Die Ressource, die dir am ehesten ausgeht. Eine statische Website oder kleine App kommt mit bescheidenem Speicher aus; eine Datenbank plus Anwendungsserver plus Cache will mehr Spielraum. Speicher wird unter Last zuerst erschöpft, also bemiss ihn nicht auf das absolute Minimum - lass Raum für Traffic-Spitzen und für das Betriebssystem selbst.</p>
 
   <h3>CPU (vCPUs)</h3>
-  <p>VPS-Pläne werden in <em>virtuellen</em> CPUs verkauft. Mehr vCPUs helfen bei gleichzeitigen Anfragen und CPU-lastiger Arbeit (Bildverarbeitung, SSR, Builds). Achte auf den Unterschied zwischen <strong>geteilten/burstbaren</strong> vCPUs — gut für spitzenartige, leichte Lasten — und <strong>dedizierten</strong> vCPUs, die mehr kosten, aber für gleichmäßige Workloads konstante Leistung bieten.</p>
+  <p>VPS-Pläne werden in <em>virtuellen</em> CPUs verkauft. Mehr vCPUs helfen bei gleichzeitigen Anfragen und CPU-lastiger Arbeit (Bildverarbeitung, SSR, Builds). Achte auf den Unterschied zwischen <strong>geteilten/burstbaren</strong> vCPUs - gut für spitzenartige, leichte Lasten - und <strong>dedizierten</strong> vCPUs, die mehr kosten, aber für gleichmäßige Workloads konstante Leistung bieten.</p>
 
   <h3>Speicher</h3>
-  <p>Bevorzuge <strong>NVMe oder SSD</strong> gegenüber älteren rotierenden Festplatten — die Festplattengeschwindigkeit schlägt sich direkt in Datenbankabfragezeiten und Seitenbuilds nieder. Prüfe auch die <em>Menge</em>: Logs, Uploads und Datenbankwachstum summieren sich. Beachte, ob der Speicher lokal (schnell) oder netzwerkgebunden (flexibler, manchmal langsamer) ist.</p>
+  <p>Bevorzuge <strong>NVMe oder SSD</strong> gegenüber älteren rotierenden Festplatten - die Festplattengeschwindigkeit schlägt sich direkt in Datenbankabfragezeiten und Seitenbuilds nieder. Prüfe auch die <em>Menge</em>: Logs, Uploads und Datenbankwachstum summieren sich. Beachte, ob der Speicher lokal (schnell) oder netzwerkgebunden (flexibler, manchmal langsamer) ist.</p>
 
   <figure>
     <img src="/img/best-vps-for-web-hosting-inbody.jpg" alt="Ein rotes SATA-Datenkabel-Steckverbinder liegt auf einem Schreibtisch vor Server-Hardware-Schächten" width="1280" height="853" loading="lazy" />
@@ -43,24 +43,24 @@ import Article from '../../../layouts/Article.astro';
   </figure>
 
   <h3>Bandbreite und Netzwerk</h3>
-  <p>Zwei Dinge verbergen sich hinter "Bandbreite": das monatliche <strong>Datentransfer-Kontingent</strong> (wie viele GB/TB du ausliefern kannst) und die <strong>Port-Geschwindigkeit</strong> (wie schnell, z. B. 1 Gbit/s). Medienlastige Websites verbrauchen Transferkontingente schnell; lies die Richtlinie zu Überschreitungen. Manche Hoster bewerben "unbegrenzten" Transfer, wenden aber ein Fair-Use-Limit an — prüfe die Bedingungen.</p>
+  <p>Zwei Dinge verbergen sich hinter "Bandbreite": das monatliche <strong>Datentransfer-Kontingent</strong> (wie viele GB/TB du ausliefern kannst) und die <strong>Port-Geschwindigkeit</strong> (wie schnell, z. B. 1 Gbit/s). Medienlastige Websites verbrauchen Transferkontingente schnell; lies die Richtlinie zu Überschreitungen. Manche Hoster bewerben "unbegrenzten" Transfer, wenden aber ein Fair-Use-Limit an - prüfe die Bedingungen.</p>
 
   <h3>Serverstandort</h3>
-  <p>Wähle eine Rechenzentrumsregion nahe deinem Publikum — physische Distanz fügt jeder Anfrage Latenz hinzu. Wenn deine Nutzer in Europa sind, fühlt sich eine europäische Region schneller an als eine US-amerikanische. Der Standort kann auch für Datenresidenz-Regeln wichtig sein. Ein CDN kann die Distanz für statische Assets verbergen, aber der Ursprungsstandort beeinflusst weiterhin dynamische Anfragen.</p>
+  <p>Wähle eine Rechenzentrumsregion nahe deinem Publikum - physische Distanz fügt jeder Anfrage Latenz hinzu. Wenn deine Nutzer in Europa sind, fühlt sich eine europäische Region schneller an als eine US-amerikanische. Der Standort kann auch für Datenresidenz-Regeln wichtig sein. Ein CDN kann die Distanz für statische Assets verbergen, aber der Ursprungsstandort beeinflusst weiterhin dynamische Anfragen.</p>
 
   <h3>Managed vs. unmanaged</h3>
-  <p>Ein <strong>unmanaged</strong> VPS übergibt dir ein nacktes Betriebssystem — du patchst, sicherst und wartest es. Ein <strong>managed</strong> VPS umfasst Updates, Monitoring und Support gegen Aufpreis. Wenn du dich auf der Kommandozeile wohlfühlst, ist unmanaged günstiger und flexibler; wenn du lieber keinen Sysadmin betreiben willst, kauft dir managed Zeit zurück.</p>
+  <p>Ein <strong>unmanaged</strong> VPS übergibt dir ein nacktes Betriebssystem - du patchst, sicherst und wartest es. Ein <strong>managed</strong> VPS umfasst Updates, Monitoring und Support gegen Aufpreis. Wenn du dich auf der Kommandozeile wohlfühlst, ist unmanaged günstiger und flexibler; wenn du lieber keinen Sysadmin betreiben willst, kauft dir managed Zeit zurück.</p>
 
   <h3>Backups, Skalierung und Support</h3>
   <ul>
-    <li><strong>Backups</strong> — sind Snapshots inklusive oder ein Zusatz? Automatisierte Backups sind das Geld wert.</li>
-    <li><strong>Skalierung</strong> — kannst du den Plan (mehr RAM/CPU) ohne Neuaufbau vergrößern? Vertikale Skalierung auf Abruf ist wertvoll.</li>
-    <li><strong>Support</strong> — Reaktionszeiten und Kanäle; am wichtigsten bei unmanaged Plänen, wenn um 2 Uhr nachts etwas kaputtgeht.</li>
-    <li><strong>Verfügbarkeit</strong> — achte auf ein veröffentlichtes SLA statt auf vage Versprechen.</li>
+    <li><strong>Backups</strong> - sind Snapshots inklusive oder ein Zusatz? Automatisierte Backups sind das Geld wert.</li>
+    <li><strong>Skalierung</strong> - kannst du den Plan (mehr RAM/CPU) ohne Neuaufbau vergrößern? Vertikale Skalierung auf Abruf ist wertvoll.</li>
+    <li><strong>Support</strong> - Reaktionszeiten und Kanäle; am wichtigsten bei unmanaged Plänen, wenn um 2 Uhr nachts etwas kaputtgeht.</li>
+    <li><strong>Verfügbarkeit</strong> - achte auf ein veröffentlichtes SLA statt auf vage Versprechen.</li>
   </ul>
 
   <h3>Preis</h3>
-  <p>Vergleiche den <em>Verlängerungspreis</em>, nicht nur die werbliche erste Laufzeit, und prüfe, was enthalten ist (Backups, Bandbreite, IPv4-Adresse, Control Panel). Der billigste Listenpreis schließt oft Dinge aus, die du am Ende sowieso kaufst. Ordne die Spezifikation deinem realen Workload zu und wähle den kleinsten Plan, der ihn mit Spielraum abdeckt — meist kannst du später hochskalieren.</p>
+  <p>Vergleiche den <em>Verlängerungspreis</em>, nicht nur die werbliche erste Laufzeit, und prüfe, was enthalten ist (Backups, Bandbreite, IPv4-Adresse, Control Panel). Der billigste Listenpreis schließt oft Dinge aus, die du am Ende sowieso kaufst. Ordne die Spezifikation deinem realen Workload zu und wähle den kleinsten Plan, der ihn mit Spielraum abdeckt - meist kannst du später hochskalieren.</p>
 
   <h2>Was du tatsächlich brauchst, nach Projekttyp</h2>
   <table>
@@ -74,5 +74,5 @@ import Article from '../../../layouts/Article.astro';
   </table>
 
   <h2>Wie man entscheidet</h2>
-  <p>Geh von deinem Workload aus, nicht von einer "Best-of"-Liste: schätze zuerst den Speicher, dann CPU, dann Speicherplatz und Transfer; verlange eine Region nahe deinen Nutzern; bestehe auf NVMe/SSD und auf enthaltene oder erschwingliche Backups; und vergleiche Verlängerungspreise bei gleichwertigen Spezifikationen. Ein VPS, der deine aktuelle Last bequem mit etwas Spielraum abdeckt — und dir erlaubt, später hochzuskalieren — schlägt jedes Mal einen überdimensionierten oder zu schwachen.</p>
+  <p>Geh von deinem Workload aus, nicht von einer "Best-of"-Liste: schätze zuerst den Speicher, dann CPU, dann Speicherplatz und Transfer; verlange eine Region nahe deinen Nutzern; bestehe auf NVMe/SSD und auf enthaltene oder erschwingliche Backups; und vergleiche Verlängerungspreise bei gleichwertigen Spezifikationen. Ein VPS, der deine aktuelle Last bequem mit etwas Spielraum abdeckt - und dir erlaubt, später hochzuskalieren - schlägt jedes Mal einen überdimensionierten oder zu schwachen.</p>
 </Article>

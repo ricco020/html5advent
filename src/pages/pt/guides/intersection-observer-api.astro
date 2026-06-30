@@ -5,17 +5,17 @@ import Article from '../../../layouts/Article.astro';
   lang="pt"
   slug="intersection-observer-api"
   title="A API IntersectionObserver: lazy-loading e efeitos de rolagem"
-  description="Use o IntersectionObserver para carregar imagens em lazy-loading, revelar elementos ao rolar e criar rolagem infinita — com threshold e rootMargin explicados, além de exemplos executáveis."
+  description="Use o IntersectionObserver para carregar imagens em lazy-loading, revelar elementos ao rolar e criar rolagem infinita - com threshold e rootMargin explicados, além de exemplos executáveis."
   cat="apis"
   day={10}
   hero="/img/intersection-observer-api-hero.jpg"
   heroAlt="Vista de cima da mesa de um designer com esboços de wireframe de UI, notas adesivas, um smartphone e marcadores coloridos"
   cluster={null}
 >
-  <p>A <strong>API IntersectionObserver</strong> informa quando um elemento entra ou sai da viewport — sem que você precise ligar um listener de <code>scroll</code> e calcular posições a cada frame. O navegador faz a observação de forma assíncrona e fora da thread principal, então tudo permanece fluido mesmo com centenas de alvos. Todos os navegadores atuais a suportam.</p>
+  <p>A <strong>API IntersectionObserver</strong> informa quando um elemento entra ou sai da viewport - sem que você precise ligar um listener de <code>scroll</code> e calcular posições a cada frame. O navegador faz a observação de forma assíncrona e fora da thread principal, então tudo permanece fluido mesmo com centenas de alvos. Todos os navegadores atuais a suportam.</p>
 
   <h2>Por que não simplesmente ouvir o scroll?</h2>
-  <p>Um handler de <code>scroll</code> dispara constantemente e te obriga a chamar <code>getBoundingClientRect()</code> para saber onde as coisas estão — isso lê o layout e pode causar travamentos. O IntersectionObserver inverte o modelo: você registra os elementos que lhe interessam e o navegador te notifica apenas quando a visibilidade deles realmente muda.</p>
+  <p>Um handler de <code>scroll</code> dispara constantemente e te obriga a chamar <code>getBoundingClientRect()</code> para saber onde as coisas estão - isso lê o layout e pode causar travamentos. O IntersectionObserver inverte o modelo: você registra os elementos que lhe interessam e o navegador te notifica apenas quando a visibilidade deles realmente muda.</p>
 
   <h2>O padrão básico</h2>
   <p>Crie um observer com um callback e depois chame <code>observe()</code> em um ou mais elementos. O callback recebe um array de objetos <code>entry</code>; a propriedade chave é <code>entry.isIntersecting</code>:</p>
@@ -43,7 +43,7 @@ const imgObserver = new IntersectionObserver((entries, observer) => {
 }, { rootMargin: '200px' });
 
 lazyImages.forEach((img) => imgObserver.observe(img));`}</code></pre>
-  <p>Observação: o lazy-loading nativo via <code>&lt;img loading="lazy"&gt;</code> hoje cobre a maioria dos casos. Recorra ao IntersectionObserver quando precisar de lógica personalizada — placeholders, fade-ins ou o carregamento de recursos que não sejam imagens.</p>
+  <p>Observação: o lazy-loading nativo via <code>&lt;img loading="lazy"&gt;</code> hoje cobre a maioria dos casos. Recorra ao IntersectionObserver quando precisar de lógica personalizada - placeholders, fade-ins ou o carregamento de recursos que não sejam imagens.</p>
 
   <figure>
     <img src="/img/intersection-observer-api-inbody.jpg" alt="Um smartphone exibindo a tela de login do Facebook ao lado de peças de Scrabble formando as palavras SOCIAL MEDIA" width="1280" height="850" loading="lazy" />
@@ -79,13 +79,13 @@ loader.observe(sentinel);`}</code></pre>
   <h2>As opções: threshold e rootMargin</h2>
   <p>Duas opções determinam quando o callback dispara:</p>
   <ul>
-    <li><strong><code>threshold</code></strong> — um número (ou array) de 0 a 1. <code>0</code> dispara no momento em que um pixel está visível; <code>1</code> dispara apenas quando o elemento inteiro está visível. Um array como <code>[0, 0.5, 1]</code> dispara a cada passo, útil para efeitos de progresso de rolagem.</li>
-    <li><strong><code>rootMargin</code></strong> — uma margem no estilo CSS que aumenta ou reduz a área usada no teste. <code>'200px'</code> aciona 200px <em>antes</em> de o elemento alcançar a viewport — ideal para pré-carregamento.</li>
-    <li><strong><code>root</code></strong> — o elemento a usar como viewport. Por padrão é a viewport do navegador; defina-o como um contêiner rolável para observar dentro dele.</li>
+    <li><strong><code>threshold</code></strong> - um número (ou array) de 0 a 1. <code>0</code> dispara no momento em que um pixel está visível; <code>1</code> dispara apenas quando o elemento inteiro está visível. Um array como <code>[0, 0.5, 1]</code> dispara a cada passo, útil para efeitos de progresso de rolagem.</li>
+    <li><strong><code>rootMargin</code></strong> - uma margem no estilo CSS que aumenta ou reduz a área usada no teste. <code>'200px'</code> aciona 200px <em>antes</em> de o elemento alcançar a viewport - ideal para pré-carregamento.</li>
+    <li><strong><code>root</code></strong> - o elemento a usar como viewport. Por padrão é a viewport do navegador; defina-o como um contêiner rolável para observar dentro dele.</li>
   </ul>
 
   <h2>Limpeza</h2>
-  <p>Pare de observar um único elemento com <code>observer.unobserve(el)</code>, ou desmonte tudo com <code>observer.disconnect()</code> — importante em single-page apps quando uma view é desmontada, para evitar vazamentos.</p>
+  <p>Pare de observar um único elemento com <code>observer.unobserve(el)</code>, ou desmonte tudo com <code>observer.disconnect()</code> - importante em single-page apps quando uma view é desmontada, para evitar vazamentos.</p>
 
   <h2>Referência rápida</h2>
   <table>

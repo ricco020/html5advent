@@ -5,7 +5,7 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="fetch-api-javascript"
   title="The Fetch API in JavaScript: a practical guide"
-  description="How to make HTTP requests in the browser with the Fetch API — GET, JSON, POST, error handling, and aborting requests — with runnable examples."
+  description="How to make HTTP requests in the browser with the Fetch API - GET, JSON, POST, error handling, and aborting requests - with runnable examples."
   cat="apis"
   day={1}
   hero="/img/web-dev-code.jpg"
@@ -31,7 +31,7 @@ console.log(data);`}</code></pre>
   .then((data) => console.log(data));`}</code></pre>
 
   <h2>The gotcha: fetch does not reject on HTTP errors</h2>
-  <p>This trips up almost everyone. A <code>404</code> or <code>500</code> response is still a <em>successful</em> fetch — the promise only rejects on a <strong>network</strong> failure (offline, DNS, CORS). You must check <code>response.ok</code> yourself:</p>
+  <p>This trips up almost everyone. A <code>404</code> or <code>500</code> response is still a <em>successful</em> fetch - the promise only rejects on a <strong>network</strong> failure (offline, DNS, CORS). You must check <code>response.ok</code> yourself:</p>
   <pre><code>{`const res = await fetch(url);
 if (!res.ok) {
   throw new Error(\`HTTP \${res.status} \${res.statusText}\`);
@@ -53,7 +53,7 @@ const data = await res.json();`}</code></pre>
 const created = await res.json();`}</code></pre>
 
   <h2>Aborting a request</h2>
-  <p>Use an <code>AbortController</code> to cancel a request — useful for timeouts or when a component unmounts:</p>
+  <p>Use an <code>AbortController</code> to cancel a request - useful for timeouts or when a component unmounts:</p>
   <pre><code>{`const controller = new AbortController();
 const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -78,5 +78,5 @@ try {
     </tbody>
   </table>
 
-  <p>That covers the everyday cases. The Fetch API also supports streaming response bodies, <code>FormData</code> uploads, and request/response cloning — but the patterns above handle the vast majority of real-world calls.</p>
+  <p>That covers the everyday cases. The Fetch API also supports streaming response bodies, <code>FormData</code> uploads, and request/response cloning - but the patterns above handle the vast majority of real-world calls.</p>
 </Article>

@@ -5,17 +5,17 @@ import Article from '../../../layouts/Article.astro';
   lang="it"
   slug="intersection-observer-api"
   title="L'API IntersectionObserver: lazy-loading ed effetti allo scroll"
-  description="Usa IntersectionObserver per caricare immagini in lazy-loading, rivelare elementi durante lo scroll e creare lo scroll infinito — con threshold e rootMargin spiegati, più esempi eseguibili."
+  description="Usa IntersectionObserver per caricare immagini in lazy-loading, rivelare elementi durante lo scroll e creare lo scroll infinito - con threshold e rootMargin spiegati, più esempi eseguibili."
   cat="apis"
   day={10}
   hero="/img/intersection-observer-api-hero.jpg"
   heroAlt="Vista dall'alto della scrivania di un designer con schizzi di wireframe UI, foglietti adesivi, uno smartphone e pennarelli colorati"
   cluster={null}
 >
-  <p>L'<strong>API IntersectionObserver</strong> ti dice quando un elemento entra o esce dal viewport — senza che tu debba collegare un listener <code>scroll</code> e calcolare le posizioni a ogni frame. Il browser esegue il controllo in modo asincrono e fuori dal thread principale, quindi tutto resta fluido anche con centinaia di elementi osservati. Ogni browser attuale la supporta.</p>
+  <p>L'<strong>API IntersectionObserver</strong> ti dice quando un elemento entra o esce dal viewport - senza che tu debba collegare un listener <code>scroll</code> e calcolare le posizioni a ogni frame. Il browser esegue il controllo in modo asincrono e fuori dal thread principale, quindi tutto resta fluido anche con centinaia di elementi osservati. Ogni browser attuale la supporta.</p>
 
   <h2>Perché non ascoltare semplicemente lo scroll?</h2>
-  <p>Un handler <code>scroll</code> scatta di continuo e ti costringe a chiamare <code>getBoundingClientRect()</code> per sapere dove si trovano gli elementi — questo legge il layout e può causare scatti. IntersectionObserver ribalta il modello: registri gli elementi che ti interessano e il browser ti avvisa solo quando la loro visibilità cambia davvero.</p>
+  <p>Un handler <code>scroll</code> scatta di continuo e ti costringe a chiamare <code>getBoundingClientRect()</code> per sapere dove si trovano gli elementi - questo legge il layout e può causare scatti. IntersectionObserver ribalta il modello: registri gli elementi che ti interessano e il browser ti avvisa solo quando la loro visibilità cambia davvero.</p>
 
   <h2>Lo schema di base</h2>
   <p>Crea un observer con una callback, poi chiama <code>observe()</code> su uno o più elementi. La callback riceve un array di oggetti <code>entry</code>; la proprietà chiave è <code>entry.isIntersecting</code>:</p>
@@ -43,7 +43,7 @@ const imgObserver = new IntersectionObserver((entries, observer) => {
 }, { rootMargin: '200px' });
 
 lazyImages.forEach((img) => imgObserver.observe(img));`}</code></pre>
-  <p>Nota: il lazy-loading nativo tramite <code>&lt;img loading="lazy"&gt;</code> copre ormai la maggior parte dei casi. Ricorri a IntersectionObserver quando ti serve una logica personalizzata — segnaposto, dissolvenze o il caricamento di risorse non immagine.</p>
+  <p>Nota: il lazy-loading nativo tramite <code>&lt;img loading="lazy"&gt;</code> copre ormai la maggior parte dei casi. Ricorri a IntersectionObserver quando ti serve una logica personalizzata - segnaposto, dissolvenze o il caricamento di risorse non immagine.</p>
 
   <figure>
     <img src="/img/intersection-observer-api-inbody.jpg" alt="Uno smartphone che mostra la schermata di login di Facebook accanto a tessere dello Scrabble che compongono le parole SOCIAL MEDIA" width="1280" height="850" loading="lazy" />
@@ -79,13 +79,13 @@ loader.observe(sentinel);`}</code></pre>
   <h2>Le opzioni: threshold e rootMargin</h2>
   <p>Due opzioni determinano quando scatta la callback:</p>
   <ul>
-    <li><strong><code>threshold</code></strong> — un numero (o array) da 0 a 1. <code>0</code> scatta nel momento in cui un pixel è visibile; <code>1</code> scatta solo quando l'intero elemento è visibile. Un array come <code>[0, 0.5, 1]</code> scatta a ogni passo, comodo per gli effetti di avanzamento dello scroll.</li>
-    <li><strong><code>rootMargin</code></strong> — un margine in stile CSS che ingrandisce o riduce l'area usata per il test. <code>'200px'</code> si attiva 200px <em>prima</em> che l'elemento raggiunga il viewport — ideale per il pre-caricamento.</li>
-    <li><strong><code>root</code></strong> — l'elemento da usare come viewport. Per impostazione predefinita è il viewport del browser; impostalo su un contenitore scorrevole per osservare all'interno di esso.</li>
+    <li><strong><code>threshold</code></strong> - un numero (o array) da 0 a 1. <code>0</code> scatta nel momento in cui un pixel è visibile; <code>1</code> scatta solo quando l'intero elemento è visibile. Un array come <code>[0, 0.5, 1]</code> scatta a ogni passo, comodo per gli effetti di avanzamento dello scroll.</li>
+    <li><strong><code>rootMargin</code></strong> - un margine in stile CSS che ingrandisce o riduce l'area usata per il test. <code>'200px'</code> si attiva 200px <em>prima</em> che l'elemento raggiunga il viewport - ideale per il pre-caricamento.</li>
+    <li><strong><code>root</code></strong> - l'elemento da usare come viewport. Per impostazione predefinita è il viewport del browser; impostalo su un contenitore scorrevole per osservare all'interno di esso.</li>
   </ul>
 
   <h2>Pulizia</h2>
-  <p>Smetti di osservare un singolo elemento con <code>observer.unobserve(el)</code>, oppure smonta tutto con <code>observer.disconnect()</code> — importante nelle single-page app quando una vista viene smontata, per evitare perdite di memoria.</p>
+  <p>Smetti di osservare un singolo elemento con <code>observer.unobserve(el)</code>, oppure smonta tutto con <code>observer.disconnect()</code> - importante nelle single-page app quando una vista viene smontata, per evitare perdite di memoria.</p>
 
   <h2>Riferimento rapido</h2>
   <table>

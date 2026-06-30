@@ -12,14 +12,14 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="La mano di un tecnico che effettua la manutenzione di un server illuminato di blu in un rack di un data center"
   cluster="deploy"
 >
-  <p>Un <strong>sito statico</strong> è un insieme di file pre-compilati — HTML, CSS, JavaScript e asset — che un server può consegnare al browser così come sono, senza che venga eseguito codice a ogni richiesta. Strumenti come <strong>Astro</strong>, <strong>Vite</strong>, Eleventy o una cartella HTML scritta a mano producono tutti questo tipo di output. Ospitarlo è più semplice, più economico e più veloce che ospitare un'app dinamica, perché non c'è nulla da eseguire lato server.</p>
+  <p>Un <strong>sito statico</strong> è un insieme di file pre-compilati - HTML, CSS, JavaScript e asset - che un server può consegnare al browser così come sono, senza che venga eseguito codice a ogni richiesta. Strumenti come <strong>Astro</strong>, <strong>Vite</strong>, Eleventy o una cartella HTML scritta a mano producono tutti questo tipo di output. Ospitarlo è più semplice, più economico e più veloce che ospitare un'app dinamica, perché non c'è nulla da eseguire lato server.</p>
 
   <h2>Cosa significa davvero "hosting statico"</h2>
-  <p>Con l'hosting statico esegui un passo di build in locale o in CI, che produce una cartella di file semplici (spesso chiamata <code>dist</code> o <code>_site</code>). L'unico compito dell'host è memorizzare quei file e servirli via HTTP. Non c'è PHP, nessun processo Node, nessun database — solo file. Questo ha tre conseguenze dirette:</p>
+  <p>Con l'hosting statico esegui un passo di build in locale o in CI, che produce una cartella di file semplici (spesso chiamata <code>dist</code> o <code>_site</code>). L'unico compito dell'host è memorizzare quei file e servirli via HTTP. Non c'è PHP, nessun processo Node, nessun database - solo file. Questo ha tre conseguenze dirette:</p>
   <ul>
-    <li><strong>Velocità</strong> — i file possono essere messi in cache in modo aggressivo e serviti dall'edge, vicino al visitatore.</li>
-    <li><strong>Costo</strong> — nessun server sempre acceso da pagare; molti provider offrono un generoso piano gratuito.</li>
-    <li><strong>Affidabilità</strong> — meno parti in movimento significano meno cose che possono rompersi sotto carico.</li>
+    <li><strong>Velocità</strong> - i file possono essere messi in cache in modo aggressivo e serviti dall'edge, vicino al visitatore.</li>
+    <li><strong>Costo</strong> - nessun server sempre acceso da pagare; molti provider offrono un generoso piano gratuito.</li>
+    <li><strong>Affidabilità</strong> - meno parti in movimento significano meno cose che possono rompersi sotto carico.</li>
   </ul>
 
   <h2>Costruire la cartella di output</h2>
@@ -31,12 +31,12 @@ npm run build        # outputs to ./dist
 npm run build        # outputs to ./dist
 
 # Plain HTML
-# no build step — your folder of .html files is already the output`}</code></pre>
+# no build step - your folder of .html files is already the output`}</code></pre>
   <p>Per un sito HTML puro, la "build" è semplicemente la cartella che già possiedi. Per Astro o Vite, è la directory <code>dist</code> a essere servita.</p>
 
   <figure>
     <img src="/img/static-website-hosting-inbody.jpg" alt="Una fila di server neri montati a rack in un data center" width="1280" height="853" loading="lazy" />
-    <figcaption>Dietro ogni sito statico c'è un'infrastruttura fisica — rack di server e nodi edge della CDN che memorizzano e distribuiscono i tuoi file compilati.</figcaption>
+    <figcaption>Dietro ogni sito statico c'è un'infrastruttura fisica - rack di server e nodi edge della CDN che memorizzano e distribuiscono i tuoi file compilati.</figcaption>
   </figure>
 
   <h2>Dove ospitare: CDN vs hosting statico classico</h2>
@@ -55,7 +55,7 @@ npm run build        # outputs to ./dist
   <p>Molte piattaforme supportano anche la <strong>delega dei nameserver</strong>, in cui affidi interamente la gestione DNS all'host. Dopo la propagazione dei record, l'host serve il tuo sito sul tuo dominio.</p>
 
   <h2>HTTPS gratuito</h2>
-  <p>L'HTTPS non è più opzionale — i browser segnalano l'HTTP semplice come "non sicuro" e molte API della piattaforma web funzionano solo in un contesto sicuro. La buona notizia: praticamente ogni host statico moderno emette e rinnova i certificati TLS per te automaticamente, di solito tramite Let's Encrypt. Una volta collegato il dominio, il certificato viene fornito senza alcun passaggio manuale e i rinnovi avvengono da soli.</p>
+  <p>L'HTTPS non è più opzionale - i browser segnalano l'HTTP semplice come "non sicuro" e molte API della piattaforma web funzionano solo in un contesto sicuro. La buona notizia: praticamente ogni host statico moderno emette e rinnova i certificati TLS per te automaticamente, di solito tramite Let's Encrypt. Una volta collegato il dominio, il certificato viene fornito senza alcun passaggio manuale e i rinnovi avvengono da soli.</p>
 
   <h2>Riferimento rapido</h2>
   <table>
@@ -69,5 +69,5 @@ npm run build        # outputs to ./dist
     </tbody>
   </table>
 
-  <p>Il senso dell'hosting statico è proprio che si toglie di mezzo: costruisci una volta, fai push, e i file vengono serviti velocemente dall'edge. Riserva l'hosting dinamico alle parti del tuo progetto che hanno davvero bisogno di logica lato server — e tieni il frontend statico su un'infrastruttura costruita per consegnare i file rapidamente.</p>
+  <p>Il senso dell'hosting statico è proprio che si toglie di mezzo: costruisci una volta, fai push, e i file vengono serviti velocemente dall'edge. Riserva l'hosting dinamico alle parti del tuo progetto che hanno davvero bisogno di logica lato server - e tieni il frontend statico su un'infrastruttura costruita per consegnare i file rapidamente.</p>
 </Article>

@@ -12,7 +12,7 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="Un foglio stampato di markup HTML con una penna appoggiata sopra"
   cluster={null}
 >
-  <p>Il <strong>CSS nesting</strong> ti permette di scrivere regole dentro altre regole, così gli stili che vanno insieme restano insieme. Per anni questo è stato possibile solo con un preprocessore come Sass. Ora è una funzionalità nativa del CSS, disponibile in ogni browser moderno — senza alcun passaggio di build.</p>
+  <p>Il <strong>CSS nesting</strong> ti permette di scrivere regole dentro altre regole, così gli stili che vanno insieme restano insieme. Per anni questo è stato possibile solo con un preprocessore come Sass. Ora è una funzionalità nativa del CSS, disponibile in ogni browser moderno - senza alcun passaggio di build.</p>
 
   <h2>L'idea di base</h2>
   <p>Invece di ripetere il selettore genitore per ogni figlio, annidi la regola figlia al suo interno. Questi due blocchi producono lo stesso risultato:</p>
@@ -30,7 +30,7 @@ import Article from '../../../layouts/Article.astro';
   <p>Ogni selettore annidato viene letto relativamente al suo genitore, quindi <code>.card p</code> è ciò che il browser applica realmente.</p>
 
   <h2>Il selettore di annidamento &amp;</h2>
-  <p>La e commerciale <code>&amp;</code> fa riferimento al selettore genitore. Ti serve ogni volta che il selettore annidato deve collegarsi direttamente al genitore invece di descrivere un discendente — pseudo-classi, classi modificatrici e selettori composti:</p>
+  <p>La e commerciale <code>&amp;</code> fa riferimento al selettore genitore. Ti serve ogni volta che il selettore annidato deve collegarsi direttamente al genitore invece di descrivere un discendente - pseudo-classi, classi modificatrici e selettori composti:</p>
   <pre><code>{`.btn {
   background: #2563eb;
 
@@ -57,13 +57,13 @@ import Article from '../../../layouts/Article.astro';
   <h2>Dove differisce da Sass</h2>
   <p>La sintassi assomiglia a Sass, ma le due cose non sono identiche. Le differenze che mordono più spesso:</p>
   <ul>
-    <li><strong>Concatenazione</strong>: Sass ti permette di costruire selettori come <code>&amp;__title</code> (BEM). Il CSS nesting nativo <em>non</em> concatena — <code>&amp;__title</code> non è valido. Devi scrivere il nome completo della classe.</li>
+    <li><strong>Concatenazione</strong>: Sass ti permette di costruire selettori come <code>&amp;__title</code> (BEM). Il CSS nesting nativo <em>non</em> concatena - <code>&amp;__title</code> non è valido. Devi scrivere il nome completo della classe.</li>
     <li><strong>Nessuna fase di compilazione</strong>: l'annidamento nativo gira nel browser, quindi non c'è nulla da compilare né source map da gestire.</li>
     <li><strong>Specificità di &amp;</strong>: nel CSS nativo, <code>&amp;</code> si comporta come <code>:is()</code> e assume la specificità del selettore più specifico nella lista del genitore, cosa che può differire in modo sottile dall'output di Sass.</li>
   </ul>
 
   <h2>Supporto dei browser e fallback</h2>
-  <p>Il CSS nesting nativo è supportato nelle versioni correnti di Chrome, Edge, Firefox e Safari. Le prime implementazioni richiedevano che il selettore annidato iniziasse con un simbolo (quindi scrivevi <code>&amp; p</code> invece di <code>p</code>); la sintassi rilassata che consente un semplice selettore di elemento è ciò che viene distribuito nei browser di oggi. Se devi supportare motori più vecchi, continua a usare Sass o PostCSS — il plugin <code>postcss-nesting</code> compila l'annidamento nativo in CSS flat.</p>
+  <p>Il CSS nesting nativo è supportato nelle versioni correnti di Chrome, Edge, Firefox e Safari. Le prime implementazioni richiedevano che il selettore annidato iniziasse con un simbolo (quindi scrivevi <code>&amp; p</code> invece di <code>p</code>); la sintassi rilassata che consente un semplice selettore di elemento è ciò che viene distribuito nei browser di oggi. Se devi supportare motori più vecchi, continua a usare Sass o PostCSS - il plugin <code>postcss-nesting</code> compila l'annidamento nativo in CSS flat.</p>
 
   <h2>Riferimento rapido</h2>
   <table>
@@ -73,9 +73,9 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Pseudo-classe</td><td><code>&amp;:hover &#123; ... &#125;</code></td></tr>
       <tr><td>Classe modificatrice</td><td><code>&amp;.is-active &#123; ... &#125;</code></td></tr>
       <tr><td>Responsive</td><td><code>@media (...) &#123; ... &#125;</code> annidata</td></tr>
-      <tr><td>Concatenazione BEM</td><td>non supportata — scrivi la classe completa</td></tr>
+      <tr><td>Concatenazione BEM</td><td>non supportata - scrivi la classe completa</td></tr>
     </tbody>
   </table>
 
-  <p>L'annidamento nativo elimina uno degli ultimi grandi motivi per ricorrere a un preprocessore in un nuovo progetto. Mantieni l'annidamento poco profondo — due o tre livelli — e i tuoi fogli di stile resteranno leggibili mentre le relazioni tra i selettori restano evidenti.</p>
+  <p>L'annidamento nativo elimina uno degli ultimi grandi motivi per ricorrere a un preprocessore in un nuovo progetto. Mantieni l'annidamento poco profondo - due o tre livelli - e i tuoi fogli di stile resteranno leggibili mentre le relazioni tra i selettori restano evidenti.</p>
 </Article>

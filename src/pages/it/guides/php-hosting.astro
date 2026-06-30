@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="it"
   slug="php-hosting"
   title="Hosting PHP spiegato: shared vs VPS, versioni e prestazioni"
-  description="Cosa cercare in un hosting PHP — shared vs VPS, versioni ed estensioni di PHP, deployment, .htaccess e prestazioni con OPcache — senza il rumore del marketing."
+  description="Cosa cercare in un hosting PHP - shared vs VPS, versioni ed estensioni di PHP, deployment, .htaccess e prestazioni con OPcache - senza il rumore del marketing."
   cat="hosting"
   day={15}
   hero="/img/php-hosting-hero.jpg"
@@ -13,18 +13,18 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>PHP alimenta ancora una grande fetta del web, e ospitarlo è terreno battuto — il che è esattamente il motivo per cui le offerte sembrano tutte uguali e le vere differenze si nascondono nei dettagli. Questa guida copre i criteri che contano davvero: il compromesso shared vs VPS, versioni ed estensioni di PHP, come fai il deploy, cosa controlla <code>.htaccess</code> e le manopole delle prestazioni che vale la pena conoscere.</p>
+  <p>PHP alimenta ancora una grande fetta del web, e ospitarlo è terreno battuto - il che è esattamente il motivo per cui le offerte sembrano tutte uguali e le vere differenze si nascondono nei dettagli. Questa guida copre i criteri che contano davvero: il compromesso shared vs VPS, versioni ed estensioni di PHP, come fai il deploy, cosa controlla <code>.htaccess</code> e le manopole delle prestazioni che vale la pena conoscere.</p>
 
   <h2>Shared hosting vs VPS</h2>
   <p>La prima decisione è quanto è isolato il tuo ambiente.</p>
   <ul>
-    <li><strong>Shared hosting</strong> — il tuo sito risiede insieme a molti altri su una macchina, gestita al posto tuo (PHP, web server, spesso un pannello di controllo). Il più economico e semplice; cedi il controllo sulla versione di PHP, sulle estensioni e sulla configurazione del server, e condividi le risorse con i vicini.</li>
-    <li><strong>VPS</strong> — una fetta dedicata di un server con accesso root. Scegli la versione di PHP, installi qualsiasi estensione, ottimizzi il web server e non sei influenzato dagli altri inquilini — ma sei responsabile di aggiornamenti e sicurezza.</li>
+    <li><strong>Shared hosting</strong> - il tuo sito risiede insieme a molti altri su una macchina, gestita al posto tuo (PHP, web server, spesso un pannello di controllo). Il più economico e semplice; cedi il controllo sulla versione di PHP, sulle estensioni e sulla configurazione del server, e condividi le risorse con i vicini.</li>
+    <li><strong>VPS</strong> - una fetta dedicata di un server con accesso root. Scegli la versione di PHP, installi qualsiasi estensione, ottimizzi il web server e non sei influenzato dagli altri inquilini - ma sei responsabile di aggiornamenti e sicurezza.</li>
   </ul>
   <p>Per un piccolo sito o un CMS standard, lo shared hosting di solito basta. Punta a un VPS quando hai bisogno di una build PHP specifica, estensioni personalizzate, prestazioni più prevedibili o pieno controllo sullo stack.</p>
 
   <h2>Le versioni di PHP contano</h2>
-  <p>La versione di PHP non è un dettaglio — le release più recenti sono sensibilmente più veloci e, cosa cruciale, ricevono ancora correzioni di sicurezza. Eseguire una versione a fine vita significa niente più patch. Verifica sempre quali versioni offre un host e se puoi cambiarla facilmente. Puoi leggere la versione in esecuzione dal codice o dalla CLI:</p>
+  <p>La versione di PHP non è un dettaglio - le release più recenti sono sensibilmente più veloci e, cosa cruciale, ricevono ancora correzioni di sicurezza. Eseguire una versione a fine vita significa niente più patch. Verifica sempre quali versioni offre un host e se puoi cambiarla facilmente. Puoi leggere la versione in esecuzione dal codice o dalla CLI:</p>
   <pre><code>{`<?php
 echo phpversion();        // e.g. "8.3.x"
 // or a full report:
@@ -33,12 +33,12 @@ phpinfo();`}</code></pre>
   <p>Un buon host ti permette di selezionare la versione di PHP per sito (spesso nel pannello di controllo) e mantiene disponibile una gamma di versioni supportate, così puoi aggiornare secondo i tuoi tempi.</p>
 
   <h2>Estensioni: controlla prima di impegnarti</h2>
-  <p>La funzionalità di PHP è suddivisa tra estensioni, e la tua app probabilmente dipende da diverse — un driver di database, la gestione delle immagini e così via. Quelle comuni da verificare che un host fornisca:</p>
+  <p>La funzionalità di PHP è suddivisa tra estensioni, e la tua app probabilmente dipende da diverse - un driver di database, la gestione delle immagini e così via. Quelle comuni da verificare che un host fornisca:</p>
   <ul>
-    <li><code>pdo_mysql</code> / <code>mysqli</code> — connettività MySQL/MariaDB.</li>
-    <li><code>mbstring</code> — gestione di stringhe multibyte, richiesta da molti framework.</li>
-    <li><code>gd</code> o <code>imagick</code> — elaborazione delle immagini.</li>
-    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> — richieste HTTP, crittografia, archivi, localizzazione.</li>
+    <li><code>pdo_mysql</code> / <code>mysqli</code> - connettività MySQL/MariaDB.</li>
+    <li><code>mbstring</code> - gestione di stringhe multibyte, richiesta da molti framework.</li>
+    <li><code>gd</code> o <code>imagick</code> - elaborazione delle immagini.</li>
+    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> - richieste HTTP, crittografia, archivi, localizzazione.</li>
   </ul>
   <p>Elenca ciò che è effettivamente caricato sul server con:</p>
   <pre><code>{`php -m`}</code></pre>
@@ -49,13 +49,13 @@ phpinfo();`}</code></pre>
   </figure>
 
   <h2>Deployment e .htaccess</h2>
-  <p>Sullo shared hosting in genere fai il deploy caricando file (SFTP) o facendo il pull da Git nella web root; alcuni host aggiungono uno step di deploy dal pannello. Su Apache, il file <code>.htaccess</code> nella tua web root configura il comportamento per-directory senza toccare la configurazione principale del server — utile per URL puliti, redirect e header di caching. Un pattern comune instrada tutte le richieste a un front controller:</p>
-  <pre><code>{`# .htaccess — route everything to index.php (front controller)
+  <p>Sullo shared hosting in genere fai il deploy caricando file (SFTP) o facendo il pull da Git nella web root; alcuni host aggiungono uno step di deploy dal pannello. Su Apache, il file <code>.htaccess</code> nella tua web root configura il comportamento per-directory senza toccare la configurazione principale del server - utile per URL puliti, redirect e header di caching. Un pattern comune instrada tutte le richieste a un front controller:</p>
+  <pre><code>{`# .htaccess - route everything to index.php (front controller)
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]`}</code></pre>
-  <p>Nota che <code>.htaccess</code> è una funzionalità di Apache. Su Nginx le regole equivalenti risiedono nella configurazione del server, che sullo shared hosting potresti non controllare — un altro motivo per sapere quale web server esegue il tuo host.</p>
+  <p>Nota che <code>.htaccess</code> è una funzionalità di Apache. Su Nginx le regole equivalenti risiedono nella configurazione del server, che sullo shared hosting potresti non controllare - un altro motivo per sapere quale web server esegue il tuo host.</p>
 
   <h2>Prestazioni: OPcache</h2>
   <p>Il singolo maggior guadagno di prestazioni in PHP è <strong>OPcache</strong>, che mette in cache il bytecode compilato così che PHP non debba ri-analizzare e ri-compilare i tuoi script a ogni richiesta. La maggior parte degli host moderni lo abilita di default; vale la pena confermarlo. Impostazioni tipiche in <code>php.ini</code>:</p>
@@ -63,7 +63,7 @@ RewriteRule ^ index.php [L]`}</code></pre>
 opcache.memory_consumption=128
 opcache.max_accelerated_files=10000
 opcache.validate_timestamps=1`}</code></pre>
-  <p>In produzione puoi impostare <code>opcache.validate_timestamps=0</code> così che PHP non controlli mai i file per modifiche, poi svuotare la cache al deploy — spremendo un po' più di velocità al costo di dover azzerare esplicitamente la cache.</p>
+  <p>In produzione puoi impostare <code>opcache.validate_timestamps=0</code> così che PHP non controlli mai i file per modifiche, poi svuotare la cache al deploy - spremendo un po' più di velocità al costo di dover azzerare esplicitamente la cache.</p>
 
   <h2>Checklist rapida</h2>
   <table>
@@ -77,5 +77,5 @@ opcache.validate_timestamps=1`}</code></pre>
     </tbody>
   </table>
 
-  <p>L'hosting PHP è maturo, quindi non scervellarti sui nomi dei brand — abbina l'host ai requisiti reali della tua app: la versione di PHP giusta, le estensioni da cui dipendi, un web server che capisci e OPcache attivo. Azzecca questi e il resto è perlopiù questione di preferenze.</p>
+  <p>L'hosting PHP è maturo, quindi non scervellarti sui nomi dei brand - abbina l'host ai requisiti reali della tua app: la versione di PHP giusta, le estensioni da cui dipendi, un web server che capisci e OPcache attivo. Azzecca questi e il resto è perlopiù questione di preferenze.</p>
 </Article>

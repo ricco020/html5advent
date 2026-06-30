@@ -4,7 +4,7 @@
 //  - NO rating / aggregateRating / Review here: the pages display no rating, so schema must not invent one.
 //  - `offers` is emitted ONLY when a real, dated price is VISIBLE on the page that references it.
 //    Contabo Cloud VPS list prices below are the genuine published EUR/month (12-month term, ex. VAT)
-//    as of June 2026 — they are shown verbatim on the contabo-review page, which is the only page
+//    as of June 2026 - they are shown verbatim on the contabo-review page, which is the only page
 //    that surfaces an Offer. Every other page emits Product WITHOUT Offer (no visible price).
 //  - Providers with no firm price we display (Hetzner, OVH, DigitalOcean…) → Product, never an Offer.
 
@@ -55,7 +55,7 @@ export const PRODUCTS = {
 };
 
 // Build a schema.org node for one product key.
-// withOffers=true emits Offer(s) — ONLY pass true when the prices are visible on the page.
+// withOffers=true emits Offer(s) - ONLY pass true when the prices are visible on the page.
 // asSoftwareApplication=true → SoftwareApplication (single-product review); else → Product.
 export function productNode(key, { withOffers = false, asSoftwareApplication = false } = {}) {
   const p = PRODUCTS[key];

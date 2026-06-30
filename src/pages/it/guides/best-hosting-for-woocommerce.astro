@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="it"
   slug="best-hosting-for-woocommerce"
   title="Hosting per un negozio WooCommerce: i requisiti che contano davvero"
-  description="Una guida pratica all'hosting di un negozio WooCommerce — i requisiti di prestazioni, risorse e scalabilità che contano davvero, oltre al confronto tra hosting condiviso, gestito e VPS per un negozio online."
+  description="Una guida pratica all'hosting di un negozio WooCommerce - i requisiti di prestazioni, risorse e scalabilità che contano davvero, oltre al confronto tra hosting condiviso, gestito e VPS per un negozio online."
   cat="hosting"
   hero="/img/best-hosting-for-woocommerce-hero.jpg"
   heroAlt="Una mano che tiene una carta fedeltà rossa davanti a un portatile che mostra un negozio online con badge di sconto"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p><strong>WooCommerce</strong> trasforma WordPress in un negozio online completo, il che significa che il tuo hosting ora deve svolgere due compiti impegnativi allo stesso tempo: servire un sistema di gestione dei contenuti <em>e</em> far funzionare un negozio transazionale. Un blog può tollerare una pagina lenta; un negozio no — un carrello fiacco o un timeout al pagamento ti costa la vendita. Questa guida illustra i requisiti che incidono davvero su un negozio WooCommerce, così da poter giudicare qualsiasi hosting da solo, invece di fidarti di una classifica di marketing.</p>
+  <p><strong>WooCommerce</strong> trasforma WordPress in un negozio online completo, il che significa che il tuo hosting ora deve svolgere due compiti impegnativi allo stesso tempo: servire un sistema di gestione dei contenuti <em>e</em> far funzionare un negozio transazionale. Un blog può tollerare una pagina lenta; un negozio no - un carrello fiacco o un timeout al pagamento ti costa la vendita. Questa guida illustra i requisiti che incidono davvero su un negozio WooCommerce, così da poter giudicare qualsiasi hosting da solo, invece di fidarti di una classifica di marketing.</p>
 
   <h2>Perché un negozio è più pesante di un blog</h2>
   <p>Un tipico blog WordPress può mettere in cache quasi ogni pagina e servirla come HTML statico. Un negozio non può farlo per le pagine che contano di più. Carrello, pagamento, «il mio account» e qualsiasi vista con accesso effettuato sono <strong>dinamici e personalizzati per utente</strong>, quindi aggirano la cache di pagina e colpiscono PHP e il database a ogni richiesta. Aggiungi la ricerca di prodotti, il filtraggio a faccette, la logica dei coupon, i controlli di stock e le chiamate ai gateway di pagamento, e il server sta facendo lavoro reale proprio sulle pagine in cui la velocità si converte in ricavi.</p>
@@ -22,15 +22,15 @@ import Article from '../../../layouts/Article.astro';
   <p>Confronta gli hosting su queste dimensioni concrete invece che su aggettivi come «fulmineo».</p>
 
   <h3>Versione di PHP e risorse</h3>
-  <p>Esegui una <strong>versione di PHP attualmente supportata</strong> — le versioni più recenti sono sensibilmente più veloci e ricevono ancora correzioni di sicurezza, mentre le versioni a fine vita no. Oltre alla versione, due limiti lato server incidono direttamente sui negozi WooCommerce:</p>
+  <p>Esegui una <strong>versione di PHP attualmente supportata</strong> - le versioni più recenti sono sensibilmente più veloci e ricevono ancora correzioni di sicurezza, mentre le versioni a fine vita no. Oltre alla versione, due limiti lato server incidono direttamente sui negozi WooCommerce:</p>
   <ul>
-    <li><code>memory_limit</code> — WooCommerce raccomanda un limite di memoria PHP generoso; importare prodotti, generare report o far girare molti plugin può esaurirne uno troppo stretto.</li>
-    <li><code>max_execution_time</code> e i limiti di upload — le attività di lunga durata (importazioni di prodotti in massa, CSV di grandi dimensioni) falliscono silenziosamente quando sono troppo bassi.</li>
+    <li><code>memory_limit</code> - WooCommerce raccomanda un limite di memoria PHP generoso; importare prodotti, generare report o far girare molti plugin può esaurirne uno troppo stretto.</li>
+    <li><code>max_execution_time</code> e i limiti di upload - le attività di lunga durata (importazioni di prodotti in massa, CSV di grandi dimensioni) falliscono silenziosamente quando sono troppo bassi.</li>
   </ul>
   <p>Conferma che l'hosting ti permetta di aumentare questi valori, idealmente per sito, invece di bloccarti sui valori predefiniti del condiviso.</p>
 
   <h3>Prestazioni del database</h3>
-  <p>WooCommerce fa un uso intensivo del database. Ordini, prodotti, sessioni e soprattutto le tabelle <code>wp_options</code> e dei metadati vengono interrogate di continuo. Preferisci un hosting su un MySQL o MariaDB moderno con <strong>storage NVMe/SSD</strong> — la velocità del disco si riflette direttamente sui tempi di query e quindi sulla latenza del pagamento. Su cataloghi più grandi, la possibilità di usare l'<strong>High-Performance Order Storage</strong> di WooCommerce (tabelle ordini dedicate) aiuta il database a scalare; è un'impostazione di WooCommerce, ma rende solo su un hosting che non sia già a corto di CPU e I/O.</p>
+  <p>WooCommerce fa un uso intensivo del database. Ordini, prodotti, sessioni e soprattutto le tabelle <code>wp_options</code> e dei metadati vengono interrogate di continuo. Preferisci un hosting su un MySQL o MariaDB moderno con <strong>storage NVMe/SSD</strong> - la velocità del disco si riflette direttamente sui tempi di query e quindi sulla latenza del pagamento. Su cataloghi più grandi, la possibilità di usare l'<strong>High-Performance Order Storage</strong> di WooCommerce (tabelle ordini dedicate) aiuta il database a scalare; è un'impostazione di WooCommerce, ma rende solo su un hosting che non sia già a corto di CPU e I/O.</p>
 
   <figure>
     <img src="/img/best-hosting-for-woocommerce-inbody.jpg" alt="Una persona che tiene una carta bancaria mentre digita su un portatile, completando un pagamento online" width="1280" height="853" loading="lazy" />
@@ -38,43 +38,43 @@ import Article from '../../../layouts/Article.astro';
   </figure>
 
   <h3>Margine di RAM e CPU</h3>
-  <p>La memoria è di solito la prima risorsa a esaurirsi in un negozio. Ogni worker PHP che gestisce una richiesta dinamica consuma RAM, e un pagamento molto frequentato significa più worker contemporaneamente. Troppa poca memoria e le richieste si accodano o vengono terminate; il sintomo che l'acquirente vede è un carrello che gira a vuoto. La CPU conta per le stesse pagine dinamiche e per il lavoro in background (cron, email degli ordini, indicizzazione della ricerca). Dimensiona entrambe con margine per i picchi di traffico — una vendita lampo o una menzione in una newsletter può moltiplicare gli utenti contemporanei in pochi minuti.</p>
+  <p>La memoria è di solito la prima risorsa a esaurirsi in un negozio. Ogni worker PHP che gestisce una richiesta dinamica consuma RAM, e un pagamento molto frequentato significa più worker contemporaneamente. Troppa poca memoria e le richieste si accodano o vengono terminate; il sintomo che l'acquirente vede è un carrello che gira a vuoto. La CPU conta per le stesse pagine dinamiche e per il lavoro in background (cron, email degli ordini, indicizzazione della ricerca). Dimensiona entrambe con margine per i picchi di traffico - una vendita lampo o una menzione in una newsletter può moltiplicare gli utenti contemporanei in pochi minuti.</p>
 
   <h3>Cache fatta bene</h3>
   <p>La cache è la singola leva più importante per la velocità di un negozio, ma deve essere <em>consapevole del negozio</em>:</p>
   <ul>
-    <li><strong>Cache di pagina</strong> per le pagine di catalogo e di contenuto — si possono mettere in cache in modo aggressivo.</li>
-    <li><strong>Esclusioni dalla cache</strong> per carrello, pagamento e pagine dell'account — queste non devono mai essere servite obsolete, altrimenti un acquirente vede il carrello di qualcun altro.</li>
-    <li><strong>Cache a oggetti</strong> (Redis o Memcached) per mettere in cache i risultati delle query al database e gli oggetti PHP — è ciò che mantiene veloci le pagine dinamiche su larga scala. Verifica se l'hosting offre una cache a oggetti persistente.</li>
+    <li><strong>Cache di pagina</strong> per le pagine di catalogo e di contenuto - si possono mettere in cache in modo aggressivo.</li>
+    <li><strong>Esclusioni dalla cache</strong> per carrello, pagamento e pagine dell'account - queste non devono mai essere servite obsolete, altrimenti un acquirente vede il carrello di qualcun altro.</li>
+    <li><strong>Cache a oggetti</strong> (Redis o Memcached) per mettere in cache i risultati delle query al database e gli oggetti PHP - è ciò che mantiene veloci le pagine dinamiche su larga scala. Verifica se l'hosting offre una cache a oggetti persistente.</li>
     <li><strong>Cache di opcode</strong> (OPcache) attivata, così il PHP compilato viene riutilizzato tra le richieste.</li>
   </ul>
 
   <h3>SSL, sicurezza e considerazioni PCI</h3>
-  <p>Un negozio gestisce dati personali e instrada pagamenti, quindi l'<strong>HTTPS è obbligatorio</strong>, non opzionale — la maggior parte degli hosting include certificati automatizzati gratuiti, quindi confermalo. Se raccogli i dati delle carte sul tuo sito, erediti obblighi PCI-DSS; usare un gateway di pagamento ospitato (in cui i dati della carta vengono inseriti dal lato del fornitore) tiene la maggior parte di quel peso lontana dal tuo server. Cerca impostazioni predefinite sensate: un web application firewall, una scansione automatizzata del malware e un isolamento affinché la violazione di un vicino non possa raggiungere il tuo negozio.</p>
+  <p>Un negozio gestisce dati personali e instrada pagamenti, quindi l'<strong>HTTPS è obbligatorio</strong>, non opzionale - la maggior parte degli hosting include certificati automatizzati gratuiti, quindi confermalo. Se raccogli i dati delle carte sul tuo sito, erediti obblighi PCI-DSS; usare un gateway di pagamento ospitato (in cui i dati della carta vengono inseriti dal lato del fornitore) tiene la maggior parte di quel peso lontana dal tuo server. Cerca impostazioni predefinite sensate: un web application firewall, una scansione automatizzata del malware e un isolamento affinché la violazione di un vicino non possa raggiungere il tuo negozio.</p>
 
   <h3>Backup e staging</h3>
-  <p>Un negozio online è un sistema transazionale vivo — perdere la tabella degli ordini significa perdere denaro e fiducia dei clienti. Pretendi <strong>backup giornalieri automatizzati</strong> che includano sia i file sia il database, con un ripristino facile con un clic. Un <strong>ambiente di staging</strong> è quasi altrettanto importante: gli aggiornamenti di WooCommerce, WordPress e dei plugin possono rompere il pagamento, quindi è bene testarli su una copia prima che tocchino i clienti reali.</p>
+  <p>Un negozio online è un sistema transazionale vivo - perdere la tabella degli ordini significa perdere denaro e fiducia dei clienti. Pretendi <strong>backup giornalieri automatizzati</strong> che includano sia i file sia il database, con un ripristino facile con un clic. Un <strong>ambiente di staging</strong> è quasi altrettanto importante: gli aggiornamenti di WooCommerce, WordPress e dei plugin possono rompere il pagamento, quindi è bene testarli su una copia prima che tocchino i clienti reali.</p>
 
   <h3>Scalabilità</h3>
-  <p>Il traffico di un negozio è irregolare per natura — lanci, saldi, picchi stagionali. Chiedi come scala il piano: puoi aggiungere RAM e CPU senza ricostruire il sito? C'è un percorso di upgrade chiaro da un piano piccolo a uno più grande, o a un VPS, man mano che catalogo e ordini crescono? Un hosting che puoi ridimensionare su richiesta batte uno in cui crescere significa una migrazione dolorosa.</p>
+  <p>Il traffico di un negozio è irregolare per natura - lanci, saldi, picchi stagionali. Chiedi come scala il piano: puoi aggiungere RAM e CPU senza ricostruire il sito? C'è un percorso di upgrade chiaro da un piano piccolo a uno più grande, o a un VPS, man mano che catalogo e ordini crescono? Un hosting che puoi ridimensionare su richiesta batte uno in cui crescere significa una migrazione dolorosa.</p>
 
   <h2>Condiviso vs WordPress gestito vs VPS</h2>
   <table>
     <thead><tr><th>Opzione</th><th>Ideale per</th><th>A cosa fare attenzione</th></tr></thead>
     <tbody>
-      <tr><td>Hosting condiviso</td><td>Un negozio nuovo di zecca con pochi prodotti e poco traffico, con un budget ristretto.</td><td>Vicini rumorosi, limiti di CPU/processi, spesso senza cache a oggetti — superato rapidamente una volta che gli ordini decollano.</td></tr>
-      <tr><td>WordPress/WooCommerce gestito</td><td>Proprietari che vogliono una cache consapevole del negozio, staging e aggiornamenti gestiti per loro.</td><td>Prezzo più alto; a volte restrizioni sui plugin o tariffazione a visita — leggi i limiti.</td></tr>
+      <tr><td>Hosting condiviso</td><td>Un negozio nuovo di zecca con pochi prodotti e poco traffico, con un budget ristretto.</td><td>Vicini rumorosi, limiti di CPU/processi, spesso senza cache a oggetti - superato rapidamente una volta che gli ordini decollano.</td></tr>
+      <tr><td>WordPress/WooCommerce gestito</td><td>Proprietari che vogliono una cache consapevole del negozio, staging e aggiornamenti gestiti per loro.</td><td>Prezzo più alto; a volte restrizioni sui plugin o tariffazione a visita - leggi i limiti.</td></tr>
       <tr><td>VPS (autogestito o gestito)</td><td>Negozi in crescita che hanno bisogno di RAM/CPU garantite, configurazione su misura e spazio per crescere.</td><td>Sei tu (o un piano gestito) a occuparti dell'amministrazione del server, del tuning e della sicurezza.</td></tr>
     </tbody>
   </table>
 
   <h2>A chi si rivolge</h2>
   <ul>
-    <li><strong>Appena lanciato, catalogo piccolo:</strong> un piano condiviso di qualità o un gestito di base è sufficiente — concentra il budget su una versione di PHP supportata, SSL e backup.</li>
+    <li><strong>Appena lanciato, catalogo piccolo:</strong> un piano condiviso di qualità o un gestito di base è sufficiente - concentra il budget su una versione di PHP supportata, SSL e backup.</li>
     <li><strong>Vendite costanti, catalogo in crescita:</strong> passa a un hosting WooCommerce gestito o a un piccolo VPS per ottenere una cache a oggetti, staging e risorse garantite.</li>
-    <li><strong>Traffico elevato, vendite lampo, catalogo grande:</strong> un VPS (o superiore) con CPU/RAM dedicate, cache a oggetti Redis e un percorso di scalabilità chiaro — le pagine di pagamento dinamiche hanno bisogno di un margine reale.</li>
+    <li><strong>Traffico elevato, vendite lampo, catalogo grande:</strong> un VPS (o superiore) con CPU/RAM dedicate, cache a oggetti Redis e un percorso di scalabilità chiaro - le pagine di pagamento dinamiche hanno bisogno di un margine reale.</li>
   </ul>
 
   <h2>Come decidere</h2>
-  <p>Parti dal negozio, non da una lista dei «migliori hosting». Conferma una versione di PHP supportata con un limite di memoria generoso, storage del database NVMe/SSD, una cache consapevole del negozio con una cache a oggetti persistente, SSL gratuito, backup automatizzati di file e database, un ambiente di staging e un percorso pulito per scalare. Fai corrispondere questi requisiti al tuo traffico reale e alla dimensione del catalogo, poi scegli il piano più piccolo che li copra con margine — potrai crescere verso un VPS o un livello superiore man mano che gli ordini aumentano.</p>
+  <p>Parti dal negozio, non da una lista dei «migliori hosting». Conferma una versione di PHP supportata con un limite di memoria generoso, storage del database NVMe/SSD, una cache consapevole del negozio con una cache a oggetti persistente, SSL gratuito, backup automatizzati di file e database, un ambiente di staging e un percorso pulito per scalare. Fai corrispondere questi requisiti al tuo traffico reale e alla dimensione del catalogo, poi scegli il piano più piccolo che li copra con margine - potrai crescere verso un VPS o un livello superiore man mano che gli ordini aumentano.</p>
 </Article>

@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="it"
   slug="service-worker"
   title="Service Worker: caching, offline e aggiornamenti spiegati"
-  description="Una guida pratica ai service worker — registrarne uno, il ciclo di vita install/activate, la Cache API, servire una pagina offline e distribuire aggiornamenti in sicurezza."
+  description="Una guida pratica ai service worker - registrarne uno, il ciclo di vita install/activate, la Cache API, servire una pagina offline e distribuire aggiornamenti in sicurezza."
   cat="apis"
   day={4}
   hero="/img/service-worker-hero.jpg"
@@ -14,7 +14,7 @@ import Article from '../../../layouts/Article.astro';
 >
   <p>Un <strong>service worker</strong> è uno script che il browser esegue in background, separato dalla tua pagina. Si colloca tra la tua app e la rete come un proxy programmabile: può intercettare le richieste, rispondere dalla cache e mantenere il tuo sito funzionante anche quando l'utente è offline. È la base delle Progressive Web App.</p>
 
-  <p>Due regole fondamentali prima di tutto. Un service worker funziona solo su <strong>HTTPS</strong> (o <code>localhost</code> durante lo sviluppo) e <strong>non ha accesso al DOM</strong> — comunica con le pagine tramite eventi e messaggi, non toccando <code>document</code>.</p>
+  <p>Due regole fondamentali prima di tutto. Un service worker funziona solo su <strong>HTTPS</strong> (o <code>localhost</code> durante lo sviluppo) e <strong>non ha accesso al DOM</strong> - comunica con le pagine tramite eventi e messaggi, non toccando <code>document</code>.</p>
 
   <h2>Registrare un service worker</h2>
   <p>Registri il worker dal normale script della tua pagina. Verifica prima la disponibilità della funzionalità, poi indirizza il browser al file dello script:</p>
@@ -46,11 +46,11 @@ self.addEventListener('activate', (event) => {
     )
   );
 });`}</code></pre>
-  <p>Chiamare <code>event.waitUntil()</code> dice al browser di non considerare la fase conclusa finché la tua promise non si risolve — altrimenti potrebbe terminare il worker a metà del compito.</p>
+  <p>Chiamare <code>event.waitUntil()</code> dice al browser di non considerare la fase conclusa finché la tua promise non si risolve - altrimenti potrebbe terminare il worker a metà del compito.</p>
 
   <figure>
     <img src="/img/service-worker-inbody.jpg" alt="A rack of server hard-drive bays with status lights" width="1280" height="720" loading="lazy" />
-    <figcaption>La Cache API memorizza le risposte sul dispositivo stesso dell'utente, non su un server come quello illustrato — quella copia locale è ciò che permette a una pagina di caricarsi senza alcuna rete.</figcaption>
+    <figcaption>La Cache API memorizza le risposte sul dispositivo stesso dell'utente, non su un server come quello illustrato - quella copia locale è ciò che permette a una pagina di caricarsi senza alcuna rete.</figcaption>
   </figure>
 
   <h2>Intercettare le richieste con fetch</h2>
@@ -80,7 +80,7 @@ self.addEventListener('activate', (event) => {
   </table>
 
   <h2>Distribuire aggiornamenti senza penalizzare gli utenti</h2>
-  <p>Quando modifichi <code>sw.js</code>, il browser rileva i nuovi byte e installa il nuovo worker, ma rimane <em>in attesa</em> finché ogni scheda che usa il vecchio non viene chiusa. Questo impedisce che due versioni vengano eseguite contemporaneamente. Per prendere il controllo prima, chiama <code>self.skipWaiting()</code> in <code>install</code> e <code>clients.claim()</code> in <code>activate</code> — ma fallo solo quando sei certo che la nuova versione sia compatibile con le pagine già aperte.</p>
+  <p>Quando modifichi <code>sw.js</code>, il browser rileva i nuovi byte e installa il nuovo worker, ma rimane <em>in attesa</em> finché ogni scheda che usa il vecchio non viene chiusa. Questo impedisce che due versioni vengano eseguite contemporaneamente. Per prendere il controllo prima, chiama <code>self.skipWaiting()</code> in <code>install</code> e <code>clients.claim()</code> in <code>activate</code> - ma fallo solo quando sei certo che la nuova versione sia compatibile con le pagine già aperte.</p>
   <p>Incrementa sempre il nome della cache (<code>site-v1</code> → <code>site-v2</code>) quando gli asset cambiano. L'handler <code>activate</code> qui sopra elimina poi la cache obsoleta, così gli utenti non ricevono mai un misto di file vecchi e nuovi.</p>
 
   <p>Questo è l'intero ciclo fondamentale: registrare, pre-mettere in cache all'install, ripulire all'activate e rispondere alle richieste al fetch. Inizia con una strategia cache-first per i file statici e una network-first per il tuo HTML, e avrai un sito che si carica istantaneamente alle visite ripetute e sopravvive a una connessione caduta.</p>

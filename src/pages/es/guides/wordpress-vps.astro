@@ -12,36 +12,36 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>Ejecutar <strong>WordPress en un VPS</strong> te da el control total de la pila — pero también te entrega la responsabilidad de gestionar un servidor. Para algunos sitios ese intercambio vale mucho la pena; para otros, un alojamiento WordPress compartido o gestionado es la opción más inteligente. Esta guía cubre <em>cuándo</em> tiene sentido un VPS y <em>cómo</em> configurar uno, para que decidas con los ojos abiertos en lugar de seguir una moda.</p>
+  <p>Ejecutar <strong>WordPress en un VPS</strong> te da el control total de la pila - pero también te entrega la responsabilidad de gestionar un servidor. Para algunos sitios ese intercambio vale mucho la pena; para otros, un alojamiento WordPress compartido o gestionado es la opción más inteligente. Esta guía cubre <em>cuándo</em> tiene sentido un VPS y <em>cómo</em> configurar uno, para que decidas con los ojos abiertos en lugar de seguir una moda.</p>
 
   <h2>Cuándo tiene sentido un VPS para WordPress</h2>
   <p>WordPress funciona perfectamente en un alojamiento compartido barato para sitios pequeños, y el alojamiento WordPress gestionado elimina por completo el trabajo de servidor. Un <strong>VPS</strong> se sitúa en medio: recursos dedicados y acceso root completo, a cambio de hacer tú mismo la administración de sistemas. Pásate a un VPS cuando:</p>
   <ul>
     <li>Tu alojamiento compartido te limita o alcanzas los límites de CPU/procesos durante los picos de tráfico.</li>
-    <li>Gestionas un sitio más pesado — WooCommerce, una plataforma de membresía o muchos plugins — que necesita RAM y CPU garantizados.</li>
+    <li>Gestionas un sitio más pesado - WooCommerce, una plataforma de membresía o muchos plugins - que necesita RAM y CPU garantizados.</li>
     <li>Quieres controlar la versión de PHP, la configuración del servidor web, la capa de caché, o alojar varios sitios en una sola máquina.</li>
     <li>Necesitas una pila o un ajuste específico (caché de objetos, reglas de Nginx personalizadas, tu propia configuración TLS) que el alojamiento compartido no permite.</li>
   </ul>
 
   <h2>Cuándo un VPS es la elección equivocada</h2>
-  <p>Sé honesto con el compromiso. Un VPS significa que <strong>tú</strong> parcheas el sistema operativo, aseguras SSH, configuras el servidor web, gestionas PHP y eres dueño de las copias de seguridad. Si ese no es un trabajo que quieras hacer — o lo harías mal — un alojamiento WordPress gestionado que se encarga de las actualizaciones, la seguridad y las copias de seguridad suele ser la mejor relación calidad-precio, incluso a un precio de etiqueta más alto. Un pequeño sitio de presentación rara vez justifica el mantenimiento de un servidor autogestionado.</p>
+  <p>Sé honesto con el compromiso. Un VPS significa que <strong>tú</strong> parcheas el sistema operativo, aseguras SSH, configuras el servidor web, gestionas PHP y eres dueño de las copias de seguridad. Si ese no es un trabajo que quieras hacer - o lo harías mal - un alojamiento WordPress gestionado que se encarga de las actualizaciones, la seguridad y las copias de seguridad suele ser la mejor relación calidad-precio, incluso a un precio de etiqueta más alto. Un pequeño sitio de presentación rara vez justifica el mantenimiento de un servidor autogestionado.</p>
 
   <figure>
     <img src="/img/wordpress-vps-inbody.jpg" alt="Un desarrollador con auriculares está sentado de espaldas a la cámara, frente a un monitor que muestra código en una sala con luz azul oscura" width="1280" height="853" loading="lazy" />
-    <figcaption>Un VPS significa ser dueño del servidor: parchearlo, asegurarlo y ajustarlo tú mismo — bien si disfrutas ese trabajo, una carga si no.</figcaption>
+    <figcaption>Un VPS significa ser dueño del servidor: parchearlo, asegurarlo y ajustarlo tú mismo - bien si disfrutas ese trabajo, una carga si no.</figcaption>
   </figure>
 
   <h2>Qué buscar en un VPS para WordPress</h2>
   <h3>RAM</h3>
   <p>El recurso que WordPress y su base de datos agotan primero, especialmente con WooCommerce, maquetadores de páginas o muchos plugins. El agotamiento de la memoria es la causa habitual de que un sitio se caiga bajo carga, así que dimensiona con margen en lugar de al mínimo absoluto.</p>
   <h3>CPU y almacenamiento</h3>
-  <p>Un par de vCPU manejan un sitio típico; el trabajo limitado por CPU (SSR, procesamiento de imágenes, carritos ocupados) pide más, idealmente <strong>dedicadas</strong> en lugar de en ráfaga. Insiste en almacenamiento <strong>NVMe o SSD</strong> — la velocidad del disco se nota directamente en los tiempos de consulta a la base de datos y en la capacidad de respuesta del administrador.</p>
+  <p>Un par de vCPU manejan un sitio típico; el trabajo limitado por CPU (SSR, procesamiento de imágenes, carritos ocupados) pide más, idealmente <strong>dedicadas</strong> en lugar de en ráfaga. Insiste en almacenamiento <strong>NVMe o SSD</strong> - la velocidad del disco se nota directamente en los tiempos de consulta a la base de datos y en la capacidad de respuesta del administrador.</p>
   <h3>Ubicación, copias de seguridad y soporte</h3>
-  <p>Elige una región de centro de datos cerca de tu audiencia para reducir la latencia en cada petición. Asegúrate de que las <strong>copias de seguridad automatizadas</strong> estén incluidas o sean asequibles — una restauración con un clic convierte una mala actualización de plugin en un arreglo de cinco minutos. En un plan no gestionado, el tiempo de respuesta del soporte importa más cuando algo se rompe a las 2 de la madrugada.</p>
-  <p>Los proveedores conocidos por recursos generosos en relación al precio, como <strong>Contabo</strong>, hacen realista un VPS WordPress autogestionado con un presupuesto modesto — obtienes el margen de CPU y RAM que le gusta a un sitio respaldado por base de datos sin pagar el precio de un servidor dedicado.</p>
+  <p>Elige una región de centro de datos cerca de tu audiencia para reducir la latencia en cada petición. Asegúrate de que las <strong>copias de seguridad automatizadas</strong> estén incluidas o sean asequibles - una restauración con un clic convierte una mala actualización de plugin en un arreglo de cinco minutos. En un plan no gestionado, el tiempo de respuesta del soporte importa más cuando algo se rompe a las 2 de la madrugada.</p>
+  <p>Los proveedores conocidos por recursos generosos en relación al precio, como <strong>Contabo</strong>, hacen realista un VPS WordPress autogestionado con un presupuesto modesto - obtienes el margen de CPU y RAM que le gusta a un sitio respaldado por base de datos sin pagar el precio de un servidor dedicado.</p>
 
   <h2>Cómo configurarlo: la pila LEMP</h2>
-  <p>La pila moderna común para WordPress en un VPS es <strong>LEMP</strong> — Linux, Nginx, MySQL/MariaDB y PHP. Esta es la forma de una instalación nueva en Ubuntu.</p>
+  <p>La pila moderna común para WordPress en un VPS es <strong>LEMP</strong> - Linux, Nginx, MySQL/MariaDB y PHP. Esta es la forma de una instalación nueva en Ubuntu.</p>
 
   <h3>1. Endurecer primero el servidor</h3>
   <pre><code>{`sudo apt update && sudo apt upgrade -y
@@ -99,7 +99,7 @@ sudo certbot --nginx -d example.com -d www.example.com`}</code></pre>
   <h2>Tras la instalación: mantenerlo sano</h2>
   <ul>
     <li>Activa las <strong>actualizaciones de seguridad automáticas</strong> del sistema operativo y mantén PHP en una versión soportada.</li>
-    <li>Configura <strong>copias de seguridad fuera del servidor</strong> de los archivos y la base de datos — no dependas de una única instantánea del proveedor.</li>
+    <li>Configura <strong>copias de seguridad fuera del servidor</strong> de los archivos y la base de datos - no dependas de una única instantánea del proveedor.</li>
     <li>Añade una <strong>capa de caché</strong> (caché de página más una caché de objetos como Redis) una vez que el tráfico crezca.</li>
     <li>Endurece el propio WordPress: contraseñas fuertes, menos plugins, y actualizaciones rápidas del núcleo y los plugins.</li>
   </ul>
@@ -112,5 +112,5 @@ sudo certbot --nginx -d example.com -d www.example.com`}</code></pre>
   </ul>
 
   <h2>Cómo decidir</h2>
-  <p>Ejecuta WordPress en un VPS cuando realmente quieras — y vayas a hacer — el control que ofrece: un sitio más pesado o en crecimiento, una pila personalizada, o varios sitios en una sola máquina. Dimensiona primero la RAM, insiste en almacenamiento NVMe y una región cercana, y trata las copias de seguridad automatizadas y HTTPS como innegociables. Si el mantenimiento del servidor se siente como una tarea pesada en lugar de una herramienta, elige el alojamiento gestionado — la &#123;respuesta&#125; correcta es la que se ajusta a cuánto de la pila quieres realmente poseer.</p>
+  <p>Ejecuta WordPress en un VPS cuando realmente quieras - y vayas a hacer - el control que ofrece: un sitio más pesado o en crecimiento, una pila personalizada, o varios sitios en una sola máquina. Dimensiona primero la RAM, insiste en almacenamiento NVMe y una región cercana, y trata las copias de seguridad automatizadas y HTTPS como innegociables. Si el mantenimiento del servidor se siente como una tarea pesada en lugar de una herramienta, elige el alojamiento gestionado - la &#123;respuesta&#125; correcta es la que se ajusta a cuánto de la pila quieres realmente poseer.</p>
 </Article>

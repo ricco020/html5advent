@@ -12,36 +12,36 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p><strong>WordPress auf einem VPS</strong> zu betreiben gibt dir die volle Kontrolle über den Stack — aber es überträgt dir auch die Verantwortung, einen Server zu betreiben. Für manche Websites ist dieser Tausch die Sache wert; für andere ist Shared oder Managed WordPress-Hosting die klügere Wahl. Dieser Leitfaden behandelt, <em>wann</em> ein VPS sinnvoll ist und <em>wie</em> man einen einrichtet, damit du mit offenen Augen entscheidest, statt einem Trend zu folgen.</p>
+  <p><strong>WordPress auf einem VPS</strong> zu betreiben gibt dir die volle Kontrolle über den Stack - aber es überträgt dir auch die Verantwortung, einen Server zu betreiben. Für manche Websites ist dieser Tausch die Sache wert; für andere ist Shared oder Managed WordPress-Hosting die klügere Wahl. Dieser Leitfaden behandelt, <em>wann</em> ein VPS sinnvoll ist und <em>wie</em> man einen einrichtet, damit du mit offenen Augen entscheidest, statt einem Trend zu folgen.</p>
 
   <h2>Wann ein VPS für WordPress sinnvoll ist</h2>
   <p>WordPress läuft für kleine Websites problemlos auf günstigem Shared Hosting, und Managed WordPress-Hosting nimmt einem die Serverarbeit komplett ab. Ein <strong>VPS</strong> liegt dazwischen: dedizierte Ressourcen und voller Root-Zugriff, im Tausch dafür, dass du die Systemadministration selbst erledigst. Wechsle zu einem VPS, wenn:</p>
   <ul>
     <li>Dein Shared Host dich drosselt oder du bei Traffic-Spitzen an CPU-/Prozesslimits stößt.</li>
-    <li>Du eine schwerere Website betreibst — WooCommerce, eine Mitgliederplattform oder viele Plugins —, die garantierten RAM und CPU braucht.</li>
+    <li>Du eine schwerere Website betreibst - WooCommerce, eine Mitgliederplattform oder viele Plugins -, die garantierten RAM und CPU braucht.</li>
     <li>Du Kontrolle über die PHP-Version, die Webserver-Konfiguration, die Caching-Schicht möchtest oder mehrere Websites auf einer Maschine hosten willst.</li>
     <li>Du einen bestimmten Stack oder ein bestimmtes Tuning brauchst (Object Cache, eigene Nginx-Regeln, deine eigene TLS-Einrichtung), das der Shared Host nicht erlaubt.</li>
   </ul>
 
   <h2>Wann ein VPS die falsche Wahl ist</h2>
-  <p>Sei ehrlich beim Abwägen. Ein VPS bedeutet, dass <strong>du</strong> das Betriebssystem patchst, SSH absicherst, den Webserver konfigurierst, PHP verwaltest und die Backups besitzt. Wenn das keine Arbeit ist, die du machen willst — oder die du schlecht machen würdest —, ist ein Managed WordPress-Host, der Updates, Sicherheit und Backups übernimmt, in der Regel das bessere Preis-Leistungs-Verhältnis, selbst bei einem höheren Listenpreis. Eine kleine Visitenkarten-Website rechtfertigt selten den Unterhalt eines selbst betriebenen Servers.</p>
+  <p>Sei ehrlich beim Abwägen. Ein VPS bedeutet, dass <strong>du</strong> das Betriebssystem patchst, SSH absicherst, den Webserver konfigurierst, PHP verwaltest und die Backups besitzt. Wenn das keine Arbeit ist, die du machen willst - oder die du schlecht machen würdest -, ist ein Managed WordPress-Host, der Updates, Sicherheit und Backups übernimmt, in der Regel das bessere Preis-Leistungs-Verhältnis, selbst bei einem höheren Listenpreis. Eine kleine Visitenkarten-Website rechtfertigt selten den Unterhalt eines selbst betriebenen Servers.</p>
 
   <figure>
     <img src="/img/wordpress-vps-inbody.jpg" alt="Ein Entwickler mit Kopfhörern sitzt mit dem Rücken zur Kamera vor einem Monitor, der Code in einem dunkelblau beleuchteten Raum anzeigt" width="1280" height="853" loading="lazy" />
-    <figcaption>Ein VPS bedeutet, den Server zu besitzen: ihn selbst patchen, absichern und tunen — schön, wenn du diese Arbeit magst, eine Last, wenn nicht.</figcaption>
+    <figcaption>Ein VPS bedeutet, den Server zu besitzen: ihn selbst patchen, absichern und tunen - schön, wenn du diese Arbeit magst, eine Last, wenn nicht.</figcaption>
   </figure>
 
   <h2>Worauf man bei einem VPS für WordPress achten sollte</h2>
   <h3>RAM</h3>
   <p>Die Ressource, die WordPress und seine Datenbank zuerst aufbrauchen, besonders mit WooCommerce, Page-Buildern oder vielen Plugins. Speichererschöpfung ist die übliche Ursache dafür, dass eine Website unter Last zusammenbricht, also dimensioniere mit Spielraum statt auf das absolute Minimum.</p>
   <h3>CPU und Speicher</h3>
-  <p>Ein paar vCPUs bewältigen eine typische Website; CPU-gebundene Arbeit (SSR, Bildverarbeitung, ausgelastete Warenkörbe) will mehr, idealerweise <strong>dediziert</strong> statt burstbar. Bestehe auf <strong>NVMe- oder SSD</strong>-Speicher — die Festplattengeschwindigkeit zeigt sich direkt in den Datenbankabfragezeiten und der Reaktionsfähigkeit des Admin-Bereichs.</p>
+  <p>Ein paar vCPUs bewältigen eine typische Website; CPU-gebundene Arbeit (SSR, Bildverarbeitung, ausgelastete Warenkörbe) will mehr, idealerweise <strong>dediziert</strong> statt burstbar. Bestehe auf <strong>NVMe- oder SSD</strong>-Speicher - die Festplattengeschwindigkeit zeigt sich direkt in den Datenbankabfragezeiten und der Reaktionsfähigkeit des Admin-Bereichs.</p>
   <h3>Standort, Backups und Support</h3>
-  <p>Wähle eine Rechenzentrumsregion nahe deinem Publikum, um die Latenz bei jeder Anfrage zu senken. Stelle sicher, dass <strong>automatisierte Backups</strong> enthalten oder bezahlbar sind — eine Ein-Klick-Wiederherstellung macht aus einem schlechten Plugin-Update eine Fünf-Minuten-Reparatur. Bei einem Unmanaged-Tarif zählt die Antwortzeit des Supports am meisten, wenn um 2 Uhr nachts etwas kaputtgeht.</p>
-  <p>Anbieter, die für großzügige Ressourcen pro Preis bekannt sind, wie <strong>Contabo</strong>, machen einen selbst betriebenen WordPress-VPS bei bescheidenem Budget realistisch — du bekommst den CPU- und RAM-Spielraum, den eine datenbankgestützte Website mag, ohne den Preis eines dedizierten Servers zu zahlen.</p>
+  <p>Wähle eine Rechenzentrumsregion nahe deinem Publikum, um die Latenz bei jeder Anfrage zu senken. Stelle sicher, dass <strong>automatisierte Backups</strong> enthalten oder bezahlbar sind - eine Ein-Klick-Wiederherstellung macht aus einem schlechten Plugin-Update eine Fünf-Minuten-Reparatur. Bei einem Unmanaged-Tarif zählt die Antwortzeit des Supports am meisten, wenn um 2 Uhr nachts etwas kaputtgeht.</p>
+  <p>Anbieter, die für großzügige Ressourcen pro Preis bekannt sind, wie <strong>Contabo</strong>, machen einen selbst betriebenen WordPress-VPS bei bescheidenem Budget realistisch - du bekommst den CPU- und RAM-Spielraum, den eine datenbankgestützte Website mag, ohne den Preis eines dedizierten Servers zu zahlen.</p>
 
   <h2>Wie man ihn einrichtet: der LEMP-Stack</h2>
-  <p>Der gängige moderne Stack für WordPress auf einem VPS ist <strong>LEMP</strong> — Linux, Nginx, MySQL/MariaDB und PHP. Hier die Grundform einer frischen Installation unter Ubuntu.</p>
+  <p>Der gängige moderne Stack für WordPress auf einem VPS ist <strong>LEMP</strong> - Linux, Nginx, MySQL/MariaDB und PHP. Hier die Grundform einer frischen Installation unter Ubuntu.</p>
 
   <h3>1. Zuerst den Server härten</h3>
   <pre><code>{`sudo apt update && sudo apt upgrade -y
@@ -99,7 +99,7 @@ sudo certbot --nginx -d example.com -d www.example.com`}</code></pre>
   <h2>Nach der Installation: gesund halten</h2>
   <ul>
     <li>Schalte <strong>automatische Sicherheitsupdates</strong> für das Betriebssystem ein und halte PHP auf einer unterstützten Version.</li>
-    <li>Richte <strong>Off-Server-Backups</strong> der Dateien und der Datenbank ein — verlass dich nicht auf einen einzelnen Snapshot des Hosts.</li>
+    <li>Richte <strong>Off-Server-Backups</strong> der Dateien und der Datenbank ein - verlass dich nicht auf einen einzelnen Snapshot des Hosts.</li>
     <li>Füge eine <strong>Caching-Schicht</strong> hinzu (Page Cache plus ein Object Cache wie Redis), sobald der Traffic wächst.</li>
     <li>Härte WordPress selbst: starke Logins, weniger Plugins und zügige Core-/Plugin-Updates.</li>
   </ul>
@@ -112,5 +112,5 @@ sudo certbot --nginx -d example.com -d www.example.com`}</code></pre>
   </ul>
 
   <h2>Wie man entscheidet</h2>
-  <p>Betreibe WordPress auf einem VPS, wenn du die Kontrolle, die er bietet, wirklich willst — und auch nutzen wirst: eine schwerere oder wachsende Website, ein eigener Stack oder mehrere Websites auf einer Maschine. Dimensioniere zuerst den RAM, bestehe auf NVMe-Speicher und einer nahen Region und behandle automatisierte Backups und HTTPS als nicht verhandelbar. Wenn sich der Serverunterhalt eher wie eine lästige Pflicht als wie ein Werkzeug anfühlt, wähle stattdessen Managed Hosting — die &#123;richtige&#125; Antwort ist die, die dazu passt, wie viel vom Stack du tatsächlich besitzen willst.</p>
+  <p>Betreibe WordPress auf einem VPS, wenn du die Kontrolle, die er bietet, wirklich willst - und auch nutzen wirst: eine schwerere oder wachsende Website, ein eigener Stack oder mehrere Websites auf einer Maschine. Dimensioniere zuerst den RAM, bestehe auf NVMe-Speicher und einer nahen Region und behandle automatisierte Backups und HTTPS als nicht verhandelbar. Wenn sich der Serverunterhalt eher wie eine lästige Pflicht als wie ein Werkzeug anfühlt, wähle stattdessen Managed Hosting - die &#123;richtige&#125; Antwort ist die, die dazu passt, wie viel vom Stack du tatsächlich besitzen willst.</p>
 </Article>

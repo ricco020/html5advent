@@ -12,7 +12,7 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="Ein ausgedrucktes Blatt mit HTML-Markup und einem darauf liegenden Stift"
   cluster={null}
 >
-  <p><strong>CSS-Nesting</strong> erlaubt es, Regeln innerhalb anderer Regeln zu schreiben, sodass zusammengehörende Stile beieinanderbleiben. Jahrelang war das nur mit einem Präprozessor wie Sass möglich. Jetzt ist es ein natives CSS-Feature, das in jedem modernen Browser läuft — ganz ohne Build-Schritt.</p>
+  <p><strong>CSS-Nesting</strong> erlaubt es, Regeln innerhalb anderer Regeln zu schreiben, sodass zusammengehörende Stile beieinanderbleiben. Jahrelang war das nur mit einem Präprozessor wie Sass möglich. Jetzt ist es ein natives CSS-Feature, das in jedem modernen Browser läuft - ganz ohne Build-Schritt.</p>
 
   <h2>Die Grundidee</h2>
   <p>Statt den Eltern-Selektor für jedes Kind zu wiederholen, verschachtelst du die Kind-Regel in ihm. Diese beiden Blöcke liefern dasselbe Ergebnis:</p>
@@ -30,7 +30,7 @@ import Article from '../../../layouts/Article.astro';
   <p>Jeder verschachtelte Selektor wird relativ zu seinem Elternteil gelesen, sodass <code>.card p</code> das ist, was der Browser tatsächlich anwendet.</p>
 
   <h2>Der &amp; Verschachtelungsselektor</h2>
-  <p>Das Kaufmanns-Und <code>&amp;</code> verweist auf den Eltern-Selektor. Du brauchst es immer dann, wenn der verschachtelte Selektor direkt am Elternteil ansetzen muss, statt einen Nachfahren zu beschreiben — Pseudoklassen, Modifikatorklassen und zusammengesetzte Selektoren:</p>
+  <p>Das Kaufmanns-Und <code>&amp;</code> verweist auf den Eltern-Selektor. Du brauchst es immer dann, wenn der verschachtelte Selektor direkt am Elternteil ansetzen muss, statt einen Nachfahren zu beschreiben - Pseudoklassen, Modifikatorklassen und zusammengesetzte Selektoren:</p>
   <pre><code>{`.btn {
   background: #2563eb;
 
@@ -57,13 +57,13 @@ import Article from '../../../layouts/Article.astro';
   <h2>Wo es sich von Sass unterscheidet</h2>
   <p>Die Syntax sieht aus wie Sass, doch beide sind nicht identisch. Die Unterschiede, die am häufigsten zubeißen:</p>
   <ul>
-    <li><strong>Verkettung</strong>: Sass lässt dich Selektoren wie <code>&amp;__title</code> (BEM) bauen. Natives CSS-Nesting verkettet <em>nicht</em> — <code>&amp;__title</code> ist ungültig. Du musst den vollständigen Klassennamen schreiben.</li>
+    <li><strong>Verkettung</strong>: Sass lässt dich Selektoren wie <code>&amp;__title</code> (BEM) bauen. Natives CSS-Nesting verkettet <em>nicht</em> - <code>&amp;__title</code> ist ungültig. Du musst den vollständigen Klassennamen schreiben.</li>
     <li><strong>Kein Kompilierschritt</strong>: natives Nesting läuft im Browser, es gibt also nichts zu kompilieren und keine Source-Maps zu verwalten.</li>
     <li><strong>Spezifität von &amp;</strong>: in nativem CSS verhält sich <code>&amp;</code> wie <code>:is()</code> und nimmt die Spezifität des spezifischsten Selektors in der Elternliste an, was sich subtil vom Sass-Ergebnis unterscheiden kann.</li>
   </ul>
 
   <h2>Browser-Support und Fallback</h2>
-  <p>Natives CSS-Nesting wird in aktuellen Versionen von Chrome, Edge, Firefox und Safari unterstützt. Frühe Implementierungen verlangten, dass der verschachtelte Selektor mit einem Symbol beginnt (du schriebst also <code>&amp; p</code> statt <code>p</code>); die gelockerte Syntax, die einen bloßen Element-Selektor erlaubt, ist das, was in den heutigen Browsern ausgeliefert wird. Wenn du ältere Engines unterstützen musst, bleibe bei Sass oder PostCSS — das Plugin <code>postcss-nesting</code> kompiliert natives Nesting zu flachem CSS herunter.</p>
+  <p>Natives CSS-Nesting wird in aktuellen Versionen von Chrome, Edge, Firefox und Safari unterstützt. Frühe Implementierungen verlangten, dass der verschachtelte Selektor mit einem Symbol beginnt (du schriebst also <code>&amp; p</code> statt <code>p</code>); die gelockerte Syntax, die einen bloßen Element-Selektor erlaubt, ist das, was in den heutigen Browsern ausgeliefert wird. Wenn du ältere Engines unterstützen musst, bleibe bei Sass oder PostCSS - das Plugin <code>postcss-nesting</code> kompiliert natives Nesting zu flachem CSS herunter.</p>
 
   <h2>Schnellreferenz</h2>
   <table>
@@ -73,9 +73,9 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Pseudoklasse</td><td><code>&amp;:hover &#123; ... &#125;</code></td></tr>
       <tr><td>Modifikatorklasse</td><td><code>&amp;.is-active &#123; ... &#125;</code></td></tr>
       <tr><td>Responsive</td><td><code>@media (...) &#123; ... &#125;</code> verschachtelt</td></tr>
-      <tr><td>BEM-Verkettung</td><td>nicht unterstützt — schreibe die vollständige Klasse</td></tr>
+      <tr><td>BEM-Verkettung</td><td>nicht unterstützt - schreibe die vollständige Klasse</td></tr>
     </tbody>
   </table>
 
-  <p>Natives Nesting nimmt einen der letzten großen Gründe weg, bei einem neuen Projekt zu einem Präprozessor zu greifen. Halte die Verschachtelung flach — zwei oder drei Ebenen — und deine Stylesheets bleiben lesbar, während die Beziehungen zwischen den Selektoren offensichtlich bleiben.</p>
+  <p>Natives Nesting nimmt einen der letzten großen Gründe weg, bei einem neuen Projekt zu einem Präprozessor zu greifen. Halte die Verschachtelung flach - zwei oder drei Ebenen - und deine Stylesheets bleiben lesbar, während die Beziehungen zwischen den Selektoren offensichtlich bleiben.</p>
 </Article>

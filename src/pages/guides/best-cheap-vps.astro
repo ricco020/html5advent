@@ -5,35 +5,35 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="best-cheap-vps"
   title="Cheap VPS hosting: how to get value without cutting corners"
-  description="A practical guide to choosing a cheap VPS — how to read low-priced plans honestly, which corners are safe to cut and which aren't, and the criteria that separate genuine value from a false bargain."
+  description="A practical guide to choosing a cheap VPS - how to read low-priced plans honestly, which corners are safe to cut and which aren't, and the criteria that separate genuine value from a false bargain."
   cat="hosting"
   hero="/img/best-cheap-vps-hero.jpg"
   heroAlt="A close-up of a server's drive bays filled with 1.92TB SATA SSDs under blue lighting"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
   faq={[
-    { q: 'Can a cheap VPS still be good?', a: "Yes. Price alone doesn't determine quality — a cheap VPS can be solid when the provider is honest about resources and you match the plan to your real needs. The danger is over-subscribed hardware or hidden limits, not the low price itself." },
-    { q: "What corners are safe to cut on a cheap VPS?", a: "It's usually safe to start with modest RAM and an unmanaged plan and to skip premium add-ons you don't need yet. What's risky to cut is backups, adequate bandwidth and a reputable provider — those failures cost more than they save." },
+    { q: 'Can a cheap VPS still be good?', a: "Yes. Price alone doesn't determine quality - a cheap VPS can be solid when the provider is honest about resources and you match the plan to your real needs. The danger is over-subscribed hardware or hidden limits, not the low price itself." },
+    { q: "What corners are safe to cut on a cheap VPS?", a: "It's usually safe to start with modest RAM and an unmanaged plan and to skip premium add-ons you don't need yet. What's risky to cut is backups, adequate bandwidth and a reputable provider - those failures cost more than they save." },
     { q: 'How do I read a low-priced VPS plan honestly?', a: 'Look past the headline price at the actual vCPU, RAM, storage type and amount, the bandwidth cap, and whether backups or support cost extra. A clear, complete spec sheet is a better signal of value than the price tag.' },
     { q: 'How much RAM do I need on a cheap VPS?', a: 'For a small site or a single app, 1–2 GB is often enough to start; databases and heavier stacks want 4 GB or more. Pick the smallest size that comfortably runs your workload, since you can usually scale up later.' },
   ]}
 >
-  <p>A <strong>cheap VPS</strong> can be excellent value or a false economy — and the price tag alone won't tell you which. The goal isn't to spend as little as possible; it's to get the resources and reliability your project needs at the lowest honest price. This guide explains how to read low-cost plans, which corners are safe to cut, and which ones will cost you more later.</p>
+  <p>A <strong>cheap VPS</strong> can be excellent value or a false economy - and the price tag alone won't tell you which. The goal isn't to spend as little as possible; it's to get the resources and reliability your project needs at the lowest honest price. This guide explains how to read low-cost plans, which corners are safe to cut, and which ones will cost you more later.</p>
 
   <h2>Why a VPS can be cheap and still good</h2>
-  <p>A <strong>VPS</strong> (Virtual Private Server) splits one physical machine into isolated slices, each with guaranteed RAM, CPU and storage plus root access. Because the host shares the hardware cost across many tenants, a VPS can be genuinely affordable while still giving you dedicated resources — far more control than shared hosting for not much more money. Low price and good value aren't opposites; the trick is telling a lean, efficient plan apart from one that's been hollowed out.</p>
+  <p>A <strong>VPS</strong> (Virtual Private Server) splits one physical machine into isolated slices, each with guaranteed RAM, CPU and storage plus root access. Because the host shares the hardware cost across many tenants, a VPS can be genuinely affordable while still giving you dedicated resources - far more control than shared hosting for not much more money. Low price and good value aren't opposites; the trick is telling a lean, efficient plan apart from one that's been hollowed out.</p>
 
   <h2>How to read a cheap VPS plan honestly</h2>
   <p>Low-priced plans often look identical on a spec sheet but differ where it counts. Check these before you judge the price:</p>
 
   <h3>Dedicated vs burstable CPU</h3>
-  <p>Cheap plans frequently sell <strong>shared or burstable vCPUs</strong> — fine for spiky, light workloads, but they can throttle under sustained load. A slightly pricier plan with <strong>dedicated vCPUs</strong> may be the real bargain if your app runs steadily. Match the CPU type to your workload, not just the core count.</p>
+  <p>Cheap plans frequently sell <strong>shared or burstable vCPUs</strong> - fine for spiky, light workloads, but they can throttle under sustained load. A slightly pricier plan with <strong>dedicated vCPUs</strong> may be the real bargain if your app runs steadily. Match the CPU type to your workload, not just the core count.</p>
 
   <h3>RAM is the resource you run out of first</h3>
-  <p>Memory is usually what gets exhausted first under load, taking your app down with it. Don't size to the bare minimum the platform "technically" runs on — leave headroom for traffic spikes and for the OS itself. A cheap plan with too little RAM is the most common false bargain.</p>
+  <p>Memory is usually what gets exhausted first under load, taking your app down with it. Don't size to the bare minimum the platform "technically" runs on - leave headroom for traffic spikes and for the OS itself. A cheap plan with too little RAM is the most common false bargain.</p>
 
   <h3>Storage type, not just amount</h3>
-  <p>Prefer <strong>NVMe or SSD</strong> over older spinning disks — disk speed shows up directly in database queries and page builds. Check the amount too, since logs, uploads and database growth add up. Cheap plans sometimes advertise lots of storage on slow disks; fast-but-smaller usually serves a web app better.</p>
+  <p>Prefer <strong>NVMe or SSD</strong> over older spinning disks - disk speed shows up directly in database queries and page builds. Check the amount too, since logs, uploads and database growth add up. Cheap plans sometimes advertise lots of storage on slow disks; fast-but-smaller usually serves a web app better.</p>
 
   <figure>
     <img src="/img/best-cheap-vps-inbody.jpg" alt="Glowing orange points of light travelling along bundled fibre-optic strands against a dark background" width="1280" height="853" loading="lazy" />
@@ -41,12 +41,12 @@ import Article from '../../layouts/Article.astro';
   </figure>
 
   <h3>Bandwidth: allowance and port speed</h3>
-  <p>Two things hide under "bandwidth": the monthly <strong>data-transfer allowance</strong> (GB/TB you can serve) and the <strong>port speed</strong> (how fast). Cheap plans sometimes cap transfer tightly or apply a fair-use limit behind an "unlimited" label — read the terms, especially if you serve media or downloads.</p>
+  <p>Two things hide under "bandwidth": the monthly <strong>data-transfer allowance</strong> (GB/TB you can serve) and the <strong>port speed</strong> (how fast). Cheap plans sometimes cap transfer tightly or apply a fair-use limit behind an "unlimited" label - read the terms, especially if you serve media or downloads.</p>
 
   <h3>Renewal price, not the intro offer</h3>
-  <p>The headline price is often a promotional first term that jumps at renewal. Compare what you'll pay <em>after</em> the promo, and confirm what's bundled — backups, an IPv4 address, a control panel and bandwidth are sometimes billed separately. A "cheap" plan that nickel-and-dimes the extras can end up costing more than a transparent one.</p>
+  <p>The headline price is often a promotional first term that jumps at renewal. Compare what you'll pay <em>after</em> the promo, and confirm what's bundled - backups, an IPv4 address, a control panel and bandwidth are sometimes billed separately. A "cheap" plan that nickel-and-dimes the extras can end up costing more than a transparent one.</p>
 
-  <h2>Corners it's safe to cut — and corners it isn't</h2>
+  <h2>Corners it's safe to cut - and corners it isn't</h2>
   <table>
     <thead><tr><th>Safe to economise</th><th>Don't skimp on</th></tr></thead>
     <tbody>
@@ -58,7 +58,7 @@ import Article from '../../layouts/Article.astro';
   </table>
 
   <h3>Managed vs unmanaged</h3>
-  <p>The biggest honest saving on a cheap VPS is going <strong>unmanaged</strong>: you patch, secure and maintain the OS yourself, and the host charges less. If you're comfortable with Linux and a terminal, that's free money. If you'd rather not run sysadmin, a managed plan costs more but buys back your time — and an unmanaged box you neglect is a false economy of a different kind.</p>
+  <p>The biggest honest saving on a cheap VPS is going <strong>unmanaged</strong>: you patch, secure and maintain the OS yourself, and the host charges less. If you're comfortable with Linux and a terminal, that's free money. If you'd rather not run sysadmin, a managed plan costs more but buys back your time - and an unmanaged box you neglect is a false economy of a different kind.</p>
 
   <h2>A sensible first setup</h2>
   <p>Whatever provider you choose, a few minutes of hardening turns a bare cheap VPS into a safe one:</p>
@@ -80,7 +80,7 @@ sudo systemctl reload ssh`}</code></pre>
   <p>From there, set up automatic security updates and your own off-server backups so you're not relying on a single snapshot.</p>
 
   <h2>Where genuine value lives</h2>
-  <p>A cheap VPS earns its keep when the provider is upfront about resources and the network is solid. <strong>Contabo</strong>, for example, is widely known for offering generous CPU and RAM for the price — the kind of resources-per-euro that make a VPS a realistic option on a small budget, without the spec being hollowed out. Whatever you pick, judge it on the criteria above rather than the headline number.</p>
+  <p>A cheap VPS earns its keep when the provider is upfront about resources and the network is solid. <strong>Contabo</strong>, for example, is widely known for offering generous CPU and RAM for the price - the kind of resources-per-euro that make a VPS a realistic option on a small budget, without the spec being hollowed out. Whatever you pick, judge it on the criteria above rather than the headline number.</p>
 
   <h2>Who it's for</h2>
   <ul>
@@ -90,5 +90,5 @@ sudo systemctl reload ssh`}</code></pre>
   </ul>
 
   <h2>How to decide</h2>
-  <p>Start from your workload: estimate RAM first, then CPU type, then storage and transfer. Insist on NVMe/SSD, a region near your users and automated or affordable backups. Compare <em>renewal</em> prices on equivalent specs, and treat suspiciously cheap "unlimited" claims as marketing until the terms prove otherwise. The best cheap VPS is the one that covers your real needs with a little headroom — not the one with the smallest number on the banner.</p>
+  <p>Start from your workload: estimate RAM first, then CPU type, then storage and transfer. Insist on NVMe/SSD, a region near your users and automated or affordable backups. Compare <em>renewal</em> prices on equivalent specs, and treat suspiciously cheap "unlimited" claims as marketing until the terms prove otherwise. The best cheap VPS is the one that covers your real needs with a little headroom - not the one with the smallest number on the banner.</p>
 </Article>

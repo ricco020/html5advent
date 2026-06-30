@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="fr"
   slug="fetch-api-javascript"
   title="L'API Fetch en JavaScript : guide pratique"
-  description="Comment faire des requêtes HTTP dans le navigateur avec l'API Fetch — GET, JSON, POST, gestion des erreurs et annulation de requête — avec des exemples exécutables."
+  description="Comment faire des requêtes HTTP dans le navigateur avec l'API Fetch - GET, JSON, POST, gestion des erreurs et annulation de requête - avec des exemples exécutables."
   cat="apis"
   day={1}
   hero="/img/web-dev-code.jpg"
@@ -25,7 +25,7 @@ console.log(data);`}</code></pre>
   .then((data) => console.log(data));`}</code></pre>
 
   <h2>Le piège : fetch ne rejette pas sur les erreurs HTTP</h2>
-  <p>C'est ce qui surprend presque tout le monde. Une réponse <code>404</code> ou <code>500</code> reste un fetch <em>réussi</em> — la promesse n'est rejetée que sur une défaillance <strong>réseau</strong> (hors ligne, DNS, CORS). Vous devez vérifier <code>response.ok</code> vous-même :</p>
+  <p>C'est ce qui surprend presque tout le monde. Une réponse <code>404</code> ou <code>500</code> reste un fetch <em>réussi</em> - la promesse n'est rejetée que sur une défaillance <strong>réseau</strong> (hors ligne, DNS, CORS). Vous devez vérifier <code>response.ok</code> vous-même :</p>
   <pre><code>{`const res = await fetch(url);
 if (!res.ok) {
   throw new Error(\`HTTP \${res.status} \${res.statusText}\`);
@@ -47,7 +47,7 @@ const data = await res.json();`}</code></pre>
 const created = await res.json();`}</code></pre>
 
   <h2>Annuler une requête</h2>
-  <p>Utilisez un <code>AbortController</code> pour annuler une requête — utile pour les délais d'attente ou quand un composant est démonté :</p>
+  <p>Utilisez un <code>AbortController</code> pour annuler une requête - utile pour les délais d'attente ou quand un composant est démonté :</p>
   <pre><code>{`const controller = new AbortController();
 const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -72,5 +72,5 @@ try {
     </tbody>
   </table>
 
-  <p>Cela couvre les cas du quotidien. L'API Fetch prend aussi en charge le streaming des corps de réponse, les envois <code>FormData</code> et le clonage requête/réponse — mais les patterns ci-dessus gèrent la grande majorité des appels réels.</p>
+  <p>Cela couvre les cas du quotidien. L'API Fetch prend aussi en charge le streaming des corps de réponse, les envois <code>FormData</code> et le clonage requête/réponse - mais les patterns ci-dessus gèrent la grande majorité des appels réels.</p>
 </Article>

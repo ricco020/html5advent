@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="pt"
   slug="web-components"
   title="Web Components: Custom Elements, Shadow DOM e templates"
-  description="Crie elementos HTML reutilizáveis com as APIs nativas de Web Components — definir um Custom Element, encapsular estilos com o Shadow DOM, clonar um &lt;template&gt; e passar dados com atributos."
+  description="Crie elementos HTML reutilizáveis com as APIs nativas de Web Components - definir um Custom Element, encapsular estilos com o Shadow DOM, clonar um &lt;template&gt; e passar dados com atributos."
   cat="html"
   day={5}
   hero="/img/web-components-hero.jpg"
   heroAlt="Uma pilha de coloridas peças de plástico encaixáveis de formas diferentes"
   cluster={null}
 >
-  <p>Os <strong>Web Components</strong> são um conjunto de APIs nativas do navegador que lhe permitem construir os seus próprios elementos HTML reutilizáveis — sem necessidade de framework. Um componente que distribui funciona da mesma forma em HTML puro, React, Vue ou Svelte, porque é apenas um elemento que o navegador compreende. Três APIs tornam isto possível: os Custom Elements, o Shadow DOM e a tag <code>&lt;template&gt;</code>.</p>
+  <p>Os <strong>Web Components</strong> são um conjunto de APIs nativas do navegador que lhe permitem construir os seus próprios elementos HTML reutilizáveis - sem necessidade de framework. Um componente que distribui funciona da mesma forma em HTML puro, React, Vue ou Svelte, porque é apenas um elemento que o navegador compreende. Três APIs tornam isto possível: os Custom Elements, o Shadow DOM e a tag <code>&lt;template&gt;</code>.</p>
 
   <h2>Custom Elements</h2>
   <p>Um Custom Element é uma classe que estende <code>HTMLElement</code>, registada com um nome de tag que <strong>tem de conter um hífen</strong> (para que nunca possa colidir com uma futura tag integrada):</p>
@@ -30,7 +30,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   <p>A classe oferece-lhe <strong>callbacks de ciclo de vida</strong>. Os mais úteis são <code>connectedCallback</code> (o elemento foi adicionado à página), <code>disconnectedCallback</code> (foi removido) e <code>attributeChangedCallback</code> (um atributo observado mudou).</p>
 
   <h2>Reagir a atributos</h2>
-  <p>Para passar dados, leia atributos — exatamente como <code>src</code> numa imagem. Declare quais observar com um getter estático <code>observedAttributes</code>, depois responda em <code>attributeChangedCallback</code>. Construir o nó com <code>textContent</code> mantém os valores fornecidos pelo utilizador em segurança:</p>
+  <p>Para passar dados, leia atributos - exatamente como <code>src</code> numa imagem. Declare quais observar com um getter estático <code>observedAttributes</code>, depois responda em <code>attributeChangedCallback</code>. Construir o nó com <code>textContent</code> mantém os valores fornecidos pelo utilizador em segurança:</p>
   <pre><code>{`class GreetingCard extends HTMLElement {
   static get observedAttributes() {
     return ['name'];
@@ -75,7 +75,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   }
 }
 customElements.define('fancy-button', FancyButton);`}</code></pre>
-  <p>O <code>&lt;slot&gt;</code> é um marcador de posição: o que quer que coloque entre as tags — <code>&lt;fancy-button&gt;Save&lt;/fancy-button&gt;</code> — é projetado nesse ponto, de modo que o componente envolve o seu conteúdo sem o substituir.</p>
+  <p>O <code>&lt;slot&gt;</code> é um marcador de posição: o que quer que coloque entre as tags - <code>&lt;fancy-button&gt;Save&lt;/fancy-button&gt;</code> - é projetado nesse ponto, de modo que o componente envolve o seu conteúdo sem o substituir.</p>
 
   <h2>Templates: clone uma vez, reutilize a baixo custo</h2>
   <p>O elemento <code>&lt;template&gt;</code> contém markup inerte que é analisado mas não renderizado até que o clone. É a forma eficiente de estampar estruturas repetidas:</p>

@@ -3,7 +3,7 @@ import { t, localePath } from '../i18n/ui.js';
 import { GUIDES } from '../data/guides.js';
 const { lang = 'en' } = Astro.props;
 const avail = GUIDES.filter((g) => (g.locales || ['en']).includes(lang)).sort((a, b) => a.day - b.day);
-const empty = { en: 'Guides are being published — check back soon.', fr: 'Les guides arrivent — revenez bientôt.', es: 'Las guías se están publicando — vuelve pronto.' }[lang];
+const empty = { en: 'Guides are being published - check back soon.', fr: 'Les guides arrivent - revenez bientôt.', es: 'Las guías se están publicando - vuelve pronto.' }[lang];
 ---
 <h1>{t(lang, 'guides')}</h1>
 {avail.length === 0 ? (

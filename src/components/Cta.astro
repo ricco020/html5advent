@@ -1,5 +1,5 @@
 ---
-// Commercial recommendation card — renders only on hosting/deploy pages. ≤2 per article (caller controls).
+// Commercial recommendation card - renders only on hosting/deploy pages. ≤2 per article (caller controls).
 // Honest: labelled as affiliate, on-theme, points at /go/<slug>.
 import { offerForCluster } from '../data/cta.js';
 const { cluster, locale = 'en' } = Astro.props;
@@ -7,12 +7,12 @@ const offer = cluster ? offerForCluster(cluster) : null;
 const a = offer?.angle?.[locale] || offer?.angle?.en;
 
 const T = {
-  en: { reco: 'Recommended for this guide', btn: 'Visit', aff: 'Affiliate link — supports the site at no extra cost to you.' },
-  fr: { reco: 'Recommandé pour ce guide', btn: 'Voir', aff: 'Lien affilié — soutient le site, sans surcoût pour vous.' },
-  es: { reco: 'Recomendado para esta guía', btn: 'Ver', aff: 'Enlace de afiliado — apoya el sitio sin coste extra para ti.' },
-  de: { reco: 'Empfohlen für diese Anleitung', btn: 'Zu', aff: 'Affiliate-Link — unterstützt die Seite ohne Mehrkosten für dich.' },
-  it: { reco: 'Consigliato per questa guida', btn: 'Vai a', aff: 'Link di affiliazione — sostiene il sito senza costi extra per te.' },
-  pt: { reco: 'Recomendado para este guia', btn: 'Ver', aff: 'Link de afiliado — apoia o site sem custo extra para si.' },
+  en: { reco: 'Recommended for this guide', btn: 'Visit', aff: 'Affiliate link - supports the site at no extra cost to you.' },
+  fr: { reco: 'Recommandé pour ce guide', btn: 'Voir', aff: 'Lien affilié - soutient le site, sans surcoût pour vous.' },
+  es: { reco: 'Recomendado para esta guía', btn: 'Ver', aff: 'Enlace de afiliado - apoya el sitio sin coste extra para ti.' },
+  de: { reco: 'Empfohlen für diese Anleitung', btn: 'Zu', aff: 'Affiliate-Link - unterstützt die Seite ohne Mehrkosten für dich.' },
+  it: { reco: 'Consigliato per questa guida', btn: 'Vai a', aff: 'Link di affiliazione - sostiene il sito senza costi extra per te.' },
+  pt: { reco: 'Recomendado para este guia', btn: 'Ver', aff: 'Link de afiliado - apoia o site sem custo extra para si.' },
 }[locale] || {};
 ---
 {offer && a && (

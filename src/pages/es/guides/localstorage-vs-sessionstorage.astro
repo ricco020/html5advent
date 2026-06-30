@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="es"
   slug="localstorage-vs-sessionstorage"
   title="localStorage vs sessionStorage: la API Web Storage explicada"
-  description="Cuándo usar localStorage frente a sessionStorage — diferencias de duración y alcance, sus límites de tamaño, cómo guardar JSON con seguridad y reaccionar al evento storage."
+  description="Cuándo usar localStorage frente a sessionStorage - diferencias de duración y alcance, sus límites de tamaño, cómo guardar JSON con seguridad y reaccionar al evento storage."
   cat="apis"
   day={6}
   hero="/img/localstorage-vs-sessionstorage-hero.jpg"
   heroAlt="Un pasillo de archivo estrecho con estanterías de cajas de almacenamiento y archivadores etiquetados"
   cluster={null}
 >
-  <p>La <strong>API Web Storage</strong> le da al navegador dos almacenes clave-valor sencillos — <code>localStorage</code> y <code>sessionStorage</code> — para guardar pequeñas cantidades de datos en el dispositivo del usuario. Ambos comparten exactamente la misma API; solo se diferencian en <em>cuánto viven los datos</em> y <em>quién puede verlos</em>.</p>
+  <p>La <strong>API Web Storage</strong> le da al navegador dos almacenes clave-valor sencillos - <code>localStorage</code> y <code>sessionStorage</code> - para guardar pequeñas cantidades de datos en el dispositivo del usuario. Ambos comparten exactamente la misma API; solo se diferencian en <em>cuánto viven los datos</em> y <em>quién puede verlos</em>.</p>
 
   <h2>La API compartida</h2>
   <p>Ambos objetos exponen los mismos cinco métodos, y los dos guardan <strong>solo cadenas</strong>:</p>
@@ -25,7 +25,7 @@ console.log(localStorage.length);              // número de claves`}</code></pr
   <pre><code>{`const theme = localStorage.getItem('theme') || 'light';`}</code></pre>
 
   <h2>La única diferencia real: la duración</h2>
-  <p>Toda la decisión cabe en una frase. <code>localStorage</code> persiste <strong>hasta que lo borras</strong> — sobrevive a recargas, al cierre de pestañas y al reinicio del navegador. <code>sessionStorage</code> vive solo mientras viva la <strong>pestaña</strong>: cierra la pestaña y los datos desaparecen, y una segunda pestaña en el mismo sitio obtiene su propio almacén separado.</p>
+  <p>Toda la decisión cabe en una frase. <code>localStorage</code> persiste <strong>hasta que lo borras</strong> - sobrevive a recargas, al cierre de pestañas y al reinicio del navegador. <code>sessionStorage</code> vive solo mientras viva la <strong>pestaña</strong>: cierra la pestaña y los datos desaparecen, y una segunda pestaña en el mismo sitio obtiene su propio almacén separado.</p>
 
   <figure>
     <img src="/img/localstorage-vs-sessionstorage-inbody.jpg" alt="Una pantalla mostrando código fuente JavaScript de colores que lee el objeto window" width="1280" height="720" loading="lazy" />
@@ -42,7 +42,7 @@ localStorage.setItem('user', JSON.stringify(user));
 // Releer
 const saved = JSON.parse(localStorage.getItem('user'));
 console.log(saved.name); // 'Ada'`}</code></pre>
-  <p>Envuelve <code>JSON.parse</code> en un <code>try/catch</code> cuando el valor pueda faltar o estar corrupto — parsear <code>null</code> o texto inválido lanza un error:</p>
+  <p>Envuelve <code>JSON.parse</code> en un <code>try/catch</code> cuando el valor pueda faltar o estar corrupto - parsear <code>null</code> o texto inválido lanza un error:</p>
   <pre><code>{`function readJSON(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -53,10 +53,10 @@ console.log(saved.name); // 'Ada'`}</code></pre>
 }`}</code></pre>
 
   <h2>Alcance y el límite de tamaño</h2>
-  <p>El almacenamiento se acota por <strong>origen</strong> (esquema + host + puerto): <code>https://example.com</code> y <code>http://example.com</code> no comparten datos. La cuota es de aproximadamente <strong>5&nbsp;MB por origen</strong> en la mayoría de navegadores — generosa para preferencias y cachés pequeñas, pero no es una base de datos. Superarla hace que <code>setItem</code> lance un <code>QuotaExceededError</code>, así que protege las escrituras grandes.</p>
+  <p>El almacenamiento se acota por <strong>origen</strong> (esquema + host + puerto): <code>https://example.com</code> y <code>http://example.com</code> no comparten datos. La cuota es de aproximadamente <strong>5&nbsp;MB por origen</strong> en la mayoría de navegadores - generosa para preferencias y cachés pequeñas, pero no es una base de datos. Superarla hace que <code>setItem</code> lance un <code>QuotaExceededError</code>, así que protege las escrituras grandes.</p>
 
   <h2>Reaccionar a los cambios entre pestañas</h2>
-  <p>El evento <code>storage</code> se dispara en las <em>otras</em> pestañas del mismo origen cuando <code>localStorage</code> cambia — útil para sincronizar un cierre de sesión o un cambio de tema entre ventanas abiertas. Ten en cuenta que <strong>no</strong> se dispara en la pestaña que hizo el cambio, y que <code>sessionStorage</code> nunca lo activa:</p>
+  <p>El evento <code>storage</code> se dispara en las <em>otras</em> pestañas del mismo origen cuando <code>localStorage</code> cambia - útil para sincronizar un cierre de sesión o un cambio de tema entre ventanas abiertas. Ten en cuenta que <strong>no</strong> se dispara en la pestaña que hizo el cambio, y que <code>sessionStorage</code> nunca lo activa:</p>
   <pre><code>{`window.addEventListener('storage', (event) => {
   if (event.key === 'theme') {
     applyTheme(event.newValue);
@@ -75,5 +75,5 @@ console.log(saved.name); // 'Ada'`}</code></pre>
     </tbody>
   </table>
 
-  <p>Recurre a <code>localStorage</code> cuando el dato deba permanecer entre visitas, y a <code>sessionStorage</code> cuando solo tenga sentido para la pestaña actual. Para cualquier cosa sensible — tokens, contraseñas, datos personales — ninguno es apropiado: ambos son legibles por cualquier script de la página, así que mantén los secretos completamente fuera del Web Storage.</p>
+  <p>Recurre a <code>localStorage</code> cuando el dato deba permanecer entre visitas, y a <code>sessionStorage</code> cuando solo tenga sentido para la pestaña actual. Para cualquier cosa sensible - tokens, contraseñas, datos personales - ninguno es apropiado: ambos son legibles por cualquier script de la página, así que mantén los secretos completamente fuera del Web Storage.</p>
 </Article>

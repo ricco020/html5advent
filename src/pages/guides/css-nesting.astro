@@ -12,7 +12,7 @@ import Article from '../../layouts/Article.astro';
   heroAlt="A printed sheet of HTML markup with a pen resting on it"
   cluster={null}
 >
-  <p><strong>CSS nesting</strong> lets you write rules inside other rules, so styles that belong together stay together. For years this was only possible with a preprocessor like Sass. It is now a native CSS feature, shipping in every modern browser — no build step required.</p>
+  <p><strong>CSS nesting</strong> lets you write rules inside other rules, so styles that belong together stay together. For years this was only possible with a preprocessor like Sass. It is now a native CSS feature, shipping in every modern browser - no build step required.</p>
 
   <h2>The basic idea</h2>
   <p>Instead of repeating the parent selector for every child, you nest the child rule inside it. These two blocks produce the same result:</p>
@@ -30,7 +30,7 @@ import Article from '../../layouts/Article.astro';
   <p>Each nested selector is read relative to its parent, so <code>.card p</code> is what the browser actually applies.</p>
 
   <h2>The &amp; nesting selector</h2>
-  <p>The ampersand <code>&amp;</code> refers to the parent selector. You need it whenever the nested selector must attach directly to the parent rather than describe a descendant — pseudo-classes, modifier classes, and compound selectors:</p>
+  <p>The ampersand <code>&amp;</code> refers to the parent selector. You need it whenever the nested selector must attach directly to the parent rather than describe a descendant - pseudo-classes, modifier classes, and compound selectors:</p>
   <pre><code>{`.btn {
   background: #2563eb;
 
@@ -57,13 +57,13 @@ import Article from '../../layouts/Article.astro';
   <h2>Where it differs from Sass</h2>
   <p>The syntax looks like Sass, but the two are not identical. The differences that bite most often:</p>
   <ul>
-    <li><strong>Concatenation</strong>: Sass lets you build selectors like <code>&amp;__title</code> (BEM). Native CSS nesting does <em>not</em> concatenate — <code>&amp;__title</code> is invalid. You must write the full class name.</li>
+    <li><strong>Concatenation</strong>: Sass lets you build selectors like <code>&amp;__title</code> (BEM). Native CSS nesting does <em>not</em> concatenate - <code>&amp;__title</code> is invalid. You must write the full class name.</li>
     <li><strong>No compile step</strong>: native nesting runs in the browser, so there is nothing to compile and no source maps to manage.</li>
     <li><strong>Specificity of &amp;</strong>: in native CSS, <code>&amp;</code> behaves like <code>:is()</code> and takes the specificity of the most specific selector in the parent list, which can differ subtly from Sass output.</li>
   </ul>
 
   <h2>Browser support and fallback</h2>
-  <p>Native CSS nesting is supported in current versions of Chrome, Edge, Firefox and Safari. Early implementations required the nested selector to start with a symbol (so you wrote <code>&amp; p</code> instead of <code>p</code>); the relaxed syntax that allows a bare element selector is what ships in today's browsers. If you must support older engines, keep using Sass or PostCSS — the <code>postcss-nesting</code> plugin compiles native nesting down to flat CSS.</p>
+  <p>Native CSS nesting is supported in current versions of Chrome, Edge, Firefox and Safari. Early implementations required the nested selector to start with a symbol (so you wrote <code>&amp; p</code> instead of <code>p</code>); the relaxed syntax that allows a bare element selector is what ships in today's browsers. If you must support older engines, keep using Sass or PostCSS - the <code>postcss-nesting</code> plugin compiles native nesting down to flat CSS.</p>
 
   <h2>Quick reference</h2>
   <table>
@@ -73,9 +73,9 @@ import Article from '../../layouts/Article.astro';
       <tr><td>Pseudo-class</td><td><code>&amp;:hover &#123; ... &#125;</code></td></tr>
       <tr><td>Modifier class</td><td><code>&amp;.is-active &#123; ... &#125;</code></td></tr>
       <tr><td>Responsive</td><td><code>@media (...) &#123; ... &#125;</code> nested</td></tr>
-      <tr><td>BEM concatenation</td><td>not supported — write the full class</td></tr>
+      <tr><td>BEM concatenation</td><td>not supported - write the full class</td></tr>
     </tbody>
   </table>
 
-  <p>Native nesting removes one of the last big reasons to reach for a preprocessor on a new project. Keep the nesting shallow — two or three levels — and your stylesheets stay readable while the relationships between selectors stay obvious.</p>
+  <p>Native nesting removes one of the last big reasons to reach for a preprocessor on a new project. Keep the nesting shallow - two or three levels - and your stylesheets stay readable while the relationships between selectors stay obvious.</p>
 </Article>

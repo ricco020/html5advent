@@ -5,21 +5,21 @@ import Article from '../../../layouts/Article.astro';
   lang="it"
   slug="cloud-hosting"
   title="L'hosting cloud spiegato: quando ha senso per un progetto web"
-  description="Che cosa significa davvero l'hosting cloud, in che cosa si distingue da un singolo VPS o dall'hosting condiviso, i suoi veri punti di forza e compromessi, e i tipi di progetti web a cui si adatta — senza prezzi o benchmark inventati."
+  description="Che cosa significa davvero l'hosting cloud, in che cosa si distingue da un singolo VPS o dall'hosting condiviso, i suoi veri punti di forza e compromessi, e i tipi di progetti web a cui si adatta - senza prezzi o benchmark inventati."
   cat="hosting"
   hero="/img/cloud-hosting-hero.jpg"
   heroAlt="Una mano che indica una nuvola bianca contro un cielo azzurro sovrapposta a una rete connessa a maglia"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>L'<strong>hosting cloud</strong> esegue il tuo sito o la tua app su un pool di server connessi anziché su una singola macchina. Invece di essere legato a una sola scatola, il tuo carico di lavoro attinge risorse da un cluster, così la capacità può essere aggiunta o rimossa su richiesta e un singolo guasto hardware non deve necessariamente metterti offline. Questo modello porta vantaggi reali — e compromessi reali. Questa guida spiega che cos'è l'hosting cloud, come si confronta con l'hosting condiviso e con un singolo VPS, e quando è davvero la scelta giusta per un progetto web.</p>
+  <p>L'<strong>hosting cloud</strong> esegue il tuo sito o la tua app su un pool di server connessi anziché su una singola macchina. Invece di essere legato a una sola scatola, il tuo carico di lavoro attinge risorse da un cluster, così la capacità può essere aggiunta o rimossa su richiesta e un singolo guasto hardware non deve necessariamente metterti offline. Questo modello porta vantaggi reali - e compromessi reali. Questa guida spiega che cos'è l'hosting cloud, come si confronta con l'hosting condiviso e con un singolo VPS, e quando è davvero la scelta giusta per un progetto web.</p>
 
   <h2>Che cosa significa davvero l'hosting cloud</h2>
   <p>Nell'hosting tradizionale il tuo sito vive su un solo server fisico (condiviso) o su una singola fetta virtuale di uno (un VPS). Nell'hosting cloud, la virtualizzazione distribuisce il carico su <strong>molti server in rete</strong>. Se un nodo si guasta, altri ne raccolgono il lavoro; se hai bisogno di più capacità, la piattaforma la fornisce dal pool. Vieni fatturato per ciò che usi anziché per una scatola fissa.</p>
   <p>Due proprietà definiscono il modello:</p>
   <ul>
-    <li><strong>Elasticità</strong> — le risorse aumentano e diminuiscono per adattarsi alla domanda, spesso automaticamente.</li>
-    <li><strong>Ridondanza</strong> — il carico di lavoro non è agganciato a un singolo punto di guasto, quindi la piattaforma può tollerare la caduta di un nodo.</li>
+    <li><strong>Elasticità</strong> - le risorse aumentano e diminuiscono per adattarsi alla domanda, spesso automaticamente.</li>
+    <li><strong>Ridondanza</strong> - il carico di lavoro non è agganciato a un singolo punto di guasto, quindi la piattaforma può tollerare la caduta di un nodo.</li>
   </ul>
 
   <h2>Cloud vs condiviso vs VPS</h2>
@@ -31,7 +31,7 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Hosting cloud</td><td>Un pool di server in rete</td><td>Elastica, spesso automatica</td><td>Spesso basata sul consumo</td></tr>
     </tbody>
   </table>
-  <p>Un singolo VPS ti offre risorse garantite e isolate su una sola macchina — prevedibile e semplice. L'hosting cloud scambia quella semplicità con elasticità e resilienza distribuendoti su molte macchine. Nessuno dei due è «migliore»; risolvono problemi diversi.</p>
+  <p>Un singolo VPS ti offre risorse garantite e isolate su una sola macchina - prevedibile e semplice. L'hosting cloud scambia quella semplicità con elasticità e resilienza distribuendoti su molte macchine. Nessuno dei due è «migliore»; risolvono problemi diversi.</p>
 
   <figure>
     <img src="/img/cloud-hosting-inbody.jpg" alt="Rack di server nel corridoio di un datacenter con un diagramma sovrapposto che collega un'icona di nuvola a telefoni, schermi e un database" width="1280" height="720" loading="lazy" />
@@ -41,26 +41,26 @@ import Article from '../../../layouts/Article.astro';
   <h2>Quando l'hosting cloud ha senso</h2>
   <p>Il modello si guadagna il proprio valore in situazioni specifiche:</p>
   <ul>
-    <li><strong>Traffico imprevedibile o a picchi</strong> — un lancio, un post virale o picchi stagionali. La scalabilità elastica assorbe il picco invece di crollarci sotto, poi si riduce quando passa.</li>
-    <li><strong>L'uptime è critico</strong> — quando i tempi di inattività costano denaro o fiducia reali, la ridondanza integrata di più nodi è preziosa.</li>
-    <li><strong>Crescita rapida</strong> — non sai quale sarà il carico del prossimo trimestre e preferisci non sovradimensionare oggi una scatola fissa.</li>
-    <li><strong>Utenti distribuiti</strong> — le piattaforme cloud rendono più facile operare in più regioni per mantenere bassa la latenza per un pubblico globale.</li>
+    <li><strong>Traffico imprevedibile o a picchi</strong> - un lancio, un post virale o picchi stagionali. La scalabilità elastica assorbe il picco invece di crollarci sotto, poi si riduce quando passa.</li>
+    <li><strong>L'uptime è critico</strong> - quando i tempi di inattività costano denaro o fiducia reali, la ridondanza integrata di più nodi è preziosa.</li>
+    <li><strong>Crescita rapida</strong> - non sai quale sarà il carico del prossimo trimestre e preferisci non sovradimensionare oggi una scatola fissa.</li>
+    <li><strong>Utenti distribuiti</strong> - le piattaforme cloud rendono più facile operare in più regioni per mantenere bassa la latenza per un pubblico globale.</li>
   </ul>
 
   <h2>Quando è eccessivo</h2>
   <p>L'hosting cloud non è automaticamente la risposta giusta.</p>
   <ul>
-    <li><strong>Traffico stabile e prevedibile</strong> — se il tuo carico è piatto, un singolo VPS è più semplice e di solito più economico del cloud basato sul consumo.</li>
-    <li><strong>Siti piccoli o statici</strong> — un blog o un sito vetrina è servito meglio da hosting condiviso o da un host statico.</li>
-    <li><strong>Budget stretti e fissi</strong> — la fatturazione a consumo può essere imprevedibile; un VPS a tariffa fissa rende i costi facili da prevedere.</li>
-    <li><strong>Vuoi semplicità</strong> — le piattaforme cloud aggiungono concetti (bilanciatori di carico, auto-scaling, servizi gestiti) che sono un sovraccarico se non ne hai bisogno.</li>
+    <li><strong>Traffico stabile e prevedibile</strong> - se il tuo carico è piatto, un singolo VPS è più semplice e di solito più economico del cloud basato sul consumo.</li>
+    <li><strong>Siti piccoli o statici</strong> - un blog o un sito vetrina è servito meglio da hosting condiviso o da un host statico.</li>
+    <li><strong>Budget stretti e fissi</strong> - la fatturazione a consumo può essere imprevedibile; un VPS a tariffa fissa rende i costi facili da prevedere.</li>
+    <li><strong>Vuoi semplicità</strong> - le piattaforme cloud aggiungono concetti (bilanciatori di carico, auto-scaling, servizi gestiti) che sono un sovraccarico se non ne hai bisogno.</li>
   </ul>
 
   <h2>Pro e contro</h2>
   <h3>Vantaggi</h3>
   <ul>
-    <li>Scalabilità elastica — gestisci i picchi di traffico senza ricostruire.</li>
-    <li>Resilienza — nessun singolo server è un singolo punto di guasto.</li>
+    <li>Scalabilità elastica - gestisci i picchi di traffico senza ricostruire.</li>
+    <li>Resilienza - nessun singolo server è un singolo punto di guasto.</li>
     <li>Paghi per ciò che usi (quando il traffico è genuinamente variabile).</li>
     <li>Deployment multi-regione più facili per un pubblico globale.</li>
   </ul>
@@ -72,7 +72,7 @@ import Article from '../../../layouts/Article.astro';
   </ul>
 
   <h2>Una via di mezzo pratica</h2>
-  <p>Molti progetti non hanno bisogno della piena elasticità del cloud fin dal primo giorno. Un approccio comune ed economico è partire da un <strong>VPS</strong> ben dimensionato con prezzi mensili prevedibili, per poi spostarsi verso una configurazione cloud solo quando il traffico diventa davvero variabile o i requisiti di uptime si fanno più stringenti. Per la fase VPS, i provider focalizzati su un buon rapporto risorse-prezzo — come <strong>Contabo</strong>, noto per CPU e RAM generose a basso costo mensile — ti danno ampio margine mentre cresci, senza impegnarti nella fatturazione a consumo prima di averne bisogno.</p>
+  <p>Molti progetti non hanno bisogno della piena elasticità del cloud fin dal primo giorno. Un approccio comune ed economico è partire da un <strong>VPS</strong> ben dimensionato con prezzi mensili prevedibili, per poi spostarsi verso una configurazione cloud solo quando il traffico diventa davvero variabile o i requisiti di uptime si fanno più stringenti. Per la fase VPS, i provider focalizzati su un buon rapporto risorse-prezzo - come <strong>Contabo</strong>, noto per CPU e RAM generose a basso costo mensile - ti danno ampio margine mentre cresci, senza impegnarti nella fatturazione a consumo prima di averne bisogno.</p>
 
   <h2>Come decidere</h2>
   <p>Chiediti se il tuo traffico è variabile e se i tempi di inattività sono costosi. Se entrambe le risposte sono sì, l'elasticità e la ridondanza dell'hosting cloud giustificano la complessità aggiuntiva. Se il tuo carico è stabile e il budget fisso, un singolo VPS è più semplice e più facile da prevedere. Se stai valutando l'opzione VPS, consulta le nostre guide su <a href="/it/guides/vps-hosting">che cos'è un VPS e come sceglierne uno</a> e su <a href="/it/guides/best-vps-for-web-hosting">come scegliere il miglior VPS per un progetto web</a>.</p>

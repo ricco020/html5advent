@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="fr"
   slug="best-hosting-for-woocommerce"
   title="Héberger une boutique WooCommerce : les exigences qui comptent vraiment"
-  description="Un guide pratique pour héberger une boutique WooCommerce — les exigences de performance, de ressources et de scalabilité qui comptent réellement, et la comparaison entre hébergement mutualisé, managé et VPS pour une boutique en ligne."
+  description="Un guide pratique pour héberger une boutique WooCommerce - les exigences de performance, de ressources et de scalabilité qui comptent réellement, et la comparaison entre hébergement mutualisé, managé et VPS pour une boutique en ligne."
   cat="hosting"
   hero="/img/best-hosting-for-woocommerce-hero.jpg"
   heroAlt="Une main tenant une carte de fidélité rouge devant un ordinateur portable affichant une boutique en ligne avec des badges de réduction"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p><strong>WooCommerce</strong> transforme WordPress en véritable boutique en ligne, ce qui signifie que votre hébergement doit désormais accomplir deux tâches exigeantes à la fois : servir un système de gestion de contenu <em>et</em> faire tourner une boutique transactionnelle. Un blog tolère une page lente ; une boutique non — un panier poussif ou un délai d'attente au paiement vous coûte la vente. Ce guide passe en revue les exigences qui affectent réellement une boutique WooCommerce, afin que vous puissiez juger n'importe quel hébergeur par vous-même, plutôt que de vous fier à un classement marketing.</p>
+  <p><strong>WooCommerce</strong> transforme WordPress en véritable boutique en ligne, ce qui signifie que votre hébergement doit désormais accomplir deux tâches exigeantes à la fois : servir un système de gestion de contenu <em>et</em> faire tourner une boutique transactionnelle. Un blog tolère une page lente ; une boutique non - un panier poussif ou un délai d'attente au paiement vous coûte la vente. Ce guide passe en revue les exigences qui affectent réellement une boutique WooCommerce, afin que vous puissiez juger n'importe quel hébergeur par vous-même, plutôt que de vous fier à un classement marketing.</p>
 
   <h2>Pourquoi une boutique est plus lourde qu'un blog</h2>
   <p>Un blog WordPress classique peut mettre en cache presque chaque page et la servir en HTML statique. Une boutique ne peut pas faire cela pour les pages qui comptent le plus. Le panier, le paiement, « mon compte » et toute vue connectée sont <strong>dynamiques et propres à chaque utilisateur</strong>, ils contournent donc le cache de page et sollicitent PHP et la base de données à chaque requête. Ajoutez la recherche de produits, le filtrage à facettes, la logique des codes promo, les vérifications de stock et les appels aux passerelles de paiement, et le serveur effectue un vrai travail sur les pages mêmes où la vitesse se convertit en chiffre d'affaires.</p>
@@ -22,15 +22,15 @@ import Article from '../../../layouts/Article.astro';
   <p>Comparez les hébergeurs sur ces dimensions concrètes plutôt que sur des adjectifs comme « ultra-rapide ».</p>
 
   <h3>Version de PHP et ressources</h3>
-  <p>Faites tourner une <strong>version de PHP actuellement supportée</strong> — les versions récentes sont sensiblement plus rapides et reçoivent encore des correctifs de sécurité, contrairement aux versions en fin de vie. Au-delà de la version, deux limites côté serveur impactent directement les boutiques WooCommerce :</p>
+  <p>Faites tourner une <strong>version de PHP actuellement supportée</strong> - les versions récentes sont sensiblement plus rapides et reçoivent encore des correctifs de sécurité, contrairement aux versions en fin de vie. Au-delà de la version, deux limites côté serveur impactent directement les boutiques WooCommerce :</p>
   <ul>
-    <li><code>memory_limit</code> — WooCommerce recommande une limite de mémoire PHP généreuse ; importer des produits, générer des rapports ou faire tourner de nombreux plugins peut épuiser une limite trop serrée.</li>
-    <li><code>max_execution_time</code> et les limites d'envoi — les tâches longues (imports de produits en masse, gros fichiers CSV) échouent silencieusement quand elles sont trop basses.</li>
+    <li><code>memory_limit</code> - WooCommerce recommande une limite de mémoire PHP généreuse ; importer des produits, générer des rapports ou faire tourner de nombreux plugins peut épuiser une limite trop serrée.</li>
+    <li><code>max_execution_time</code> et les limites d'envoi - les tâches longues (imports de produits en masse, gros fichiers CSV) échouent silencieusement quand elles sont trop basses.</li>
   </ul>
   <p>Vérifiez que l'hébergeur vous laisse augmenter ces valeurs, idéalement par site, plutôt que de vous enfermer dans des réglages mutualisés par défaut.</p>
 
   <h3>Performance de la base de données</h3>
-  <p>WooCommerce sollicite fortement la base de données. Les commandes, les produits, les sessions et surtout les tables <code>wp_options</code> et de métadonnées sont interrogés en permanence. Préférez un hébergeur sur un MySQL ou MariaDB moderne avec un <strong>stockage NVMe/SSD</strong> — la vitesse du disque se répercute directement sur les temps de requête, donc sur la latence du paiement. Sur les catalogues plus volumineux, la capacité d'utiliser le <strong>stockage de commandes haute performance</strong> de WooCommerce (tables de commandes dédiées) aide la base de données à monter en charge ; c'est un réglage de WooCommerce, mais il ne paie que sur un hébergeur qui n'est pas déjà à court de CPU et d'I/O.</p>
+  <p>WooCommerce sollicite fortement la base de données. Les commandes, les produits, les sessions et surtout les tables <code>wp_options</code> et de métadonnées sont interrogés en permanence. Préférez un hébergeur sur un MySQL ou MariaDB moderne avec un <strong>stockage NVMe/SSD</strong> - la vitesse du disque se répercute directement sur les temps de requête, donc sur la latence du paiement. Sur les catalogues plus volumineux, la capacité d'utiliser le <strong>stockage de commandes haute performance</strong> de WooCommerce (tables de commandes dédiées) aide la base de données à monter en charge ; c'est un réglage de WooCommerce, mais il ne paie que sur un hébergeur qui n'est pas déjà à court de CPU et d'I/O.</p>
 
   <figure>
     <img src="/img/best-hosting-for-woocommerce-inbody.jpg" alt="Une personne tenant une carte bancaire tout en tapant sur un ordinateur portable, finalisant un paiement en ligne" width="1280" height="853" loading="lazy" />
@@ -38,43 +38,43 @@ import Article from '../../../layouts/Article.astro';
   </figure>
 
   <h3>Marge de RAM et de CPU</h3>
-  <p>La mémoire est généralement la première ressource à manquer dans une boutique. Chaque worker PHP qui traite une requête dynamique consomme de la RAM, et un paiement très actif implique plusieurs workers en même temps. Trop peu de mémoire et les requêtes s'accumulent en file d'attente ou sont tuées ; le symptôme que voit l'acheteur, c'est un panier qui tourne en rond. Le CPU compte pour ces mêmes pages dynamiques et pour le travail en arrière-plan (cron, emails de commande, indexation de la recherche). Dimensionnez les deux avec une marge pour les pics de trafic — une vente flash ou une mise en avant dans une newsletter peut multiplier les utilisateurs simultanés en quelques minutes.</p>
+  <p>La mémoire est généralement la première ressource à manquer dans une boutique. Chaque worker PHP qui traite une requête dynamique consomme de la RAM, et un paiement très actif implique plusieurs workers en même temps. Trop peu de mémoire et les requêtes s'accumulent en file d'attente ou sont tuées ; le symptôme que voit l'acheteur, c'est un panier qui tourne en rond. Le CPU compte pour ces mêmes pages dynamiques et pour le travail en arrière-plan (cron, emails de commande, indexation de la recherche). Dimensionnez les deux avec une marge pour les pics de trafic - une vente flash ou une mise en avant dans une newsletter peut multiplier les utilisateurs simultanés en quelques minutes.</p>
 
   <h3>Un cache bien fait</h3>
   <p>Le cache est le plus grand levier unique pour la vitesse d'une boutique, mais il doit être <em>conscient de la boutique</em> :</p>
   <ul>
-    <li><strong>Cache de page</strong> pour les pages de catalogue et de contenu — qu'on peut mettre en cache de façon agressive.</li>
-    <li><strong>Exclusions de cache</strong> pour le panier, le paiement et les pages de compte — celles-ci ne doivent jamais être servies périmées, sinon un acheteur voit le panier de quelqu'un d'autre.</li>
-    <li><strong>Cache objet</strong> (Redis ou Memcached) pour mettre en cache les résultats des requêtes de base de données et les objets PHP — c'est ce qui garde les pages dynamiques rapides à grande échelle. Vérifiez si l'hébergeur propose un cache objet persistant.</li>
+    <li><strong>Cache de page</strong> pour les pages de catalogue et de contenu - qu'on peut mettre en cache de façon agressive.</li>
+    <li><strong>Exclusions de cache</strong> pour le panier, le paiement et les pages de compte - celles-ci ne doivent jamais être servies périmées, sinon un acheteur voit le panier de quelqu'un d'autre.</li>
+    <li><strong>Cache objet</strong> (Redis ou Memcached) pour mettre en cache les résultats des requêtes de base de données et les objets PHP - c'est ce qui garde les pages dynamiques rapides à grande échelle. Vérifiez si l'hébergeur propose un cache objet persistant.</li>
     <li><strong>Cache d'opcode</strong> (OPcache) activé, afin que le PHP compilé soit réutilisé entre les requêtes.</li>
   </ul>
 
   <h3>SSL, sécurité et considérations PCI</h3>
-  <p>Une boutique gère des données personnelles et achemine des paiements, donc le <strong>HTTPS est obligatoire</strong>, pas optionnel — la plupart des hébergeurs incluent des certificats automatisés gratuits, alors vérifiez-le. Si vous saisissez les détails des cartes sur votre site, vous héritez d'obligations PCI-DSS ; utiliser une passerelle de paiement hébergée (où les données de carte sont saisies du côté du prestataire) éloigne l'essentiel de cette charge de votre serveur. Cherchez des réglages par défaut sensés : un pare-feu applicatif web, une analyse automatisée des malwares, et une isolation pour qu'une compromission voisine ne puisse pas atteindre votre boutique.</p>
+  <p>Une boutique gère des données personnelles et achemine des paiements, donc le <strong>HTTPS est obligatoire</strong>, pas optionnel - la plupart des hébergeurs incluent des certificats automatisés gratuits, alors vérifiez-le. Si vous saisissez les détails des cartes sur votre site, vous héritez d'obligations PCI-DSS ; utiliser une passerelle de paiement hébergée (où les données de carte sont saisies du côté du prestataire) éloigne l'essentiel de cette charge de votre serveur. Cherchez des réglages par défaut sensés : un pare-feu applicatif web, une analyse automatisée des malwares, et une isolation pour qu'une compromission voisine ne puisse pas atteindre votre boutique.</p>
 
   <h3>Sauvegardes et préproduction</h3>
-  <p>Une boutique en ligne est un système transactionnel vivant — perdre la table des commandes, c'est perdre de l'argent et la confiance des clients. Exigez des <strong>sauvegardes quotidiennes automatisées</strong> qui incluent à la fois les fichiers et la base de données, avec une restauration facile en un clic. Un <strong>environnement de préproduction</strong> est presque aussi important : les mises à jour de WooCommerce, de WordPress et des plugins peuvent casser le paiement, vous voulez donc les tester sur une copie avant qu'elles ne touchent de vrais clients.</p>
+  <p>Une boutique en ligne est un système transactionnel vivant - perdre la table des commandes, c'est perdre de l'argent et la confiance des clients. Exigez des <strong>sauvegardes quotidiennes automatisées</strong> qui incluent à la fois les fichiers et la base de données, avec une restauration facile en un clic. Un <strong>environnement de préproduction</strong> est presque aussi important : les mises à jour de WooCommerce, de WordPress et des plugins peuvent casser le paiement, vous voulez donc les tester sur une copie avant qu'elles ne touchent de vrais clients.</p>
 
   <h3>Scalabilité</h3>
-  <p>Le trafic d'une boutique est irrégulier par nature — lancements, soldes, pics saisonniers. Demandez comment l'offre monte en charge : pouvez-vous ajouter de la RAM et du CPU sans reconstruire le site ? Y a-t-il un chemin de mise à niveau clair d'une petite offre vers une plus grande, ou vers un VPS, à mesure que le catalogue et les commandes grandissent ? Un hébergeur que vous pouvez redimensionner à la demande vaut mieux qu'un hébergeur où la croissance implique une migration douloureuse.</p>
+  <p>Le trafic d'une boutique est irrégulier par nature - lancements, soldes, pics saisonniers. Demandez comment l'offre monte en charge : pouvez-vous ajouter de la RAM et du CPU sans reconstruire le site ? Y a-t-il un chemin de mise à niveau clair d'une petite offre vers une plus grande, ou vers un VPS, à mesure que le catalogue et les commandes grandissent ? Un hébergeur que vous pouvez redimensionner à la demande vaut mieux qu'un hébergeur où la croissance implique une migration douloureuse.</p>
 
   <h2>Mutualisé vs WordPress managé vs VPS</h2>
   <table>
     <thead><tr><th>Option</th><th>Idéal pour</th><th>À surveiller</th></tr></thead>
     <tbody>
-      <tr><td>Hébergement mutualisé</td><td>Une boutique toute neuve avec peu de produits et un faible trafic, avec un budget serré.</td><td>Voisins bruyants, limites de CPU/processus, souvent pas de cache objet — vite dépassé une fois que les commandes décollent.</td></tr>
-      <tr><td>WordPress/WooCommerce managé</td><td>Les propriétaires qui veulent un cache conscient de la boutique, une préproduction et des mises à jour gérées pour eux.</td><td>Prix plus élevé ; parfois des restrictions de plugins ou une tarification à la visite — lisez les limites.</td></tr>
+      <tr><td>Hébergement mutualisé</td><td>Une boutique toute neuve avec peu de produits et un faible trafic, avec un budget serré.</td><td>Voisins bruyants, limites de CPU/processus, souvent pas de cache objet - vite dépassé une fois que les commandes décollent.</td></tr>
+      <tr><td>WordPress/WooCommerce managé</td><td>Les propriétaires qui veulent un cache conscient de la boutique, une préproduction et des mises à jour gérées pour eux.</td><td>Prix plus élevé ; parfois des restrictions de plugins ou une tarification à la visite - lisez les limites.</td></tr>
       <tr><td>VPS (auto-géré ou managé)</td><td>Les boutiques en croissance qui ont besoin de RAM/CPU garantis, d'une configuration sur mesure et de marge pour grandir.</td><td>C'est vous (ou une offre managée) qui assumez l'administration du serveur, le réglage et la sécurité.</td></tr>
     </tbody>
   </table>
 
   <h2>Pour qui c'est fait</h2>
   <ul>
-    <li><strong>En plein lancement, petit catalogue :</strong> une offre mutualisée de qualité ou une offre managée d'entrée de gamme suffit — concentrez votre budget sur une version de PHP supportée, le SSL et les sauvegardes.</li>
+    <li><strong>En plein lancement, petit catalogue :</strong> une offre mutualisée de qualité ou une offre managée d'entrée de gamme suffit - concentrez votre budget sur une version de PHP supportée, le SSL et les sauvegardes.</li>
     <li><strong>Ventes régulières, catalogue en croissance :</strong> passez à un hébergement WooCommerce managé ou un petit VPS pour bénéficier d'un cache objet, d'une préproduction et de ressources garanties.</li>
-    <li><strong>Fort trafic, ventes flash, gros catalogue :</strong> un VPS (ou plus) avec CPU/RAM dédiés, un cache objet Redis et un chemin de scalabilité clair — les pages de paiement dynamiques ont besoin d'une vraie marge.</li>
+    <li><strong>Fort trafic, ventes flash, gros catalogue :</strong> un VPS (ou plus) avec CPU/RAM dédiés, un cache objet Redis et un chemin de scalabilité clair - les pages de paiement dynamiques ont besoin d'une vraie marge.</li>
   </ul>
 
   <h2>Comment décider</h2>
-  <p>Partez de la boutique, pas d'une liste des « meilleurs hébergeurs ». Confirmez une version de PHP supportée avec une limite de mémoire généreuse, un stockage de base de données NVMe/SSD, un cache conscient de la boutique avec un cache objet persistant, un SSL gratuit, des sauvegardes automatisées des fichiers et de la base de données, un environnement de préproduction et un chemin propre pour monter en charge. Faites correspondre ces exigences à votre trafic réel et à la taille de votre catalogue, puis choisissez la plus petite offre qui les couvre avec de la marge — vous pourrez évoluer vers un VPS ou un palier supérieur à mesure que les commandes grimpent.</p>
+  <p>Partez de la boutique, pas d'une liste des « meilleurs hébergeurs ». Confirmez une version de PHP supportée avec une limite de mémoire généreuse, un stockage de base de données NVMe/SSD, un cache conscient de la boutique avec un cache objet persistant, un SSL gratuit, des sauvegardes automatisées des fichiers et de la base de données, un environnement de préproduction et un chemin propre pour monter en charge. Faites correspondre ces exigences à votre trafic réel et à la taille de votre catalogue, puis choisissez la plus petite offre qui les couvre avec de la marge - vous pourrez évoluer vers un VPS ou un palier supérieur à mesure que les commandes grimpent.</p>
 </Article>

@@ -15,7 +15,7 @@ const {
   //   { type: 'itemlist', name: '…', keys: ['contabo','hetzner',…] }      → comparison / best-of list
   // `offers: true` is HONEST ONLY when the price is visible in the page body (see products.js).
   commerce = null,
-  // Optional FAQ: array of { q, a } — renders a visible FAQ section + FAQPage JSON-LD (GEO).
+  // Optional FAQ: array of { q, a } - renders a visible FAQ section + FAQPage JSON-LD (GEO).
   faq = null,
 } = Astro.props;
 
@@ -58,13 +58,13 @@ const schema = graph.length > 1
 
 const FAQ_LABEL = { en: 'Frequently asked questions', fr: 'Questions fréquentes', es: 'Preguntas frecuentes', de: 'Häufige Fragen', it: 'Domande frequenti', pt: 'Perguntas frequentes' };
 
-// Related guides — internal links so every guide is cross-linked (crawl paths, not a dead end).
+// Related guides - internal links so every guide is cross-linked (crawl paths, not a dead end).
 // Same category first, then fill with others; only guides that exist in this locale (no 404s).
 const REL_LABEL = { en: 'Related guides', fr: 'Guides liés', es: 'Guías relacionadas', de: 'Verwandte Guides', it: 'Guide correlate', pt: 'Guias relacionados' };
 const inLang = GUIDES.filter((g) => g.slug !== slug && (g.locales || ['en']).includes(lang));
 const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) => g.cat !== cat)].slice(0, 4);
 ---
-<Base title={`${title} — HTML5 Advent`} description={description} lang={lang} path={path} schema={schema} ogType="article">
+<Base title={`${title} - HTML5 Advent`} description={description} lang={lang} path={path} schema={schema} ogType="article">
   <article class="article">
     <nav class="crumb" aria-label="Breadcrumb">
       <a href={localePath(lang)}>{t(lang, 'home')}</a> ›

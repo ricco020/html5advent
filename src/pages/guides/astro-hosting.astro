@@ -1,29 +1,29 @@
 ---
 import Article from '../../layouts/Article.astro';
-export const prerender = true; // force static — overrides the prerender=false string shown in a code example below
+export const prerender = true; // force static - overrides the prerender=false string shown in a code example below
 ---
 <Article
   lang="en"
   slug="astro-hosting"
   title="How to host an Astro site: static and SSR options"
-  description="A practical guide to deploying an Astro site — the difference between static output and server (SSR) output, how adapters work, the build commands, and how to choose a host for each mode."
+  description="A practical guide to deploying an Astro site - the difference between static output and server (SSR) output, how adapters work, the build commands, and how to choose a host for each mode."
   cat="hosting"
   hero="/img/astro-hosting-hero.jpg"
   heroAlt="HTML source code with anchor and list-item tags shown in colour on a dark screen"
   cluster="deploy"
 >
-  <p><strong>Astro</strong> can ship your site two very different ways, and which one you pick decides where and how you host it. By default Astro builds a folder of plain HTML, CSS and JS — files any static host can serve. But Astro can also run on a server, rendering pages on demand (SSR) for things like authentication, forms or per-request data. This guide explains both output modes, the build commands behind them, how adapters fit in, and how to choose a host for each.</p>
+  <p><strong>Astro</strong> can ship your site two very different ways, and which one you pick decides where and how you host it. By default Astro builds a folder of plain HTML, CSS and JS - files any static host can serve. But Astro can also run on a server, rendering pages on demand (SSR) for things like authentication, forms or per-request data. This guide explains both output modes, the build commands behind them, how adapters fit in, and how to choose a host for each.</p>
 
   <h2>Static vs server: the core decision</h2>
   <p>Every hosting choice for Astro flows from one question: does your site need a running server at request time?</p>
   <ul>
-    <li><strong>Static (the default).</strong> Pages are rendered once, at build time, into HTML files. There's no server process — you upload the built folder to a CDN or static host and it serves files. Fastest, cheapest, simplest. Ideal for blogs, docs, marketing sites and most content sites.</li>
+    <li><strong>Static (the default).</strong> Pages are rendered once, at build time, into HTML files. There's no server process - you upload the built folder to a CDN or static host and it serves files. Fastest, cheapest, simplest. Ideal for blogs, docs, marketing sites and most content sites.</li>
     <li><strong>Server / SSR.</strong> Pages are rendered per request by a Node (or edge) process. Needed when content depends on the request: logged-in users, form handling, on-the-fly personalisation, or data that must be fresh on every load.</li>
   </ul>
   <p>You can also mix the two: keep the site mostly static and opt specific routes into on-demand rendering. The point is to render statically wherever you can, and only pay for a server where you actually need one.</p>
 
   <h2>The build commands</h2>
-  <p>Whatever the mode, the workflow is the same two commands — install, then build:</p>
+  <p>Whatever the mode, the workflow is the same two commands - install, then build:</p>
   <pre><code>{`# install dependencies
 npm install
 
@@ -32,11 +32,11 @@ npm run build
 
 # preview the production build locally before deploying
 npm run preview`}</code></pre>
-  <p>By default <code>npm run build</code> writes a static site to the <code>dist/</code> folder. That folder is your entire deployable site in static mode — there is nothing else to run.</p>
+  <p>By default <code>npm run build</code> writes a static site to the <code>dist/</code> folder. That folder is your entire deployable site in static mode - there is nothing else to run.</p>
 
   <h2>Configuring the output mode</h2>
-  <p>You control the mode in <code>astro.config.mjs</code>. Static is the default, so a minimal config needs nothing special. To render on the server, you add an <strong>adapter</strong> — a small package that teaches Astro how to run on a specific platform (Node, or an edge/serverless runtime):</p>
-  <pre><code>{`// astro.config.mjs — server (SSR) output with the Node adapter
+  <p>You control the mode in <code>astro.config.mjs</code>. Static is the default, so a minimal config needs nothing special. To render on the server, you add an <strong>adapter</strong> - a small package that teaches Astro how to run on a specific platform (Node, or an edge/serverless runtime):</p>
+  <pre><code>{`// astro.config.mjs - server (SSR) output with the Node adapter
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 
@@ -49,13 +49,13 @@ export default defineConfig({
 node ./dist/server/entry.mjs`}</code></pre>
   <p>If you only need a handful of dynamic routes, keep the default static output and opt individual pages out of prerendering instead of switching the whole site to server mode:</p>
   <pre><code>{`---
-// src/pages/dashboard.astro — render this page per request
+// src/pages/dashboard.astro - render this page per request
 export const prerender = false;
 ---`}</code></pre>
 
   <figure>
     <img src="/img/astro-hosting-inbody.jpg" alt="JavaScript source code with syntax highlighting shown on a dark editor screen" width="1280" height="720" loading="lazy" />
-    <figcaption>JavaScript in a code editor — the build step turns your Astro components into the HTML and JS that gets deployed.</figcaption>
+    <figcaption>JavaScript in a code editor - the build step turns your Astro components into the HTML and JS that gets deployed.</figcaption>
   </figure>
 
   <h2>Choosing a host by mode</h2>
@@ -63,12 +63,12 @@ export const prerender = false;
   <p>For static output you just need somewhere to serve the contents of <code>dist/</code> over HTTPS, ideally from a CDN. The build/publish settings are simple:</p>
   <pre><code>{`Build command:    npm run build
 Publish/output:   dist`}</code></pre>
-  <p>Plenty of platforms do this — managed static hosts, object storage behind a CDN, or a general-purpose host that can serve a folder. Because there's no server to keep alive, static hosting is cheap and effortless to scale. Hosting on European infrastructure is a fine choice here when your audience or data-residency needs point that way.</p>
+  <p>Plenty of platforms do this - managed static hosts, object storage behind a CDN, or a general-purpose host that can serve a folder. Because there's no server to keep alive, static hosting is cheap and effortless to scale. Hosting on European infrastructure is a fine choice here when your audience or data-residency needs point that way.</p>
 
   <h3>Server (SSR) hosting</h3>
   <p>SSR needs a runtime that keeps a process alive. Two broad routes:</p>
   <ul>
-    <li><strong>A Node host / VPS.</strong> With the Node adapter you build a standalone server and run it like any Node service. A VPS gives you full control over the process, environment and scaling — handy if you already run other services there.</li>
+    <li><strong>A Node host / VPS.</strong> With the Node adapter you build a standalone server and run it like any Node service. A VPS gives you full control over the process, environment and scaling - handy if you already run other services there.</li>
     <li><strong>Serverless / edge.</strong> Platform-specific adapters package your app to run as functions. Less to manage, but you're tied to that platform's model.</li>
   </ul>
   <p>A simple way to run the Node build on your own server is a process manager so it restarts on crash or reboot:</p>
@@ -88,5 +88,5 @@ pm2 save`}</code></pre>
   </table>
 
   <h2>How to decide</h2>
-  <p>Start static — it's the default for a reason: cheaper, faster and simpler to host. Only reach for the server adapter when a real requirement (logged-in state, form processing, always-fresh data) forces per-request rendering, and even then consider opting just those routes out of prerendering rather than running the whole site on a server. Match the host to the mode you end up with: a CDN-backed static host for built files, or a Node-capable VPS / serverless platform when you genuinely need a server.</p>
+  <p>Start static - it's the default for a reason: cheaper, faster and simpler to host. Only reach for the server adapter when a real requirement (logged-in state, form processing, always-fresh data) forces per-request rendering, and even then consider opting just those routes out of prerendering rather than running the whole site on a server. Match the host to the mode you end up with: a CDN-backed static host for built files, or a Node-capable VPS / serverless platform when you genuinely need a server.</p>
 </Article>

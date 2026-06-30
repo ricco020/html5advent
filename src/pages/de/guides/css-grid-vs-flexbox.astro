@@ -14,13 +14,13 @@ import Article from '../../../layouts/Article.astro';
     { q: `Sollte ich Flexbox oder Grid verwenden?`, a: `Verwende Flexbox, um Elemente in einer einzigen Richtung anzuordnen (eine Zeile oder eine Spalte) und den Inhalt einer Komponente auszurichten; greife zu CSS Grid, wenn du Zeilen und Spalten gleichzeitig steuern musst, etwa für das Grundgerüst einer Seite oder eine Galerie, die beide Achsen ausgerichtet hält.` },
     { q: `Kann man CSS Grid und Flexbox zusammen verwenden?`, a: `Ja, und das ist der Normalfall. Grid übernimmt meist die übergeordnete Seiten- oder Abschnittsstruktur, während Flexbox die Elemente innerhalb jedes Bereichs ausrichtet (Karten, Header, Toolbars). Sie sind Schichten desselben Layoutsystems, keine Konkurrenten.` },
     { q: `Ist CSS Grid besser als Flexbox?`, a: `Keines ist besser; sie lösen unterschiedliche Probleme. Flexbox ist eindimensional und inhaltsgetrieben, Grid ist zweidimensional und layoutgetrieben. Entscheide danach, ob dein Layout wirklich zweidimensional ist.` },
-    { q: `Ist die Browserunterstützung 2026 ein Problem?`, a: `Nein. Sowohl Flexbox als auch CSS Grid werden seit Jahren von allen modernen Browsern unterstützt, daher ist die Kompatibilität kein entscheidender Faktor — wähle nach der Art des Problems.` },
+    { q: `Ist die Browserunterstützung 2026 ein Problem?`, a: `Nein. Sowohl Flexbox als auch CSS Grid werden seit Jahren von allen modernen Browsern unterstützt, daher ist die Kompatibilität kein entscheidender Faktor - wähle nach der Art des Problems.` },
   ]}
 >
-  <p><strong>Grid vs. Flexbox</strong> ist die meistgestellte Frage zum CSS-Layout — und die ehrliche Antwort lautet: Es sind keine Rivalen. Sie lösen unterschiedliche Probleme: <strong>Flexbox ordnet Inhalte in einer Dimension</strong> (eine Zeile <em>oder</em> eine Spalte), während <strong>CSS Grid Inhalte in zwei Dimensionen ordnet</strong> (Zeilen <em>und</em> Spalten zugleich). Wenn das einmal sitzt, ist die Wahl zwischen beiden kein Raten mehr.</p>
+  <p><strong>Grid vs. Flexbox</strong> ist die meistgestellte Frage zum CSS-Layout - und die ehrliche Antwort lautet: Es sind keine Rivalen. Sie lösen unterschiedliche Probleme: <strong>Flexbox ordnet Inhalte in einer Dimension</strong> (eine Zeile <em>oder</em> eine Spalte), während <strong>CSS Grid Inhalte in zwei Dimensionen ordnet</strong> (Zeilen <em>und</em> Spalten zugleich). Wenn das einmal sitzt, ist die Wahl zwischen beiden kein Raten mehr.</p>
 
   <h2>Die Antwort in einem Satz</h2>
-  <p>Wenn du Elemente entlang einer einzigen Linie anordnest — eine Navigationsleiste, eine Reihe von Buttons, umbrechende Tags — greif zu <strong>Flexbox</strong>. Wenn du Elemente in eine echte zweidimensionale Struktur bringst — ein Seitenlayout, eine Fotogalerie, ein Dashboard aus Karten, die in Zeilen und Spalten ausgerichtet sind — greif zu <strong>Grid</strong>. Die meisten nicht-trivialen Seiten nutzen beides, und das ist so gedacht, kein Kompromiss.</p>
+  <p>Wenn du Elemente entlang einer einzigen Linie anordnest - eine Navigationsleiste, eine Reihe von Buttons, umbrechende Tags - greif zu <strong>Flexbox</strong>. Wenn du Elemente in eine echte zweidimensionale Struktur bringst - ein Seitenlayout, eine Fotogalerie, ein Dashboard aus Karten, die in Zeilen und Spalten ausgerichtet sind - greif zu <strong>Grid</strong>. Die meisten nicht-trivialen Seiten nutzen beides, und das ist so gedacht, kein Kompromiss.</p>
 
   <h2>Wie sie sich tatsächlich unterscheiden</h2>
   <table>
@@ -33,17 +33,17 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Am besten für</td><td>Komponenten: Navigationsleisten, Toolbars, Listen, Platz entlang einer Linie verteilen</td><td>Seiten- und Bereichslayouts, Galerien, Kartenraster, Überlappung</td></tr>
       <tr><td>Abstände</td><td><code>gap</code> unterstützt</td><td><code>gap</code> unterstützt (hier entstanden)</td></tr>
       <tr><td>Ausrichtung</td><td>Hervorragend entlang der Haupt-/Querachse</td><td>Hervorragend in beiden Achsen, plus Platzierung über Linie/Bereich</td></tr>
-      <tr><td>Überlappung</td><td>Nicht wirklich</td><td>Ja — Elemente können sich Zellen teilen</td></tr>
+      <tr><td>Überlappung</td><td>Nicht wirklich</td><td>Ja - Elemente können sich Zellen teilen</td></tr>
     </tbody>
   </table>
 
   <figure>
     <img src="/img/css-grid-vs-flexbox-inbody.jpg" alt="Nahaufnahme von CSS-Quellcode auf einem Computermonitor" width="1280" height="853" loading="lazy" />
-    <figcaption>Sowohl Grid als auch Flexbox werden in reinem CSS geschrieben — ohne Framework oder Präprozessor. Die Wahl betrifft die Form des Layouts, nicht das Werkzeug.</figcaption>
+    <figcaption>Sowohl Grid als auch Flexbox werden in reinem CSS geschrieben - ohne Framework oder Präprozessor. Die Wahl betrifft die Form des Layouts, nicht das Werkzeug.</figcaption>
   </figure>
 
   <h2>Wann du Flexbox nutzt</h2>
-  <p>Flexbox spielt seine Stärken aus, wenn du eine Reihe von Elementen hast und den Platz <em>zwischen</em> ihnen entlang einer Achse verteilen willst. Eine Navigationsleiste mit Logo links und Links rechts, ein Karten-Footer, der einen Button nach unten drückt, eine Reihe von Tags, die umbricht, wenn der Platz ausgeht — das sind alles eindimensionale Probleme. Das klassische Muster ist eine einzige Deklaration:</p>
+  <p>Flexbox spielt seine Stärken aus, wenn du eine Reihe von Elementen hast und den Platz <em>zwischen</em> ihnen entlang einer Achse verteilen willst. Eine Navigationsleiste mit Logo links und Links rechts, ein Karten-Footer, der einen Button nach unten drückt, eine Reihe von Tags, die umbricht, wenn der Platz ausgeht - das sind alles eindimensionale Probleme. Das klassische Muster ist eine einzige Deklaration:</p>
   <pre><code>.nav &#123;
   display: flex;
   align-items: center;
@@ -53,20 +53,20 @@ import Article from '../../../layouts/Article.astro';
   <p>Da Flexbox inhaltsgesteuert ist, dimensionieren sich die Elemente von selbst, und du justierst sie mit <code>flex-grow</code>, <code>flex-shrink</code> und <code>flex-basis</code>. Das macht es ideal für Komponenten, deren Inhalte du nicht vollständig kontrollierst.</p>
 
   <h2>Wann du Grid nutzt</h2>
-  <p>Grid spielt seine Stärken aus, wenn du zuerst die Struktur definierst und die Elemente darin platzierst. Eine Seite mit Header, Seitenleiste, Hauptbereich und Footer; eine Galerie, die saubere Zeilen <em>und</em> Spalten halten soll; ein responsiver Satz von Karten, der mit <code>auto-fill</code> umfließt — das sind zweidimensionale Probleme. Du deklarierst die Tracks, dann landen die Elemente darin:</p>
+  <p>Grid spielt seine Stärken aus, wenn du zuerst die Struktur definierst und die Elemente darin platzierst. Eine Seite mit Header, Seitenleiste, Hauptbereich und Footer; eine Galerie, die saubere Zeilen <em>und</em> Spalten halten soll; ein responsiver Satz von Karten, der mit <code>auto-fill</code> umfließt - das sind zweidimensionale Probleme. Du deklarierst die Tracks, dann landen die Elemente darin:</p>
   <pre><code>.gallery &#123;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
 &#125;</code></pre>
-  <p>Diese eine Regel erzeugt ein responsives Kartenraster, das von selbst Spalten hinzufügt und entfernt, ganz ohne Media Queries — etwas, das Flexbox nicht sauber kann, weil es immer nur eine Achse kennt.</p>
+  <p>Diese eine Regel erzeugt ein responsives Kartenraster, das von selbst Spalten hinzufügt und entfernt, ganz ohne Media Queries - etwas, das Flexbox nicht sauber kann, weil es immer nur eine Achse kennt.</p>
 
   <h2>Die echte Antwort: nutze beides zusammen</h2>
-  <p>Auf einer echten Seite nutzt du fast immer beides, ineinander verschachtelt. Grid kümmert sich um das große Ganze — das Grundgerüst der Seite oder eines Bereichs — und Flexbox um das Kleine darin: das Ausrichten der Elemente innerhalb einer Karte, eines Headers oder einer Toolbar. Zu Grid zu greifen heißt nicht, Flexbox aufzugeben; sie sind Schichten desselben Systems.</p>
-  <p>Ein einfaches Denkmodell: <strong>Grid ist fürs Layout, Flexbox für Komponenten.</strong> Wenn du Bereiche einer Seite positionierst, ist das Grid. Wenn du die Inhalte eines Bereichs aufreihst, ist das Flexbox. Bei Unsicherheit frag dich, ob das Problem wirklich zweidimensional ist — wenn Spalten und Zeilen miteinander fluchten müssen, ist es Grid; wenn es nur eine Linie aus Dingen ist, ist es Flexbox.</p>
+  <p>Auf einer echten Seite nutzt du fast immer beides, ineinander verschachtelt. Grid kümmert sich um das große Ganze - das Grundgerüst der Seite oder eines Bereichs - und Flexbox um das Kleine darin: das Ausrichten der Elemente innerhalb einer Karte, eines Headers oder einer Toolbar. Zu Grid zu greifen heißt nicht, Flexbox aufzugeben; sie sind Schichten desselben Systems.</p>
+  <p>Ein einfaches Denkmodell: <strong>Grid ist fürs Layout, Flexbox für Komponenten.</strong> Wenn du Bereiche einer Seite positionierst, ist das Grid. Wenn du die Inhalte eines Bereichs aufreihst, ist das Flexbox. Bei Unsicherheit frag dich, ob das Problem wirklich zweidimensional ist - wenn Spalten und Zeilen miteinander fluchten müssen, ist es Grid; wenn es nur eine Linie aus Dingen ist, ist es Flexbox.</p>
 
   <h2>Browser-Support</h2>
-  <p>Beide werden in jedem modernen Browser vollständig unterstützt, und das seit Jahren — Support ist 2026 also kein Entscheidungskriterium. Wähle nach der Form des Problems, nicht nach der Kompatibilität. Für tiefere Komponenten-Styles kombinierst du beides mit <a href="/de/guides/css-nesting">nativem CSS-Nesting</a> und <a href="/de/guides/css-container-queries">Container Queries</a>, mit denen eine Komponente auf den Platz reagiert, den sie tatsächlich bekommt.</p>
+  <p>Beide werden in jedem modernen Browser vollständig unterstützt, und das seit Jahren - Support ist 2026 also kein Entscheidungskriterium. Wähle nach der Form des Problems, nicht nach der Kompatibilität. Für tiefere Komponenten-Styles kombinierst du beides mit <a href="/de/guides/css-nesting">nativem CSS-Nesting</a> und <a href="/de/guides/css-container-queries">Container Queries</a>, mit denen eine Komponente auf den Platz reagiert, den sie tatsächlich bekommt.</p>
 
   <h2>Das Fazit</h2>
   <p>Grid vs. Flexbox ist die falsche Fragestellung. <strong>Flexbox ist eindimensional und inhaltsgesteuert; Grid ist zweidimensional und layoutgesteuert.</strong> Wähle Flexbox für Linien aus Elementen und für Komponenten, wähle Grid für echte 2D-Layouts, und rechne damit, sie auf jeder Seite mit echter Struktur zu verschachteln. Zu wissen, welche Frage jedes von beiden beantwortet, ist das ganze Können.</p>

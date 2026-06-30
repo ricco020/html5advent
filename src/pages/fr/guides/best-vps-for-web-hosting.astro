@@ -13,10 +13,10 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>Un <strong>VPS</strong> (serveur privé virtuel) vous donne une part d'un serveur physique avec des ressources garanties, un accès root et votre propre système d'exploitation — sans le coût d'une machine dédiée. Pour un projet web qui a dépassé l'hébergement mutualisé mais n'a pas besoin d'un serveur entier, c'est en général le bon juste-milieu. Ce guide passe en revue les critères qui comptent vraiment, pour que vous puissiez juger n'importe quel hébergeur vous-même plutôt que de vous fier à un classement.</p>
+  <p>Un <strong>VPS</strong> (serveur privé virtuel) vous donne une part d'un serveur physique avec des ressources garanties, un accès root et votre propre système d'exploitation - sans le coût d'une machine dédiée. Pour un projet web qui a dépassé l'hébergement mutualisé mais n'a pas besoin d'un serveur entier, c'est en général le bon juste-milieu. Ce guide passe en revue les critères qui comptent vraiment, pour que vous puissiez juger n'importe quel hébergeur vous-même plutôt que de vous fier à un classement.</p>
 
   <h2>VPS ou mutualisé : quand passer au niveau supérieur</h2>
-  <p>L'hébergement mutualisé place de nombreux sites sur un même serveur et répartit les ressources de façon informelle — bon marché et sans maintenance, mais votre performance dépend des voisins, et vous ne pouvez pas installer de logiciel sur mesure. Un VPS vous donne de la <strong>RAM et du CPU dédiés et garantis</strong>, un accès root complet et la liberté de configurer la pile comme vous l'entendez.</p>
+  <p>L'hébergement mutualisé place de nombreux sites sur un même serveur et répartit les ressources de façon informelle - bon marché et sans maintenance, mais votre performance dépend des voisins, et vous ne pouvez pas installer de logiciel sur mesure. Un VPS vous donne de la <strong>RAM et du CPU dédiés et garantis</strong>, un accès root complet et la liberté de configurer la pile comme vous l'entendez.</p>
   <p>Signaux concrets qu'il est temps de passer à un VPS :</p>
   <ul>
     <li>Votre hébergeur mutualisé vous bride ou vous atteignez les limites CPU/processus lors des pics de trafic.</li>
@@ -29,13 +29,13 @@ import Article from '../../../layouts/Article.astro';
   <p>Ignorez les superlatifs marketing et comparez les hébergeurs sur ces dimensions concrètes.</p>
 
   <h3>RAM</h3>
-  <p>La ressource que vous risquez le plus d'épuiser. Un site statique ou une petite application se contente d'une mémoire modeste ; une base de données plus un serveur applicatif plus un cache en réclament davantage. La mémoire est ce qui sature en premier sous charge, alors ne la dimensionnez pas au strict minimum — gardez de la marge pour les pics de trafic et pour le système lui-même.</p>
+  <p>La ressource que vous risquez le plus d'épuiser. Un site statique ou une petite application se contente d'une mémoire modeste ; une base de données plus un serveur applicatif plus un cache en réclament davantage. La mémoire est ce qui sature en premier sous charge, alors ne la dimensionnez pas au strict minimum - gardez de la marge pour les pics de trafic et pour le système lui-même.</p>
 
   <h3>CPU (vCPU)</h3>
-  <p>Les offres VPS se vendent en CPU <em>virtuels</em>. Plus de vCPU aident pour les requêtes simultanées et les traitements gourmands en CPU (traitement d'images, rendu côté serveur, builds). Distinguez les vCPU <strong>partagés/burstables</strong> — parfaits pour des charges légères et irrégulières — des vCPU <strong>dédiés</strong>, plus chers mais offrant une performance constante pour des charges régulières.</p>
+  <p>Les offres VPS se vendent en CPU <em>virtuels</em>. Plus de vCPU aident pour les requêtes simultanées et les traitements gourmands en CPU (traitement d'images, rendu côté serveur, builds). Distinguez les vCPU <strong>partagés/burstables</strong> - parfaits pour des charges légères et irrégulières - des vCPU <strong>dédiés</strong>, plus chers mais offrant une performance constante pour des charges régulières.</p>
 
   <h3>Stockage</h3>
-  <p>Préférez le <strong>NVMe ou le SSD</strong> aux anciens disques mécaniques — la vitesse disque se ressent directement sur le temps des requêtes en base et sur les builds. Vérifiez aussi la <em>quantité</em> : journaux, fichiers envoyés et croissance de la base s'accumulent. Notez si le stockage est local (rapide) ou attaché au réseau (plus souple, parfois plus lent).</p>
+  <p>Préférez le <strong>NVMe ou le SSD</strong> aux anciens disques mécaniques - la vitesse disque se ressent directement sur le temps des requêtes en base et sur les builds. Vérifiez aussi la <em>quantité</em> : journaux, fichiers envoyés et croissance de la base s'accumulent. Notez si le stockage est local (rapide) ou attaché au réseau (plus souple, parfois plus lent).</p>
 
   <figure>
     <img src="/img/best-vps-for-web-hosting-inbody.jpg" alt="Un connecteur de câble de données SATA rouge posé sur un bureau devant des baies de serveurs" width="1280" height="853" loading="lazy" />
@@ -43,24 +43,24 @@ import Article from '../../../layouts/Article.astro';
   </figure>
 
   <h3>Bande passante et réseau</h3>
-  <p>Deux choses se cachent sous « bande passante » : le <strong>volume de transfert mensuel</strong> (combien de Go/To vous pouvez servir) et le <strong>débit du port</strong> (sa vitesse, p. ex. 1 Gb/s). Les sites riches en médias consomment vite les quotas de transfert ; lisez la politique sur les dépassements. Certains hébergeurs annoncent un transfert « illimité » mais appliquent un plafond d'usage raisonnable — vérifiez les conditions.</p>
+  <p>Deux choses se cachent sous « bande passante » : le <strong>volume de transfert mensuel</strong> (combien de Go/To vous pouvez servir) et le <strong>débit du port</strong> (sa vitesse, p. ex. 1 Gb/s). Les sites riches en médias consomment vite les quotas de transfert ; lisez la politique sur les dépassements. Certains hébergeurs annoncent un transfert « illimité » mais appliquent un plafond d'usage raisonnable - vérifiez les conditions.</p>
 
   <h3>Localisation du serveur</h3>
-  <p>Choisissez une région de datacenter proche de votre audience — la distance physique ajoute de la latence à chaque requête. Si vos utilisateurs sont en Europe, une région européenne paraîtra plus rapide qu'une région américaine. La localisation peut aussi compter pour les règles de résidence des données. Un CDN peut masquer la distance pour les ressources statiques, mais l'emplacement d'origine affecte tout de même les requêtes dynamiques.</p>
+  <p>Choisissez une région de datacenter proche de votre audience - la distance physique ajoute de la latence à chaque requête. Si vos utilisateurs sont en Europe, une région européenne paraîtra plus rapide qu'une région américaine. La localisation peut aussi compter pour les règles de résidence des données. Un CDN peut masquer la distance pour les ressources statiques, mais l'emplacement d'origine affecte tout de même les requêtes dynamiques.</p>
 
   <h3>Infogéré ou non infogéré</h3>
-  <p>Un VPS <strong>non infogéré</strong> vous livre un OS nu — vous patchez, sécurisez et maintenez. Un VPS <strong>infogéré</strong> inclut mises à jour, supervision et support, pour plus cher. Si vous êtes à l'aise en ligne de commande, le non infogéré est moins cher et plus souple ; sinon, l'infogéré vous rachète du temps.</p>
+  <p>Un VPS <strong>non infogéré</strong> vous livre un OS nu - vous patchez, sécurisez et maintenez. Un VPS <strong>infogéré</strong> inclut mises à jour, supervision et support, pour plus cher. Si vous êtes à l'aise en ligne de commande, le non infogéré est moins cher et plus souple ; sinon, l'infogéré vous rachète du temps.</p>
 
   <h3>Sauvegardes, montée en charge et support</h3>
   <ul>
-    <li><strong>Sauvegardes</strong> — les snapshots sont-ils inclus ou en option ? Les sauvegardes automatiques valent leur prix.</li>
-    <li><strong>Montée en charge</strong> — peut-on redimensionner l'offre (plus de RAM/CPU) sans tout reconstruire ? Le scaling vertical à la demande est précieux.</li>
-    <li><strong>Support</strong> — délais de réponse et canaux ; crucial sur les offres non infogérées quand ça casse à 2h du matin.</li>
-    <li><strong>Disponibilité</strong> — cherchez un SLA publié plutôt que des promesses vagues.</li>
+    <li><strong>Sauvegardes</strong> - les snapshots sont-ils inclus ou en option ? Les sauvegardes automatiques valent leur prix.</li>
+    <li><strong>Montée en charge</strong> - peut-on redimensionner l'offre (plus de RAM/CPU) sans tout reconstruire ? Le scaling vertical à la demande est précieux.</li>
+    <li><strong>Support</strong> - délais de réponse et canaux ; crucial sur les offres non infogérées quand ça casse à 2h du matin.</li>
+    <li><strong>Disponibilité</strong> - cherchez un SLA publié plutôt que des promesses vagues.</li>
   </ul>
 
   <h3>Prix</h3>
-  <p>Comparez le prix de <em>renouvellement</em>, pas seulement la première période promotionnelle, et vérifiez ce qui est inclus (sauvegardes, bande passante, adresse IPv4, panneau de contrôle). Le prix d'appel le plus bas exclut souvent des choses que vous finirez par acheter. Faites correspondre la fiche technique à votre charge réelle et prenez la plus petite offre qui la couvre avec de la marge — vous pourrez en général monter en gamme plus tard.</p>
+  <p>Comparez le prix de <em>renouvellement</em>, pas seulement la première période promotionnelle, et vérifiez ce qui est inclus (sauvegardes, bande passante, adresse IPv4, panneau de contrôle). Le prix d'appel le plus bas exclut souvent des choses que vous finirez par acheter. Faites correspondre la fiche technique à votre charge réelle et prenez la plus petite offre qui la couvre avec de la marge - vous pourrez en général monter en gamme plus tard.</p>
 
   <h2>Ce dont vous avez réellement besoin, par type de projet</h2>
   <table>
@@ -74,5 +74,5 @@ import Article from '../../../layouts/Article.astro';
   </table>
 
   <h2>Comment décider</h2>
-  <p>Partez de votre charge, pas d'une liste des « meilleurs » : estimez d'abord la mémoire, puis le CPU, puis le stockage et le transfert ; exigez une région proche de vos utilisateurs ; insistez sur du NVMe/SSD et des sauvegardes incluses ou abordables ; et comparez les prix de renouvellement à fiches techniques équivalentes. Un VPS qui couvre confortablement votre charge actuelle avec un peu de marge — et vous laisse monter en gamme plus tard — bat à chaque fois un VPS surdimensionné ou sous-dimensionné.</p>
+  <p>Partez de votre charge, pas d'une liste des « meilleurs » : estimez d'abord la mémoire, puis le CPU, puis le stockage et le transfert ; exigez une région proche de vos utilisateurs ; insistez sur du NVMe/SSD et des sauvegardes incluses ou abordables ; et comparez les prix de renouvellement à fiches techniques équivalentes. Un VPS qui couvre confortablement votre charge actuelle avec un peu de marge - et vous laisse monter en gamme plus tard - bat à chaque fois un VPS surdimensionné ou sous-dimensionné.</p>
 </Article>

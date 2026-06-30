@@ -5,7 +5,7 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="service-worker"
   title="Service Workers: caching, offline and updates explained"
-  description="A practical guide to service workers — registering one, the install/activate lifecycle, the Cache API, serving a page offline, and shipping updates safely."
+  description="A practical guide to service workers - registering one, the install/activate lifecycle, the Cache API, serving a page offline, and shipping updates safely."
   cat="apis"
   day={4}
   hero="/img/service-worker-hero.jpg"
@@ -14,7 +14,7 @@ import Article from '../../layouts/Article.astro';
 >
   <p>A <strong>service worker</strong> is a script the browser runs in the background, separate from your page. It sits between your app and the network like a programmable proxy: it can intercept requests, answer them from a cache, and keep your site working even when the user is offline. It is the foundation of Progressive Web Apps.</p>
 
-  <p>Two ground rules before anything else. A service worker only runs over <strong>HTTPS</strong> (or <code>localhost</code> during development), and it has <strong>no access to the DOM</strong> — it communicates with pages through events and messages, not by touching <code>document</code>.</p>
+  <p>Two ground rules before anything else. A service worker only runs over <strong>HTTPS</strong> (or <code>localhost</code> during development), and it has <strong>no access to the DOM</strong> - it communicates with pages through events and messages, not by touching <code>document</code>.</p>
 
   <h2>Registering a service worker</h2>
   <p>You register the worker from your normal page script. Feature-detect first, then point the browser at the script file:</p>
@@ -46,11 +46,11 @@ self.addEventListener('activate', (event) => {
     )
   );
 });`}</code></pre>
-  <p>Calling <code>event.waitUntil()</code> tells the browser not to consider the phase finished until your promise settles — otherwise it might tear the worker down mid-task.</p>
+  <p>Calling <code>event.waitUntil()</code> tells the browser not to consider the phase finished until your promise settles - otherwise it might tear the worker down mid-task.</p>
 
   <figure>
     <img src="/img/service-worker-inbody.jpg" alt="A rack of server hard-drive bays with status lights" width="1280" height="720" loading="lazy" />
-    <figcaption>The Cache API stores responses on the user's own device, not on a server like the one pictured — that local copy is what lets a page load with no network.</figcaption>
+    <figcaption>The Cache API stores responses on the user's own device, not on a server like the one pictured - that local copy is what lets a page load with no network.</figcaption>
   </figure>
 
   <h2>Intercepting requests with fetch</h2>
@@ -80,7 +80,7 @@ self.addEventListener('activate', (event) => {
   </table>
 
   <h2>Shipping updates without breaking users</h2>
-  <p>When you change <code>sw.js</code>, the browser detects the new bytes and installs the new worker, but it stays <em>waiting</em> until every tab using the old one is closed. That prevents two versions running at once. To take over sooner, call <code>self.skipWaiting()</code> in <code>install</code> and <code>clients.claim()</code> in <code>activate</code> — but only do that when you are confident the new version is compatible with already-open pages.</p>
+  <p>When you change <code>sw.js</code>, the browser detects the new bytes and installs the new worker, but it stays <em>waiting</em> until every tab using the old one is closed. That prevents two versions running at once. To take over sooner, call <code>self.skipWaiting()</code> in <code>install</code> and <code>clients.claim()</code> in <code>activate</code> - but only do that when you are confident the new version is compatible with already-open pages.</p>
   <p>Always bump the cache name (<code>site-v1</code> → <code>site-v2</code>) when assets change. The <code>activate</code> handler above then deletes the stale cache, so users never get a mix of old and new files.</p>
 
   <p>That is the whole core loop: register, pre-cache on install, clean up on activate, and answer requests on fetch. Start with a cache-first strategy for static files and a network-first one for your HTML, and you have a site that loads instantly on repeat visits and survives a dropped connection.</p>

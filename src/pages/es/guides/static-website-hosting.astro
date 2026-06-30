@@ -12,14 +12,14 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="La mano de un técnico manipulando un servidor iluminado en azul dentro de un rack de centro de datos"
   cluster="deploy"
 >
-  <p>Un <strong>sitio estático</strong> es un conjunto de archivos pregenerados — HTML, CSS, JavaScript y recursos — que un servidor puede entregar tal cual al navegador, sin ejecutar código en cada petición. Herramientas como <strong>Astro</strong>, <strong>Vite</strong>, Eleventy o una carpeta HTML escrita a mano producen este tipo de salida. Alojarlo es más sencillo, más barato y más rápido que alojar una app dinámica, porque no hay nada que ejecutar en el servidor.</p>
+  <p>Un <strong>sitio estático</strong> es un conjunto de archivos pregenerados - HTML, CSS, JavaScript y recursos - que un servidor puede entregar tal cual al navegador, sin ejecutar código en cada petición. Herramientas como <strong>Astro</strong>, <strong>Vite</strong>, Eleventy o una carpeta HTML escrita a mano producen este tipo de salida. Alojarlo es más sencillo, más barato y más rápido que alojar una app dinámica, porque no hay nada que ejecutar en el servidor.</p>
 
   <h2>Qué significa realmente «alojamiento estático»</h2>
-  <p>Con el alojamiento estático ejecutas un paso de build en local o en CI, y este genera una carpeta de archivos planos (a menudo llamada <code>dist</code> o <code>_site</code>). La única tarea del proveedor es almacenar esos archivos y servirlos por HTTP. No hay PHP, ni proceso de Node, ni base de datos — solo archivos. Eso tiene tres consecuencias directas:</p>
+  <p>Con el alojamiento estático ejecutas un paso de build en local o en CI, y este genera una carpeta de archivos planos (a menudo llamada <code>dist</code> o <code>_site</code>). La única tarea del proveedor es almacenar esos archivos y servirlos por HTTP. No hay PHP, ni proceso de Node, ni base de datos - solo archivos. Eso tiene tres consecuencias directas:</p>
   <ul>
-    <li><strong>Velocidad</strong> — los archivos se cachean de forma agresiva y se sirven desde el edge, cerca del visitante.</li>
-    <li><strong>Coste</strong> — no hay un servidor encendido permanentemente que pagar; muchos proveedores ofrecen un plan gratuito generoso.</li>
-    <li><strong>Fiabilidad</strong> — menos piezas móviles significan menos cosas que puedan fallar bajo carga.</li>
+    <li><strong>Velocidad</strong> - los archivos se cachean de forma agresiva y se sirven desde el edge, cerca del visitante.</li>
+    <li><strong>Coste</strong> - no hay un servidor encendido permanentemente que pagar; muchos proveedores ofrecen un plan gratuito generoso.</li>
+    <li><strong>Fiabilidad</strong> - menos piezas móviles significan menos cosas que puedan fallar bajo carga.</li>
   </ul>
 
   <h2>Generar tu carpeta de salida</h2>
@@ -31,12 +31,12 @@ npm run build        # genera ./dist
 npm run build        # genera ./dist
 
 # HTML plano
-# sin paso de build — tu carpeta de archivos .html ya es la salida`}</code></pre>
+# sin paso de build - tu carpeta de archivos .html ya es la salida`}</code></pre>
   <p>Para un sitio HTML plano, el «build» es simplemente la carpeta que ya tienes. Para Astro o Vite, el directorio <code>dist</code> es lo que se sirve.</p>
 
   <figure>
     <img src="/img/static-website-hosting-inbody.jpg" alt="Una fila de servidores negros montados en rack dentro de un centro de datos" width="1280" height="853" loading="lazy" />
-    <figcaption>Detrás de cada sitio estático hay infraestructura física — racks de servidores y nodos edge de CDN que almacenan y distribuyen tus archivos generados.</figcaption>
+    <figcaption>Detrás de cada sitio estático hay infraestructura física - racks de servidores y nodos edge de CDN que almacenan y distribuyen tus archivos generados.</figcaption>
   </figure>
 
   <h2>Dónde alojar: CDN frente a alojamiento estático clásico</h2>
@@ -55,7 +55,7 @@ npm run build        # genera ./dist
   <p>Muchas plataformas también admiten la <strong>delegación de servidores de nombres</strong>, donde entregas la gestión DNS por completo al proveedor. Una vez propagados los registros, el proveedor sirve tu sitio en tu propio dominio.</p>
 
   <h2>HTTPS gratis</h2>
-  <p>HTTPS ya no es opcional — los navegadores marcan el HTTP simple como «no seguro», y muchas API de la plataforma web solo funcionan en un contexto seguro. La buena noticia: prácticamente todos los proveedores estáticos modernos emiten y renuevan los certificados TLS por ti automáticamente, normalmente vía Let's Encrypt. Una vez conectado tu dominio, el certificado se aprovisiona sin ningún paso manual, y las renovaciones ocurren solas.</p>
+  <p>HTTPS ya no es opcional - los navegadores marcan el HTTP simple como «no seguro», y muchas API de la plataforma web solo funcionan en un contexto seguro. La buena noticia: prácticamente todos los proveedores estáticos modernos emiten y renuevan los certificados TLS por ti automáticamente, normalmente vía Let's Encrypt. Una vez conectado tu dominio, el certificado se aprovisiona sin ningún paso manual, y las renovaciones ocurren solas.</p>
 
   <h2>Referencia rápida</h2>
   <table>
@@ -69,5 +69,5 @@ npm run build        # genera ./dist
     </tbody>
   </table>
 
-  <p>Todo el sentido del alojamiento estático es quitarse de en medio: construyes una vez, haces push y los archivos se sirven rápido desde el edge. Reserva el alojamiento dinámico para las partes de tu proyecto que de verdad necesitan lógica de servidor — y mantén el frontend estático sobre una infraestructura diseñada para entregar archivos con rapidez.</p>
+  <p>Todo el sentido del alojamiento estático es quitarse de en medio: construyes una vez, haces push y los archivos se sirven rápido desde el edge. Reserva el alojamiento dinámico para las partes de tu proyecto que de verdad necesitan lógica de servidor - y mantén el frontend estático sobre una infraestructura diseñada para entregar archivos con rapidez.</p>
 </Article>

@@ -5,7 +5,7 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="php-hosting"
   title="PHP hosting explained: shared vs VPS, versions and performance"
-  description="What to look for in PHP hosting — shared vs VPS, PHP versions and extensions, deployment, .htaccess, and performance with OPcache — without the marketing noise."
+  description="What to look for in PHP hosting - shared vs VPS, PHP versions and extensions, deployment, .htaccess, and performance with OPcache - without the marketing noise."
   cat="hosting"
   day={15}
   hero="/img/php-hosting-hero.jpg"
@@ -13,18 +13,18 @@ import Article from '../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>PHP still powers a large share of the web, and hosting it is well-trodden ground — which is exactly why the offers all look the same and the real differences hide in the details. This guide covers the criteria that actually matter: the shared-vs-VPS trade-off, PHP versions and extensions, how you deploy, what <code>.htaccess</code> controls, and the performance knobs worth knowing.</p>
+  <p>PHP still powers a large share of the web, and hosting it is well-trodden ground - which is exactly why the offers all look the same and the real differences hide in the details. This guide covers the criteria that actually matter: the shared-vs-VPS trade-off, PHP versions and extensions, how you deploy, what <code>.htaccess</code> controls, and the performance knobs worth knowing.</p>
 
   <h2>Shared hosting vs VPS</h2>
   <p>The first decision is how isolated your environment is.</p>
   <ul>
-    <li><strong>Shared hosting</strong> — your site lives alongside many others on one machine, managed for you (PHP, web server, often a control panel). Cheapest and simplest; you trade away control over the PHP version, extensions and server config, and you share resources with neighbours.</li>
-    <li><strong>VPS</strong> — a dedicated slice of a server with root access. You choose the PHP version, install any extension, tune the web server, and aren't affected by other tenants — but you're responsible for updates and security.</li>
+    <li><strong>Shared hosting</strong> - your site lives alongside many others on one machine, managed for you (PHP, web server, often a control panel). Cheapest and simplest; you trade away control over the PHP version, extensions and server config, and you share resources with neighbours.</li>
+    <li><strong>VPS</strong> - a dedicated slice of a server with root access. You choose the PHP version, install any extension, tune the web server, and aren't affected by other tenants - but you're responsible for updates and security.</li>
   </ul>
   <p>For a small site or a standard CMS, shared hosting is usually enough. Reach for a VPS when you need a specific PHP build, custom extensions, more predictable performance, or full control over the stack.</p>
 
   <h2>PHP versions matter</h2>
-  <p>The PHP version isn't a detail — newer releases are meaningfully faster and, crucially, still receive security fixes. Running an end-of-life version means no more patches. Always check which versions a host offers and whether you can switch easily. You can read the running version from code or the CLI:</p>
+  <p>The PHP version isn't a detail - newer releases are meaningfully faster and, crucially, still receive security fixes. Running an end-of-life version means no more patches. Always check which versions a host offers and whether you can switch easily. You can read the running version from code or the CLI:</p>
   <pre><code>{`<?php
 echo phpversion();        // e.g. "8.3.x"
 // or a full report:
@@ -33,12 +33,12 @@ phpinfo();`}</code></pre>
   <p>A good host lets you select the PHP version per site (often in the control panel) and keeps a range of supported versions available, so you can upgrade on your own schedule.</p>
 
   <h2>Extensions: check before you commit</h2>
-  <p>PHP's functionality is split across extensions, and your app likely depends on several — a database driver, image handling, and so on. Common ones to verify a host provides:</p>
+  <p>PHP's functionality is split across extensions, and your app likely depends on several - a database driver, image handling, and so on. Common ones to verify a host provides:</p>
   <ul>
-    <li><code>pdo_mysql</code> / <code>mysqli</code> — MySQL/MariaDB connectivity.</li>
-    <li><code>mbstring</code> — multibyte string handling, required by many frameworks.</li>
-    <li><code>gd</code> or <code>imagick</code> — image processing.</li>
-    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> — HTTP requests, encryption, archives, localisation.</li>
+    <li><code>pdo_mysql</code> / <code>mysqli</code> - MySQL/MariaDB connectivity.</li>
+    <li><code>mbstring</code> - multibyte string handling, required by many frameworks.</li>
+    <li><code>gd</code> or <code>imagick</code> - image processing.</li>
+    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> - HTTP requests, encryption, archives, localisation.</li>
   </ul>
   <p>List what's actually loaded on the server with:</p>
   <pre><code>{`php -m`}</code></pre>
@@ -49,13 +49,13 @@ phpinfo();`}</code></pre>
   </figure>
 
   <h2>Deployment and .htaccess</h2>
-  <p>On shared hosting you typically deploy by uploading files (SFTP) or pulling from Git into the web root; some hosts add a deploy step from the panel. On Apache, the <code>.htaccess</code> file in your web root configures per-directory behaviour without touching the main server config — useful for clean URLs, redirects and caching headers. A common pattern routes all requests to a front controller:</p>
-  <pre><code>{`# .htaccess — route everything to index.php (front controller)
+  <p>On shared hosting you typically deploy by uploading files (SFTP) or pulling from Git into the web root; some hosts add a deploy step from the panel. On Apache, the <code>.htaccess</code> file in your web root configures per-directory behaviour without touching the main server config - useful for clean URLs, redirects and caching headers. A common pattern routes all requests to a front controller:</p>
+  <pre><code>{`# .htaccess - route everything to index.php (front controller)
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]`}</code></pre>
-  <p>Note that <code>.htaccess</code> is an Apache feature. On Nginx the equivalent rules live in the server config, which on shared hosting you may not control — another reason to know which web server your host runs.</p>
+  <p>Note that <code>.htaccess</code> is an Apache feature. On Nginx the equivalent rules live in the server config, which on shared hosting you may not control - another reason to know which web server your host runs.</p>
 
   <h2>Performance: OPcache</h2>
   <p>The single biggest PHP performance win is <strong>OPcache</strong>, which caches compiled bytecode so PHP doesn't re-parse and re-compile your scripts on every request. Most modern hosts enable it by default; it's worth confirming. Typical settings in <code>php.ini</code>:</p>
@@ -63,7 +63,7 @@ RewriteRule ^ index.php [L]`}</code></pre>
 opcache.memory_consumption=128
 opcache.max_accelerated_files=10000
 opcache.validate_timestamps=1`}</code></pre>
-  <p>In production you can set <code>opcache.validate_timestamps=0</code> so PHP never checks files for changes, then flush the cache on deploy — squeezing out a bit more speed at the cost of needing an explicit cache reset.</p>
+  <p>In production you can set <code>opcache.validate_timestamps=0</code> so PHP never checks files for changes, then flush the cache on deploy - squeezing out a bit more speed at the cost of needing an explicit cache reset.</p>
 
   <h2>Quick checklist</h2>
   <table>
@@ -77,5 +77,5 @@ opcache.validate_timestamps=1`}</code></pre>
     </tbody>
   </table>
 
-  <p>PHP hosting is mature, so don't overthink the brand names — match the host to your app's real requirements: the right PHP version, the extensions you depend on, a web server you understand, and OPcache turned on. Get those right and the rest is mostly preference.</p>
+  <p>PHP hosting is mature, so don't overthink the brand names - match the host to your app's real requirements: the right PHP version, the extensions you depend on, a web server you understand, and OPcache turned on. Get those right and the rest is mostly preference.</p>
 </Article>

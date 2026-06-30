@@ -5,27 +5,27 @@ import Article from '../../../layouts/Article.astro';
   lang="fr"
   slug="vps-hosting"
   title="L'hébergement VPS expliqué : ce que c'est et comment le choisir"
-  description="Ce qu'est réellement un VPS, en quoi il diffère de l'hébergement mutualisé et dédié, les critères qui comptent au moment de choisir, et à qui il convient — sans benchmarks inventés, juste les faits."
+  description="Ce qu'est réellement un VPS, en quoi il diffère de l'hébergement mutualisé et dédié, les critères qui comptent au moment de choisir, et à qui il convient - sans benchmarks inventés, juste les faits."
   cat="hosting"
   hero="/img/vps-hosting-hero.jpg"
   heroAlt="Gros plan sur des serveurs en rack empilés montrant des LED d'état, des ports USB et des baies de disques dans une armoire"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>Un <strong>VPS</strong> — serveur privé virtuel — est un serveur physique partitionné en plusieurs machines virtuelles isolées, chacune dotée de son propre système d'exploitation, de ressources garanties et d'un accès root. Vous obtenez l'essentiel du contrôle d'une machine dédiée pour une fraction du coût, tandis qu'un hyperviseur maintient votre tranche séparée de celle des autres. Ce guide explique ce qu'est vraiment un VPS, comment il se compare aux alternatives, et les critères concrets sur lesquels juger n'importe quel hébergeur — pour ne pas avoir à vous fier à un classement.</p>
+  <p>Un <strong>VPS</strong> - serveur privé virtuel - est un serveur physique partitionné en plusieurs machines virtuelles isolées, chacune dotée de son propre système d'exploitation, de ressources garanties et d'un accès root. Vous obtenez l'essentiel du contrôle d'une machine dédiée pour une fraction du coût, tandis qu'un hyperviseur maintient votre tranche séparée de celle des autres. Ce guide explique ce qu'est vraiment un VPS, comment il se compare aux alternatives, et les critères concrets sur lesquels juger n'importe quel hébergeur - pour ne pas avoir à vous fier à un classement.</p>
 
   <h2>Ce qu'est réellement un VPS</h2>
-  <p>Le logiciel de virtualisation (l'<em>hyperviseur</em>) découpe un serveur physique puissant en plusieurs serveurs virtuels. Chaque VPS se comporte comme sa propre machine : il démarre son propre OS, possède sa propre adresse IP et se voit attribuer une quantité fixe de RAM, de CPU et de stockage que les voisins ne peuvent pas vous prendre. Cette isolation est la différence clé avec l'hébergement mutualisé — vos performances ne dépendent plus de ce que fait le site d'à côté.</p>
-  <p>Comme vous bénéficiez généralement d'un <strong>accès root (administrateur)</strong>, vous pouvez installer n'importe quelle pile logicielle, configurer vous-même le serveur web, faire tourner des workers en arrière-plan, des conteneurs ou le moteur de base de données de votre choix — des choses qu'un hébergement mutualisé géré ne vous laissera tout simplement pas faire.</p>
+  <p>Le logiciel de virtualisation (l'<em>hyperviseur</em>) découpe un serveur physique puissant en plusieurs serveurs virtuels. Chaque VPS se comporte comme sa propre machine : il démarre son propre OS, possède sa propre adresse IP et se voit attribuer une quantité fixe de RAM, de CPU et de stockage que les voisins ne peuvent pas vous prendre. Cette isolation est la différence clé avec l'hébergement mutualisé - vos performances ne dépendent plus de ce que fait le site d'à côté.</p>
+  <p>Comme vous bénéficiez généralement d'un <strong>accès root (administrateur)</strong>, vous pouvez installer n'importe quelle pile logicielle, configurer vous-même le serveur web, faire tourner des workers en arrière-plan, des conteneurs ou le moteur de base de données de votre choix - des choses qu'un hébergement mutualisé géré ne vous laissera tout simplement pas faire.</p>
 
   <h2>VPS vs mutualisé vs dédié</h2>
   <p>Les trois paliers courants se situent sur un spectre de contrôle, d'isolation et de coût.</p>
   <table>
     <thead><tr><th>Type</th><th>Ressources</th><th>Contrôle</th><th>Idéal pour</th></tr></thead>
     <tbody>
-      <tr><td>Hébergement mutualisé</td><td>Mutualisées, limites informelles</td><td>Faible — pas de root, pile figée</td><td>Petits sites, blogs, sites vitrines</td></tr>
-      <tr><td>VPS</td><td>Tranche garantie (RAM/CPU/disque)</td><td>Élevé — accès root, pile personnalisée</td><td>Applications en croissance, runtimes personnalisés, projets perso avec du vrai trafic</td></tr>
-      <tr><td>Serveur dédié</td><td>Une machine physique entière</td><td>Total — mais tout est à votre charge</td><td>Charges lourdes et stables exigeant une isolation maximale</td></tr>
+      <tr><td>Hébergement mutualisé</td><td>Mutualisées, limites informelles</td><td>Faible - pas de root, pile figée</td><td>Petits sites, blogs, sites vitrines</td></tr>
+      <tr><td>VPS</td><td>Tranche garantie (RAM/CPU/disque)</td><td>Élevé - accès root, pile personnalisée</td><td>Applications en croissance, runtimes personnalisés, projets perso avec du vrai trafic</td></tr>
+      <tr><td>Serveur dédié</td><td>Une machine physique entière</td><td>Total - mais tout est à votre charge</td><td>Charges lourdes et stables exigeant une isolation maximale</td></tr>
     </tbody>
   </table>
   <p>Un VPS est le juste milieu : plus de puissance et de liberté que le mutualisé, bien moins cher et moins exigeant en maintenance que la location d'une machine physique entière.</p>
@@ -33,48 +33,48 @@ import Article from '../../../layouts/Article.astro';
   <h2>Géré vs non géré</h2>
   <p>C'est le choix qui surprend le plus les gens.</p>
   <ul>
-    <li><strong>VPS non géré</strong> — vous obtenez un OS nu et vous êtes l'administrateur système : vous le patchez, le sécurisez, configurez le serveur web, mettez en place les sauvegardes et le réparez quand il tombe en panne. Moins cher et d'une flexibilité maximale, mais cela suppose que vous êtes à l'aise en ligne de commande.</li>
-    <li><strong>VPS géré</strong> — l'hébergeur prend en charge les mises à jour de l'OS, le durcissement de la sécurité, la supervision et le support, généralement avec un panneau de contrôle. Cela coûte plus cher, mais vous rachetez votre temps si vous préférez ne pas administrer un serveur.</li>
+    <li><strong>VPS non géré</strong> - vous obtenez un OS nu et vous êtes l'administrateur système : vous le patchez, le sécurisez, configurez le serveur web, mettez en place les sauvegardes et le réparez quand il tombe en panne. Moins cher et d'une flexibilité maximale, mais cela suppose que vous êtes à l'aise en ligne de commande.</li>
+    <li><strong>VPS géré</strong> - l'hébergeur prend en charge les mises à jour de l'OS, le durcissement de la sécurité, la supervision et le support, généralement avec un panneau de contrôle. Cela coûte plus cher, mais vous rachetez votre temps si vous préférez ne pas administrer un serveur.</li>
   </ul>
 
   <figure>
     <img src="/img/vps-hosting-inbody.jpg" alt="Câbles réseau regroupés branchés sur des switchs et routeurs montés en rack à l'intérieur d'une armoire serveur" width="1280" height="853" loading="lazy" />
-    <figcaption>Un VPS non géré place la configuration du réseau, de l'OS et de la pile entre vos mains — pratique si vous voulez le contrôle total, plus de travail si ce n'est pas le cas.</figcaption>
+    <figcaption>Un VPS non géré place la configuration du réseau, de l'OS et de la pile entre vos mains - pratique si vous voulez le contrôle total, plus de travail si ce n'est pas le cas.</figcaption>
   </figure>
 
   <h2>Les critères qui comptent au moment de choisir</h2>
   <p>Ignorez les superlatifs marketing et comparez plutôt les hébergeurs sur ces dimensions concrètes.</p>
 
   <h3>RAM et CPU</h3>
-  <p>La <strong>RAM</strong> est ce qui vous manquera en premier — une base de données plus un serveur applicatif plus un cache veulent tous de la mémoire, et l'OS a aussi besoin de sa part. Les <strong>vCPU</strong> (CPU virtuels) gèrent les requêtes simultanées et le travail gourmand en CPU comme le traitement d'images ou le rendu côté serveur. Surveillez la différence entre les vCPU <em>partagés/burstables</em> (bien pour des charges légères et irrégulières) et les vCPU <em>dédiés</em> (performances constantes, prix plus élevé).</p>
+  <p>La <strong>RAM</strong> est ce qui vous manquera en premier - une base de données plus un serveur applicatif plus un cache veulent tous de la mémoire, et l'OS a aussi besoin de sa part. Les <strong>vCPU</strong> (CPU virtuels) gèrent les requêtes simultanées et le travail gourmand en CPU comme le traitement d'images ou le rendu côté serveur. Surveillez la différence entre les vCPU <em>partagés/burstables</em> (bien pour des charges légères et irrégulières) et les vCPU <em>dédiés</em> (performances constantes, prix plus élevé).</p>
 
   <h3>Type de stockage</h3>
-  <p>Préférez le <strong>NVMe ou SSD</strong> aux disques mécaniques — la vitesse du disque se voit directement dans les temps de requête de base de données et les builds de pages. Vérifiez aussi la quantité : les logs, les uploads et la croissance de la base de données s'additionnent plus vite qu'on ne le croit.</p>
+  <p>Préférez le <strong>NVMe ou SSD</strong> aux disques mécaniques - la vitesse du disque se voit directement dans les temps de requête de base de données et les builds de pages. Vérifiez aussi la quantité : les logs, les uploads et la croissance de la base de données s'additionnent plus vite qu'on ne le croit.</p>
 
   <h3>Bande passante et localisation</h3>
-  <p>La « bande passante » cache deux chiffres : le <strong>quota mensuel de transfert de données</strong> et la <strong>vitesse du port</strong>. Les sites riches en médias épuisent leurs quotas de transfert, alors lisez la politique de dépassement. Et choisissez une <strong>région de datacenter proche de votre audience</strong> — la distance physique ajoute de la latence à chaque requête dynamique.</p>
+  <p>La « bande passante » cache deux chiffres : le <strong>quota mensuel de transfert de données</strong> et la <strong>vitesse du port</strong>. Les sites riches en médias épuisent leurs quotas de transfert, alors lisez la politique de dépassement. Et choisissez une <strong>région de datacenter proche de votre audience</strong> - la distance physique ajoute de la latence à chaque requête dynamique.</p>
 
   <h3>Sauvegardes, mise à l'échelle et support</h3>
   <ul>
-    <li><strong>Sauvegardes</strong> — snapshots inclus ou option payante ? Les sauvegardes automatisées valent la peine d'être payées.</li>
-    <li><strong>Mise à l'échelle</strong> — pouvez-vous redimensionner l'offre (plus de RAM/CPU) sans tout reconstruire de zéro ?</li>
-    <li><strong>Support</strong> — les délais de réponse comptent surtout sur les offres non gérées quand quelque chose casse à 2h du matin.</li>
+    <li><strong>Sauvegardes</strong> - snapshots inclus ou option payante ? Les sauvegardes automatisées valent la peine d'être payées.</li>
+    <li><strong>Mise à l'échelle</strong> - pouvez-vous redimensionner l'offre (plus de RAM/CPU) sans tout reconstruire de zéro ?</li>
+    <li><strong>Support</strong> - les délais de réponse comptent surtout sur les offres non gérées quand quelque chose casse à 2h du matin.</li>
   </ul>
 
   <h3>Prix</h3>
-  <p>Comparez le prix de <em>renouvellement</em>, pas seulement le tarif promotionnel de la première période, et confirmez ce qui est inclus (sauvegardes, bande passante, une adresse IPv4, un panneau de contrôle). Parmi les hébergeurs qui mettent l'accent sur un bon rapport ressources-prix, <strong>Contabo</strong> est une option bien connue pour un CPU et une RAM généreux à faible coût mensuel — utile quand vous voulez de la marge sans payer des tarifs premium. Comme toujours, faites correspondre la fiche technique à votre charge de travail réelle plutôt qu'à un prix affiché.</p>
+  <p>Comparez le prix de <em>renouvellement</em>, pas seulement le tarif promotionnel de la première période, et confirmez ce qui est inclus (sauvegardes, bande passante, une adresse IPv4, un panneau de contrôle). Parmi les hébergeurs qui mettent l'accent sur un bon rapport ressources-prix, <strong>Contabo</strong> est une option bien connue pour un CPU et une RAM généreux à faible coût mensuel - utile quand vous voulez de la marge sans payer des tarifs premium. Comme toujours, faites correspondre la fiche technique à votre charge de travail réelle plutôt qu'à un prix affiché.</p>
 
   <h2>Avantages et inconvénients d'un VPS</h2>
   <h3>Avantages</h3>
   <ul>
-    <li>Ressources garanties et isolées — pas de voisins bruyants.</li>
-    <li>Accès root et pile personnalisée — installez tout, réglez tout.</li>
+    <li>Ressources garanties et isolées - pas de voisins bruyants.</li>
+    <li>Accès root et pile personnalisée - installez tout, réglez tout.</li>
     <li>Bien moins cher qu'un serveur dédié, avec un contrôle similaire.</li>
     <li>Généralement évolutif à la demande (redimensionnez l'offre à mesure que vous grandissez).</li>
   </ul>
   <h3>Compromis</h3>
   <ul>
-    <li>Plus de responsabilité — un VPS non géré signifie que vous gérez la sécurité et la maintenance.</li>
+    <li>Plus de responsabilité - un VPS non géré signifie que vous gérez la sécurité et la maintenance.</li>
     <li>Surdimensionné pour un petit site statique qu'un hébergement mutualisé ou statique servirait à moindre coût.</li>
     <li>Exige une certaine aisance avec Linux/la ligne de commande, sauf si vous payez pour du géré.</li>
   </ul>

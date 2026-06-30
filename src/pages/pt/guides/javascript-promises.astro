@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="pt"
   slug="javascript-promises"
   title="Promises em JavaScript: um guia prático"
-  description="Entenda as promises em JavaScript — como criá-las, then/catch/finally, encadeamento e combinar várias com Promise.all, race, any e allSettled — com exemplos executáveis e as armadilhas mais comuns."
+  description="Entenda as promises em JavaScript - como criá-las, then/catch/finally, encadeamento e combinar várias com Promise.all, race, any e allSettled - com exemplos executáveis e as armadilhas mais comuns."
   cat="js"
   day={2}
   hero="/img/javascript-promises-hero.jpg"
   heroAlt="Uma peça de quebra-cabeça vermelha encaixando no último espaço de um quebra-cabeça cinza"
   cluster={null}
 >
-  <p>Uma <strong>promise</strong> é um objeto que representa um valor que ainda não está pronto. É a base do JavaScript assíncrono: <code>fetch()</code>, temporizadores, leituras de arquivos no Node e a maioria das APIs modernas retornam promises. Uma promise está sempre em um de três estados — <em>pendente</em>, <em>resolvida</em> ou <em>rejeitada</em> — e, uma vez decidida, nunca mais muda.</p>
+  <p>Uma <strong>promise</strong> é um objeto que representa um valor que ainda não está pronto. É a base do JavaScript assíncrono: <code>fetch()</code>, temporizadores, leituras de arquivos no Node e a maioria das APIs modernas retornam promises. Uma promise está sempre em um de três estados - <em>pendente</em>, <em>resolvida</em> ou <em>rejeitada</em> - e, uma vez decidida, nunca mais muda.</p>
 
   <h2>Criar uma promise</h2>
   <p>Na maior parte do tempo você <em>consome</em> promises que uma API lhe entrega. Mas você cria uma você mesmo com o construtor <code>Promise</code>, que recebe uma função executor que recebe <code>resolve</code> e <code>reject</code>:</p>
@@ -32,7 +32,7 @@ const fetchUser = (id) => new Promise((resolve, reject) => {
   .then((user) => console.log('Got', user.name))
   .catch((err) => console.error('Failed:', err.message))
   .finally(() => console.log('Done'));`}</code></pre>
-  <p><code>.then()</code> pode receber dois argumentos — <code>onFulfilled</code> e <code>onRejected</code> — mas um <code>.catch()</code> separado no fim da cadeia é mais claro e também captura erros lançados dentro de manipuladores <code>.then()</code> anteriores.</p>
+  <p><code>.then()</code> pode receber dois argumentos - <code>onFulfilled</code> e <code>onRejected</code> - mas um <code>.catch()</code> separado no fim da cadeia é mais claro e também captura erros lançados dentro de manipuladores <code>.then()</code> anteriores.</p>
 
   <h2>Encadeamento: o verdadeiro superpoder</h2>
   <p>Cada <code>.then()</code> retorna uma <em>nova</em> promise, então elas se encadeiam. O que você retornar de um manipulador torna-se a entrada do próximo. Crucialmente, se você retornar uma promise, a cadeia aguarda que ela seja decidida antes de continuar:</p>
@@ -52,10 +52,10 @@ const fetchUser = (id) => new Promise((resolve, reject) => {
   <h2>Executar promises em conjunto</h2>
   <p>Quando as tarefas não dependem umas das outras, inicie-as em paralelo e combine os resultados. Quatro métodos estáticos cobrem os casos mais comuns:</p>
   <ul>
-    <li><code>Promise.all([...])</code> — aguarda que <strong>todas</strong> sejam resolvidas; é rejeitada assim que <strong>uma</strong> for rejeitada. Retorna um array de resultados em ordem.</li>
-    <li><code>Promise.allSettled([...])</code> — aguarda que todas terminem e nunca é rejeitada; retorna um array de objetos <code>&#123; status, value &#125;</code> ou <code>&#123; status, reason &#125;</code>.</li>
-    <li><code>Promise.race([...])</code> — é decidida com a <strong>primeira</strong> promise a ser decidida, seja ela resolvida ou rejeitada.</li>
-    <li><code>Promise.any([...])</code> — é decidida com a primeira promise a ser <strong>resolvida</strong>; só é rejeitada se todas forem rejeitadas.</li>
+    <li><code>Promise.all([...])</code> - aguarda que <strong>todas</strong> sejam resolvidas; é rejeitada assim que <strong>uma</strong> for rejeitada. Retorna um array de resultados em ordem.</li>
+    <li><code>Promise.allSettled([...])</code> - aguarda que todas terminem e nunca é rejeitada; retorna um array de objetos <code>&#123; status, value &#125;</code> ou <code>&#123; status, reason &#125;</code>.</li>
+    <li><code>Promise.race([...])</code> - é decidida com a <strong>primeira</strong> promise a ser decidida, seja ela resolvida ou rejeitada.</li>
+    <li><code>Promise.any([...])</code> - é decidida com a primeira promise a ser <strong>resolvida</strong>; só é rejeitada se todas forem rejeitadas.</li>
   </ul>
   <pre><code>{`// Fetch three resources at once, fail if any fails
 const [user, posts, prefs] = await Promise.all([
@@ -73,10 +73,10 @@ results.forEach((r) => {
 
   <h2>Armadilhas comuns</h2>
   <ul>
-    <li><strong>Esquecer o return.</strong> Dentro de um <code>.then()</code>, se você chamar uma promise mas não a retornar com <code>return</code>, a cadeia não vai esperá-la — você perde a ordenação e o tratamento de erros.</li>
+    <li><strong>Esquecer o return.</strong> Dentro de um <code>.then()</code>, se você chamar uma promise mas não a retornar com <code>return</code>, a cadeia não vai esperá-la - você perde a ordenação e o tratamento de erros.</li>
     <li><strong>Rejeições não tratadas.</strong> Uma promise sem <code>.catch()</code> (ou um <code>try/catch</code> em torno de <code>await</code>) produz um <code>unhandledrejection</code>. Trate sempre os erros no fim da cadeia.</li>
-    <li><strong>Misturar callbacks e promises.</strong> Não chame <code>resolve</code> duas vezes nem ambos <code>resolve</code> e <code>reject</code> — só a primeira chamada conta; as demais são ignoradas silenciosamente.</li>
-    <li><strong>O executor roda imediatamente.</strong> A função que você passa para <code>new Promise()</code> roda de forma síncrona, na hora — apenas as callbacks de <code>.then()</code> são adiadas.</li>
+    <li><strong>Misturar callbacks e promises.</strong> Não chame <code>resolve</code> duas vezes nem ambos <code>resolve</code> e <code>reject</code> - só a primeira chamada conta; as demais são ignoradas silenciosamente.</li>
+    <li><strong>O executor roda imediatamente.</strong> A função que você passa para <code>new Promise()</code> roda de forma síncrona, na hora - apenas as callbacks de <code>.then()</code> são adiadas.</li>
   </ul>
 
   <h2>Referência rápida</h2>

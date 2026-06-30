@@ -5,27 +5,27 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="vps-hosting"
   title="VPS hosting explained: what it is and how to choose"
-  description="What a VPS actually is, how it differs from shared and dedicated hosting, the criteria that matter when choosing one, and who it's the right fit for — no invented benchmarks, just the facts."
+  description="What a VPS actually is, how it differs from shared and dedicated hosting, the criteria that matter when choosing one, and who it's the right fit for - no invented benchmarks, just the facts."
   cat="hosting"
   hero="/img/vps-hosting-hero.jpg"
   heroAlt="Close-up of stacked rack-mount servers showing status LEDs, USB ports and drive bays in a cabinet"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>A <strong>VPS</strong> — Virtual Private Server — is one physical server partitioned into several isolated virtual machines, each with its own operating system, guaranteed resources and root access. You get most of the control of a dedicated machine at a fraction of the cost, while a hypervisor keeps your slice separate from everyone else's. This guide explains what a VPS really is, how it compares to the alternatives, and the concrete criteria to judge any provider on — so you don't have to trust a leaderboard.</p>
+  <p>A <strong>VPS</strong> - Virtual Private Server - is one physical server partitioned into several isolated virtual machines, each with its own operating system, guaranteed resources and root access. You get most of the control of a dedicated machine at a fraction of the cost, while a hypervisor keeps your slice separate from everyone else's. This guide explains what a VPS really is, how it compares to the alternatives, and the concrete criteria to judge any provider on - so you don't have to trust a leaderboard.</p>
 
   <h2>What a VPS actually is</h2>
-  <p>Virtualization software (the <em>hypervisor</em>) splits one powerful physical server into multiple virtual servers. Each VPS behaves like its own machine: it boots its own OS, has its own IP address, and is allocated a fixed amount of RAM, CPU and storage that the neighbours can't take from you. That isolation is the key difference from shared hosting — your performance no longer depends on what the site next door is doing.</p>
-  <p>Because you typically get <strong>root (administrator) access</strong>, you can install any software stack, configure the web server yourself, run background workers, containers or a database engine of your choice — things a managed shared host simply won't let you do.</p>
+  <p>Virtualization software (the <em>hypervisor</em>) splits one powerful physical server into multiple virtual servers. Each VPS behaves like its own machine: it boots its own OS, has its own IP address, and is allocated a fixed amount of RAM, CPU and storage that the neighbours can't take from you. That isolation is the key difference from shared hosting - your performance no longer depends on what the site next door is doing.</p>
+  <p>Because you typically get <strong>root (administrator) access</strong>, you can install any software stack, configure the web server yourself, run background workers, containers or a database engine of your choice - things a managed shared host simply won't let you do.</p>
 
   <h2>VPS vs shared vs dedicated</h2>
   <p>The three common tiers sit on a spectrum of control, isolation and cost.</p>
   <table>
     <thead><tr><th>Type</th><th>Resources</th><th>Control</th><th>Best for</th></tr></thead>
     <tbody>
-      <tr><td>Shared hosting</td><td>Pooled, informal limits</td><td>Low — no root, fixed stack</td><td>Small sites, blogs, brochure sites</td></tr>
-      <tr><td>VPS</td><td>Guaranteed slice (RAM/CPU/disk)</td><td>High — root access, custom stack</td><td>Growing apps, custom runtimes, side projects with real traffic</td></tr>
-      <tr><td>Dedicated server</td><td>A whole physical machine</td><td>Full — but you manage it all</td><td>Heavy, steady workloads needing maximum isolation</td></tr>
+      <tr><td>Shared hosting</td><td>Pooled, informal limits</td><td>Low - no root, fixed stack</td><td>Small sites, blogs, brochure sites</td></tr>
+      <tr><td>VPS</td><td>Guaranteed slice (RAM/CPU/disk)</td><td>High - root access, custom stack</td><td>Growing apps, custom runtimes, side projects with real traffic</td></tr>
+      <tr><td>Dedicated server</td><td>A whole physical machine</td><td>Full - but you manage it all</td><td>Heavy, steady workloads needing maximum isolation</td></tr>
     </tbody>
   </table>
   <p>A VPS is the middle ground: more power and freedom than shared hosting, far cheaper and lower-maintenance than renting an entire physical box.</p>
@@ -33,48 +33,48 @@ import Article from '../../layouts/Article.astro';
   <h2>Managed vs unmanaged</h2>
   <p>This is the choice that surprises people most.</p>
   <ul>
-    <li><strong>Unmanaged VPS</strong> — you get a bare OS and you're the sysadmin: you patch it, secure it, configure the web server, set up backups and fix it when it breaks. Cheaper and maximally flexible, but it assumes you're comfortable on the command line.</li>
-    <li><strong>Managed VPS</strong> — the provider handles OS updates, security hardening, monitoring and support, usually with a control panel. Costs more, but it buys back your time if you'd rather not run a server.</li>
+    <li><strong>Unmanaged VPS</strong> - you get a bare OS and you're the sysadmin: you patch it, secure it, configure the web server, set up backups and fix it when it breaks. Cheaper and maximally flexible, but it assumes you're comfortable on the command line.</li>
+    <li><strong>Managed VPS</strong> - the provider handles OS updates, security hardening, monitoring and support, usually with a control panel. Costs more, but it buys back your time if you'd rather not run a server.</li>
   </ul>
 
   <figure>
     <img src="/img/vps-hosting-inbody.jpg" alt="Bundled network cables plugged into rack-mounted switches and routers inside a server cabinet" width="1280" height="853" loading="lazy" />
-    <figcaption>An unmanaged VPS puts the network, OS and stack configuration in your hands — convenient if you want full control, more work if you don't.</figcaption>
+    <figcaption>An unmanaged VPS puts the network, OS and stack configuration in your hands - convenient if you want full control, more work if you don't.</figcaption>
   </figure>
 
   <h2>The criteria that matter when choosing</h2>
   <p>Ignore marketing superlatives and compare providers on these concrete dimensions instead.</p>
 
   <h3>RAM and CPU</h3>
-  <p><strong>RAM</strong> is what you'll run out of first — a database plus an application server plus a cache all want memory, and the OS needs its share too. <strong>vCPUs</strong> (virtual CPUs) handle concurrent requests and CPU-bound work like image processing or server-side rendering. Watch the difference between <em>shared/burstable</em> vCPUs (fine for spiky light loads) and <em>dedicated</em> vCPUs (consistent performance, higher price).</p>
+  <p><strong>RAM</strong> is what you'll run out of first - a database plus an application server plus a cache all want memory, and the OS needs its share too. <strong>vCPUs</strong> (virtual CPUs) handle concurrent requests and CPU-bound work like image processing or server-side rendering. Watch the difference between <em>shared/burstable</em> vCPUs (fine for spiky light loads) and <em>dedicated</em> vCPUs (consistent performance, higher price).</p>
 
   <h3>Storage type</h3>
-  <p>Prefer <strong>NVMe or SSD</strong> over mechanical disks — disk speed shows up directly in database query times and page builds. Check the amount, too: logs, uploads and database growth add up faster than you'd expect.</p>
+  <p>Prefer <strong>NVMe or SSD</strong> over mechanical disks - disk speed shows up directly in database query times and page builds. Check the amount, too: logs, uploads and database growth add up faster than you'd expect.</p>
 
   <h3>Bandwidth and location</h3>
-  <p>"Bandwidth" hides two numbers: the monthly <strong>data-transfer allowance</strong> and the <strong>port speed</strong>. Media-heavy sites burn through transfer quotas, so read the overage policy. And pick a <strong>datacenter region close to your audience</strong> — physical distance adds latency to every dynamic request.</p>
+  <p>"Bandwidth" hides two numbers: the monthly <strong>data-transfer allowance</strong> and the <strong>port speed</strong>. Media-heavy sites burn through transfer quotas, so read the overage policy. And pick a <strong>datacenter region close to your audience</strong> - physical distance adds latency to every dynamic request.</p>
 
   <h3>Backups, scaling and support</h3>
   <ul>
-    <li><strong>Backups</strong> — included snapshots or a paid add-on? Automated backups are worth paying for.</li>
-    <li><strong>Scaling</strong> — can you resize the plan (more RAM/CPU) without rebuilding from scratch?</li>
-    <li><strong>Support</strong> — response times matter most on unmanaged plans when something breaks at 2am.</li>
+    <li><strong>Backups</strong> - included snapshots or a paid add-on? Automated backups are worth paying for.</li>
+    <li><strong>Scaling</strong> - can you resize the plan (more RAM/CPU) without rebuilding from scratch?</li>
+    <li><strong>Support</strong> - response times matter most on unmanaged plans when something breaks at 2am.</li>
   </ul>
 
   <h3>Price</h3>
-  <p>Compare the <em>renewal</em> price, not just the promotional first term, and confirm what's bundled (backups, bandwidth, an IPv4 address, a control panel). Among providers that focus on a strong resource-to-price ratio, <strong>Contabo</strong> is a well-known option for generous CPU and RAM at a low monthly cost — useful when you want headroom without paying premium rates. As always, map the spec to your real workload rather than to a sticker price.</p>
+  <p>Compare the <em>renewal</em> price, not just the promotional first term, and confirm what's bundled (backups, bandwidth, an IPv4 address, a control panel). Among providers that focus on a strong resource-to-price ratio, <strong>Contabo</strong> is a well-known option for generous CPU and RAM at a low monthly cost - useful when you want headroom without paying premium rates. As always, map the spec to your real workload rather than to a sticker price.</p>
 
   <h2>Pros and cons of a VPS</h2>
   <h3>Advantages</h3>
   <ul>
-    <li>Guaranteed, isolated resources — no noisy neighbours.</li>
-    <li>Root access and a custom stack — install anything, tune everything.</li>
+    <li>Guaranteed, isolated resources - no noisy neighbours.</li>
+    <li>Root access and a custom stack - install anything, tune everything.</li>
     <li>Far cheaper than a dedicated server, with similar control.</li>
     <li>Usually scalable on demand (resize the plan as you grow).</li>
   </ul>
   <h3>Trade-offs</h3>
   <ul>
-    <li>More responsibility — an unmanaged VPS means you handle security and maintenance.</li>
+    <li>More responsibility - an unmanaged VPS means you handle security and maintenance.</li>
     <li>Overkill for a tiny static site that shared hosting or a static host would serve more cheaply.</li>
     <li>Requires some Linux/command-line comfort unless you pay for managed.</li>
   </ul>

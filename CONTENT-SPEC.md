@@ -1,12 +1,12 @@
-# CONTENT-SPEC — rédaction des articles html5advent (à suivre À LA LETTRE)
+# CONTENT-SPEC - rédaction des articles html5advent (à suivre À LA LETTRE)
 
 Tu écris des articles Astro pour html5advent.com (ressource web moderne, EN/FR/ES). LECTURE OBLIGATOIRE
 AVANT : le fichier gold-standard `src/pages/guides/fetch-api-javascript.astro` (copie sa structure exacte)
 + `src/layouts/Article.astro` (les props) + `src/data/cta.js` (clusters).
 
-## RÈGLES DE BUILD ASTRO (CRITIQUE — sinon le build casse)
+## RÈGLES DE BUILD ASTRO (CRITIQUE - sinon le build casse)
 - Le contenu va dans le `<slot>` de `<Article>`. Utilise des balises HTML (`<p> <h2> <h3> <ul> <li> <table> <pre> <code> <figure>`).
-- **CODE** : toujours `<pre><code>{`...code multi-ligne...`}</code></pre>` — le code DANS un template literal JS entre accolades. JAMAIS de code brut (les `{` `}` `<` casseraient le JSX).
+- **CODE** : toujours `<pre><code>{`...code multi-ligne...`}</code></pre>` - le code DANS un template literal JS entre accolades. JAMAIS de code brut (les `{` `}` `<` casseraient le JSX).
 - Dans le TEXTE en prose, une accolade littérale `{` ou `}` doit être écrite `&#123;` / `&#125;`. Un `<` littéral → `&lt;`.
 - JAMAIS de commentaire HTML `<!-- -->`.
 - Inline code court : `<code>response.ok</code>`.

@@ -5,17 +5,17 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="intersection-observer-api"
   title="The IntersectionObserver API: lazy-loading and scroll effects"
-  description="Use IntersectionObserver to lazy-load images, reveal elements on scroll and build infinite scroll — with threshold and rootMargin explained, plus runnable examples."
+  description="Use IntersectionObserver to lazy-load images, reveal elements on scroll and build infinite scroll - with threshold and rootMargin explained, plus runnable examples."
   cat="apis"
   day={10}
   hero="/img/intersection-observer-api-hero.jpg"
   heroAlt="An overhead view of a designer's desk with UI wireframe sketches, sticky notes, a smartphone and coloured markers"
   cluster={null}
 >
-  <p>The <strong>IntersectionObserver API</strong> tells you when an element enters or leaves the viewport — without you wiring up a <code>scroll</code> listener and computing positions on every frame. The browser does the watching asynchronously and off the main thread, so it stays smooth even with hundreds of targets. Every current browser supports it.</p>
+  <p>The <strong>IntersectionObserver API</strong> tells you when an element enters or leaves the viewport - without you wiring up a <code>scroll</code> listener and computing positions on every frame. The browser does the watching asynchronously and off the main thread, so it stays smooth even with hundreds of targets. Every current browser supports it.</p>
 
   <h2>Why not just listen to scroll?</h2>
-  <p>A <code>scroll</code> handler fires constantly and forces you to call <code>getBoundingClientRect()</code> to know where things are — that reads layout and can cause jank. IntersectionObserver flips the model: you register the elements you care about, and the browser notifies you only when their visibility actually changes.</p>
+  <p>A <code>scroll</code> handler fires constantly and forces you to call <code>getBoundingClientRect()</code> to know where things are - that reads layout and can cause jank. IntersectionObserver flips the model: you register the elements you care about, and the browser notifies you only when their visibility actually changes.</p>
 
   <h2>The basic pattern</h2>
   <p>Create an observer with a callback, then <code>observe()</code> one or more elements. The callback receives an array of <code>entry</code> objects; the key property is <code>entry.isIntersecting</code>:</p>
@@ -43,7 +43,7 @@ const imgObserver = new IntersectionObserver((entries, observer) => {
 }, { rootMargin: '200px' });
 
 lazyImages.forEach((img) => imgObserver.observe(img));`}</code></pre>
-  <p>Note: native lazy-loading via <code>&lt;img loading="lazy"&gt;</code> covers most cases now. Reach for IntersectionObserver when you need custom logic — placeholders, fade-ins, or loading non-image resources.</p>
+  <p>Note: native lazy-loading via <code>&lt;img loading="lazy"&gt;</code> covers most cases now. Reach for IntersectionObserver when you need custom logic - placeholders, fade-ins, or loading non-image resources.</p>
 
   <figure>
     <img src="/img/intersection-observer-api-inbody.jpg" alt="A smartphone showing the Facebook login screen next to Scrabble tiles spelling the words SOCIAL MEDIA" width="1280" height="850" loading="lazy" />
@@ -79,13 +79,13 @@ loader.observe(sentinel);`}</code></pre>
   <h2>The options: threshold and rootMargin</h2>
   <p>Two options shape when the callback fires:</p>
   <ul>
-    <li><strong><code>threshold</code></strong> — a number (or array) from 0 to 1. <code>0</code> fires the moment one pixel is visible; <code>1</code> fires only when the whole element is visible. An array like <code>[0, 0.5, 1]</code> fires at each step, handy for scroll-progress effects.</li>
-    <li><strong><code>rootMargin</code></strong> — a CSS-style margin that grows or shrinks the area used for the test. <code>'200px'</code> triggers 200px <em>before</em> the element reaches the viewport — ideal for pre-loading.</li>
-    <li><strong><code>root</code></strong> — the element to use as the viewport. Defaults to the browser viewport; set it to a scrollable container to watch inside that instead.</li>
+    <li><strong><code>threshold</code></strong> - a number (or array) from 0 to 1. <code>0</code> fires the moment one pixel is visible; <code>1</code> fires only when the whole element is visible. An array like <code>[0, 0.5, 1]</code> fires at each step, handy for scroll-progress effects.</li>
+    <li><strong><code>rootMargin</code></strong> - a CSS-style margin that grows or shrinks the area used for the test. <code>'200px'</code> triggers 200px <em>before</em> the element reaches the viewport - ideal for pre-loading.</li>
+    <li><strong><code>root</code></strong> - the element to use as the viewport. Defaults to the browser viewport; set it to a scrollable container to watch inside that instead.</li>
   </ul>
 
   <h2>Cleaning up</h2>
-  <p>Stop watching a single element with <code>observer.unobserve(el)</code>, or tear everything down with <code>observer.disconnect()</code> — important in single-page apps when a view unmounts, to avoid leaks.</p>
+  <p>Stop watching a single element with <code>observer.unobserve(el)</code>, or tear everything down with <code>observer.disconnect()</code> - important in single-page apps when a view unmounts, to avoid leaks.</p>
 
   <h2>Quick reference</h2>
   <table>

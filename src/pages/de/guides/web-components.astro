@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="de"
   slug="web-components"
   title="Web Components: Custom Elements, Shadow DOM und Templates"
-  description="Erstellen Sie wiederverwendbare HTML-Elemente mit den nativen Web-Components-APIs — ein Custom Element definieren, Stile mit dem Shadow DOM kapseln, ein &lt;template&gt; klonen und Daten über Attribute übergeben."
+  description="Erstellen Sie wiederverwendbare HTML-Elemente mit den nativen Web-Components-APIs - ein Custom Element definieren, Stile mit dem Shadow DOM kapseln, ein &lt;template&gt; klonen und Daten über Attribute übergeben."
   cat="html"
   day={5}
   hero="/img/web-components-hero.jpg"
   heroAlt="Ein Haufen bunter ineinandergreifender Bausteine aus Kunststoff in verschiedenen Formen"
   cluster={null}
 >
-  <p><strong>Web Components</strong> sind eine Reihe nativer Browser-APIs, mit denen Sie Ihre eigenen wiederverwendbaren HTML-Elemente erstellen können — ganz ohne Framework. Eine Komponente, die Sie ausliefern, funktioniert gleich in reinem HTML, React, Vue oder Svelte, weil sie einfach ein Element ist, das der Browser versteht. Drei APIs machen es möglich: Custom Elements, das Shadow DOM und das <code>&lt;template&gt;</code>-Tag.</p>
+  <p><strong>Web Components</strong> sind eine Reihe nativer Browser-APIs, mit denen Sie Ihre eigenen wiederverwendbaren HTML-Elemente erstellen können - ganz ohne Framework. Eine Komponente, die Sie ausliefern, funktioniert gleich in reinem HTML, React, Vue oder Svelte, weil sie einfach ein Element ist, das der Browser versteht. Drei APIs machen es möglich: Custom Elements, das Shadow DOM und das <code>&lt;template&gt;</code>-Tag.</p>
 
   <h2>Custom Elements</h2>
   <p>Ein Custom Element ist eine Klasse, die <code>HTMLElement</code> erweitert und mit einem Tag-Namen registriert wird, der <strong>einen Bindestrich enthalten muss</strong> (damit er niemals mit einem künftigen eingebauten Tag kollidieren kann):</p>
@@ -30,7 +30,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   <p>Die Klasse gibt Ihnen <strong>Lebenszyklus-Callbacks</strong>. Die nützlichsten sind <code>connectedCallback</code> (das Element wurde der Seite hinzugefügt), <code>disconnectedCallback</code> (es wurde entfernt) und <code>attributeChangedCallback</code> (ein beobachtetes Attribut hat sich geändert).</p>
 
   <h2>Auf Attribute reagieren</h2>
-  <p>Um Daten zu übergeben, lesen Sie Attribute — genau wie <code>src</code> bei einem Bild. Geben Sie mit einem statischen <code>observedAttributes</code>-Getter an, welche zu beobachten sind, und reagieren Sie dann in <code>attributeChangedCallback</code>. Den Knoten mit <code>textContent</code> aufzubauen hält vom Nutzer gelieferte Werte sicher:</p>
+  <p>Um Daten zu übergeben, lesen Sie Attribute - genau wie <code>src</code> bei einem Bild. Geben Sie mit einem statischen <code>observedAttributes</code>-Getter an, welche zu beobachten sind, und reagieren Sie dann in <code>attributeChangedCallback</code>. Den Knoten mit <code>textContent</code> aufzubauen hält vom Nutzer gelieferte Werte sicher:</p>
   <pre><code>{`class GreetingCard extends HTMLElement {
   static get observedAttributes() {
     return ['name'];
@@ -75,7 +75,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   }
 }
 customElements.define('fancy-button', FancyButton);`}</code></pre>
-  <p>Der <code>&lt;slot&gt;</code> ist ein Platzhalter: Was auch immer Sie zwischen die Tags setzen — <code>&lt;fancy-button&gt;Save&lt;/fancy-button&gt;</code> — wird an diese Stelle projiziert, sodass die Komponente Ihren Inhalt umschließt, ohne ihn zu ersetzen.</p>
+  <p>Der <code>&lt;slot&gt;</code> ist ein Platzhalter: Was auch immer Sie zwischen die Tags setzen - <code>&lt;fancy-button&gt;Save&lt;/fancy-button&gt;</code> - wird an diese Stelle projiziert, sodass die Komponente Ihren Inhalt umschließt, ohne ihn zu ersetzen.</p>
 
   <h2>Templates: einmal klonen, günstig wiederverwenden</h2>
   <p>Das <code>&lt;template&gt;</code>-Element enthält inertes Markup, das geparst, aber nicht gerendert wird, bis Sie es klonen. Es ist der effiziente Weg, wiederkehrende Strukturen auszustanzen:</p>

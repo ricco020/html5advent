@@ -12,7 +12,7 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="Una hoja impresa de marcado HTML con un bolígrafo encima"
   cluster={null}
 >
-  <p>El <strong>anidamiento CSS</strong> permite escribir reglas dentro de otras reglas, para mantener juntos los estilos que van juntos. Durante años esto solo era posible con un preprocesador como Sass. Ahora es una función nativa de CSS, disponible en todos los navegadores modernos — sin paso de compilación.</p>
+  <p>El <strong>anidamiento CSS</strong> permite escribir reglas dentro de otras reglas, para mantener juntos los estilos que van juntos. Durante años esto solo era posible con un preprocesador como Sass. Ahora es una función nativa de CSS, disponible en todos los navegadores modernos - sin paso de compilación.</p>
 
   <h2>La idea básica</h2>
   <p>En lugar de repetir el selector padre para cada hijo, se anida la regla hija dentro. Estos dos bloques producen el mismo resultado:</p>
@@ -30,7 +30,7 @@ import Article from '../../../layouts/Article.astro';
   <p>Cada selector anidado se lee relativo a su padre, así que <code>.card p</code> es lo que el navegador aplica realmente.</p>
 
   <h2>El selector de anidamiento &amp;</h2>
-  <p>El ampersand <code>&amp;</code> se refiere al selector padre. Es necesario siempre que el selector anidado deba unirse directamente al padre en vez de describir un descendiente — pseudoclases, clases modificadoras y selectores compuestos:</p>
+  <p>El ampersand <code>&amp;</code> se refiere al selector padre. Es necesario siempre que el selector anidado deba unirse directamente al padre en vez de describir un descendiente - pseudoclases, clases modificadoras y selectores compuestos:</p>
   <pre><code>{`.btn {
   background: #2563eb;
 
@@ -57,13 +57,13 @@ import Article from '../../../layouts/Article.astro';
   <h2>En qué se diferencia de Sass</h2>
   <p>La sintaxis se parece a Sass, pero no son idénticas. Las diferencias que más sorprenden:</p>
   <ul>
-    <li><strong>Concatenación</strong>: Sass permite construir selectores como <code>&amp;__title</code> (BEM). El anidamiento nativo CSS <em>no</em> concatena — <code>&amp;__title</code> es inválido. Hay que escribir el nombre de clase completo.</li>
+    <li><strong>Concatenación</strong>: Sass permite construir selectores como <code>&amp;__title</code> (BEM). El anidamiento nativo CSS <em>no</em> concatena - <code>&amp;__title</code> es inválido. Hay que escribir el nombre de clase completo.</li>
     <li><strong>Sin compilación</strong>: el anidamiento nativo se ejecuta en el navegador, así que no hay nada que compilar ni source maps que gestionar.</li>
     <li><strong>Especificidad de &amp;</strong>: en CSS nativo, <code>&amp;</code> se comporta como <code>:is()</code> y toma la especificidad del selector más específico de la lista padre, lo que puede diferir sutilmente de la salida de Sass.</li>
   </ul>
 
   <h2>Soporte de navegadores y alternativa</h2>
-  <p>El anidamiento CSS nativo está soportado en las versiones actuales de Chrome, Edge, Firefox y Safari. Las primeras implementaciones exigían que el selector anidado empezara por un símbolo (se escribía <code>&amp; p</code> en vez de <code>p</code>); la sintaxis relajada que permite un selector de elemento desnudo es la de los navegadores actuales. Si necesitas soportar motores más antiguos, sigue con Sass o PostCSS — el plugin <code>postcss-nesting</code> compila el anidamiento nativo a CSS plano.</p>
+  <p>El anidamiento CSS nativo está soportado en las versiones actuales de Chrome, Edge, Firefox y Safari. Las primeras implementaciones exigían que el selector anidado empezara por un símbolo (se escribía <code>&amp; p</code> en vez de <code>p</code>); la sintaxis relajada que permite un selector de elemento desnudo es la de los navegadores actuales. Si necesitas soportar motores más antiguos, sigue con Sass o PostCSS - el plugin <code>postcss-nesting</code> compila el anidamiento nativo a CSS plano.</p>
 
   <h2>Referencia rápida</h2>
   <table>
@@ -73,9 +73,9 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Pseudoclase</td><td><code>&amp;:hover &#123; ... &#125;</code></td></tr>
       <tr><td>Clase modificadora</td><td><code>&amp;.is-active &#123; ... &#125;</code></td></tr>
       <tr><td>Responsive</td><td><code>@media (...) &#123; ... &#125;</code> anidado</td></tr>
-      <tr><td>Concatenación BEM</td><td>no soportada — escribe la clase completa</td></tr>
+      <tr><td>Concatenación BEM</td><td>no soportada - escribe la clase completa</td></tr>
     </tbody>
   </table>
 
-  <p>El anidamiento nativo elimina una de las últimas grandes razones para recurrir a un preprocesador en un proyecto nuevo. Mantén el anidamiento poco profundo — dos o tres niveles — y tus hojas de estilo siguen siendo legibles mientras las relaciones entre selectores se mantienen evidentes.</p>
+  <p>El anidamiento nativo elimina una de las últimas grandes razones para recurrir a un preprocesador en un proyecto nuevo. Mantén el anidamiento poco profundo - dos o tres niveles - y tus hojas de estilo siguen siendo legibles mientras las relaciones entre selectores se mantienen evidentes.</p>
 </Article>

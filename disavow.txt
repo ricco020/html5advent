@@ -1,4 +1,4 @@
-# Disavow file — html5advent.com
+# Disavow file - html5advent.com
 # Nettoyage du profil de backlinks toxiques (réseau récupéré, DR51).
 # À soumettre dans Google Search Console > Disavow Tool (UI manuelle), après vérification de la propriété GSC.
 # Format Google : une entrée par ligne. "domain:" désavoue tout le domaine source.

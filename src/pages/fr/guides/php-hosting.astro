@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="fr"
   slug="php-hosting"
   title="Hébergement PHP : mutualisé vs VPS, versions et performances"
-  description="Ce qu'il faut regarder dans un hébergement PHP — mutualisé vs VPS, versions et extensions PHP, déploiement, .htaccess et performances avec OPcache — sans le bruit marketing."
+  description="Ce qu'il faut regarder dans un hébergement PHP - mutualisé vs VPS, versions et extensions PHP, déploiement, .htaccess et performances avec OPcache - sans le bruit marketing."
   cat="hosting"
   day={15}
   hero="/img/php-hosting-hero.jpg"
@@ -13,18 +13,18 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>PHP propulse encore une grande partie du web, et l'héberger est un terrain bien balisé — c'est justement pourquoi les offres se ressemblent toutes et que les vraies différences se cachent dans les détails. Ce guide couvre les critères qui comptent vraiment : l'arbitrage mutualisé/VPS, les versions et extensions PHP, la façon de déployer, ce que contrôle le <code>.htaccess</code>, et les leviers de performance à connaître.</p>
+  <p>PHP propulse encore une grande partie du web, et l'héberger est un terrain bien balisé - c'est justement pourquoi les offres se ressemblent toutes et que les vraies différences se cachent dans les détails. Ce guide couvre les critères qui comptent vraiment : l'arbitrage mutualisé/VPS, les versions et extensions PHP, la façon de déployer, ce que contrôle le <code>.htaccess</code>, et les leviers de performance à connaître.</p>
 
   <h2>Hébergement mutualisé vs VPS</h2>
   <p>La première décision porte sur le degré d'isolation de votre environnement.</p>
   <ul>
-    <li><strong>Mutualisé</strong> — votre site cohabite avec beaucoup d'autres sur une même machine, gérée pour vous (PHP, serveur web, souvent un panneau de contrôle). Le moins cher et le plus simple ; vous renoncez au contrôle de la version PHP, des extensions et de la config serveur, et vous partagez les ressources avec les voisins.</li>
-    <li><strong>VPS</strong> — une tranche dédiée de serveur avec accès root. Vous choisissez la version PHP, installez n'importe quelle extension, réglez le serveur web et n'êtes pas affecté par les autres locataires — mais vous êtes responsable des mises à jour et de la sécurité.</li>
+    <li><strong>Mutualisé</strong> - votre site cohabite avec beaucoup d'autres sur une même machine, gérée pour vous (PHP, serveur web, souvent un panneau de contrôle). Le moins cher et le plus simple ; vous renoncez au contrôle de la version PHP, des extensions et de la config serveur, et vous partagez les ressources avec les voisins.</li>
+    <li><strong>VPS</strong> - une tranche dédiée de serveur avec accès root. Vous choisissez la version PHP, installez n'importe quelle extension, réglez le serveur web et n'êtes pas affecté par les autres locataires - mais vous êtes responsable des mises à jour et de la sécurité.</li>
   </ul>
   <p>Pour un petit site ou un CMS standard, le mutualisé suffit généralement. Optez pour un VPS quand vous avez besoin d'un build PHP précis, d'extensions personnalisées, de performances plus prévisibles, ou d'un contrôle total de la stack.</p>
 
   <h2>La version PHP compte</h2>
-  <p>La version PHP n'est pas un détail — les versions récentes sont nettement plus rapides et, surtout, reçoivent encore les correctifs de sécurité. Faire tourner une version en fin de vie, c'est ne plus avoir de patchs. Vérifiez toujours quelles versions un hébergeur propose et si vous pouvez en changer facilement. On lit la version active depuis le code ou la CLI :</p>
+  <p>La version PHP n'est pas un détail - les versions récentes sont nettement plus rapides et, surtout, reçoivent encore les correctifs de sécurité. Faire tourner une version en fin de vie, c'est ne plus avoir de patchs. Vérifiez toujours quelles versions un hébergeur propose et si vous pouvez en changer facilement. On lit la version active depuis le code ou la CLI :</p>
   <pre><code>{`<?php
 echo phpversion();        // ex. "8.3.x"
 // ou un rapport complet :
@@ -33,12 +33,12 @@ phpinfo();`}</code></pre>
   <p>Un bon hébergeur permet de sélectionner la version PHP par site (souvent dans le panneau de contrôle) et garde une gamme de versions supportées disponibles, pour que vous mettiez à jour à votre rythme.</p>
 
   <h2>Extensions : à vérifier avant de vous engager</h2>
-  <p>Les fonctionnalités de PHP sont réparties entre des extensions, et votre app en dépend probablement de plusieurs — un pilote de base de données, le traitement d'images, etc. Les plus courantes à vérifier auprès d'un hébergeur :</p>
+  <p>Les fonctionnalités de PHP sont réparties entre des extensions, et votre app en dépend probablement de plusieurs - un pilote de base de données, le traitement d'images, etc. Les plus courantes à vérifier auprès d'un hébergeur :</p>
   <ul>
-    <li><code>pdo_mysql</code> / <code>mysqli</code> — connectivité MySQL/MariaDB.</li>
-    <li><code>mbstring</code> — gestion des chaînes multioctets, requise par de nombreux frameworks.</li>
-    <li><code>gd</code> ou <code>imagick</code> — traitement d'images.</li>
-    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> — requêtes HTTP, chiffrement, archives, localisation.</li>
+    <li><code>pdo_mysql</code> / <code>mysqli</code> - connectivité MySQL/MariaDB.</li>
+    <li><code>mbstring</code> - gestion des chaînes multioctets, requise par de nombreux frameworks.</li>
+    <li><code>gd</code> ou <code>imagick</code> - traitement d'images.</li>
+    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> - requêtes HTTP, chiffrement, archives, localisation.</li>
   </ul>
   <p>Listez ce qui est réellement chargé sur le serveur avec :</p>
   <pre><code>{`php -m`}</code></pre>
@@ -49,13 +49,13 @@ phpinfo();`}</code></pre>
   </figure>
 
   <h2>Déploiement et .htaccess</h2>
-  <p>Sur du mutualisé, vous déployez généralement en envoyant des fichiers (SFTP) ou en récupérant depuis Git dans la racine web ; certains hébergeurs ajoutent une étape de déploiement depuis le panneau. Sous Apache, le fichier <code>.htaccess</code> à la racine web configure le comportement par répertoire sans toucher à la config serveur principale — utile pour les URL propres, les redirections et les en-têtes de cache. Un motif courant route toutes les requêtes vers un contrôleur frontal :</p>
-  <pre><code>{`# .htaccess — tout router vers index.php (contrôleur frontal)
+  <p>Sur du mutualisé, vous déployez généralement en envoyant des fichiers (SFTP) ou en récupérant depuis Git dans la racine web ; certains hébergeurs ajoutent une étape de déploiement depuis le panneau. Sous Apache, le fichier <code>.htaccess</code> à la racine web configure le comportement par répertoire sans toucher à la config serveur principale - utile pour les URL propres, les redirections et les en-têtes de cache. Un motif courant route toutes les requêtes vers un contrôleur frontal :</p>
+  <pre><code>{`# .htaccess - tout router vers index.php (contrôleur frontal)
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]`}</code></pre>
-  <p>Notez que <code>.htaccess</code> est une fonctionnalité d'Apache. Sous Nginx, les règles équivalentes vivent dans la config serveur, que vous ne contrôlez peut-être pas en mutualisé — une raison de plus de savoir quel serveur web utilise votre hébergeur.</p>
+  <p>Notez que <code>.htaccess</code> est une fonctionnalité d'Apache. Sous Nginx, les règles équivalentes vivent dans la config serveur, que vous ne contrôlez peut-être pas en mutualisé - une raison de plus de savoir quel serveur web utilise votre hébergeur.</p>
 
   <h2>Performances : OPcache</h2>
   <p>Le plus grand gain de performance PHP est <strong>OPcache</strong>, qui met en cache le bytecode compilé pour que PHP ne ré-analyse et ne recompile pas vos scripts à chaque requête. La plupart des hébergeurs modernes l'activent par défaut ; ça vaut la peine de le confirmer. Réglages typiques dans <code>php.ini</code> :</p>
@@ -63,7 +63,7 @@ RewriteRule ^ index.php [L]`}</code></pre>
 opcache.memory_consumption=128
 opcache.max_accelerated_files=10000
 opcache.validate_timestamps=1`}</code></pre>
-  <p>En production, vous pouvez mettre <code>opcache.validate_timestamps=0</code> pour que PHP ne vérifie jamais les changements de fichiers, puis vider le cache au déploiement — un peu plus de vitesse au prix d'une réinitialisation explicite du cache.</p>
+  <p>En production, vous pouvez mettre <code>opcache.validate_timestamps=0</code> pour que PHP ne vérifie jamais les changements de fichiers, puis vider le cache au déploiement - un peu plus de vitesse au prix d'une réinitialisation explicite du cache.</p>
 
   <h2>Checklist rapide</h2>
   <table>
@@ -77,5 +77,5 @@ opcache.validate_timestamps=1`}</code></pre>
     </tbody>
   </table>
 
-  <p>L'hébergement PHP est mature, alors ne surpensez pas les marques — alignez l'hébergeur sur les vrais besoins de votre app : la bonne version PHP, les extensions dont vous dépendez, un serveur web que vous comprenez et OPcache activé. Réussissez ces points et le reste est surtout une question de préférence.</p>
+  <p>L'hébergement PHP est mature, alors ne surpensez pas les marques - alignez l'hébergeur sur les vrais besoins de votre app : la bonne version PHP, les extensions dont vous dépendez, un serveur web que vous comprenez et OPcache activé. Réussissez ces points et le reste est surtout une question de préférence.</p>
 </Article>

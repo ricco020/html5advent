@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="es"
   slug="async-await-javascript"
   title="async/await en JavaScript: guía práctica"
-  description="Cómo funcionan async y await, su relación con las promesas, el manejo de errores con try/catch, await en bucles y el error de serie-vs-paralelo — con ejemplos ejecutables."
+  description="Cómo funcionan async y await, su relación con las promesas, el manejo de errores con try/catch, await en bucles y el error de serie-vs-paralelo - con ejemplos ejecutables."
   cat="js"
   day={3}
   hero="/img/async-await-javascript-hero.jpg"
   heroAlt="Las manos de un desarrollador escribiendo en un teclado con código fuente de colores en el monitor"
   cluster={null}
 >
-  <p>Las palabras clave <code>async</code> y <code>await</code> son sintaxis sobre las promesas. Te permiten escribir código asíncrono que se lee de arriba abajo como código síncrono, sin dejar de ser no bloqueante por debajo. Si conoces las promesas, ya conoces async/await — solo elimina la ceremonia de los <code>.then()</code>.</p>
+  <p>Las palabras clave <code>async</code> y <code>await</code> son sintaxis sobre las promesas. Te permiten escribir código asíncrono que se lee de arriba abajo como código síncrono, sin dejar de ser no bloqueante por debajo. Si conoces las promesas, ya conoces async/await - solo elimina la ceremonia de los <code>.then()</code>.</p>
 
   <h2>Lo básico</h2>
   <p>Marca una función como <code>async</code> y podrás usar <code>await</code> dentro de ella. <code>await</code> pausa esa función hasta que la promesa se resuelve y te da el valor resuelto:</p>
@@ -23,7 +23,7 @@ import Article from '../../../layouts/Article.astro';
 }
 
 getUser(42).then((name) => console.log(name));`}</code></pre>
-  <p>Dos cosas que recordar: una función <code>async</code> <strong>siempre devuelve una promesa</strong> (lo que devuelvas se envuelve en una), y <code>await</code> solo funciona <em>dentro</em> de una función <code>async</code> — salvo en el nivel superior de un módulo ES, donde se permite el top-level <code>await</code>.</p>
+  <p>Dos cosas que recordar: una función <code>async</code> <strong>siempre devuelve una promesa</strong> (lo que devuelvas se envuelve en una), y <code>await</code> solo funciona <em>dentro</em> de una función <code>async</code> - salvo en el nivel superior de un módulo ES, donde se permite el top-level <code>await</code>.</p>
 
   <h2>async/await vs promesas</h2>
   <p>Es la misma maquinaria. Esta cadena de promesas…</p>
@@ -34,7 +34,7 @@ getUser(42).then((name) => console.log(name));`}</code></pre>
   <pre><code>{`const res = await fetch('/api/user');
 const user = await res.json();
 console.log(user.name);`}</code></pre>
-  <p>Puedes mezclarlas libremente — <code>await</code> cualquier promesa, incluido el resultado de <code>Promise.all()</code>.</p>
+  <p>Puedes mezclarlas libremente - <code>await</code> cualquier promesa, incluido el resultado de <code>Promise.all()</code>.</p>
 
   <h2>Manejo de errores con try/catch</h2>
   <p>Con async/await capturas las promesas rechazadas con un <code>try/catch</code> normal, la misma construcción que usas para los errores síncronos:</p>
@@ -54,11 +54,11 @@ console.log(user.name);`}</code></pre>
 
   <figure>
     <img src="/img/async-await-javascript-inbody.jpg" alt="Una autopista de varios carriles con coches y camiones circulando uno al lado del otro en paralelo" width="1280" height="853" loading="lazy" />
-    <figcaption>Las tareas independientes pueden ejecutarse una al lado de otra como vehículos en carriles paralelos — esperarlas de una en una impone en cambio una cola en fila india.</figcaption>
+    <figcaption>Las tareas independientes pueden ejecutarse una al lado de otra como vehículos en carriles paralelos - esperarlas de una en una impone en cambio una cola en fila india.</figcaption>
   </figure>
 
   <h2>El gran error: await en serie vs en paralelo</h2>
-  <p>El fallo más común con async/await es esperar tareas independientes una tras otra. Esto se ejecuta en <em>serie</em> — la segunda petición no empieza hasta que termina la primera:</p>
+  <p>El fallo más común con async/await es esperar tareas independientes una tras otra. Esto se ejecuta en <em>serie</em> - la segunda petición no empieza hasta que termina la primera:</p>
   <pre><code>{`// Lento: tiempo total = a + b + c
 const a = await fetchA();
 const b = await fetchB();
@@ -70,10 +70,10 @@ const [a, b, c] = await Promise.all([fetchA(), fetchB(), fetchC()]);`}</code></p
   <h2>await en bucles</h2>
   <p>Un bucle <code>for</code> normal con <code>await</code> procesa los elementos <strong>de uno en uno</strong>, lo cual es correcto cuando cada paso depende del anterior o debes evitar saturar un servidor:</p>
   <pre><code>{`for (const id of ids) {
-  const item = await fetchItem(id);   // secuencial — uno tras otro
+  const item = await fetchItem(id);   // secuencial - uno tras otro
   console.log(item);
 }`}</code></pre>
-  <p>Para procesarlos en paralelo, transforma en un array de promesas y <code>await Promise.all</code>. Ojo: <code>forEach</code> <em>no</em> espera a los callbacks async — usa <code>map</code> + <code>Promise.all</code> en su lugar:</p>
+  <p>Para procesarlos en paralelo, transforma en un array de promesas y <code>await Promise.all</code>. Ojo: <code>forEach</code> <em>no</em> espera a los callbacks async - usa <code>map</code> + <code>Promise.all</code> en su lugar:</p>
   <pre><code>{`const items = await Promise.all(ids.map((id) => fetchItem(id)));`}</code></pre>
 
   <h2>Referencia rápida</h2>
@@ -88,5 +88,5 @@ const [a, b, c] = await Promise.all([fetchA(), fetchB(), fetchC()]);`}</code></p
     </tbody>
   </table>
 
-  <p>async/await no reemplaza a las promesas — las hace legibles. Mantén <code>Promise.all</code> a mano para el paralelismo, recurre a <code>try/catch</code> para los errores y vigila el <code>await</code> en serie accidental, y tendrás el JavaScript asíncrono bajo control.</p>
+  <p>async/await no reemplaza a las promesas - las hace legibles. Mantén <code>Promise.all</code> a mano para el paralelismo, recurre a <code>try/catch</code> para los errores y vigila el <code>await</code> en serie accidental, y tendrás el JavaScript asíncrono bajo control.</p>
 </Article>

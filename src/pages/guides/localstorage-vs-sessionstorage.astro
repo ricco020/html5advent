@@ -5,14 +5,14 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="localstorage-vs-sessionstorage"
   title="localStorage vs sessionStorage: the Web Storage API explained"
-  description="When to use localStorage vs sessionStorage — how they differ in lifetime and scope, their size limits, how to store JSON safely, and reacting to the storage event."
+  description="When to use localStorage vs sessionStorage - how they differ in lifetime and scope, their size limits, how to store JSON safely, and reacting to the storage event."
   cat="apis"
   day={6}
   hero="/img/localstorage-vs-sessionstorage-hero.jpg"
   heroAlt="A narrow archive aisle lined with shelves of labelled storage boxes and binders"
   cluster={null}
 >
-  <p>The <strong>Web Storage API</strong> gives the browser two simple key-value stores — <code>localStorage</code> and <code>sessionStorage</code> — for keeping small amounts of data on the user's device. Both share the exact same API; they differ only in <em>how long the data lives</em> and <em>who can see it</em>.</p>
+  <p>The <strong>Web Storage API</strong> gives the browser two simple key-value stores - <code>localStorage</code> and <code>sessionStorage</code> - for keeping small amounts of data on the user's device. Both share the exact same API; they differ only in <em>how long the data lives</em> and <em>who can see it</em>.</p>
 
   <h2>The shared API</h2>
   <p>Both objects expose the same five methods, and both store <strong>strings only</strong>:</p>
@@ -25,7 +25,7 @@ console.log(localStorage.length);              // number of keys`}</code></pre>
   <pre><code>{`const theme = localStorage.getItem('theme') || 'light';`}</code></pre>
 
   <h2>The one real difference: lifetime</h2>
-  <p>This is the whole decision in one sentence. <code>localStorage</code> persists <strong>until you delete it</strong> — it survives reloads, tab closes and browser restarts. <code>sessionStorage</code> lives only as long as the <strong>tab</strong> does: close the tab and the data is gone, and a second tab on the same site gets its own separate store.</p>
+  <p>This is the whole decision in one sentence. <code>localStorage</code> persists <strong>until you delete it</strong> - it survives reloads, tab closes and browser restarts. <code>sessionStorage</code> lives only as long as the <strong>tab</strong> does: close the tab and the data is gone, and a second tab on the same site gets its own separate store.</p>
 
   <figure>
     <img src="/img/localstorage-vs-sessionstorage-inbody.jpg" alt="A screen showing colourful JavaScript source code that reads from the window object" width="1280" height="720" loading="lazy" />
@@ -42,7 +42,7 @@ localStorage.setItem('user', JSON.stringify(user));
 // Read back
 const saved = JSON.parse(localStorage.getItem('user'));
 console.log(saved.name); // 'Ada'`}</code></pre>
-  <p>Wrap <code>JSON.parse</code> in a <code>try/catch</code> when the value might be missing or corrupted — parsing <code>null</code> or invalid text throws:</p>
+  <p>Wrap <code>JSON.parse</code> in a <code>try/catch</code> when the value might be missing or corrupted - parsing <code>null</code> or invalid text throws:</p>
   <pre><code>{`function readJSON(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -53,10 +53,10 @@ console.log(saved.name); // 'Ada'`}</code></pre>
 }`}</code></pre>
 
   <h2>Scope and the size limit</h2>
-  <p>Storage is scoped to the <strong>origin</strong> (scheme + host + port): <code>https://example.com</code> and <code>http://example.com</code> do not share data. The quota is roughly <strong>5&nbsp;MB per origin</strong> in most browsers — generous for preferences and small caches, but not a database. Exceeding it makes <code>setItem</code> throw a <code>QuotaExceededError</code>, so guard large writes.</p>
+  <p>Storage is scoped to the <strong>origin</strong> (scheme + host + port): <code>https://example.com</code> and <code>http://example.com</code> do not share data. The quota is roughly <strong>5&nbsp;MB per origin</strong> in most browsers - generous for preferences and small caches, but not a database. Exceeding it makes <code>setItem</code> throw a <code>QuotaExceededError</code>, so guard large writes.</p>
 
   <h2>Reacting to changes across tabs</h2>
-  <p>The <code>storage</code> event fires on <em>other</em> tabs of the same origin when <code>localStorage</code> changes — handy for syncing a logout or a theme switch across open windows. Note it does <strong>not</strong> fire in the tab that made the change, and <code>sessionStorage</code> never triggers it:</p>
+  <p>The <code>storage</code> event fires on <em>other</em> tabs of the same origin when <code>localStorage</code> changes - handy for syncing a logout or a theme switch across open windows. Note it does <strong>not</strong> fire in the tab that made the change, and <code>sessionStorage</code> never triggers it:</p>
   <pre><code>{`window.addEventListener('storage', (event) => {
   if (event.key === 'theme') {
     applyTheme(event.newValue);
@@ -75,5 +75,5 @@ console.log(saved.name); // 'Ada'`}</code></pre>
     </tbody>
   </table>
 
-  <p>Reach for <code>localStorage</code> when the data should stick around between visits, and <code>sessionStorage</code> when it is meaningful only for the current tab. For anything sensitive — tokens, passwords, personal data — neither is appropriate: both are readable by any script on the page, so keep secrets out of Web Storage entirely.</p>
+  <p>Reach for <code>localStorage</code> when the data should stick around between visits, and <code>sessionStorage</code> when it is meaningful only for the current tab. For anything sensitive - tokens, passwords, personal data - neither is appropriate: both are readable by any script on the page, so keep secrets out of Web Storage entirely.</p>
 </Article>

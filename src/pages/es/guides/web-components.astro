@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="es"
   slug="web-components"
   title="Web Components: Custom Elements, Shadow DOM y plantillas"
-  description="Crea elementos HTML reutilizables con las API nativas de Web Components — define un Custom Element, encapsula estilos con el Shadow DOM, clona un &lt;template&gt; y pasa datos por atributos."
+  description="Crea elementos HTML reutilizables con las API nativas de Web Components - define un Custom Element, encapsula estilos con el Shadow DOM, clona un &lt;template&gt; y pasa datos por atributos."
   cat="html"
   day={5}
   hero="/img/web-components-hero.jpg"
   heroAlt="Un montón de bloques de construcción de plástico de colores y encajables de distintas formas"
   cluster={null}
 >
-  <p>Los <strong>Web Components</strong> son un conjunto de API nativas del navegador que te permiten crear tus propios elementos HTML reutilizables — sin ningún framework. Un componente que publicas funciona igual en HTML puro, React, Vue o Svelte, porque es simplemente un elemento que el navegador entiende. Tres API lo hacen posible: los Custom Elements, el Shadow DOM y la etiqueta <code>&lt;template&gt;</code>.</p>
+  <p>Los <strong>Web Components</strong> son un conjunto de API nativas del navegador que te permiten crear tus propios elementos HTML reutilizables - sin ningún framework. Un componente que publicas funciona igual en HTML puro, React, Vue o Svelte, porque es simplemente un elemento que el navegador entiende. Tres API lo hacen posible: los Custom Elements, el Shadow DOM y la etiqueta <code>&lt;template&gt;</code>.</p>
 
   <h2>Custom Elements</h2>
   <p>Un Custom Element es una clase que extiende <code>HTMLElement</code>, registrada con un nombre de etiqueta que <strong>debe contener un guion</strong> (para no colisionar nunca con una futura etiqueta nativa):</p>
@@ -30,7 +30,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   <p>La clase te ofrece <strong>callbacks de ciclo de vida</strong>. Los más útiles son <code>connectedCallback</code> (el elemento se añadió a la página), <code>disconnectedCallback</code> (se eliminó) y <code>attributeChangedCallback</code> (un atributo observado cambió).</p>
 
   <h2>Reaccionar a los atributos</h2>
-  <p>Para pasar datos, lee atributos — igual que <code>src</code> en una imagen. Declara cuáles observar con un getter estático <code>observedAttributes</code> y luego responde en <code>attributeChangedCallback</code>. Construir el nodo con <code>textContent</code> mantiene seguros los valores que aporta el usuario:</p>
+  <p>Para pasar datos, lee atributos - igual que <code>src</code> en una imagen. Declara cuáles observar con un getter estático <code>observedAttributes</code> y luego responde en <code>attributeChangedCallback</code>. Construir el nodo con <code>textContent</code> mantiene seguros los valores que aporta el usuario:</p>
   <pre><code>{`class GreetingCard extends HTMLElement {
   static get observedAttributes() {
     return ['name'];
@@ -75,7 +75,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   }
 }
 customElements.define('fancy-button', FancyButton);`}</code></pre>
-  <p>El <code>&lt;slot&gt;</code> es un marcador de posición: lo que pongas entre las etiquetas — <code>&lt;fancy-button&gt;Guardar&lt;/fancy-button&gt;</code> — se proyecta en ese punto, así que el componente envuelve tu contenido sin reemplazarlo.</p>
+  <p>El <code>&lt;slot&gt;</code> es un marcador de posición: lo que pongas entre las etiquetas - <code>&lt;fancy-button&gt;Guardar&lt;/fancy-button&gt;</code> - se proyecta en ese punto, así que el componente envuelve tu contenido sin reemplazarlo.</p>
 
   <h2>Plantillas: clonar una vez, reutilizar barato</h2>
   <p>El elemento <code>&lt;template&gt;</code> contiene marcado inerte, analizado pero no renderizado hasta que lo clonas. Es la forma eficiente de repetir una estructura:</p>

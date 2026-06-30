@@ -12,17 +12,17 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="Iconos planos de un monitor de escritorio, una tableta, un portátil y un teléfono de distintos tamaños"
   cluster={null}
 >
-  <p>Las <strong>container queries</strong> permiten que un elemento reaccione al tamaño de su <em>contenedor padre</em> en lugar del tamaño de toda la ventana. Esa es la pieza que faltaba para hacer un componente realmente reutilizable: la misma tarjeta puede maquetarse de una forma en una barra lateral estrecha y de otra en una columna principal ancha — en la misma página, con el mismo ancho de pantalla.</p>
+  <p>Las <strong>container queries</strong> permiten que un elemento reaccione al tamaño de su <em>contenedor padre</em> en lugar del tamaño de toda la ventana. Esa es la pieza que faltaba para hacer un componente realmente reutilizable: la misma tarjeta puede maquetarse de una forma en una barra lateral estrecha y de otra en una columna principal ancha - en la misma página, con el mismo ancho de pantalla.</p>
 
   <h2>Por qué las media queries no bastaban</h2>
-  <p>Una media query hace una sola pregunta: ¿qué ancho tiene la ventana? Pero un componente no sabe el ancho de la ventana — sabe el espacio que <em>le</em> dieron. Una tarjeta colocada en una barra lateral de 300 px y la misma tarjeta en una celda de cuadrícula de 900 px necesitan maquetaciones distintas, aunque el ancho de la ventana sea idéntico. Las container queries resuelven justo esto.</p>
+  <p>Una media query hace una sola pregunta: ¿qué ancho tiene la ventana? Pero un componente no sabe el ancho de la ventana - sabe el espacio que <em>le</em> dieron. Una tarjeta colocada en una barra lateral de 300 px y la misma tarjeta en una celda de cuadrícula de 900 px necesitan maquetaciones distintas, aunque el ancho de la ventana sea idéntico. Las container queries resuelven justo esto.</p>
 
   <h2>Paso 1: declarar un contexto de contención</h2>
   <p>Se consulta un contenedor, así que primero hay que marcar un elemento <em>como</em> contenedor con <code>container-type</code>:</p>
   <pre><code>{`.card-wrapper {
   container-type: inline-size;
 }`}</code></pre>
-  <p><code>inline-size</code> significa «déjame consultar la dimensión en línea (normalmente horizontal)» — la opción más común. <code>size</code> consulta ambas dimensiones y <code>normal</code> desactiva la contención.</p>
+  <p><code>inline-size</code> significa «déjame consultar la dimensión en línea (normalmente horizontal)» - la opción más común. <code>size</code> consulta ambas dimensiones y <code>normal</code> desactiva la contención.</p>
 
   <h2>Paso 2: consultarlo con @container</h2>
   <p>Ahora cualquier descendiente de <code>.card-wrapper</code> puede adaptarse según el ancho del wrapper:</p>
@@ -36,7 +36,7 @@ import Article from '../../../layouts/Article.astro';
     grid-template-columns: 150px 1fr;
   }
 }`}</code></pre>
-  <p>Cuando el wrapper mide al menos 400 px de ancho, la tarjeta pasa a una maquetación de dos columnas. Coloca ese mismo marcado en cualquier parte de la página y se adapta al lugar donde aterriza — sin ninguna media query a nivel de página.</p>
+  <p>Cuando el wrapper mide al menos 400 px de ancho, la tarjeta pasa a una maquetación de dos columnas. Coloca ese mismo marcado en cualquier parte de la página y se adapta al lugar donde aterriza - sin ninguna media query a nivel de página.</p>
 
   <figure>
     <img src="/img/css-container-queries-inbody.jpg" alt="Un smartphone apoyado sobre una tableta y un portátil, tres pantallas de distintos tamaños" width="1280" height="820" loading="lazy" />
@@ -69,7 +69,7 @@ import Article from '../../../layouts/Article.astro';
   </table>
 
   <h2>Soporte de navegadores</h2>
-  <p>Las container queries de tamaño están soportadas en las versiones actuales de Chrome, Edge, Firefox y Safari. No sustituyen a las media queries — usa media queries para la estructura global de la página y container queries para los componentes que deben ser portables. Las dos funcionan bien juntas.</p>
+  <p>Las container queries de tamaño están soportadas en las versiones actuales de Chrome, Edge, Firefox y Safari. No sustituyen a las media queries - usa media queries para la estructura global de la página y container queries para los componentes que deben ser portables. Las dos funcionan bien juntas.</p>
 
   <p>El cambio de mentalidad es pequeño pero potente: deja de preguntar «¿qué tamaño tiene la pantalla?» y empieza a preguntar «¿cuánto espacio tiene este componente?». Ese único cambio hace que los componentes de un design system sean realmente reutilizables en cualquier sitio.</p>
 </Article>

@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="de"
   slug="localstorage-vs-sessionstorage"
   title="localStorage vs sessionStorage: die Web Storage API erklärt"
-  description="Wann localStorage und wann sessionStorage verwenden — wie sie sich in Lebensdauer und Geltungsbereich unterscheiden, ihre Größenbeschränkungen, JSON sicher speichern und auf das storage-Event reagieren."
+  description="Wann localStorage und wann sessionStorage verwenden - wie sie sich in Lebensdauer und Geltungsbereich unterscheiden, ihre Größenbeschränkungen, JSON sicher speichern und auf das storage-Event reagieren."
   cat="apis"
   day={6}
   hero="/img/localstorage-vs-sessionstorage-hero.jpg"
   heroAlt="Ein schmaler Archivgang mit Regalen voller beschrifteter Aufbewahrungsboxen und Ordner"
   cluster={null}
 >
-  <p>Die <strong>Web Storage API</strong> gibt dem Browser zwei einfache Schlüssel-Wert-Speicher — <code>localStorage</code> und <code>sessionStorage</code> — um kleine Datenmengen auf dem Gerät des Nutzers aufzubewahren. Beide teilen sich exakt dieselbe API; sie unterscheiden sich nur darin, <em>wie lange die Daten leben</em> und <em>wer sie sehen kann</em>.</p>
+  <p>Die <strong>Web Storage API</strong> gibt dem Browser zwei einfache Schlüssel-Wert-Speicher - <code>localStorage</code> und <code>sessionStorage</code> - um kleine Datenmengen auf dem Gerät des Nutzers aufzubewahren. Beide teilen sich exakt dieselbe API; sie unterscheiden sich nur darin, <em>wie lange die Daten leben</em> und <em>wer sie sehen kann</em>.</p>
 
   <h2>Die gemeinsame API</h2>
   <p>Beide Objekte stellen dieselben fünf Methoden bereit, und beide speichern <strong>ausschließlich Strings</strong>:</p>
@@ -25,7 +25,7 @@ console.log(localStorage.length);              // number of keys`}</code></pre>
   <pre><code>{`const theme = localStorage.getItem('theme') || 'light';`}</code></pre>
 
   <h2>Der einzige echte Unterschied: Lebensdauer</h2>
-  <p>Das ist die ganze Entscheidung in einem Satz. <code>localStorage</code> bleibt bestehen, <strong>bis Sie es löschen</strong> — es überlebt Neuladevorgänge, geschlossene Tabs und Browser-Neustarts. <code>sessionStorage</code> lebt nur so lange wie der <strong>Tab</strong>: Schließen Sie den Tab und die Daten sind weg, und ein zweiter Tab auf derselben Website erhält seinen eigenen separaten Speicher.</p>
+  <p>Das ist die ganze Entscheidung in einem Satz. <code>localStorage</code> bleibt bestehen, <strong>bis Sie es löschen</strong> - es überlebt Neuladevorgänge, geschlossene Tabs und Browser-Neustarts. <code>sessionStorage</code> lebt nur so lange wie der <strong>Tab</strong>: Schließen Sie den Tab und die Daten sind weg, und ein zweiter Tab auf derselben Website erhält seinen eigenen separaten Speicher.</p>
 
   <figure>
     <img src="/img/localstorage-vs-sessionstorage-inbody.jpg" alt="A screen showing colourful JavaScript source code that reads from the window object" width="1280" height="720" loading="lazy" />
@@ -42,7 +42,7 @@ localStorage.setItem('user', JSON.stringify(user));
 // Read back
 const saved = JSON.parse(localStorage.getItem('user'));
 console.log(saved.name); // 'Ada'`}</code></pre>
-  <p>Umschließen Sie <code>JSON.parse</code> mit einem <code>try/catch</code>, wenn der Wert fehlen oder beschädigt sein könnte — das Parsen von <code>null</code> oder ungültigem Text wirft einen Fehler:</p>
+  <p>Umschließen Sie <code>JSON.parse</code> mit einem <code>try/catch</code>, wenn der Wert fehlen oder beschädigt sein könnte - das Parsen von <code>null</code> oder ungültigem Text wirft einen Fehler:</p>
   <pre><code>{`function readJSON(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -53,10 +53,10 @@ console.log(saved.name); // 'Ada'`}</code></pre>
 }`}</code></pre>
 
   <h2>Geltungsbereich und das Größenlimit</h2>
-  <p>Der Speicher ist auf den <strong>Origin</strong> beschränkt (Schema + Host + Port): <code>https://example.com</code> und <code>http://example.com</code> teilen keine Daten. Das Kontingent beträgt in den meisten Browsern grob <strong>5&nbsp;MB pro Origin</strong> — großzügig für Einstellungen und kleine Caches, aber keine Datenbank. Eine Überschreitung lässt <code>setItem</code> einen <code>QuotaExceededError</code> werfen, also schützen Sie große Schreibvorgänge ab.</p>
+  <p>Der Speicher ist auf den <strong>Origin</strong> beschränkt (Schema + Host + Port): <code>https://example.com</code> und <code>http://example.com</code> teilen keine Daten. Das Kontingent beträgt in den meisten Browsern grob <strong>5&nbsp;MB pro Origin</strong> - großzügig für Einstellungen und kleine Caches, aber keine Datenbank. Eine Überschreitung lässt <code>setItem</code> einen <code>QuotaExceededError</code> werfen, also schützen Sie große Schreibvorgänge ab.</p>
 
   <h2>Auf Änderungen tab-übergreifend reagieren</h2>
-  <p>Das <code>storage</code>-Event wird auf <em>anderen</em> Tabs desselben Origins ausgelöst, wenn sich <code>localStorage</code> ändert — praktisch, um ein Logout oder einen Theme-Wechsel über offene Fenster hinweg zu synchronisieren. Beachten Sie, dass es <strong>nicht</strong> im Tab ausgelöst wird, der die Änderung vorgenommen hat, und <code>sessionStorage</code> löst es nie aus:</p>
+  <p>Das <code>storage</code>-Event wird auf <em>anderen</em> Tabs desselben Origins ausgelöst, wenn sich <code>localStorage</code> ändert - praktisch, um ein Logout oder einen Theme-Wechsel über offene Fenster hinweg zu synchronisieren. Beachten Sie, dass es <strong>nicht</strong> im Tab ausgelöst wird, der die Änderung vorgenommen hat, und <code>sessionStorage</code> löst es nie aus:</p>
   <pre><code>{`window.addEventListener('storage', (event) => {
   if (event.key === 'theme') {
     applyTheme(event.newValue);
@@ -75,5 +75,5 @@ console.log(saved.name); // 'Ada'`}</code></pre>
     </tbody>
   </table>
 
-  <p>Greifen Sie zu <code>localStorage</code>, wenn die Daten zwischen Besuchen erhalten bleiben sollen, und zu <code>sessionStorage</code>, wenn sie nur für den aktuellen Tab von Bedeutung sind. Für alles Sensible — Tokens, Passwörter, persönliche Daten — ist keiner von beiden geeignet: Beide sind von jedem Skript auf der Seite lesbar, also halten Sie Geheimnisse vollständig aus dem Web Storage heraus.</p>
+  <p>Greifen Sie zu <code>localStorage</code>, wenn die Daten zwischen Besuchen erhalten bleiben sollen, und zu <code>sessionStorage</code>, wenn sie nur für den aktuellen Tab von Bedeutung sind. Für alles Sensible - Tokens, Passwörter, persönliche Daten - ist keiner von beiden geeignet: Beide sind von jedem Skript auf der Seite lesbar, also halten Sie Geheimnisse vollständig aus dem Web Storage heraus.</p>
 </Article>

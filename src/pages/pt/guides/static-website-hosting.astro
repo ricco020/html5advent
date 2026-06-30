@@ -12,14 +12,14 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="A mão de um técnico fazendo manutenção em um servidor iluminado de azul em um rack de data center"
   cluster="deploy"
 >
-  <p>Um <strong>site estático</strong> é um conjunto de arquivos pré-compilados — HTML, CSS, JavaScript e ativos — que um servidor pode entregar ao navegador como estão, sem código sendo executado por requisição. Ferramentas como <strong>Astro</strong>, <strong>Vite</strong>, Eleventy ou uma pasta HTML escrita à mão produzem todas esse tipo de saída. Hospedá-lo é mais simples, mais barato e mais rápido do que hospedar um app dinâmico, porque não há nada para executar no lado do servidor.</p>
+  <p>Um <strong>site estático</strong> é um conjunto de arquivos pré-compilados - HTML, CSS, JavaScript e ativos - que um servidor pode entregar ao navegador como estão, sem código sendo executado por requisição. Ferramentas como <strong>Astro</strong>, <strong>Vite</strong>, Eleventy ou uma pasta HTML escrita à mão produzem todas esse tipo de saída. Hospedá-lo é mais simples, mais barato e mais rápido do que hospedar um app dinâmico, porque não há nada para executar no lado do servidor.</p>
 
   <h2>O que "hospedagem estática" realmente significa</h2>
-  <p>Com a hospedagem estática, você executa uma etapa de build localmente ou em CI, e ela emite uma pasta de arquivos simples (muitas vezes chamada de <code>dist</code> ou <code>_site</code>). A única tarefa do host é armazenar esses arquivos e servi-los por HTTP. Não há PHP, nem processo Node, nem banco de dados — apenas arquivos. Isso tem três consequências diretas:</p>
+  <p>Com a hospedagem estática, você executa uma etapa de build localmente ou em CI, e ela emite uma pasta de arquivos simples (muitas vezes chamada de <code>dist</code> ou <code>_site</code>). A única tarefa do host é armazenar esses arquivos e servi-los por HTTP. Não há PHP, nem processo Node, nem banco de dados - apenas arquivos. Isso tem três consequências diretas:</p>
   <ul>
-    <li><strong>Velocidade</strong> — os arquivos podem ser cacheados de forma agressiva e servidos a partir da edge, perto do visitante.</li>
-    <li><strong>Custo</strong> — nenhum servidor sempre ligado para pagar; muitos provedores oferecem um plano gratuito generoso.</li>
-    <li><strong>Confiabilidade</strong> — menos partes móveis significam menos coisas que podem quebrar sob carga.</li>
+    <li><strong>Velocidade</strong> - os arquivos podem ser cacheados de forma agressiva e servidos a partir da edge, perto do visitante.</li>
+    <li><strong>Custo</strong> - nenhum servidor sempre ligado para pagar; muitos provedores oferecem um plano gratuito generoso.</li>
+    <li><strong>Confiabilidade</strong> - menos partes móveis significam menos coisas que podem quebrar sob carga.</li>
   </ul>
 
   <h2>Construindo sua pasta de saída</h2>
@@ -31,12 +31,12 @@ npm run build        # outputs to ./dist
 npm run build        # outputs to ./dist
 
 # Plain HTML
-# no build step — your folder of .html files is already the output`}</code></pre>
+# no build step - your folder of .html files is already the output`}</code></pre>
   <p>Para um site HTML puro, a "build" é apenas a pasta que você já tem. Para Astro ou Vite, é o diretório <code>dist</code> que é servido.</p>
 
   <figure>
     <img src="/img/static-website-hosting-inbody.jpg" alt="Uma fileira de servidores pretos montados em rack em um data center" width="1280" height="853" loading="lazy" />
-    <figcaption>Por trás de todo site estático há uma infraestrutura física — racks de servidores e nós de edge da CDN que armazenam e distribuem seus arquivos compilados.</figcaption>
+    <figcaption>Por trás de todo site estático há uma infraestrutura física - racks de servidores e nós de edge da CDN que armazenam e distribuem seus arquivos compilados.</figcaption>
   </figure>
 
   <h2>Onde hospedar: CDN vs hospedagem estática clássica</h2>
@@ -55,7 +55,7 @@ npm run build        # outputs to ./dist
   <p>Muitas plataformas também suportam <strong>delegação de nameservers</strong>, onde você entrega o gerenciamento de DNS inteiramente ao host. Após a propagação dos registros, o host serve seu site no seu próprio domínio.</p>
 
   <h2>HTTPS de graça</h2>
-  <p>O HTTPS não é mais opcional — os navegadores sinalizam o HTTP simples como "não seguro", e muitas APIs da plataforma web só funcionam em um contexto seguro. A boa notícia: praticamente todo host estático moderno emite e renova certificados TLS para você automaticamente, geralmente via Let's Encrypt. Uma vez conectado o seu domínio, o certificado é provisionado sem nenhuma etapa manual, e as renovações acontecem por conta própria.</p>
+  <p>O HTTPS não é mais opcional - os navegadores sinalizam o HTTP simples como "não seguro", e muitas APIs da plataforma web só funcionam em um contexto seguro. A boa notícia: praticamente todo host estático moderno emite e renova certificados TLS para você automaticamente, geralmente via Let's Encrypt. Uma vez conectado o seu domínio, o certificado é provisionado sem nenhuma etapa manual, e as renovações acontecem por conta própria.</p>
 
   <h2>Referência rápida</h2>
   <table>
@@ -69,5 +69,5 @@ npm run build        # outputs to ./dist
     </tbody>
   </table>
 
-  <p>O propósito da hospedagem estática é justamente sair do seu caminho: você compila uma vez, faz push, e os arquivos são servidos rapidamente a partir da edge. Reserve a hospedagem dinâmica para as partes do seu projeto que realmente precisam de lógica no lado do servidor — e mantenha o frontend estático em uma infraestrutura construída para entregar arquivos rapidamente.</p>
+  <p>O propósito da hospedagem estática é justamente sair do seu caminho: você compila uma vez, faz push, e os arquivos são servidos rapidamente a partir da edge. Reserve a hospedagem dinâmica para as partes do seu projeto que realmente precisam de lógica no lado do servidor - e mantenha o frontend estático em uma infraestrutura construída para entregar arquivos rapidamente.</p>
 </Article>

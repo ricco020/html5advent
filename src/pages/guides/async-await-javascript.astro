@@ -5,7 +5,7 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="async-await-javascript"
   title="async/await in JavaScript: a practical guide"
-  description="How async and await work, how they relate to promises, error handling with try/catch, awaiting in loops, and the serial-vs-parallel gotcha — with runnable examples."
+  description="How async and await work, how they relate to promises, error handling with try/catch, awaiting in loops, and the serial-vs-parallel gotcha - with runnable examples."
   cat="js"
   day={3}
   hero="/img/async-await-javascript-hero.jpg"
@@ -13,12 +13,12 @@ import Article from '../../layouts/Article.astro';
   cluster={null}
   faq={[
     { q: 'What is async/await in JavaScript?', a: 'async/await is syntax that lets you write promise-based asynchronous code as if it were synchronous. Marking a function async makes it return a promise, and await pauses inside that function until a promise settles, so you read the logic top to bottom instead of chaining .then calls.' },
-    { q: 'Is async/await better than promises?', a: "They're the same thing underneath — async/await is built on promises and just reads more clearly for sequential steps and try/catch error handling. Promise combinators like Promise.all are still the right tool for running work in parallel, so you mix both." },
+    { q: 'Is async/await better than promises?', a: "They're the same thing underneath - async/await is built on promises and just reads more clearly for sequential steps and try/catch error handling. Promise combinators like Promise.all are still the right tool for running work in parallel, so you mix both." },
     { q: 'How do you handle errors with async/await?', a: 'Wrap the awaited calls in a try/catch block; a rejected promise throws at the await, so catch handles it like any synchronous error. From the caller side you can also add a .catch on the promise the async function returns.' },
-    { q: 'Why is awaiting in a loop slow?', a: 'Awaiting each item one after another runs them serially — each waits for the previous to finish. If the tasks are independent, start them all first and await Promise.all on the array instead, which runs them in parallel and is far faster.' },
+    { q: 'Why is awaiting in a loop slow?', a: 'Awaiting each item one after another runs them serially - each waits for the previous to finish. If the tasks are independent, start them all first and await Promise.all on the array instead, which runs them in parallel and is far faster.' },
   ]}
 >
-  <p>The <code>async</code> and <code>await</code> keywords are syntax over promises. They let you write asynchronous code that reads top-to-bottom like synchronous code, while still being non-blocking under the hood. If you know promises, you already know async/await — it just removes the <code>.then()</code> ceremony.</p>
+  <p>The <code>async</code> and <code>await</code> keywords are syntax over promises. They let you write asynchronous code that reads top-to-bottom like synchronous code, while still being non-blocking under the hood. If you know promises, you already know async/await - it just removes the <code>.then()</code> ceremony.</p>
 
   <h2>The basics</h2>
   <p>Mark a function <code>async</code> and you can use <code>await</code> inside it. <code>await</code> pauses that function until the promise settles, then gives you the resolved value:</p>
@@ -29,7 +29,7 @@ import Article from '../../layouts/Article.astro';
 }
 
 getUser(42).then((name) => console.log(name));`}</code></pre>
-  <p>Two things to remember: an <code>async</code> function <strong>always returns a promise</strong> (whatever you return is wrapped in one), and <code>await</code> only works <em>inside</em> an <code>async</code> function — except at the top level of an ES module, where top-level <code>await</code> is allowed.</p>
+  <p>Two things to remember: an <code>async</code> function <strong>always returns a promise</strong> (whatever you return is wrapped in one), and <code>await</code> only works <em>inside</em> an <code>async</code> function - except at the top level of an ES module, where top-level <code>await</code> is allowed.</p>
 
   <h2>async/await vs promises</h2>
   <p>They're the same machinery. This promise chain…</p>
@@ -40,7 +40,7 @@ getUser(42).then((name) => console.log(name));`}</code></pre>
   <pre><code>{`const res = await fetch('/api/user');
 const user = await res.json();
 console.log(user.name);`}</code></pre>
-  <p>You can mix them freely — <code>await</code> any promise, including the result of <code>Promise.all()</code>.</p>
+  <p>You can mix them freely - <code>await</code> any promise, including the result of <code>Promise.all()</code>.</p>
 
   <h2>Error handling with try/catch</h2>
   <p>With async/await you catch rejected promises using ordinary <code>try/catch</code>, the same construct you use for synchronous errors:</p>
@@ -60,11 +60,11 @@ console.log(user.name);`}</code></pre>
 
   <figure>
     <img src="/img/async-await-javascript-inbody.jpg" alt="A multi-lane motorway with cars and trucks travelling side by side in parallel" width="1280" height="853" loading="lazy" />
-    <figcaption>Independent tasks can run side by side like vehicles in parallel lanes — awaiting them one at a time forces a single-file queue instead.</figcaption>
+    <figcaption>Independent tasks can run side by side like vehicles in parallel lanes - awaiting them one at a time forces a single-file queue instead.</figcaption>
   </figure>
 
   <h2>The big gotcha: serial vs parallel await</h2>
-  <p>The most common async/await mistake is awaiting independent tasks one after another. This runs in <em>series</em> — the second request doesn't start until the first finishes:</p>
+  <p>The most common async/await mistake is awaiting independent tasks one after another. This runs in <em>series</em> - the second request doesn't start until the first finishes:</p>
   <pre><code>{`// Slow: total time = a + b + c
 const a = await fetchA();
 const b = await fetchB();
@@ -76,10 +76,10 @@ const [a, b, c] = await Promise.all([fetchA(), fetchB(), fetchC()]);`}</code></p
   <h2>await in loops</h2>
   <p>A plain <code>for</code> loop with <code>await</code> processes items <strong>one at a time</strong>, which is correct when each step depends on the previous one or you must avoid overwhelming a server:</p>
   <pre><code>{`for (const id of ids) {
-  const item = await fetchItem(id);   // sequential — one after another
+  const item = await fetchItem(id);   // sequential - one after another
   console.log(item);
 }`}</code></pre>
-  <p>To process them concurrently, map to an array of promises and <code>await Promise.all</code>. Note that <code>forEach</code> does <em>not</em> wait for async callbacks — use <code>map</code> + <code>Promise.all</code> instead:</p>
+  <p>To process them concurrently, map to an array of promises and <code>await Promise.all</code>. Note that <code>forEach</code> does <em>not</em> wait for async callbacks - use <code>map</code> + <code>Promise.all</code> instead:</p>
   <pre><code>{`const items = await Promise.all(ids.map((id) => fetchItem(id)));`}</code></pre>
 
   <h2>Quick reference</h2>
@@ -94,5 +94,5 @@ const [a, b, c] = await Promise.all([fetchA(), fetchB(), fetchC()]);`}</code></p
     </tbody>
   </table>
 
-  <p>async/await doesn't replace promises — it makes them readable. Keep <code>Promise.all</code> in your toolkit for parallelism, reach for <code>try/catch</code> for errors, and watch out for the accidental serial <code>await</code>, and you'll have asynchronous JavaScript well in hand.</p>
+  <p>async/await doesn't replace promises - it makes them readable. Keep <code>Promise.all</code> in your toolkit for parallelism, reach for <code>try/catch</code> for errors, and watch out for the accidental serial <code>await</code>, and you'll have asynchronous JavaScript well in hand.</p>
 </Article>

@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="es"
   slug="php-hosting"
   title="Alojamiento PHP: compartido vs VPS, versiones y rendimiento"
-  description="Qué mirar en un alojamiento PHP — compartido vs VPS, versiones y extensiones de PHP, despliegue, .htaccess y rendimiento con OPcache — sin el ruido del marketing."
+  description="Qué mirar en un alojamiento PHP - compartido vs VPS, versiones y extensiones de PHP, despliegue, .htaccess y rendimiento con OPcache - sin el ruido del marketing."
   cat="hosting"
   day={15}
   hero="/img/php-hosting-hero.jpg"
@@ -13,18 +13,18 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>PHP todavía impulsa una gran parte de la web, y alojarlo es terreno muy trillado — precisamente por eso todas las ofertas se parecen y las diferencias reales se esconden en los detalles. Esta guía cubre los criterios que de verdad importan: la disyuntiva compartido/VPS, las versiones y extensiones de PHP, cómo despliegas, qué controla el <code>.htaccess</code> y los ajustes de rendimiento que conviene conocer.</p>
+  <p>PHP todavía impulsa una gran parte de la web, y alojarlo es terreno muy trillado - precisamente por eso todas las ofertas se parecen y las diferencias reales se esconden en los detalles. Esta guía cubre los criterios que de verdad importan: la disyuntiva compartido/VPS, las versiones y extensiones de PHP, cómo despliegas, qué controla el <code>.htaccess</code> y los ajustes de rendimiento que conviene conocer.</p>
 
   <h2>Alojamiento compartido vs VPS</h2>
   <p>La primera decisión es cuán aislado está tu entorno.</p>
   <ul>
-    <li><strong>Compartido</strong> — tu sitio convive con muchos otros en una misma máquina, gestionada por ti (PHP, servidor web, a menudo un panel de control). Lo más barato y simple; renuncias al control de la versión de PHP, las extensiones y la configuración del servidor, y compartes recursos con los vecinos.</li>
-    <li><strong>VPS</strong> — una porción dedicada de servidor con acceso root. Eliges la versión de PHP, instalas cualquier extensión, ajustas el servidor web y no te afectan otros inquilinos — pero eres responsable de las actualizaciones y la seguridad.</li>
+    <li><strong>Compartido</strong> - tu sitio convive con muchos otros en una misma máquina, gestionada por ti (PHP, servidor web, a menudo un panel de control). Lo más barato y simple; renuncias al control de la versión de PHP, las extensiones y la configuración del servidor, y compartes recursos con los vecinos.</li>
+    <li><strong>VPS</strong> - una porción dedicada de servidor con acceso root. Eliges la versión de PHP, instalas cualquier extensión, ajustas el servidor web y no te afectan otros inquilinos - pero eres responsable de las actualizaciones y la seguridad.</li>
   </ul>
   <p>Para un sitio pequeño o un CMS estándar, el compartido suele bastar. Recurre a un VPS cuando necesites un build de PHP concreto, extensiones personalizadas, un rendimiento más previsible o control total del stack.</p>
 
   <h2>La versión de PHP importa</h2>
-  <p>La versión de PHP no es un detalle — las versiones recientes son notablemente más rápidas y, sobre todo, aún reciben correcciones de seguridad. Ejecutar una versión sin soporte significa quedarse sin parches. Comprueba siempre qué versiones ofrece un alojamiento y si puedes cambiarlas con facilidad. La versión activa se lee desde el código o la CLI:</p>
+  <p>La versión de PHP no es un detalle - las versiones recientes son notablemente más rápidas y, sobre todo, aún reciben correcciones de seguridad. Ejecutar una versión sin soporte significa quedarse sin parches. Comprueba siempre qué versiones ofrece un alojamiento y si puedes cambiarlas con facilidad. La versión activa se lee desde el código o la CLI:</p>
   <pre><code>{`<?php
 echo phpversion();        // p. ej. "8.3.x"
 // o un informe completo:
@@ -33,12 +33,12 @@ phpinfo();`}</code></pre>
   <p>Un buen alojamiento permite seleccionar la versión de PHP por sitio (a menudo en el panel de control) y mantiene disponible un rango de versiones soportadas, para que actualices a tu ritmo.</p>
 
   <h2>Extensiones: compruébalas antes de comprometerte</h2>
-  <p>La funcionalidad de PHP se reparte en extensiones, y tu app probablemente depende de varias — un controlador de base de datos, el tratamiento de imágenes, etc. Las más comunes que conviene verificar en un alojamiento:</p>
+  <p>La funcionalidad de PHP se reparte en extensiones, y tu app probablemente depende de varias - un controlador de base de datos, el tratamiento de imágenes, etc. Las más comunes que conviene verificar en un alojamiento:</p>
   <ul>
-    <li><code>pdo_mysql</code> / <code>mysqli</code> — conectividad MySQL/MariaDB.</li>
-    <li><code>mbstring</code> — manejo de cadenas multibyte, requerido por muchos frameworks.</li>
-    <li><code>gd</code> o <code>imagick</code> — procesamiento de imágenes.</li>
-    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> — peticiones HTTP, cifrado, archivos comprimidos, localización.</li>
+    <li><code>pdo_mysql</code> / <code>mysqli</code> - conectividad MySQL/MariaDB.</li>
+    <li><code>mbstring</code> - manejo de cadenas multibyte, requerido por muchos frameworks.</li>
+    <li><code>gd</code> o <code>imagick</code> - procesamiento de imágenes.</li>
+    <li><code>curl</code>, <code>openssl</code>, <code>zip</code>, <code>intl</code> - peticiones HTTP, cifrado, archivos comprimidos, localización.</li>
   </ul>
   <p>Lista lo que está realmente cargado en el servidor con:</p>
   <pre><code>{`php -m`}</code></pre>
@@ -49,13 +49,13 @@ phpinfo();`}</code></pre>
   </figure>
 
   <h2>Despliegue y .htaccess</h2>
-  <p>En alojamiento compartido sueles desplegar subiendo archivos (SFTP) o trayéndolos desde Git a la raíz web; algunos alojamientos añaden un paso de despliegue desde el panel. En Apache, el archivo <code>.htaccess</code> de tu raíz web configura el comportamiento por directorio sin tocar la configuración principal del servidor — útil para URL limpias, redirecciones y cabeceras de caché. Un patrón común enruta todas las peticiones a un controlador frontal:</p>
-  <pre><code>{`# .htaccess — enrutar todo a index.php (controlador frontal)
+  <p>En alojamiento compartido sueles desplegar subiendo archivos (SFTP) o trayéndolos desde Git a la raíz web; algunos alojamientos añaden un paso de despliegue desde el panel. En Apache, el archivo <code>.htaccess</code> de tu raíz web configura el comportamiento por directorio sin tocar la configuración principal del servidor - útil para URL limpias, redirecciones y cabeceras de caché. Un patrón común enruta todas las peticiones a un controlador frontal:</p>
+  <pre><code>{`# .htaccess - enrutar todo a index.php (controlador frontal)
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]`}</code></pre>
-  <p>Ten en cuenta que <code>.htaccess</code> es una función de Apache. En Nginx las reglas equivalentes viven en la configuración del servidor, que en compartido quizá no controles — otra razón para saber qué servidor web usa tu alojamiento.</p>
+  <p>Ten en cuenta que <code>.htaccess</code> es una función de Apache. En Nginx las reglas equivalentes viven en la configuración del servidor, que en compartido quizá no controles - otra razón para saber qué servidor web usa tu alojamiento.</p>
 
   <h2>Rendimiento: OPcache</h2>
   <p>La mayor ganancia de rendimiento en PHP es <strong>OPcache</strong>, que cachea el bytecode compilado para que PHP no vuelva a analizar y recompilar tus scripts en cada petición. La mayoría de alojamientos modernos lo activan por defecto; merece la pena confirmarlo. Ajustes típicos en <code>php.ini</code>:</p>
@@ -63,7 +63,7 @@ RewriteRule ^ index.php [L]`}</code></pre>
 opcache.memory_consumption=128
 opcache.max_accelerated_files=10000
 opcache.validate_timestamps=1`}</code></pre>
-  <p>En producción puedes poner <code>opcache.validate_timestamps=0</code> para que PHP nunca compruebe cambios en los archivos, y vaciar la caché al desplegar — un poco más de velocidad a cambio de necesitar un reinicio explícito de la caché.</p>
+  <p>En producción puedes poner <code>opcache.validate_timestamps=0</code> para que PHP nunca compruebe cambios en los archivos, y vaciar la caché al desplegar - un poco más de velocidad a cambio de necesitar un reinicio explícito de la caché.</p>
 
   <h2>Lista rápida</h2>
   <table>
@@ -77,5 +77,5 @@ opcache.validate_timestamps=1`}</code></pre>
     </tbody>
   </table>
 
-  <p>El alojamiento PHP es maduro, así que no le des demasiadas vueltas a las marcas — ajusta el alojamiento a los requisitos reales de tu app: la versión de PHP correcta, las extensiones de las que dependes, un servidor web que entiendas y OPcache activado. Acierta en eso y el resto es sobre todo cuestión de preferencia.</p>
+  <p>El alojamiento PHP es maduro, así que no le des demasiadas vueltas a las marcas - ajusta el alojamiento a los requisitos reales de tu app: la versión de PHP correcta, las extensiones de las que dependes, un servidor web que entiendas y OPcache activado. Acierta en eso y el resto es sobre todo cuestión de preferencia.</p>
 </Article>

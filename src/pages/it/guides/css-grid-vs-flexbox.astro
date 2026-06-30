@@ -17,10 +17,10 @@ import Article from '../../../layouts/Article.astro';
     { q: `La compatibilità dei browser è un problema nel 2026?`, a: `No. Sia Flexbox sia CSS Grid sono supportati da tutti i browser moderni da anni, quindi la compatibilità non è un fattore decisivo: scegli in base alla natura del problema.` },
   ]}
 >
-  <p><strong>Grid vs Flexbox</strong> è la domanda più frequente sul layout in CSS — e la risposta onesta è che non sono rivali. Risolvono problemi diversi: <strong>Flexbox dispone il contenuto in una dimensione</strong> (una riga <em>oppure</em> una colonna), mentre <strong>CSS Grid dispone il contenuto in due dimensioni</strong> (righe <em>e</em> colonne insieme). Una volta capito questo, scegliere tra i due non è più un tirare a indovinare.</p>
+  <p><strong>Grid vs Flexbox</strong> è la domanda più frequente sul layout in CSS - e la risposta onesta è che non sono rivali. Risolvono problemi diversi: <strong>Flexbox dispone il contenuto in una dimensione</strong> (una riga <em>oppure</em> una colonna), mentre <strong>CSS Grid dispone il contenuto in due dimensioni</strong> (righe <em>e</em> colonne insieme). Una volta capito questo, scegliere tra i due non è più un tirare a indovinare.</p>
 
   <h2>La risposta in una riga</h2>
-  <p>Se stai allineando elementi lungo un'unica linea — una barra di navigazione, una fila di pulsanti, tag che vanno a capo — ricorri a <strong>Flexbox</strong>. Se stai organizzando elementi in una vera struttura bidimensionale — il layout di una pagina, una galleria fotografica, una dashboard di card allineate per righe e colonne — ricorri a <strong>Grid</strong>. La maggior parte delle pagine non banali usa entrambi, ed è il risultato voluto, non un compromesso.</p>
+  <p>Se stai allineando elementi lungo un'unica linea - una barra di navigazione, una fila di pulsanti, tag che vanno a capo - ricorri a <strong>Flexbox</strong>. Se stai organizzando elementi in una vera struttura bidimensionale - il layout di una pagina, una galleria fotografica, una dashboard di card allineate per righe e colonne - ricorri a <strong>Grid</strong>. La maggior parte delle pagine non banali usa entrambi, ed è il risultato voluto, non un compromesso.</p>
 
   <h2>In che cosa differiscono davvero</h2>
   <table>
@@ -33,13 +33,13 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Ideale per</td><td>Componenti: barre di navigazione, toolbar, liste, distribuire lo spazio su una linea</td><td>Layout di pagina e di sezione, gallerie, griglie di card, sovrapposizioni</td></tr>
       <tr><td>Spaziature</td><td><code>gap</code> supportato</td><td><code>gap</code> supportato (nato qui)</td></tr>
       <tr><td>Allineamento</td><td>Eccellente lungo l'asse principale/trasversale</td><td>Eccellente su entrambi gli assi, più posizionamento per linea/area</td></tr>
-      <tr><td>Sovrapposizione</td><td>Non proprio</td><td>Sì — gli elementi possono condividere le celle</td></tr>
+      <tr><td>Sovrapposizione</td><td>Non proprio</td><td>Sì - gli elementi possono condividere le celle</td></tr>
     </tbody>
   </table>
 
   <figure>
     <img src="/img/css-grid-vs-flexbox-inbody.jpg" alt="Primo piano di codice sorgente CSS mostrato su un monitor di un computer" width="1280" height="853" loading="lazy" />
-    <figcaption>Sia Grid sia Flexbox si scrivono in puro CSS — senza framework né preprocessore. La scelta riguarda la forma del layout, non gli strumenti.</figcaption>
+    <figcaption>Sia Grid sia Flexbox si scrivono in puro CSS - senza framework né preprocessore. La scelta riguarda la forma del layout, non gli strumenti.</figcaption>
   </figure>
 
   <h2>Quando usare Flexbox</h2>
@@ -59,11 +59,11 @@ import Article from '../../../layouts/Article.astro';
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
 &#125;</code></pre>
-  <p>Quell'unica regola produce una griglia di card responsive che aggiunge e rimuove colonne da sola, senza alcuna media query — qualcosa che Flexbox non sa fare in modo pulito, perché conosce un solo asse alla volta.</p>
+  <p>Quell'unica regola produce una griglia di card responsive che aggiunge e rimuove colonne da sola, senza alcuna media query - qualcosa che Flexbox non sa fare in modo pulito, perché conosce un solo asse alla volta.</p>
 
   <h2>La risposta vera: usali insieme</h2>
-  <p>In una pagina reale usi quasi sempre entrambi, annidati. Grid gestisce il quadro generale — lo scheletro complessivo della pagina o della sezione — e Flexbox gestisce il dettaglio all'interno di ogni regione: allineare gli elementi dentro una card, un header o una toolbar. Ricorrere a Grid non significa abbandonare Flexbox; sono livelli dello stesso sistema.</p>
-  <p>Un modello mentale semplice: <strong>Grid è per il layout, Flexbox è per i componenti.</strong> Se stai posizionando le regioni di una pagina, è Grid. Se stai allineando il contenuto di una regione, è Flexbox. Nel dubbio, chiediti se il problema è davvero bidimensionale — se colonne e righe devono allinearsi tra loro, è Grid; se è solo una riga di elementi, è Flexbox.</p>
+  <p>In una pagina reale usi quasi sempre entrambi, annidati. Grid gestisce il quadro generale - lo scheletro complessivo della pagina o della sezione - e Flexbox gestisce il dettaglio all'interno di ogni regione: allineare gli elementi dentro una card, un header o una toolbar. Ricorrere a Grid non significa abbandonare Flexbox; sono livelli dello stesso sistema.</p>
+  <p>Un modello mentale semplice: <strong>Grid è per il layout, Flexbox è per i componenti.</strong> Se stai posizionando le regioni di una pagina, è Grid. Se stai allineando il contenuto di una regione, è Flexbox. Nel dubbio, chiediti se il problema è davvero bidimensionale - se colonne e righe devono allinearsi tra loro, è Grid; se è solo una riga di elementi, è Flexbox.</p>
 
   <h2>Supporto dei browser</h2>
   <p>Entrambi sono pienamente supportati in ogni browser moderno, e lo sono da anni, quindi il supporto non è un fattore decisivo nel 2026. Scegli in base alla forma del problema, non alla compatibilità. Per uno styling dei componenti più approfondito puoi abbinare l'uno o l'altro al <a href="/it/guides/css-nesting">nesting nativo di CSS</a> e alle <a href="/it/guides/css-container-queries">container query</a>, che permettono a un componente di reagire allo spazio che riceve davvero.</p>

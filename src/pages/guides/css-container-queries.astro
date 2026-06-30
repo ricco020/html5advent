@@ -12,17 +12,17 @@ import Article from '../../layouts/Article.astro';
   heroAlt="Flat icons of a desktop monitor, tablet, laptop and phone of different sizes"
   cluster={null}
 >
-  <p><strong>Container queries</strong> let an element respond to the size of its <em>parent container</em> instead of the size of the whole viewport. That is the missing piece that finally makes a component reusable: the same card can lay out one way in a narrow sidebar and another way in a wide main column — on the same page, at the same screen width.</p>
+  <p><strong>Container queries</strong> let an element respond to the size of its <em>parent container</em> instead of the size of the whole viewport. That is the missing piece that finally makes a component reusable: the same card can lay out one way in a narrow sidebar and another way in a wide main column - on the same page, at the same screen width.</p>
 
   <h2>Why media queries were not enough</h2>
-  <p>A media query asks one question: how wide is the viewport? But a component does not know how wide the viewport is — it knows how much room <em>it</em> was given. A card dropped into a 300px sidebar and the same card in a 900px grid cell need different layouts, yet the viewport width is identical. Container queries fix exactly this.</p>
+  <p>A media query asks one question: how wide is the viewport? But a component does not know how wide the viewport is - it knows how much room <em>it</em> was given. A card dropped into a 300px sidebar and the same card in a 900px grid cell need different layouts, yet the viewport width is identical. Container queries fix exactly this.</p>
 
   <h2>Step 1: declare a containment context</h2>
   <p>You query a container, so first you have to mark an element <em>as</em> a container with <code>container-type</code>:</p>
   <pre><code>{`.card-wrapper {
   container-type: inline-size;
 }`}</code></pre>
-  <p><code>inline-size</code> means "let me query the inline (usually horizontal) dimension" — the most common choice. <code>size</code> queries both dimensions, and <code>normal</code> turns containment off.</p>
+  <p><code>inline-size</code> means "let me query the inline (usually horizontal) dimension" - the most common choice. <code>size</code> queries both dimensions, and <code>normal</code> turns containment off.</p>
 
   <h2>Step 2: query it with @container</h2>
   <p>Now any descendant of <code>.card-wrapper</code> can adapt based on the wrapper's width:</p>
@@ -36,7 +36,7 @@ import Article from '../../layouts/Article.astro';
     grid-template-columns: 150px 1fr;
   }
 }`}</code></pre>
-  <p>When the wrapper is at least 400px wide, the card switches to a two-column layout. Drop that same markup anywhere on the page and it adapts to wherever it lands — no page-level media queries needed.</p>
+  <p>When the wrapper is at least 400px wide, the card switches to a two-column layout. Drop that same markup anywhere on the page and it adapts to wherever it lands - no page-level media queries needed.</p>
 
   <figure>
     <img src="/img/css-container-queries-inbody.jpg" alt="A smartphone resting on top of a tablet and a laptop, three screens of different sizes" width="1280" height="820" loading="lazy" />
@@ -69,7 +69,7 @@ import Article from '../../layouts/Article.astro';
   </table>
 
   <h2>Browser support</h2>
-  <p>Size container queries are supported across current Chrome, Edge, Firefox and Safari. They are not a replacement for media queries — use media queries for the overall page structure and container queries for components that must be portable. The two work well together.</p>
+  <p>Size container queries are supported across current Chrome, Edge, Firefox and Safari. They are not a replacement for media queries - use media queries for the overall page structure and container queries for components that must be portable. The two work well together.</p>
 
   <p>The mental shift is small but powerful: stop asking "how big is the screen?" and start asking "how much room does this component have?" That single change is what makes a design system's components genuinely drop-in anywhere.</p>
 </Article>

@@ -5,18 +5,18 @@ import Article from '../../../layouts/Article.astro';
   lang="es"
   slug="vps-vs-dedicated-server"
   title="VPS vs servidor dedicado: ¿cuál necesita tu proyecto?"
-  description="En qué se diferencian realmente un VPS y un servidor dedicado — rendimiento, aislamiento, escalado, control y precio — y una forma clara de decidir cuál encaja con tu web o aplicación."
+  description="En qué se diferencian realmente un VPS y un servidor dedicado - rendimiento, aislamiento, escalado, control y precio - y una forma clara de decidir cuál encaja con tu web o aplicación."
   cat="hosting"
   hero="/img/vps-vs-dedicated-server-hero.jpg"
   heroAlt="La mano de un técnico extrayendo un módulo de servidor de un rack iluminado en azul en un centro de datos"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p>Un <strong>VPS</strong> (servidor privado virtual) y un <strong>servidor dedicado</strong> están uno al lado del otro en la escala del alojamiento, y es fácil confundirlos. La diferencia es sencilla: un VPS te da una <em>porción garantizada</em> de una máquina física que compartes con otros inquilinos aislados; un servidor dedicado te da la máquina física <em>entera</em>, sin vecinos. Ese único hecho explica todos los compromisos de abajo — techo de rendimiento, aislamiento, escalado, control y precio. Esta guía los compara con honestidad, sin benchmarks inventados, para que ajustes el modelo a tu carga real.</p>
+  <p>Un <strong>VPS</strong> (servidor privado virtual) y un <strong>servidor dedicado</strong> están uno al lado del otro en la escala del alojamiento, y es fácil confundirlos. La diferencia es sencilla: un VPS te da una <em>porción garantizada</em> de una máquina física que compartes con otros inquilinos aislados; un servidor dedicado te da la máquina física <em>entera</em>, sin vecinos. Ese único hecho explica todos los compromisos de abajo - techo de rendimiento, aislamiento, escalado, control y precio. Esta guía los compara con honestidad, sin benchmarks inventados, para que ajustes el modelo a tu carga real.</p>
 
   <h2>Cómo funciona cada modelo</h2>
-  <p>En un <strong>VPS</strong>, un hipervisor divide un servidor físico en varias máquinas virtuales. Cada VM tiene su propio sistema operativo, acceso root y una porción reservada de RAM, CPU y almacenamiento. Estás aislado de los demás inquilinos, pero el hardware del host es compartido — y en algunos planes la CPU es «burstable» en lugar de totalmente reservada.</p>
-  <p>Un <strong>servidor dedicado</strong> es una máquina física completa alquilada solo para ti. Cada núcleo, cada gigabyte de RAM y cada disco es tuyo, sin capa de virtualización entre tu carga y el hardware. Obtienes todo el rendimiento de la máquina y control total — y pagas la máquina entera, la uses al máximo o no.</p>
+  <p>En un <strong>VPS</strong>, un hipervisor divide un servidor físico en varias máquinas virtuales. Cada VM tiene su propio sistema operativo, acceso root y una porción reservada de RAM, CPU y almacenamiento. Estás aislado de los demás inquilinos, pero el hardware del host es compartido - y en algunos planes la CPU es «burstable» en lugar de totalmente reservada.</p>
+  <p>Un <strong>servidor dedicado</strong> es una máquina física completa alquilada solo para ti. Cada núcleo, cada gigabyte de RAM y cada disco es tuyo, sin capa de virtualización entre tu carga y el hardware. Obtienes todo el rendimiento de la máquina y control total - y pagas la máquina entera, la uses al máximo o no.</p>
 
   <h2>Las diferencias que importan</h2>
 
@@ -24,7 +24,7 @@ import Article from '../../../layouts/Article.astro';
   <p>Un servidor dedicado tiene un techo de rendimiento más alto y constante: sin sobrecarga del hipervisor, sin posibilidad de un vecino ruidoso y con acceso completo a CPU y disco. Un buen VPS rinde muy bien en la gran mayoría de proyectos web, pero su techo es la porción que compraste. Si tu carga está limitada por CPU o I/O a alto régimen sostenido, el dedicado elimina ese techo.</p>
 
   <h3>Aislamiento y seguridad</h3>
-  <p>Ambos te aíslan de otros clientes a nivel de sistema. Un servidor dedicado añade aislamiento de <em>hardware</em> — nada más se ejecuta en la máquina — algo que exigen ciertos requisitos de cumplimiento o de alta seguridad. Para la mayoría de los sitios, el aislamiento a nivel de VPS ya es suficiente.</p>
+  <p>Ambos te aíslan de otros clientes a nivel de sistema. Un servidor dedicado añade aislamiento de <em>hardware</em> - nada más se ejecuta en la máquina - algo que exigen ciertos requisitos de cumplimiento o de alta seguridad. Para la mayoría de los sitios, el aislamiento a nivel de VPS ya es suficiente.</p>
 
   <figure>
     <img src="/img/vps-vs-dedicated-server-inbody.jpg" alt="Un armario de servidores lleno de paneles de parcheo Cat6 y cables Ethernet azules conectados a puertos numerados" width="720" height="1280" loading="lazy" />
@@ -32,10 +32,10 @@ import Article from '../../../layouts/Article.astro';
   </figure>
 
   <h3>Escalado</h3>
-  <p>Un VPS suele ser más fácil de escalar: muchos hosts permiten redimensionar el plan — más RAM, más vCPU — en unos minutos, a veces sin reconstruir. Un servidor dedicado escala en pasos más grandes y lentos: cambias de hardware o migras a una máquina mayor, lo que requiere más planificación. Si esperas crecer de forma gradual, la flexibilidad del VPS es una ventaja.</p>
+  <p>Un VPS suele ser más fácil de escalar: muchos hosts permiten redimensionar el plan - más RAM, más vCPU - en unos minutos, a veces sin reconstruir. Un servidor dedicado escala en pasos más grandes y lentos: cambias de hardware o migras a una máquina mayor, lo que requiere más planificación. Si esperas crecer de forma gradual, la flexibilidad del VPS es una ventaja.</p>
 
   <h3>Control</h3>
-  <p>Ambos ofrecen acceso root completo y permiten instalar el stack que quieras. Un servidor dedicado añade control de más bajo nivel — elegir hardware concreto, ajustar el bare-metal y evitar rarezas de virtualización. Para stacks web típicos (servidor web, base de datos, caché, tareas en segundo plano), un VPS ya da todo el control necesario.</p>
+  <p>Ambos ofrecen acceso root completo y permiten instalar el stack que quieras. Un servidor dedicado añade control de más bajo nivel - elegir hardware concreto, ajustar el bare-metal y evitar rarezas de virtualización. Para stacks web típicos (servidor web, base de datos, caché, tareas en segundo plano), un VPS ya da todo el control necesario.</p>
 
   <h3>Precio</h3>
   <p>Esta es la diferencia más clara. Un VPS cuesta una fracción de un servidor dedicado porque el hardware subyacente se comparte entre varios inquilinos. Un servidor dedicado cuesta más porque pagas una máquina física entera. Como referencia, un proveedor como <strong>Contabo</strong> ofrece Cloud VPS desde unos 5–6&nbsp;€/mes, hasta unos 25&nbsp;€/mes en sus niveles VPS superiores (contrato de 12 meses, sin IVA, tráfico ilimitado de uso justo, precios de junio&nbsp;de&nbsp;2026), mientras que los servidores dedicados quedan muy por encima. Confirma siempre el precio actual y el de renovación en la página del proveedor antes de decidir.</p>
@@ -49,7 +49,7 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Aislamiento</td><td>A nivel de SO (aislado de otros inquilinos)</td><td>Nivel SO + aislamiento de hardware completo</td></tr>
       <tr><td>Escalado</td><td>Rápido, a menudo redimensionable en minutos</td><td>Pasos mayores; upgrade o migración</td></tr>
       <tr><td>Control</td><td>Root completo; stack libre</td><td>Root completo + control bare-metal/hardware</td></tr>
-      <tr><td>Precio</td><td>Una fracción de un dedicado</td><td>Más alto — toda la máquina</td></tr>
+      <tr><td>Precio</td><td>Una fracción de un dedicado</td><td>Más alto - toda la máquina</td></tr>
       <tr><td>Ideal para</td><td>La mayoría de webs/apps, proyectos en crecimiento</td><td>Carga pesada y sostenida; aislamiento estricto</td></tr>
     </tbody>
   </table>
@@ -59,7 +59,7 @@ import Article from '../../../layouts/Article.astro';
   <ul>
     <li><strong>Elige un VPS</strong> si tienes una web o app típica, quieres bajo coste y escalado fácil, y una porción generosa de máquina cubre con holgura tu carga. Es la respuesta correcta para la inmensa mayoría de proyectos.</li>
     <li><strong>Elige un servidor dedicado</strong> si tienes una carga de CPU/I/O pesada y sostenida que satura los VPS grandes, necesitas aislamiento de hardware por cumplimiento o requieres control bare-metal específico.</li>
-    <li><strong>¿Aún dudas?</strong> Empieza con un VPS. Es más barato, escala rápido y, si de verdad superas el mayor nivel de VPS, podrás migrar a dedicado más tarde — la mayoría de proyectos nunca lo necesitan.</li>
+    <li><strong>¿Aún dudas?</strong> Empieza con un VPS. Es más barato, escala rápido y, si de verdad superas el mayor nivel de VPS, podrás migrar a dedicado más tarde - la mayoría de proyectos nunca lo necesitan.</li>
   </ul>
 
   <h2>Preguntas frecuentes</h2>

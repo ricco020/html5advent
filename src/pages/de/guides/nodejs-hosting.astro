@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="de"
   slug="nodejs-hosting"
   title="Eine Node.js-App hosten: VPS, PaaS und Serverless"
-  description="Die praktischen Wege, eine Node.js-Anwendung zu deployen — VPS, Managed PaaS oder Serverless — plus PM2, ein Reverse Proxy, Umgebungsvariablen und ein vernünftiger Deployment-Ablauf."
+  description="Die praktischen Wege, eine Node.js-Anwendung zu deployen - VPS, Managed PaaS oder Serverless - plus PM2, ein Reverse Proxy, Umgebungsvariablen und ein vernünftiger Deployment-Ablauf."
   cat="hosting"
   day={14}
   hero="/img/nodejs-hosting-hero.jpg"
@@ -18,9 +18,9 @@ import Article from '../../../layouts/Article.astro';
   <h2>Drei Wege, Node.js zu hosten</h2>
   <p>Fast jedes Deployment fällt in eines dieser Modelle. Die richtige Wahl hängt davon ab, wie viel vom Server Sie verwalten möchten und wie sich Ihr Traffic verhält.</p>
   <ul>
-    <li><strong>VPS (selbst verwaltet)</strong> — Sie erhalten eine Linux-Maschine und vollen Root-Zugriff. Maximale Kontrolle und planbare Kosten, aber Sie installieren und warten Node, den Prozessmanager, den Reverse Proxy und TLS selbst.</li>
-    <li><strong>PaaS (Platform-as-a-Service)</strong> — Sie pushen Code (oft über Git) und die Plattform baut, betreibt und skaliert den Prozess für Sie. Weniger Kontrolle, schneller einsatzbereit, meist nach Verbrauch abgerechnet.</li>
-    <li><strong>Serverless / Functions</strong> — Sie deployen einzelne Handler statt eines laufenden Servers. Die Plattform startet sie bei Bedarf. Hervorragend für sprunghafte oder traffic-arme Workloads, aber zustandslos und Cold Starts unterworfen.</li>
+    <li><strong>VPS (selbst verwaltet)</strong> - Sie erhalten eine Linux-Maschine und vollen Root-Zugriff. Maximale Kontrolle und planbare Kosten, aber Sie installieren und warten Node, den Prozessmanager, den Reverse Proxy und TLS selbst.</li>
+    <li><strong>PaaS (Platform-as-a-Service)</strong> - Sie pushen Code (oft über Git) und die Plattform baut, betreibt und skaliert den Prozess für Sie. Weniger Kontrolle, schneller einsatzbereit, meist nach Verbrauch abgerechnet.</li>
+    <li><strong>Serverless / Functions</strong> - Sie deployen einzelne Handler statt eines laufenden Servers. Die Plattform startet sie bei Bedarf. Hervorragend für sprunghafte oder traffic-arme Workloads, aber zustandslos und Cold Starts unterworfen.</li>
   </ul>
 
   <h2>Den Prozess mit PM2 am Leben halten</h2>
@@ -38,7 +38,7 @@ pm2 save
 pm2 list
 pm2 logs web
 pm2 restart web`}</code></pre>
-  <p>PM2 betreibt Ihre App auch im <em>Cluster-Modus</em>, um jeden CPU-Kern zu nutzen — der einfachste Weg, eine einzelne Maschine zu skalieren:</p>
+  <p>PM2 betreibt Ihre App auch im <em>Cluster-Modus</em>, um jeden CPU-Kern zu nutzen - der einfachste Weg, eine einzelne Maschine zu skalieren:</p>
   <pre><code>{`pm2 start server.js --name web -i max`}</code></pre>
 
   <figure>
@@ -72,7 +72,7 @@ const dbUrl = process.env.DATABASE_URL;
 app.listen(port, () => {
   console.log(\`listening on \${port}\`);
 });`}</code></pre>
-  <p>Auf einem VPS können Sie diese in einer <code>.env</code>-Datei halten (von einer Bibliothek geladen und aus Git ausgeschlossen) oder über die Ecosystem-Datei von PM2 übergeben. Auf einer PaaS setzen Sie sie im Dashboard. Lesen Sie immer <code>process.env.PORT</code> — Managed-Plattformen weisen Ihnen den Port zu.</p>
+  <p>Auf einem VPS können Sie diese in einer <code>.env</code>-Datei halten (von einer Bibliothek geladen und aus Git ausgeschlossen) oder über die Ecosystem-Datei von PM2 übergeben. Auf einer PaaS setzen Sie sie im Dashboard. Lesen Sie immer <code>process.env.PORT</code> - Managed-Plattformen weisen Ihnen den Port zu.</p>
 
   <h2>Ein vernünftiger Deployment-Ablauf</h2>
   <p>Wie auch immer Sie hosten, streben Sie einen wiederholbaren Deploy an, statt Dateien von Hand auf dem Server zu bearbeiten:</p>
@@ -94,5 +94,5 @@ app.listen(port, () => {
     </tbody>
   </table>
 
-  <p>Wenn Sie gerade anfangen, betreibt ein einzelner, gut konfigurierter VPS mit PM2 und Nginx die meisten Node-Apps bequem und lehrt Sie, was die Managed-Plattformen automatisieren. Wechseln Sie zu einer PaaS oder Serverless, wenn Skalierung oder Betriebsaufwand zum Engpass werden — nicht vorher.</p>
+  <p>Wenn Sie gerade anfangen, betreibt ein einzelner, gut konfigurierter VPS mit PM2 und Nginx die meisten Node-Apps bequem und lehrt Sie, was die Managed-Plattformen automatisieren. Wechseln Sie zu einer PaaS oder Serverless, wenn Skalierung oder Betriebsaufwand zum Engpass werden - nicht vorher.</p>
 </Article>

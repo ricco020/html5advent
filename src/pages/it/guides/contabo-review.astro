@@ -5,42 +5,42 @@ import Article from '../../../layouts/Article.astro';
   lang="it"
   slug="contabo-review"
   title="Recensione di Contabo: è un buon VPS per progetti web?"
-  description="Uno sguardo onesto e senza esagerazioni su Contabo come hosting VPS per siti e applicazioni — il suo posizionamento risorse-per-il-prezzo, il tipo di offerte che vende, i compromessi da valutare e a chi si adatta davvero."
+  description="Uno sguardo onesto e senza esagerazioni su Contabo come hosting VPS per siti e applicazioni - il suo posizionamento risorse-per-il-prezzo, il tipo di offerte che vende, i compromessi da valutare e a chi si adatta davvero."
   cat="hosting"
   hero="/img/contabo-review-hero.jpg"
   heroAlt="Server argentati montati a rack impilati in un armadio, illuminati di blu, con un'unità che mostra una spia rossa"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo', software: true, offers: true }}
 >
-  <p><strong>Contabo</strong> è un'azienda di hosting tedesca che ha costruito la sua reputazione su una sola cosa: molte risorse grezze a un prezzo mensile basso. Se hai mai cercato un VPS, probabilmente hai visto i suoi piani elencati con sensibilmente più RAM, vCPU e disco rispetto a concorrenti di prezzo simile. Questo posizionamento è reale, ma «più specifiche per euro» è solo una parte della storia. Questa recensione esamina ciò che Contabo offre davvero, dove si colloca e i compromessi che vale la pena comprendere prima di impegnarsi — senza inventare benchmark né fingere di averlo usato per mesi.</p>
+  <p><strong>Contabo</strong> è un'azienda di hosting tedesca che ha costruito la sua reputazione su una sola cosa: molte risorse grezze a un prezzo mensile basso. Se hai mai cercato un VPS, probabilmente hai visto i suoi piani elencati con sensibilmente più RAM, vCPU e disco rispetto a concorrenti di prezzo simile. Questo posizionamento è reale, ma «più specifiche per euro» è solo una parte della storia. Questa recensione esamina ciò che Contabo offre davvero, dove si colloca e i compromessi che vale la pena comprendere prima di impegnarsi - senza inventare benchmark né fingere di averlo usato per mesi.</p>
 
   <h2>Cos'è Contabo</h2>
   <p>Contabo vende <strong>server privati virtuali non gestiti</strong>, accanto a piani VPS orientati allo storage, server dedicati e object storage. È un fornitore europeo con sede in Germania e nel corso degli anni ha ampliato la sua presenza di data center a diverse regioni in Europa, Nord America, Asia e oltre. La proposta di base è costante: allocazioni generose di CPU, memoria e storage a prezzi che tendono a sottoquotare i nomi più noti.</p>
-  <p>Poiché i piani VPS sono non gestiti, ottieni un sistema operativo nudo e accesso root — e la responsabilità di proteggerlo, aggiornarlo e mantenerlo è tua. È normale per questa categoria, ma è la prima cosa da chiarire: Contabo è rivolto a persone a proprio agio sulla riga di comando, non a chi vuole un'esperienza completamente assistita e gestita.</p>
+  <p>Poiché i piani VPS sono non gestiti, ottieni un sistema operativo nudo e accesso root - e la responsabilità di proteggerlo, aggiornarlo e mantenerlo è tua. È normale per questa categoria, ma è la prima cosa da chiarire: Contabo è rivolto a persone a proprio agio sulla riga di comando, non a chi vuole un'esperienza completamente assistita e gestita.</p>
 
   <h2>L'angolo «risorse per il prezzo»</h2>
-  <p>Il motivo principale per cui gli sviluppatori scelgono Contabo è il valore. Per un dato budget, i suoi piani in genere ti consegnano più memoria e più disco di quanti ne otterresti altrove, il che è attraente quando il tuo carico di lavoro è genuinamente affamato di risorse — un database accanto a un server applicativo, uno strumento self-hosted, un ambiente di staging, o diversi piccoli siti su una stessa macchina.</p>
+  <p>Il motivo principale per cui gli sviluppatori scelgono Contabo è il valore. Per un dato budget, i suoi piani in genere ti consegnano più memoria e più disco di quanti ne otterresti altrove, il che è attraente quando il tuo carico di lavoro è genuinamente affamato di risorse - un database accanto a un server applicativo, uno strumento self-hosted, un ambiente di staging, o diversi piccoli siti su una stessa macchina.</p>
   <p>Un modo utile di leggere questo onestamente: <em>più risorse allocate non equivalgono a più prestazioni in ogni dimensione</em>. RAM e storage generosi sono facili da quantificare e facili da pubblicizzare. Cose come il comportamento sostenuto della CPU sotto carico, il throughput di rete verso il tuo pubblico specifico, e come un host tratta i «vicini rumorosi» sono più difficili da mettere su una scheda tecnica. Contabo ti dà gran parte delle risorse facili da misurare; se ciò si traduce nell'esperienza di cui hai bisogno dipende dal tuo carico di lavoro, quindi dimensiona il piano in base a ciò che eseguirai davvero piuttosto che al numero più grande.</p>
 
   <figure>
     <img src="/img/contabo-review-inbody.jpg" alt="Una mano che inserisce un modulo disco in uno chassis di server illuminato di blu in un rack" width="1280" height="719" loading="lazy" />
-    <figcaption>Un VPS è una fetta di un server fisico come questi — il fornitore gestisce l'hardware, tu gestisci il sistema operativo sopra.</figcaption>
+    <figcaption>Un VPS è una fetta di un server fisico come questi - il fornitore gestisce l'hardware, tu gestisci il sistema operativo sopra.</figcaption>
   </figure>
 
   <h2>Lo storage e la linea VPS-storage</h2>
-  <p>Oltre ai piani VPS standard, Contabo offre livelli di <strong>VPS storage</strong> costruiti per conservare grandi quantità di dati a basso costo — backup, librerie multimediali, archivi. Se il tuo progetto è pesante sullo storage piuttosto che sul calcolo, è un'opzione distinta che vale la pena conoscere. Come sempre, verifica se un dato piano usa NVMe/SSD più veloci o storage più grande ma più lento, perché il tipo di disco si riflette direttamente sulla reattività di database e letture di file. Adatta la classe di storage a ciò che il carico di lavoro richiede: disco veloce per un database molto sollecitato, capacità di massa per un archivio.</p>
+  <p>Oltre ai piani VPS standard, Contabo offre livelli di <strong>VPS storage</strong> costruiti per conservare grandi quantità di dati a basso costo - backup, librerie multimediali, archivi. Se il tuo progetto è pesante sullo storage piuttosto che sul calcolo, è un'opzione distinta che vale la pena conoscere. Come sempre, verifica se un dato piano usa NVMe/SSD più veloci o storage più grande ma più lento, perché il tipo di disco si riflette direttamente sulla reattività di database e letture di file. Adatta la classe di storage a ciò che il carico di lavoro richiede: disco veloce per un database molto sollecitato, capacità di massa per un archivio.</p>
 
   <h2>Punti da valutare onestamente</h2>
-  <p>Nessun host è giusto per tutti. Queste sono le considerazioni oggettive da riflettere con Contabo — non verdetti, ma le domande da porsi prima di acquistare:</p>
+  <p>Nessun host è giusto per tutti. Queste sono le considerazioni oggettive da riflettere con Contabo - non verdetti, ma le domande da porsi prima di acquistare:</p>
   <ul>
-    <li><strong>Non gestito significa self-service.</strong> Ti occupi tu dell'installazione dell'OS, dell'hardening della sicurezza, degli aggiornamenti e del ripristino. Se non vuoi essere il tuo sysadmin, un VPS economico non gestito — Contabo incluso — è la categoria sbagliata.</li>
+    <li><strong>Non gestito significa self-service.</strong> Ti occupi tu dell'installazione dell'OS, dell'hardening della sicurezza, degli aggiornamenti e del ripristino. Se non vuoi essere il tuo sysadmin, un VPS economico non gestito - Contabo incluso - è la categoria sbagliata.</li>
     <li><strong>Il supporto è in stile community-e-ticket.</strong> I fornitori economici non gestiti in genere non offrono il supporto profondo e pratico degli host gestiti premium. Considera la tua capacità di risolvere i problemi.</li>
-    <li><strong>La posizione del data center conta per la latenza.</strong> Contabo pubblica le regioni in cui opera — scegline una vicina al tuo pubblico, perché la distanza fisica aggiunge latenza a ogni richiesta dinamica. Conferma che la regione specifica sia disponibile per il piano che vuoi.</li>
+    <li><strong>La posizione del data center conta per la latenza.</strong> Contabo pubblica le regioni in cui opera - scegline una vicina al tuo pubblico, perché la distanza fisica aggiunge latenza a ogni richiesta dinamica. Conferma che la regione specifica sia disponibile per il piano che vuoi.</li>
     <li><strong>Dettagli di setup e add-on.</strong> Verifica se c'è una tariffa di setup una tantum su un piano, cosa è incluso di default (backup, IP aggiuntivi, pannello di controllo) e cosa costa extra, così che il totale non sia una sorpresa.</li>
-    <li><strong>Provisioning e ridimensionamento.</strong> Comprendi come scali — se puoi ridimensionare sul posto o devi migrare — prima che il tuo progetto superi il suo primo piano.</li>
+    <li><strong>Provisioning e ridimensionamento.</strong> Comprendi come scali - se puoi ridimensionare sul posto o devi migrare - prima che il tuo progetto superi il suo primo piano.</li>
   </ul>
 
-  <h2>A chi si adatta Contabo — e a chi no</h2>
+  <h2>A chi si adatta Contabo - e a chi no</h2>
   <table>
     <thead><tr><th>Buona scelta se tu…</th><th>Guarda altrove se tu…</th></tr></thead>
     <tbody>
@@ -52,7 +52,7 @@ import Article from '../../../layouts/Article.astro';
   </table>
 
   <h2>Quanto costa</h2>
-  <p>Per rendere concreto il discorso sul rapporto qualità-prezzo, ecco i prezzi di listino dei <strong>Cloud VPS</strong> di Contabo (impegno 12 mesi, prezzi IVA esclusa, in € al mese, rilevati a giugno 2026 — verifica sempre il prezzo attuale sul sito di Contabo prima di acquistare):</p>
+  <p>Per rendere concreto il discorso sul rapporto qualità-prezzo, ecco i prezzi di listino dei <strong>Cloud VPS</strong> di Contabo (impegno 12 mesi, prezzi IVA esclusa, in € al mese, rilevati a giugno 2026 - verifica sempre il prezzo attuale sul sito di Contabo prima di acquistare):</p>
   <table>
     <thead><tr><th>Piano</th><th>Prezzo (€/mese)</th></tr></thead>
     <tbody>
@@ -62,8 +62,8 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Cloud VPS 40</td><td>25,00</td></tr>
     </tbody>
   </table>
-  <p>Su alcune durate può applicarsi un costo di attivazione una tantum, e un impegno più lungo riduce il canone mensile — leggi con attenzione il riepilogo dell'ordine. Le cifre sopra sono prezzi di listino in un dato momento, non una promessa; usale come riferimento e verifica il prezzo in vigore per la tua regione e durata.</p>
+  <p>Su alcune durate può applicarsi un costo di attivazione una tantum, e un impegno più lungo riduce il canone mensile - leggi con attenzione il riepilogo dell'ordine. Le cifre sopra sono prezzi di listino in un dato momento, non una promessa; usale come riferimento e verifica il prezzo in vigore per la tua regione e durata.</p>
 
   <h2>Il verdetto onesto</h2>
-  <p>Contabo si guadagna la sua reputazione come fornitore di <strong>VPS non gestito, ricco di risorse e orientato al valore</strong>. Se sai gestire il tuo server e il tuo carico di lavoro beneficia di abbondante memoria e disco per euro, è un candidato sensato da inserire in shortlist. Se vuoi la comodità del gestito, supporto premium, o la garanzia che la specifica più grande equivalga alla migliore esperienza per il tuo traffico particolare, valutalo invece rispetto alle alternative gestite. Come con qualsiasi host, la mossa giusta è mappare il tuo carico di lavoro reale — memoria prima, poi CPU, poi storage, poi regione — e scegliere il piano più piccolo che lo copra con margine, presso un fornitore il cui modello corrisponde a quanta manutenzione vuoi assumerti.</p>
+  <p>Contabo si guadagna la sua reputazione come fornitore di <strong>VPS non gestito, ricco di risorse e orientato al valore</strong>. Se sai gestire il tuo server e il tuo carico di lavoro beneficia di abbondante memoria e disco per euro, è un candidato sensato da inserire in shortlist. Se vuoi la comodità del gestito, supporto premium, o la garanzia che la specifica più grande equivalga alla migliore esperienza per il tuo traffico particolare, valutalo invece rispetto alle alternative gestite. Come con qualsiasi host, la mossa giusta è mappare il tuo carico di lavoro reale - memoria prima, poi CPU, poi storage, poi regione - e scegliere il piano più piccolo che lo copra con margine, presso un fornitore il cui modello corrisponde a quanta manutenzione vuoi assumerti.</p>
 </Article>

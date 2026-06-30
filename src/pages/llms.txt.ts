@@ -5,7 +5,7 @@ const SITE = 'https://html5advent.com';
 
 const HEADER = `# HTML5 Advent
 
-> Independent resource on the modern web platform — HTML, CSS, JavaScript and browser Web APIs —
+> Independent resource on the modern web platform - HTML, CSS, JavaScript and browser Web APIs -
 > plus "Web Platform Advent", a yearly calendar of practical front-end demos and tips.
 > First-hand, example-driven, vendor-neutral. Continues the original 2010 HTML5 advent calendar.
 
@@ -16,14 +16,14 @@ const HEADER = `# HTML5 Advent
 - Hands-on hosting & deployment guides for web projects (static sites, Node/PHP apps)
 
 ## Editorial principles
-- Original, tested examples — no fabricated benchmarks or claims.
+- Original, tested examples - no fabricated benchmarks or claims.
 - Vendor-neutral; affiliate links (hosting) are disclosed and limited to genuinely relevant pages.
 
 ## Languages
 English (/), Français (/fr), Español (/es), Deutsch (/de), Italiano (/it), Português (/pt).
 
 ## Full content
-- /llms-full.txt — every guide with its description, in all six languages.
+- /llms-full.txt - every guide with its description, in all six languages.
 `;
 
 const CAT_LABELS: Record<string, string> = {

@@ -5,14 +5,14 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="web-components"
   title="Web Components: Custom Elements, Shadow DOM and templates"
-  description="Build reusable HTML elements with the native Web Components APIs — define a Custom Element, encapsulate styles with the Shadow DOM, clone a &lt;template&gt;, and pass data with attributes."
+  description="Build reusable HTML elements with the native Web Components APIs - define a Custom Element, encapsulate styles with the Shadow DOM, clone a &lt;template&gt;, and pass data with attributes."
   cat="html"
   day={5}
   hero="/img/web-components-hero.jpg"
   heroAlt="A pile of colourful interlocking plastic building blocks of different shapes"
   cluster={null}
 >
-  <p><strong>Web Components</strong> are a set of native browser APIs that let you build your own reusable HTML elements — no framework required. A component you ship works the same in plain HTML, React, Vue or Svelte, because it is just an element the browser understands. Three APIs make it work: Custom Elements, the Shadow DOM, and the <code>&lt;template&gt;</code> tag.</p>
+  <p><strong>Web Components</strong> are a set of native browser APIs that let you build your own reusable HTML elements - no framework required. A component you ship works the same in plain HTML, React, Vue or Svelte, because it is just an element the browser understands. Three APIs make it work: Custom Elements, the Shadow DOM, and the <code>&lt;template&gt;</code> tag.</p>
 
   <h2>Custom Elements</h2>
   <p>A Custom Element is a class extending <code>HTMLElement</code>, registered with a tag name that <strong>must contain a hyphen</strong> (so it can never collide with a future built-in tag):</p>
@@ -30,7 +30,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   <p>The class gives you <strong>lifecycle callbacks</strong>. The most useful are <code>connectedCallback</code> (the element was added to the page), <code>disconnectedCallback</code> (it was removed), and <code>attributeChangedCallback</code> (a watched attribute changed).</p>
 
   <h2>Reacting to attributes</h2>
-  <p>To pass data in, read attributes — exactly like <code>src</code> on an image. Declare which ones to watch with a static <code>observedAttributes</code> getter, then respond in <code>attributeChangedCallback</code>. Building the node with <code>textContent</code> keeps user-supplied values safe:</p>
+  <p>To pass data in, read attributes - exactly like <code>src</code> on an image. Declare which ones to watch with a static <code>observedAttributes</code> getter, then respond in <code>attributeChangedCallback</code>. Building the node with <code>textContent</code> keeps user-supplied values safe:</p>
   <pre><code>{`class GreetingCard extends HTMLElement {
   static get observedAttributes() {
     return ['name'];
@@ -75,7 +75,7 @@ customElements.define('greeting-card', GreetingCard);`}</code></pre>
   }
 }
 customElements.define('fancy-button', FancyButton);`}</code></pre>
-  <p>The <code>&lt;slot&gt;</code> is a placeholder: whatever you put between the tags — <code>&lt;fancy-button&gt;Save&lt;/fancy-button&gt;</code> — is projected into that spot, so the component wraps your content without replacing it.</p>
+  <p>The <code>&lt;slot&gt;</code> is a placeholder: whatever you put between the tags - <code>&lt;fancy-button&gt;Save&lt;/fancy-button&gt;</code> - is projected into that spot, so the component wraps your content without replacing it.</p>
 
   <h2>Templates: clone once, reuse cheaply</h2>
   <p>The <code>&lt;template&gt;</code> element holds inert markup that is parsed but not rendered until you clone it. It is the efficient way to stamp out repeated structure:</p>

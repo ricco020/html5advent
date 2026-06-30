@@ -5,7 +5,7 @@ export const DEFAULT_LOCALE = 'en';
 export const UI = {
   en: {
     tagline: 'The modern web platform, one demo at a time.',
-    intro: 'Practical, tested guides to HTML, CSS, JavaScript and browser Web APIs — plus the Web Platform Advent calendar of 24 front-end demos.',
+    intro: 'Practical, tested guides to HTML, CSS, JavaScript and browser Web APIs - plus the Web Platform Advent calendar of 24 front-end demos.',
     advent: 'Web Platform Advent',
     guides: 'Guides',
     apis: 'Web APIs',
@@ -17,7 +17,7 @@ export const UI = {
   },
   fr: {
     tagline: 'La plateforme web moderne, une démo à la fois.',
-    intro: 'Des guides concrets et testés sur HTML, CSS, JavaScript et les Web APIs du navigateur — plus le calendrier Web Platform Advent de 24 démos front-end.',
+    intro: 'Des guides concrets et testés sur HTML, CSS, JavaScript et les Web APIs du navigateur - plus le calendrier Web Platform Advent de 24 démos front-end.',
     advent: 'Web Platform Advent',
     guides: 'Guides',
     apis: 'Web APIs',
@@ -29,7 +29,7 @@ export const UI = {
   },
   es: {
     tagline: 'La plataforma web moderna, una demo a la vez.',
-    intro: 'Guías prácticas y probadas sobre HTML, CSS, JavaScript y las Web APIs del navegador — además del calendario Web Platform Advent de 24 demos front-end.',
+    intro: 'Guías prácticas y probadas sobre HTML, CSS, JavaScript y las Web APIs del navegador - además del calendario Web Platform Advent de 24 demos front-end.',
     advent: 'Web Platform Advent',
     guides: 'Guías',
     apis: 'Web APIs',
@@ -41,7 +41,7 @@ export const UI = {
   },
   de: {
     tagline: 'Die moderne Web-Plattform, eine Demo nach der anderen.',
-    intro: 'Praktische, getestete Anleitungen zu HTML, CSS, JavaScript und Browser-Web-APIs — plus der Web-Platform-Advent-Kalender mit 24 Frontend-Demos.',
+    intro: 'Praktische, getestete Anleitungen zu HTML, CSS, JavaScript und Browser-Web-APIs - plus der Web-Platform-Advent-Kalender mit 24 Frontend-Demos.',
     advent: 'Web Platform Advent', guides: 'Anleitungen', apis: 'Web-APIs', hosting: 'Hosting & Deployment',
     readMore: 'Anleitung lesen',
     disclosure: 'Einige Hosting-Links sind Affiliate-Links. Sie ändern nie unsere Empfehlungen und stehen nur auf wirklich relevanten Seiten.',
@@ -49,7 +49,7 @@ export const UI = {
   },
   it: {
     tagline: 'La piattaforma web moderna, una demo alla volta.',
-    intro: 'Guide pratiche e testate su HTML, CSS, JavaScript e le Web API del browser — più il calendario Web Platform Advent di 24 demo front-end.',
+    intro: 'Guide pratiche e testate su HTML, CSS, JavaScript e le Web API del browser - più il calendario Web Platform Advent di 24 demo front-end.',
     advent: 'Web Platform Advent', guides: 'Guide', apis: 'Web API', hosting: 'Hosting e deploy',
     readMore: 'Leggi la guida',
     disclosure: 'Alcuni link di hosting sono link di affiliazione. Non cambiano mai ciò che consigliamo e li aggiungiamo solo a pagine davvero pertinenti.',
@@ -57,7 +57,7 @@ export const UI = {
   },
   pt: {
     tagline: 'A plataforma web moderna, uma demo de cada vez.',
-    intro: 'Guias práticos e testados sobre HTML, CSS, JavaScript e as Web APIs do navegador — além do calendário Web Platform Advent com 24 demos front-end.',
+    intro: 'Guias práticos e testados sobre HTML, CSS, JavaScript e as Web APIs do navegador - além do calendário Web Platform Advent com 24 demos front-end.',
     advent: 'Web Platform Advent', guides: 'Guias', apis: 'Web APIs', hosting: 'Hospedagem e deploy',
     readMore: 'Ler o guia',
     disclosure: 'Alguns links de hospedagem são links de afiliado. Nunca mudam o que recomendamos e só os adicionamos a páginas realmente relevantes.',

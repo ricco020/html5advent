@@ -5,21 +5,21 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="best-hosting-for-laravel"
   title="Hosting a Laravel app: VPS, requirements and deployment"
-  description="A practical guide to hosting a Laravel application — why a VPS is usually the right fit, the server requirements that matter (PHP, extensions, queue workers, scheduler), and a real deployment walkthrough with Composer, .env, Nginx and Supervisor."
+  description="A practical guide to hosting a Laravel application - why a VPS is usually the right fit, the server requirements that matter (PHP, extensions, queue workers, scheduler), and a real deployment walkthrough with Composer, .env, Nginx and Supervisor."
   cat="hosting"
   hero="/img/best-hosting-for-laravel-hero.jpg"
   heroAlt="A developer wearing headphones working at a desk in front of a monitor full of code, with code projected on the wall behind"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p><strong>Laravel</strong> is a full PHP application framework, not a set of pages you upload by FTP. It expects a real runtime: a recent PHP, several extensions, a writable storage directory, scheduled tasks and — for anything non-trivial — background queue workers. That's why basic shared hosting often fights you, and why a <strong>VPS</strong> is usually the right home for a Laravel app. This guide covers what the server actually needs and walks through a real deployment.</p>
+  <p><strong>Laravel</strong> is a full PHP application framework, not a set of pages you upload by FTP. It expects a real runtime: a recent PHP, several extensions, a writable storage directory, scheduled tasks and - for anything non-trivial - background queue workers. That's why basic shared hosting often fights you, and why a <strong>VPS</strong> is usually the right home for a Laravel app. This guide covers what the server actually needs and walks through a real deployment.</p>
 
   <h2>Why a VPS suits Laravel</h2>
-  <p>Shared hosting is built for "drop files in a web root". Laravel wants more than that: SSH access to run <code>composer</code> and <code>artisan</code>, the ability to point the web server at the <code>public/</code> directory, a long-running process to drain the queue, and a cron entry for the scheduler. A VPS gives you <strong>root access, guaranteed RAM and CPU, and full control of the stack</strong> — exactly what those needs require. A managed platform can also work, but a VPS is the most flexible middle ground once an app has queues, a database and a cache.</p>
+  <p>Shared hosting is built for "drop files in a web root". Laravel wants more than that: SSH access to run <code>composer</code> and <code>artisan</code>, the ability to point the web server at the <code>public/</code> directory, a long-running process to drain the queue, and a cron entry for the scheduler. A VPS gives you <strong>root access, guaranteed RAM and CPU, and full control of the stack</strong> - exactly what those needs require. A managed platform can also work, but a VPS is the most flexible middle ground once an app has queues, a database and a cache.</p>
 
   <h2>Server requirements</h2>
   <h3>PHP and extensions</h3>
-  <p>Run a <strong>currently supported PHP version</strong> that matches your Laravel release — check the framework's documentation for the exact minimum. Laravel needs a standard set of PHP extensions enabled; on a Debian/Ubuntu VPS they're typically installed together:</p>
+  <p>Run a <strong>currently supported PHP version</strong> that matches your Laravel release - check the framework's documentation for the exact minimum. Laravel needs a standard set of PHP extensions enabled; on a Debian/Ubuntu VPS they're typically installed together:</p>
   <pre><code>{`# Ubuntu/Debian: PHP-FPM + the extensions Laravel expects
 sudo apt install -y php-fpm php-cli php-mbstring php-xml \\
   php-bcmath php-curl php-mysql php-zip php-gd php-intl
@@ -30,7 +30,7 @@ sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer`}</
   <p>The exact package names vary by distribution, but the extensions to confirm are <code>mbstring</code>, <code>xml</code>, <code>bcmath</code>, <code>curl</code>, the database driver (<code>pdo_mysql</code> or <code>pdo_pgsql</code>), <code>zip</code> and <code>openssl</code>. Missing one usually shows up as a clear error during <code>composer install</code> or at boot.</p>
 
   <h3>Database, cache and queue backend</h3>
-  <p>Most Laravel apps pair with <strong>MySQL/MariaDB or PostgreSQL</strong>. For anything that uses queues, sessions or caching at scale, add <strong>Redis</strong> — it serves as a fast cache, session store and queue driver in one. Make sure the VPS has enough RAM for the database and Redis alongside PHP-FPM workers; memory is the resource you're most likely to exhaust.</p>
+  <p>Most Laravel apps pair with <strong>MySQL/MariaDB or PostgreSQL</strong>. For anything that uses queues, sessions or caching at scale, add <strong>Redis</strong> - it serves as a fast cache, session store and queue driver in one. Make sure the VPS has enough RAM for the database and Redis alongside PHP-FPM workers; memory is the resource you're most likely to exhaust.</p>
 
   <h3>Storage permissions</h3>
   <p>Laravel writes to two directories, <code>storage/</code> and <code>bootstrap/cache/</code>. The web-server user (often <code>www-data</code>) must be able to write to them, or you'll get permission errors that look like application bugs:</p>
@@ -39,7 +39,7 @@ sudo chmod -R ug+rwX storage bootstrap/cache`}</code></pre>
 
   <figure>
     <img src="/img/best-hosting-for-laravel-inbody.jpg" alt="Close-up of a screen showing syntax-highlighted code with functions and conditionals" width="1280" height="720" loading="lazy" />
-    <figcaption>A Laravel deployment is a repeatable sequence of commands — install dependencies, cache config and routes, run migrations — rather than uploading files by hand.</figcaption>
+    <figcaption>A Laravel deployment is a repeatable sequence of commands - install dependencies, cache config and routes, run migrations - rather than uploading files by hand.</figcaption>
   </figure>
 
   <h2>Deployment walkthrough</h2>
@@ -53,7 +53,7 @@ composer install --no-dev --optimize-autoloader`}</code></pre>
   <p>Laravel reads configuration from a <code>.env</code> file that is <strong>never committed to git</strong>. Copy the example, generate the app key, and fill in the real values:</p>
   <pre><code>{`cp .env.example .env
 php artisan key:generate`}</code></pre>
-  <p>A minimal production <code>.env</code> looks like this — set <code>APP_DEBUG</code> to false so errors aren't leaked to visitors:</p>
+  <p>A minimal production <code>.env</code> looks like this - set <code>APP_DEBUG</code> to false so errors aren't leaked to visitors:</p>
   <pre><code>{`APP_NAME="Your App"
 APP_ENV=production
 APP_KEY=base64:...generated...
@@ -73,7 +73,7 @@ SESSION_DRIVER=redis
 REDIS_HOST=127.0.0.1`}</code></pre>
 
   <h3>3. Migrate and cache for production</h3>
-  <p>Run the database migrations, then build Laravel's cached config, routes and views. Caching these is what makes the framework fast in production — but remember to rebuild them on every deploy, since they freeze the current state:</p>
+  <p>Run the database migrations, then build Laravel's cached config, routes and views. Caching these is what makes the framework fast in production - but remember to rebuild them on every deploy, since they freeze the current state:</p>
   <pre><code>{`php artisan migrate --force
 
 php artisan config:cache
@@ -81,7 +81,7 @@ php artisan route:cache
 php artisan view:cache`}</code></pre>
 
   <h3>4. Point Nginx at public/</h3>
-  <p>The web server's document root must be the <code>public/</code> directory — never the project root, or you'd expose <code>.env</code> and source files. A standard Nginx + PHP-FPM server block:</p>
+  <p>The web server's document root must be the <code>public/</code> directory - never the project root, or you'd expose <code>.env</code> and source files. A standard Nginx + PHP-FPM server block:</p>
   <pre><code>{`server {
     listen 80;
     server_name yourapp.com;
@@ -104,10 +104,10 @@ php artisan view:cache`}</code></pre>
         deny all;
     }
 }`}</code></pre>
-  <p>Add HTTPS with a free automated certificate (most hosts and tools like Certbot make this a one-liner) — a production app should always be served over TLS.</p>
+  <p>Add HTTPS with a free automated certificate (most hosts and tools like Certbot make this a one-liner) - a production app should always be served over TLS.</p>
 
   <h3>5. Run the queue worker with Supervisor</h3>
-  <p>Background jobs (emails, notifications, exports) run through a <strong>queue worker</strong>, a long-running process that must survive crashes and reboots. Don't run <code>php artisan queue:work</code> by hand in an SSH session — use a process manager like <strong>Supervisor</strong> to keep it alive:</p>
+  <p>Background jobs (emails, notifications, exports) run through a <strong>queue worker</strong>, a long-running process that must survive crashes and reboots. Don't run <code>php artisan queue:work</code> by hand in an SSH session - use a process manager like <strong>Supervisor</strong> to keep it alive:</p>
   <pre><code>{`# /etc/supervisor/conf.d/app-worker.conf
 [program:app-worker]
 process_name=%(program_name)s_%(process_num)02d
@@ -131,7 +131,7 @@ sudo supervisorctl start app-worker:*`}</code></pre>
   <table>
     <thead><tr><th>App profile</th><th>What it needs</th></tr></thead>
     <tbody>
-      <tr><td>Small app, light traffic</td><td>Entry VPS: a couple of GB RAM, NVMe storage, 1–2 vCPUs — PHP-FPM plus a small database.</td></tr>
+      <tr><td>Small app, light traffic</td><td>Entry VPS: a couple of GB RAM, NVMe storage, 1–2 vCPUs - PHP-FPM plus a small database.</td></tr>
       <tr><td>Queues + Redis + database</td><td>More RAM headroom so Redis, the database and several PHP-FPM and worker processes coexist comfortably.</td></tr>
       <tr><td>Higher traffic / heavy jobs</td><td>Dedicated vCPUs for steady load, more worker processes, room to scale up; consider separating the database later.</td></tr>
     </tbody>
@@ -140,10 +140,10 @@ sudo supervisorctl start app-worker:*`}</code></pre>
   <h2>Who it's for</h2>
   <ul>
     <li><strong>Prefer not to manage a server:</strong> a managed platform or managed VPS handles patching and process supervision for you, at a higher price.</li>
-    <li><strong>Comfortable on the command line:</strong> an unmanaged VPS is cheaper and fully flexible — you own the PHP, Nginx, Supervisor and cron setup shown above.</li>
+    <li><strong>Comfortable on the command line:</strong> an unmanaged VPS is cheaper and fully flexible - you own the PHP, Nginx, Supervisor and cron setup shown above.</li>
     <li><strong>Growing app with queues and cache:</strong> a VPS with guaranteed RAM/CPU and Redis is the natural fit; size memory first, then CPU, then storage.</li>
   </ul>
 
   <h2>How to decide</h2>
-  <p>Start from what Laravel needs to run well: SSH access, a supported PHP with the right extensions, a database and (for queues/cache) Redis, writable storage, a queue worker under Supervisor and a one-line cron for the scheduler. A VPS gives you all of that with guaranteed resources and a clear path to scale — match the plan to your traffic and background-job load, and pick the smallest one that covers it with headroom.</p>
+  <p>Start from what Laravel needs to run well: SSH access, a supported PHP with the right extensions, a database and (for queues/cache) Redis, writable storage, a queue worker under Supervisor and a one-line cron for the scheduler. A VPS gives you all of that with guaranteed resources and a clear path to scale - match the plan to your traffic and background-job load, and pick the smallest one that covers it with headroom.</p>
 </Article>

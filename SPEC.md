@@ -1,4 +1,4 @@
-# BLUEPRINT — html5advent.com (13ᵉ site, actif dev/GEO autonome)
+# BLUEPRINT - html5advent.com (13ᵉ site, actif dev/GEO autonome)
 
 > Domaine expiré récupéré (DR51, niche HTML5/web-standards). Profil légacy PROPRE
 > (Christian Heilmann DR69, atmarkit DR88, alsacreations DR71, openmatt, churchm.ag)
@@ -17,7 +17,7 @@ Fidèle à l'héritage : l'« advent calendar » de démos HTML5 (2010-2011).
 ## STACK & INFRA
 - **Astro static** (modèle coldwa.st), build `format: preserve`. Build sur **/tmp ext4**, jamais /mnt/c.
 - Déploiement **Vercel** (gratuit, scope Eric). DNS → Vercel.
-- **GA4 + GSC dès J0** (règle Eric impérative — via service-account `data/service-account.json` du repo NDD :
+- **GA4 + GSC dès J0** (règle Eric impérative - via service-account `data/service-account.json` du repo NDD :
   GA4 propriété+stream+tag gtag, GSC vérif DNS TXT). Noter les IDs dans ce SPEC après création.
 - **Multilingue FR/EN/ES** dès la création (règle Eric) + détection auto langue (Accept-Language, fallback EN,
   EN = locale prioritaire vu la niche dev). Slugs/hreflang/canonical par locale.
@@ -27,7 +27,7 @@ Fidèle à l'héritage : l'« advent calendar » de démos HTML5 (2010-2011).
 - La racine DOIT répondre **200** (page d'accueil réelle). 301 propres : `http→https`, `www→apex`.
 - Aucun lien légacy ne doit finir en 404. Pas de deep-paths légacy connus à mapper (contrairement à d'autres NDD).
 
-## CONTENU — 1ʳᵉ vague (8-15 pages, kw validés DataForSEO AVANT écriture)
+## CONTENU - 1ʳᵉ vague (8-15 pages, kw validés DataForSEO AVANT écriture)
 Dev long-tail KD bas, on-thème strict. Idées (à valider DataForSEO, logger keyword-validation-log.csv) :
 - "Web platform features <année>" / nouveautés HTML-CSS-JS
 - Guides Web APIs modernes (Canvas, Web Storage, Geolocation, WebSocket, Intersection Observer, View Transitions…)
@@ -36,7 +36,7 @@ Dev long-tail KD bas, on-thème strict. Idées (à valider DataForSEO, logger ke
 Règles contenu : honnêteté stricte (0 fab), **2 images vivantes** (hero + in-body, 2ᵉ légende vraie),
 hero pas 2× /15 articles, schema TechArticle/FAQ.
 
-## MONÉTISATION (modeste mais RÉELLE — mix référence + bas-funnel)
+## MONÉTISATION (modeste mais RÉELLE - mix référence + bas-funnel)
 Le CA ne vient PAS des pages de pure référence (intention info) mais des **pages bas-funnel à intention
 transactionnelle dev**. Donc le contenu DOIT mélanger 2 types :
 - **~70 % référence/démo** (Web APIs, nouveautés HTML/CSS/JS, hub Advent) → trafic + autorité + GEO + backlinks. Convertit peu.

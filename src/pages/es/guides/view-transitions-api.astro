@@ -12,10 +12,10 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="Un logotipo brillante del navegador Google Chrome sobre un anillo metálico"
   cluster={null}
 >
-  <p>La <strong>API View Transitions</strong> anima el cambio entre dos estados de una página — una lista que se convierte en una vista de detalle, un tema que se alterna, un elemento que desaparece por un filtro — casi sin código de animación. El navegador captura el estado antiguo, captura el nuevo y hace un fundido (o una transformación) entre ambos por ti.</p>
+  <p>La <strong>API View Transitions</strong> anima el cambio entre dos estados de una página - una lista que se convierte en una vista de detalle, un tema que se alterna, un elemento que desaparece por un filtro - casi sin código de animación. El navegador captura el estado antiguo, captura el nuevo y hace un fundido (o una transformación) entre ambos por ti.</p>
 
   <h2>Transiciones same-document</h2>
-  <p>Para cambios de estado dentro de una misma página — una aplicación de una sola página que actualiza el DOM — envuelve la actualización del DOM en <code>document.startViewTransition()</code>:</p>
+  <p>Para cambios de estado dentro de una misma página - una aplicación de una sola página que actualiza el DOM - envuelve la actualización del DOM en <code>document.startViewTransition()</code>:</p>
   <pre><code>{`function showDetail(item) {
   if (!document.startViewTransition) {
     updateDOM(item); // sin soporte: solo actualiza, sin animación
@@ -23,7 +23,7 @@ import Article from '../../../layouts/Article.astro';
   }
   document.startViewTransition(() => updateDOM(item));
 }`}</code></pre>
-  <p>El callback hace tu trabajo habitual sobre el DOM. El navegador captura una instantánea «antes» justo antes de ejecutarlo y una «después» al terminar, y luego anima entre ambas. Por defecto es un fundido encadenado suave — ya una buena mejora gratis.</p>
+  <p>El callback hace tu trabajo habitual sobre el DOM. El navegador captura una instantánea «antes» justo antes de ejecutarlo y una «después» al terminar, y luego anima entre ambas. Por defecto es un fundido encadenado suave - ya una buena mejora gratis.</p>
 
   <h2>Personalizar la animación con CSS</h2>
   <p>Durante una transición, el navegador construye un árbol de pseudoelementos que puedes estilar. El punto de enganche más simple es el grupo de transición raíz:</p>
@@ -35,11 +35,11 @@ import Article from '../../../layouts/Article.astro';
 
   <figure>
     <img src="/img/view-transitions-api-inbody.jpg" alt="Una mano sosteniendo un teléfono que muestra una pantalla de perfil de una app frente a dos monitores de escritorio" width="1280" height="853" loading="lazy" />
-    <figcaption>Las view transitions suavizan el salto entre pantallas — el tipo de navegación fluida que los usuarios esperan de una app nativa, ahora posible en la web.</figcaption>
+    <figcaption>Las view transitions suavizan el salto entre pantallas - el tipo de navegación fluida que los usuarios esperan de una app nativa, ahora posible en la web.</figcaption>
   </figure>
 
   <h2>Animar un elemento concreto entre estados</h2>
-  <p>Para que un elemento parezca moverse y transformarse entre los dos estados — una miniatura que crece hasta una imagen completa — dale un <code>view-transition-name</code> compartido en ambos estados:</p>
+  <p>Para que un elemento parezca moverse y transformarse entre los dos estados - una miniatura que crece hasta una imagen completa - dale un <code>view-transition-name</code> compartido en ambos estados:</p>
   <pre><code>{`.hero-image {
   view-transition-name: hero;
 }`}</code></pre>
@@ -50,7 +50,7 @@ import Article from '../../../layouts/Article.astro';
   <pre><code>{`@view-transition {
   navigation: auto;
 }`}</code></pre>
-  <p>Con esa única regla, las navegaciones same-origin se animan automáticamente. Valores <code>view-transition-name</code> idénticos en ambas páginas permiten que un elemento — por ejemplo la imagen hero de un artículo — se prolongue de la página de lista a la del artículo.</p>
+  <p>Con esa única regla, las navegaciones same-origin se animan automáticamente. Valores <code>view-transition-name</code> idénticos en ambas páginas permiten que un elemento - por ejemplo la imagen hero de un artículo - se prolongue de la página de lista a la del artículo.</p>
 
   <h2>Referencia rápida</h2>
   <table>
@@ -66,5 +66,5 @@ import Article from '../../../layouts/Article.astro';
   <h2>Soporte y mejora progresiva</h2>
   <p>Las transiciones same-document están en los navegadores Chromium y Safari; el soporte cross-document se está desplegando y Firefox implementa ambas. Como proteges con <code>if (!document.startViewTransition)</code> y la versión cross-document es una activación puramente CSS, la API se degrada con elegancia: los navegadores incompatibles simplemente actualizan la página sin animación. Por eso es seguro adoptarla hoy como mejora progresiva.</p>
 
-  <p>Recurre a las view transitions cuando un salto entre estados se sienta brusco. Un poco de movimiento da al usuario sensación de continuidad — de dónde vienen las cosas y a dónde van — sin escribir ni un solo keyframe a mano en la mayoría de los casos.</p>
+  <p>Recurre a las view transitions cuando un salto entre estados se sienta brusco. Un poco de movimiento da al usuario sensación de continuidad - de dónde vienen las cosas y a dónde van - sin escribir ni un solo keyframe a mano en la mayoría de los casos.</p>
 </Article>

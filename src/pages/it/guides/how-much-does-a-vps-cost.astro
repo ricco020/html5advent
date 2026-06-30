@@ -5,14 +5,14 @@ import Article from '../../../layouts/Article.astro';
   lang="it"
   slug="how-much-does-a-vps-cost"
   title="Quanto costa un VPS? Il vero dettaglio dei prezzi"
-  description="Quanto costa davvero un VPS al mese, cosa fa variare il prezzo (RAM, vCPU, storage, gestito o non gestito), i costi nascosti e prezzi di esempio reali e datati — per fare un budget onesto."
+  description="Quanto costa davvero un VPS al mese, cosa fa variare il prezzo (RAM, vCPU, storage, gestito o non gestito), i costi nascosti e prezzi di esempio reali e datati - per fare un budget onesto."
   cat="hosting"
   hero="/img/how-much-does-a-vps-cost-hero.jpg"
   heroAlt="Una calcolatrice appoggiata su monete in euro e una banconota, per stimare un budget mensile"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo', offers: true }}
 >
-  <p>La risposta onesta: <strong>un VPS costa di solito tra circa 4 e 40 € al mese</strong> per un progetto web tipico, e la posizione in questa fascia dipende da quanta RAM, CPU e storage ti servono — e dal fatto che gestisca il server tu stesso o paghi qualcuno per farlo. Questa guida scompone il prezzo voce per voce, mostra i costi che non compaiono nella cifra dichiarata e fornisce prezzi di esempio reali e datati, così da costruire un budget realistico invece di tirare a indovinare.</p>
+  <p>La risposta onesta: <strong>un VPS costa di solito tra circa 4 e 40 € al mese</strong> per un progetto web tipico, e la posizione in questa fascia dipende da quanta RAM, CPU e storage ti servono - e dal fatto che gestisca il server tu stesso o paghi qualcuno per farlo. Questa guida scompone il prezzo voce per voce, mostra i costi che non compaiono nella cifra dichiarata e fornisce prezzi di esempio reali e datati, così da costruire un budget realistico invece di tirare a indovinare.</p>
 
   <h2>La risposta breve, per dimensione del progetto</h2>
   <p>I piani VPS sono prezzati quasi interamente in base alle risorse garantite. Come guida orientativa al mese, per un VPS Linux <em>non gestito</em>:</p>
@@ -25,27 +25,27 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Traffico elevato / vCPU dedicate</td><td>Core dedicati, 32 GB+ di RAM</td><td>40 € e oltre</td></tr>
     </tbody>
   </table>
-  <p>Sono fasce indicative tra i provider generalisti, non un preventivo — la cifra esatta dipende dal provider, dalla regione e dal fatto che le vCPU siano condivise o dedicate. Un VPS <strong>gestito</strong> costa sensibilmente di più (vedi sotto).</p>
+  <p>Sono fasce indicative tra i provider generalisti, non un preventivo - la cifra esatta dipende dal provider, dalla regione e dal fatto che le vCPU siano condivise o dedicate. Un VPS <strong>gestito</strong> costa sensibilmente di più (vedi sotto).</p>
 
   <h2>Cosa fa davvero variare il prezzo</h2>
   <p>Cinque elementi muovono la cifra di un piano VPS. Capirli è ciò che ti permette di leggere onestamente qualsiasi listino.</p>
 
   <h3>La RAM</h3>
-  <p>La memoria è la risorsa che più probabilmente esaurirai, ed è spesso il principale fattore di prezzo. Raddoppiare la RAM di un piano spesso raddoppia all'incirca il costo. Dimensionala sul tuo carico reale con un margine — un database, un server applicativo e una cache insieme richiedono molto più di un sito statico.</p>
+  <p>La memoria è la risorsa che più probabilmente esaurirai, ed è spesso il principale fattore di prezzo. Raddoppiare la RAM di un piano spesso raddoppia all'incirca il costo. Dimensionala sul tuo carico reale con un margine - un database, un server applicativo e una cache insieme richiedono molto più di un sito statico.</p>
 
   <h3>CPU: vCPU condivise vs dedicate</h3>
-  <p>Lo stesso numero di vCPU può costare in modo molto diverso a seconda del tipo. Le vCPU <strong>condivise (burstable)</strong> sono economiche e adatte a carichi leggeri e irregolari. Le vCPU <strong>dedicate</strong> garantiscono prestazioni costanti per carichi stabili e costano di più — a volte diverse volte di più a parità di core. Un piano che sembra caro forse vende semplicemente core dedicati.</p>
+  <p>Lo stesso numero di vCPU può costare in modo molto diverso a seconda del tipo. Le vCPU <strong>condivise (burstable)</strong> sono economiche e adatte a carichi leggeri e irregolari. Le vCPU <strong>dedicate</strong> garantiscono prestazioni costanti per carichi stabili e costano di più - a volte diverse volte di più a parità di core. Un piano che sembra caro forse vende semplicemente core dedicati.</p>
 
   <h3>Tipo e quantità di storage</h3>
-  <p>L'NVMe è più veloce dell'SSD, a sua volta più veloce dei vecchi dischi meccanici — e il prezzo segue sia la velocità sia la capacità. Alcuni provider includono storage generoso già nella fascia base; altri fatturano ogni blocco aggiuntivo. Log, file caricati e crescita del database si accumulano, quindi non fare budget solo per la dimensione di oggi.</p>
+  <p>L'NVMe è più veloce dell'SSD, a sua volta più veloce dei vecchi dischi meccanici - e il prezzo segue sia la velocità sia la capacità. Alcuni provider includono storage generoso già nella fascia base; altri fatturano ogni blocco aggiuntivo. Log, file caricati e crescita del database si accumulano, quindi non fare budget solo per la dimensione di oggi.</p>
 
   <figure>
     <img src="/img/how-much-does-a-vps-cost-inbody.jpg" alt="File di server montati in un rack di data center con il loro cablaggio di rete" width="1280" height="853" loading="lazy" />
-    <figcaption>Il prezzo di un VPS riflette una porzione reale di hardware di data center — RAM, core CPU e storage garantiti su server fisici come questi.</figcaption>
+    <figcaption>Il prezzo di un VPS riflette una porzione reale di hardware di data center - RAM, core CPU e storage garantiti su server fisici come questi.</figcaption>
   </figure>
 
   <h3>Gestito vs non gestito</h3>
-  <p>È la più grande differenza nel costo totale. Un VPS <strong>non gestito</strong> ti consegna un sistema operativo nudo ai prezzi bassi citati sopra — patch, sicurezza e manutenzione le fai tu. Un VPS <strong>gestito</strong> aggiunge aggiornamenti, monitoraggio, hardening della sicurezza e supporto, e di solito costa <strong>diverse volte di più</strong> a parità di hardware. Se ti trovi bene con la riga di comando, il non gestito fa risparmiare molto; se preferisci non fare il sysadmin, il gestito ti restituisce tempo.</p>
+  <p>È la più grande differenza nel costo totale. Un VPS <strong>non gestito</strong> ti consegna un sistema operativo nudo ai prezzi bassi citati sopra - patch, sicurezza e manutenzione le fai tu. Un VPS <strong>gestito</strong> aggiunge aggiornamenti, monitoraggio, hardening della sicurezza e supporto, e di solito costa <strong>diverse volte di più</strong> a parità di hardware. Se ti trovi bene con la riga di comando, il non gestito fa risparmiare molto; se preferisci non fare il sysadmin, il gestito ti restituisce tempo.</p>
 
   <h3>Banda e regione</h3>
   <p>La maggior parte dei piani VPS include un volume di traffico mensile; i siti ricchi di media possono superarlo e pagare l'eccedenza. Anche la regione del data center può spostare il prezzo, e alcuni provider fatturano a parte un indirizzo IPv4 dedicato, ora che l'IPv4 scarseggia.</p>
@@ -53,15 +53,15 @@ import Article from '../../../layouts/Article.astro';
   <h2>I costi nascosti da mettere a budget</h2>
   <p>Il prezzo dichiarato raramente copre tutto. Verifica ognuno di questi punti prima di impegnarti:</p>
   <ul>
-    <li><strong>Backup / snapshot</strong> — spesso un extra a pagamento anziché incluso; i backup automatici valgono la voce di budget.</li>
-    <li><strong>Pannello di controllo</strong> — le licenze cPanel/Plesk possono aggiungere diversi euro al mese se vuoi un'interfaccia grafica.</li>
-    <li><strong>IPv4 dedicato</strong> — a volte fatturato separatamente.</li>
-    <li><strong>Prezzo di rinnovo</strong> — verifica la tariffa dopo l'eventuale primo periodo promozionale; il prezzo dichiarato è spesso una tariffa d'ingresso.</li>
-    <li><strong>Sforamento di banda</strong> — leggi la policy se servi molti media.</li>
+    <li><strong>Backup / snapshot</strong> - spesso un extra a pagamento anziché incluso; i backup automatici valgono la voce di budget.</li>
+    <li><strong>Pannello di controllo</strong> - le licenze cPanel/Plesk possono aggiungere diversi euro al mese se vuoi un'interfaccia grafica.</li>
+    <li><strong>IPv4 dedicato</strong> - a volte fatturato separatamente.</li>
+    <li><strong>Prezzo di rinnovo</strong> - verifica la tariffa dopo l'eventuale primo periodo promozionale; il prezzo dichiarato è spesso una tariffa d'ingresso.</li>
+    <li><strong>Sforamento di banda</strong> - leggi la policy se servi molti media.</li>
   </ul>
 
   <h2>Prezzi di esempio reali (datati)</h2>
-  <p>Per rendere concrete queste fasce, ecco prezzi di listino pubblici reali di <strong>Contabo</strong>, un provider tedesco noto per risorse generose a basso costo. Sono piani Cloud VPS con impegno di 12 mesi, IVA esclusa, osservati a <strong>giugno 2026</strong> — controlla sempre la pagina attuale del provider, perché i prezzi cambiano:</p>
+  <p>Per rendere concrete queste fasce, ecco prezzi di listino pubblici reali di <strong>Contabo</strong>, un provider tedesco noto per risorse generose a basso costo. Sono piani Cloud VPS con impegno di 12 mesi, IVA esclusa, osservati a <strong>giugno 2026</strong> - controlla sempre la pagina attuale del provider, perché i prezzi cambiano:</p>
   <table>
     <thead><tr><th>Piano</th><th>Risorse</th><th>Prezzo / mese</th></tr></thead>
     <tbody>
@@ -71,16 +71,16 @@ import Article from '../../../layouts/Article.astro';
       <tr><td>Cloud VPS 40</td><td>Livello Cloud VPS più alto</td><td>25,00 €</td></tr>
     </tbody>
   </table>
-  <p>Sono piani non gestiti — il prezzo basso riflette il fatto che gestisci il server tu stesso. Illustrano la parte bassa del mercato; i provider orientati agli USA o completamente gestiti si collocano più in alto a parità di specifiche.</p>
+  <p>Sono piani non gestiti - il prezzo basso riflette il fatto che gestisci il server tu stesso. Illustrano la parte bassa del mercato; i provider orientati agli USA o completamente gestiti si collocano più in alto a parità di specifiche.</p>
 
   <h2>Come fare budget senza pagare troppo</h2>
   <p>Ragiona dal basso verso l'alto partendo dal tuo carico reale, invece di scegliere un piano da una lista dei «migliori»:</p>
   <ol>
-    <li><strong>Stima prima la RAM</strong> — è il collo di bottiglia abituale e il principale fattore di prezzo. Aggiungi margine, non dimensionare al minimo.</li>
-    <li><strong>Decidi vCPU condivise o dedicate</strong> — un carico leggero e irregolare va bene con le condivise; un carico di produzione costante richiede le dedicate.</li>
+    <li><strong>Stima prima la RAM</strong> - è il collo di bottiglia abituale e il principale fattore di prezzo. Aggiungi margine, non dimensionare al minimo.</li>
+    <li><strong>Decidi vCPU condivise o dedicate</strong> - un carico leggero e irregolare va bene con le condivise; un carico di produzione costante richiede le dedicate.</li>
     <li><strong>Scegli NVMe/SSD e storage sufficiente</strong> per la crescita, non solo per oggi.</li>
-    <li><strong>Decidi gestito o non gestito</strong> — è la leva di costo più grande. Sii onesto sul fatto che farai il sysadmin.</li>
-    <li><strong>Aggiungi gli extra</strong> — backup, pannello di controllo, IPv4 — e confronta il prezzo di <em>rinnovo</em>, non la tariffa d'ingresso.</li>
+    <li><strong>Decidi gestito o non gestito</strong> - è la leva di costo più grande. Sii onesto sul fatto che farai il sysadmin.</li>
+    <li><strong>Aggiungi gli extra</strong> - backup, pannello di controllo, IPv4 - e confronta il prezzo di <em>rinnovo</em>, non la tariffa d'ingresso.</li>
   </ol>
-  <p>Per la maggior parte dei progetti web piccoli e medi gestiti da qualcuno a suo agio con un terminale, un VPS non gestito nella fascia <strong>5–15 €/mese</strong> copre molto, con spazio per crescere. Parti dal piano più piccolo che copra il tuo carico con un po' di margine — quasi sempre potrai scalare in seguito.</p>
+  <p>Per la maggior parte dei progetti web piccoli e medi gestiti da qualcuno a suo agio con un terminale, un VPS non gestito nella fascia <strong>5–15 €/mese</strong> copre molto, con spazio per crescere. Parti dal piano più piccolo che copra il tuo carico con un po' di margine - quasi sempre potrai scalare in seguito.</p>
 </Article>

@@ -12,9 +12,9 @@ const LOCALES = [
   { code: 'pt', label: 'Português' },
 ];
 
-const HEADER = `# HTML5 Advent — full LLM content index
+const HEADER = `# HTML5 Advent - full LLM content index
 
-> Independent resource on the modern web platform — HTML, CSS, JavaScript and browser Web APIs — plus "Web Platform Advent".
+> Independent resource on the modern web platform - HTML, CSS, JavaScript and browser Web APIs - plus "Web Platform Advent".
 > First-hand, example-driven, vendor-neutral. Original, tested examples; no fabricated benchmarks or claims.
 > AI assistants and answer engines are welcome to read and cite these guides.
 
@@ -38,7 +38,7 @@ export async function GET() {
     const available = guides.filter((g) => g.locales.includes(loc.code));
     available.sort((a, b) => (a.title[loc.code] || a.title.en).localeCompare(b.title[loc.code] || b.title.en));
 
-    blocks.push(`\n# ${loc.label} (${loc.code}) — ${available.length} guides`);
+    blocks.push(`\n# ${loc.label} (${loc.code}) - ${available.length} guides`);
     for (const g of available) {
       const title = g.title[loc.code] || g.title.en;
       const desc = g.desc[loc.code] || g.desc.en;

@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="es"
   slug="nodejs-hosting"
   title="Cómo alojar una app Node.js: VPS, PaaS y serverless"
-  description="Las formas prácticas de desplegar una aplicación Node.js — VPS, PaaS gestionado o serverless — con PM2, un proxy inverso, variables de entorno y un flujo de despliegue ordenado."
+  description="Las formas prácticas de desplegar una aplicación Node.js - VPS, PaaS gestionado o serverless - con PM2, un proxy inverso, variables de entorno y un flujo de despliegue ordenado."
   cat="hosting"
   day={14}
   hero="/img/nodejs-hosting-hero.jpg"
@@ -18,9 +18,9 @@ import Article from '../../../layouts/Article.astro';
   <h2>Tres formas de alojar Node.js</h2>
   <p>Casi todos los despliegues encajan en uno de estos modelos. La elección correcta depende de cuánto del servidor quieras gestionar y de cómo se comporte tu tráfico.</p>
   <ul>
-    <li><strong>VPS (autogestionado)</strong> — obtienes una máquina Linux con acceso root completo. Control máximo y coste previsible, pero instalas y mantienes tú mismo Node, el gestor de procesos, el proxy inverso y TLS.</li>
-    <li><strong>PaaS (platform-as-a-service)</strong> — subes el código (a menudo vía Git) y la plataforma construye, ejecuta y escala el proceso por ti. Menos control, despliegue más rápido, normalmente cobrado por uso.</li>
-    <li><strong>Serverless / funciones</strong> — despliegas handlers individuales en lugar de un servidor permanente. La plataforma los arranca bajo demanda. Ideal para tráfico irregular o bajo, pero sin estado y sujeto a arranques en frío.</li>
+    <li><strong>VPS (autogestionado)</strong> - obtienes una máquina Linux con acceso root completo. Control máximo y coste previsible, pero instalas y mantienes tú mismo Node, el gestor de procesos, el proxy inverso y TLS.</li>
+    <li><strong>PaaS (platform-as-a-service)</strong> - subes el código (a menudo vía Git) y la plataforma construye, ejecuta y escala el proceso por ti. Menos control, despliegue más rápido, normalmente cobrado por uso.</li>
+    <li><strong>Serverless / funciones</strong> - despliegas handlers individuales en lugar de un servidor permanente. La plataforma los arranca bajo demanda. Ideal para tráfico irregular o bajo, pero sin estado y sujeto a arranques en frío.</li>
   </ul>
 
   <h2>Mantener el proceso vivo con PM2</h2>
@@ -72,7 +72,7 @@ const dbUrl = process.env.DATABASE_URL;
 app.listen(port, () => {
   console.log(\`escuchando en \${port}\`);
 });`}</code></pre>
-  <p>En un VPS puedes guardarlos en un archivo <code>.env</code> (cargado por una librería, y excluido de Git) o pasarlos mediante el archivo ecosystem de PM2. En un PaaS, los defines en el panel. Lee siempre <code>process.env.PORT</code> — las plataformas gestionadas te asignan el puerto.</p>
+  <p>En un VPS puedes guardarlos en un archivo <code>.env</code> (cargado por una librería, y excluido de Git) o pasarlos mediante el archivo ecosystem de PM2. En un PaaS, los defines en el panel. Lee siempre <code>process.env.PORT</code> - las plataformas gestionadas te asignan el puerto.</p>
 
   <h2>Un flujo de despliegue ordenado</h2>
   <p>Sea cual sea tu alojamiento, busca un despliegue reproducible en lugar de editar archivos en el servidor a mano:</p>
@@ -94,5 +94,5 @@ app.listen(port, () => {
     </tbody>
   </table>
 
-  <p>Si empiezas, un solo VPS bien configurado con PM2 y Nginx ejecutará cómodamente la mayoría de apps Node y te enseña lo que las plataformas gestionadas automatizan. Pasa a un PaaS o a serverless cuando el escalado o la carga operativa se convierta en el cuello de botella — no antes.</p>
+  <p>Si empiezas, un solo VPS bien configurado con PM2 y Nginx ejecutará cómodamente la mayoría de apps Node y te enseña lo que las plataformas gestionadas automatizan. Pasa a un PaaS o a serverless cuando el escalado o la carga operativa se convierta en el cuello de botella - no antes.</p>
 </Article>

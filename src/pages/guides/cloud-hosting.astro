@@ -5,21 +5,21 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="cloud-hosting"
   title="Cloud hosting explained: when it makes sense for a web project"
-  description="What cloud hosting actually means, how it differs from a single VPS or shared hosting, its real strengths and trade-offs, and the kinds of web projects it suits — without invented pricing or benchmarks."
+  description="What cloud hosting actually means, how it differs from a single VPS or shared hosting, its real strengths and trade-offs, and the kinds of web projects it suits - without invented pricing or benchmarks."
   cat="hosting"
   hero="/img/cloud-hosting-hero.jpg"
   heroAlt="A hand pointing at a white cloud against a blue sky overlaid with a connected network mesh"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
-  <p><strong>Cloud hosting</strong> runs your site or app across a pool of connected servers rather than on a single machine. Instead of being tied to one box, your workload draws resources from a cluster, so capacity can be added or removed on demand and a single hardware failure doesn't have to take you offline. That model brings real advantages — and real trade-offs. This guide explains what cloud hosting is, how it compares to shared hosting and a single VPS, and when it's actually the right choice for a web project.</p>
+  <p><strong>Cloud hosting</strong> runs your site or app across a pool of connected servers rather than on a single machine. Instead of being tied to one box, your workload draws resources from a cluster, so capacity can be added or removed on demand and a single hardware failure doesn't have to take you offline. That model brings real advantages - and real trade-offs. This guide explains what cloud hosting is, how it compares to shared hosting and a single VPS, and when it's actually the right choice for a web project.</p>
 
   <h2>What cloud hosting actually means</h2>
   <p>In traditional hosting your site lives on one physical server (shared) or one virtual slice of one (a VPS). In cloud hosting, virtualization spreads the load across <strong>many networked servers</strong>. If one node fails, others pick up the work; if you need more capacity, the platform provisions it from the pool. You're billed for what you use rather than for a fixed box.</p>
   <p>Two properties define the model:</p>
   <ul>
-    <li><strong>Elasticity</strong> — resources scale up and down to match demand, often automatically.</li>
-    <li><strong>Redundancy</strong> — the workload isn't pinned to a single point of failure, so the platform can tolerate a node going down.</li>
+    <li><strong>Elasticity</strong> - resources scale up and down to match demand, often automatically.</li>
+    <li><strong>Redundancy</strong> - the workload isn't pinned to a single point of failure, so the platform can tolerate a node going down.</li>
   </ul>
 
   <h2>Cloud vs shared vs VPS</h2>
@@ -31,7 +31,7 @@ import Article from '../../layouts/Article.astro';
       <tr><td>Cloud hosting</td><td>A pool of networked servers</td><td>Elastic, often automatic</td><td>Often usage-based</td></tr>
     </tbody>
   </table>
-  <p>A single VPS gives you guaranteed, isolated resources on one machine — predictable and simple. Cloud hosting trades that simplicity for elasticity and resilience by spreading you across many machines. Neither is "better"; they solve different problems.</p>
+  <p>A single VPS gives you guaranteed, isolated resources on one machine - predictable and simple. Cloud hosting trades that simplicity for elasticity and resilience by spreading you across many machines. Neither is "better"; they solve different problems.</p>
 
   <figure>
     <img src="/img/cloud-hosting-inbody.jpg" alt="Server racks in a datacenter aisle with an overlaid diagram linking a cloud icon to phones, screens and a database" width="1280" height="720" loading="lazy" />
@@ -41,26 +41,26 @@ import Article from '../../layouts/Article.astro';
   <h2>When cloud hosting makes sense</h2>
   <p>The model earns its keep in specific situations:</p>
   <ul>
-    <li><strong>Unpredictable or spiky traffic</strong> — a launch, a viral post or seasonal peaks. Elastic scaling absorbs the spike instead of crashing under it, then scales back down when it passes.</li>
-    <li><strong>Uptime is critical</strong> — when downtime costs real money or trust, the built-in redundancy of multiple nodes is valuable.</li>
-    <li><strong>Rapid growth</strong> — you don't know next quarter's load, and you'd rather not over-provision a fixed box today.</li>
-    <li><strong>Distributed users</strong> — cloud platforms make it easier to run in several regions to keep latency low for a global audience.</li>
+    <li><strong>Unpredictable or spiky traffic</strong> - a launch, a viral post or seasonal peaks. Elastic scaling absorbs the spike instead of crashing under it, then scales back down when it passes.</li>
+    <li><strong>Uptime is critical</strong> - when downtime costs real money or trust, the built-in redundancy of multiple nodes is valuable.</li>
+    <li><strong>Rapid growth</strong> - you don't know next quarter's load, and you'd rather not over-provision a fixed box today.</li>
+    <li><strong>Distributed users</strong> - cloud platforms make it easier to run in several regions to keep latency low for a global audience.</li>
   </ul>
 
   <h2>When it's overkill</h2>
   <p>Cloud hosting isn't automatically the right answer.</p>
   <ul>
-    <li><strong>Steady, predictable traffic</strong> — if your load is flat, a single VPS is simpler and usually cheaper than usage-based cloud.</li>
-    <li><strong>Small or static sites</strong> — a blog or brochure site is better served by shared hosting or a static host.</li>
-    <li><strong>Tight, fixed budgets</strong> — usage-based billing can be unpredictable; a flat-rate VPS makes costs easy to forecast.</li>
-    <li><strong>You want simplicity</strong> — cloud platforms add concepts (load balancers, auto-scaling, managed services) that are overhead if you don't need them.</li>
+    <li><strong>Steady, predictable traffic</strong> - if your load is flat, a single VPS is simpler and usually cheaper than usage-based cloud.</li>
+    <li><strong>Small or static sites</strong> - a blog or brochure site is better served by shared hosting or a static host.</li>
+    <li><strong>Tight, fixed budgets</strong> - usage-based billing can be unpredictable; a flat-rate VPS makes costs easy to forecast.</li>
+    <li><strong>You want simplicity</strong> - cloud platforms add concepts (load balancers, auto-scaling, managed services) that are overhead if you don't need them.</li>
   </ul>
 
   <h2>Pros and cons</h2>
   <h3>Advantages</h3>
   <ul>
-    <li>Elastic scaling — handle traffic spikes without rebuilding.</li>
-    <li>Resilience — no single server is a single point of failure.</li>
+    <li>Elastic scaling - handle traffic spikes without rebuilding.</li>
+    <li>Resilience - no single server is a single point of failure.</li>
     <li>Pay for what you use (when traffic is genuinely variable).</li>
     <li>Easier multi-region deployments for a global audience.</li>
   </ul>
@@ -72,7 +72,7 @@ import Article from '../../layouts/Article.astro';
   </ul>
 
   <h2>A practical middle path</h2>
-  <p>Many projects don't need full cloud elasticity on day one. A common, cost-effective approach is to start on a well-specced <strong>VPS</strong> with predictable monthly pricing, then move toward a cloud setup only once traffic genuinely becomes variable or uptime requirements tighten. For the VPS stage, providers focused on a strong resource-to-price ratio — such as <strong>Contabo</strong>, known for generous CPU and RAM at a low monthly cost — give you plenty of headroom while you grow, without committing to usage-based billing before you need it.</p>
+  <p>Many projects don't need full cloud elasticity on day one. A common, cost-effective approach is to start on a well-specced <strong>VPS</strong> with predictable monthly pricing, then move toward a cloud setup only once traffic genuinely becomes variable or uptime requirements tighten. For the VPS stage, providers focused on a strong resource-to-price ratio - such as <strong>Contabo</strong>, known for generous CPU and RAM at a low monthly cost - give you plenty of headroom while you grow, without committing to usage-based billing before you need it.</p>
 
   <h2>How to decide</h2>
   <p>Ask whether your traffic is variable and whether downtime is expensive. If both are yes, cloud hosting's elasticity and redundancy justify the extra complexity. If your load is steady and your budget fixed, a single VPS is simpler and easier to forecast. If you're weighing the VPS option, see our guides on <a href="/guides/vps-hosting">what a VPS is and how to choose one</a> and <a href="/guides/best-vps-for-web-hosting">picking the best VPS for a web project</a>.</p>

@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="it"
   slug="fetch-api-javascript"
   title="La Fetch API in JavaScript: una guida pratica"
-  description="Come effettuare richieste HTTP nel browser con la Fetch API — GET, JSON, POST, gestione degli errori e annullamento delle richieste — con esempi eseguibili."
+  description="Come effettuare richieste HTTP nel browser con la Fetch API - GET, JSON, POST, gestione degli errori e annullamento delle richieste - con esempi eseguibili."
   cat="apis"
   day={1}
   hero="/img/web-dev-code.jpg"
@@ -25,7 +25,7 @@ console.log(data);`}</code></pre>
   .then((data) => console.log(data));`}</code></pre>
 
   <h2>L'insidia: fetch non viene rifiutata sugli errori HTTP</h2>
-  <p>È ciò che sorprende quasi tutti. Una risposta <code>404</code> o <code>500</code> resta una fetch <em>riuscita</em> — la promise viene rifiutata solo in caso di guasto di <strong>rete</strong> (offline, DNS, CORS). Devi controllare <code>response.ok</code> da solo:</p>
+  <p>È ciò che sorprende quasi tutti. Una risposta <code>404</code> o <code>500</code> resta una fetch <em>riuscita</em> - la promise viene rifiutata solo in caso di guasto di <strong>rete</strong> (offline, DNS, CORS). Devi controllare <code>response.ok</code> da solo:</p>
   <pre><code>{`const res = await fetch(url);
 if (!res.ok) {
   throw new Error(\`HTTP \${res.status} \${res.statusText}\`);
@@ -47,7 +47,7 @@ const data = await res.json();`}</code></pre>
 const created = await res.json();`}</code></pre>
 
   <h2>Annullare una richiesta</h2>
-  <p>Usa un <code>AbortController</code> per annullare una richiesta — utile per i timeout o quando un componente viene smontato:</p>
+  <p>Usa un <code>AbortController</code> per annullare una richiesta - utile per i timeout o quando un componente viene smontato:</p>
   <pre><code>{`const controller = new AbortController();
 const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -72,5 +72,5 @@ try {
     </tbody>
   </table>
 
-  <p>Questo copre i casi quotidiani. La Fetch API supporta anche lo streaming dei corpi delle risposte, gli upload con <code>FormData</code> e la clonazione di richiesta/risposta — ma i pattern qui sopra gestiscono la stragrande maggioranza delle chiamate reali.</p>
+  <p>Questo copre i casi quotidiani. La Fetch API supporta anche lo streaming dei corpi delle risposte, gli upload con <code>FormData</code> e la clonazione di richiesta/risposta - ma i pattern qui sopra gestiscono la stragrande maggioranza delle chiamate reali.</p>
 </Article>

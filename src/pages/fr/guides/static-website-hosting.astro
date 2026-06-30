@@ -12,14 +12,14 @@ import Article from '../../../layouts/Article.astro';
   heroAlt="La main d'un technicien manipulant un serveur éclairé en bleu dans une baie de datacenter"
   cluster="deploy"
 >
-  <p>Un <strong>site statique</strong> est un ensemble de fichiers pré-générés — HTML, CSS, JavaScript et médias — qu'un serveur peut livrer tels quels au navigateur, sans rien exécuter à chaque requête. Des outils comme <strong>Astro</strong>, <strong>Vite</strong>, Eleventy ou un simple dossier HTML écrit à la main produisent ce type de sortie. L'héberger est plus simple, moins cher et plus rapide qu'une application dynamique, car il n'y a rien à exécuter côté serveur.</p>
+  <p>Un <strong>site statique</strong> est un ensemble de fichiers pré-générés - HTML, CSS, JavaScript et médias - qu'un serveur peut livrer tels quels au navigateur, sans rien exécuter à chaque requête. Des outils comme <strong>Astro</strong>, <strong>Vite</strong>, Eleventy ou un simple dossier HTML écrit à la main produisent ce type de sortie. L'héberger est plus simple, moins cher et plus rapide qu'une application dynamique, car il n'y a rien à exécuter côté serveur.</p>
 
   <h2>Ce que signifie vraiment « hébergement statique »</h2>
-  <p>Avec l'hébergement statique, vous lancez une étape de build en local ou en CI, qui produit un dossier de fichiers bruts (souvent nommé <code>dist</code> ou <code>_site</code>). Le seul rôle de l'hébergeur est de stocker ces fichiers et de les servir en HTTP. Pas de PHP, pas de processus Node, pas de base de données — uniquement des fichiers. Cela a trois conséquences directes :</p>
+  <p>Avec l'hébergement statique, vous lancez une étape de build en local ou en CI, qui produit un dossier de fichiers bruts (souvent nommé <code>dist</code> ou <code>_site</code>). Le seul rôle de l'hébergeur est de stocker ces fichiers et de les servir en HTTP. Pas de PHP, pas de processus Node, pas de base de données - uniquement des fichiers. Cela a trois conséquences directes :</p>
   <ul>
-    <li><strong>Vitesse</strong> — les fichiers se mettent en cache agressivement et se servent depuis l'edge, au plus près du visiteur.</li>
-    <li><strong>Coût</strong> — pas de serveur allumé en permanence à payer ; beaucoup de fournisseurs offrent un palier gratuit généreux.</li>
-    <li><strong>Fiabilité</strong> — moins de pièces mobiles, donc moins de choses susceptibles de casser sous la charge.</li>
+    <li><strong>Vitesse</strong> - les fichiers se mettent en cache agressivement et se servent depuis l'edge, au plus près du visiteur.</li>
+    <li><strong>Coût</strong> - pas de serveur allumé en permanence à payer ; beaucoup de fournisseurs offrent un palier gratuit généreux.</li>
+    <li><strong>Fiabilité</strong> - moins de pièces mobiles, donc moins de choses susceptibles de casser sous la charge.</li>
   </ul>
 
   <h2>Générer votre dossier de sortie</h2>
@@ -31,12 +31,12 @@ npm run build        # génère ./dist
 npm run build        # génère ./dist
 
 # HTML brut
-# pas d'étape de build — votre dossier de fichiers .html est déjà la sortie`}</code></pre>
+# pas d'étape de build - votre dossier de fichiers .html est déjà la sortie`}</code></pre>
   <p>Pour un site HTML brut, le « build » est simplement le dossier que vous avez déjà. Pour Astro ou Vite, c'est le répertoire <code>dist</code> qui est servi.</p>
 
   <figure>
     <img src="/img/static-website-hosting-inbody.jpg" alt="Une rangée de serveurs noirs montés en rack dans un datacenter" width="1280" height="853" loading="lazy" />
-    <figcaption>Derrière chaque site statique se cache une infrastructure physique — des baies de serveurs et des nœuds edge de CDN qui stockent et distribuent vos fichiers générés.</figcaption>
+    <figcaption>Derrière chaque site statique se cache une infrastructure physique - des baies de serveurs et des nœuds edge de CDN qui stockent et distribuent vos fichiers générés.</figcaption>
   </figure>
 
   <h2>Où héberger : CDN ou hébergement statique classique</h2>
@@ -55,7 +55,7 @@ npm run build        # génère ./dist
   <p>Beaucoup de plateformes acceptent aussi la <strong>délégation des serveurs de noms</strong>, où vous confiez entièrement la gestion DNS à l'hébergeur. Une fois les enregistrements propagés, l'hébergeur sert votre site sur votre propre domaine.</p>
 
   <h2>HTTPS gratuit</h2>
-  <p>HTTPS n'est plus optionnel — les navigateurs signalent le HTTP simple comme « non sécurisé », et de nombreuses API de la plateforme web ne fonctionnent que dans un contexte sécurisé. Bonne nouvelle : la quasi-totalité des hébergeurs statiques modernes émettent et renouvellent les certificats TLS pour vous automatiquement, généralement via Let's Encrypt. Une fois votre domaine connecté, le certificat est provisionné sans aucune manipulation, et les renouvellements se font tout seuls.</p>
+  <p>HTTPS n'est plus optionnel - les navigateurs signalent le HTTP simple comme « non sécurisé », et de nombreuses API de la plateforme web ne fonctionnent que dans un contexte sécurisé. Bonne nouvelle : la quasi-totalité des hébergeurs statiques modernes émettent et renouvellent les certificats TLS pour vous automatiquement, généralement via Let's Encrypt. Une fois votre domaine connecté, le certificat est provisionné sans aucune manipulation, et les renouvellements se font tout seuls.</p>
 
   <h2>Référence rapide</h2>
   <table>
@@ -69,5 +69,5 @@ npm run build        # génère ./dist
     </tbody>
   </table>
 
-  <p>Tout l'intérêt de l'hébergement statique est de s'effacer : vous générez une fois, vous poussez, et les fichiers sont servis vite depuis l'edge. Réservez l'hébergement dynamique aux parties de votre projet qui ont réellement besoin de logique côté serveur — et gardez le frontend statique sur une infrastructure conçue pour livrer des fichiers rapidement.</p>
+  <p>Tout l'intérêt de l'hébergement statique est de s'effacer : vous générez une fois, vous poussez, et les fichiers sont servis vite depuis l'edge. Réservez l'hébergement dynamique aux parties de votre projet qui ont réellement besoin de logique côté serveur - et gardez le frontend statique sur une infrastructure conçue pour livrer des fichiers rapidement.</p>
 </Article>

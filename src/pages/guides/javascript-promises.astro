@@ -5,7 +5,7 @@ import Article from '../../layouts/Article.astro';
   lang="en"
   slug="javascript-promises"
   title="JavaScript Promises: a practical guide"
-  description="Understand JavaScript promises — creating them, then/catch/finally, chaining, and combining many with Promise.all, race, any and allSettled — with runnable examples and the common gotchas."
+  description="Understand JavaScript promises - creating them, then/catch/finally, chaining, and combining many with Promise.all, race, any and allSettled - with runnable examples and the common gotchas."
   cat="js"
   day={2}
   hero="/img/javascript-promises-hero.jpg"
@@ -14,11 +14,11 @@ import Article from '../../layouts/Article.astro';
   faq={[
     { q: 'What is a promise in JavaScript?', a: 'A promise is an object representing the eventual result of an asynchronous operation. It starts pending and then settles as either fulfilled with a value or rejected with an error, and once it settles it never changes again. You react to the outcome with then, catch and finally.' },
     { q: "What's the difference between Promise.all, race, any and allSettled?", a: 'Promise.all resolves when every promise fulfils and rejects on the first rejection; allSettled waits for all of them and reports each outcome; race settles as soon as the first promise settles either way; any resolves on the first fulfilment and rejects only if all of them fail.' },
-    { q: 'How do you handle errors in a promise chain?', a: 'Add a single .catch at the end of the chain — it catches a rejection from any earlier step, because errors propagate down the chain until something handles them. A .finally then runs afterwards regardless of success or failure.' },
+    { q: 'How do you handle errors in a promise chain?', a: 'Add a single .catch at the end of the chain - it catches a rejection from any earlier step, because errors propagate down the chain until something handles them. A .finally then runs afterwards regardless of success or failure.' },
     { q: 'Why chain promises instead of nesting them?', a: 'Returning a value or promise from a then handler passes it to the next then, so steps stay flat and readable and errors funnel into one catch. Nesting promises recreates the "callback hell" that promises were designed to avoid.' },
   ]}
 >
-  <p>A <strong>promise</strong> is an object that represents a value that isn't ready yet. It's the foundation of asynchronous JavaScript: <code>fetch()</code>, timers, file reads in Node, and most modern APIs return promises. A promise is always in one of three states — <em>pending</em>, <em>fulfilled</em>, or <em>rejected</em> — and once it settles it never changes again.</p>
+  <p>A <strong>promise</strong> is an object that represents a value that isn't ready yet. It's the foundation of asynchronous JavaScript: <code>fetch()</code>, timers, file reads in Node, and most modern APIs return promises. A promise is always in one of three states - <em>pending</em>, <em>fulfilled</em>, or <em>rejected</em> - and once it settles it never changes again.</p>
 
   <h2>Creating a promise</h2>
   <p>Most of the time you <em>consume</em> promises that an API hands you. But you create one yourself with the <code>Promise</code> constructor, which takes an executor function receiving <code>resolve</code> and <code>reject</code>:</p>
@@ -38,7 +38,7 @@ const fetchUser = (id) => new Promise((resolve, reject) => {
   .then((user) => console.log('Got', user.name))
   .catch((err) => console.error('Failed:', err.message))
   .finally(() => console.log('Done'));`}</code></pre>
-  <p><code>.then()</code> can take two arguments — <code>onFulfilled</code> and <code>onRejected</code> — but a separate <code>.catch()</code> at the end of the chain is clearer and also catches errors thrown inside earlier <code>.then()</code> handlers.</p>
+  <p><code>.then()</code> can take two arguments - <code>onFulfilled</code> and <code>onRejected</code> - but a separate <code>.catch()</code> at the end of the chain is clearer and also catches errors thrown inside earlier <code>.then()</code> handlers.</p>
 
   <h2>Chaining: the real superpower</h2>
   <p>Every <code>.then()</code> returns a <em>new</em> promise, so they chain. Whatever you return from a handler becomes the input to the next one. Crucially, if you return a promise, the chain waits for it to settle before continuing:</p>
@@ -58,10 +58,10 @@ const fetchUser = (id) => new Promise((resolve, reject) => {
   <h2>Running promises together</h2>
   <p>When tasks don't depend on each other, start them in parallel and combine the results. Four static methods cover the common cases:</p>
   <ul>
-    <li><code>Promise.all([...])</code> — waits for <strong>all</strong> to fulfil; rejects as soon as <strong>one</strong> rejects. Returns an array of results in order.</li>
-    <li><code>Promise.allSettled([...])</code> — waits for all to finish and never rejects; returns an array of <code>&#123; status, value &#125;</code> or <code>&#123; status, reason &#125;</code> objects.</li>
-    <li><code>Promise.race([...])</code> — settles with the <strong>first</strong> promise to settle, whether it fulfils or rejects.</li>
-    <li><code>Promise.any([...])</code> — settles with the first promise to <strong>fulfil</strong>; only rejects if they all reject.</li>
+    <li><code>Promise.all([...])</code> - waits for <strong>all</strong> to fulfil; rejects as soon as <strong>one</strong> rejects. Returns an array of results in order.</li>
+    <li><code>Promise.allSettled([...])</code> - waits for all to finish and never rejects; returns an array of <code>&#123; status, value &#125;</code> or <code>&#123; status, reason &#125;</code> objects.</li>
+    <li><code>Promise.race([...])</code> - settles with the <strong>first</strong> promise to settle, whether it fulfils or rejects.</li>
+    <li><code>Promise.any([...])</code> - settles with the first promise to <strong>fulfil</strong>; only rejects if they all reject.</li>
   </ul>
   <pre><code>{`// Fetch three resources at once, fail if any fails
 const [user, posts, prefs] = await Promise.all([
@@ -79,10 +79,10 @@ results.forEach((r) => {
 
   <h2>Common gotchas</h2>
   <ul>
-    <li><strong>Forgetting to return.</strong> Inside a <code>.then()</code>, if you call a promise but don't <code>return</code> it, the chain won't wait for it — you lose ordering and error handling.</li>
+    <li><strong>Forgetting to return.</strong> Inside a <code>.then()</code>, if you call a promise but don't <code>return</code> it, the chain won't wait for it - you lose ordering and error handling.</li>
     <li><strong>Unhandled rejections.</strong> A promise without a <code>.catch()</code> (or a <code>try/catch</code> around <code>await</code>) produces an <code>unhandledrejection</code>. Always handle errors at the end of the chain.</li>
-    <li><strong>Mixing callbacks and promises.</strong> Don't call <code>resolve</code> twice or both <code>resolve</code> and <code>reject</code> — only the first call counts; the rest are silently ignored.</li>
-    <li><strong>The executor runs immediately.</strong> The function you pass to <code>new Promise()</code> runs synchronously, right away — only the <code>.then()</code> callbacks are deferred.</li>
+    <li><strong>Mixing callbacks and promises.</strong> Don't call <code>resolve</code> twice or both <code>resolve</code> and <code>reject</code> - only the first call counts; the rest are silently ignored.</li>
+    <li><strong>The executor runs immediately.</strong> The function you pass to <code>new Promise()</code> runs synchronously, right away - only the <code>.then()</code> callbacks are deferred.</li>
   </ul>
 
   <h2>Quick reference</h2>
