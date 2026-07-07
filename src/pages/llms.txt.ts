@@ -22,6 +22,10 @@ const HEADER = `# HTML5 Advent
 ## Languages
 English (/), Français (/fr), Español (/es), Deutsch (/de), Italiano (/it), Português (/pt).
 
+## Interactive tools (free, in-browser, six languages)
+- /tools/flexbox-playground - CSS Flexbox playground: toggle flex properties, see the layout live, copy the CSS.
+- /tools/contrast-checker - WCAG color contrast checker: enter text and background colours, get the contrast ratio and AA/AAA pass or fail.
+
 ## Full content
 - /llms-full.txt - every guide with its description, in all six languages.
 `;
