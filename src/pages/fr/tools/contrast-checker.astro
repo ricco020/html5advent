@@ -1,0 +1,101 @@
+---
+import Base from '../../../layouts/Base.astro';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Verificateur de contraste WCAG',
+  url: 'https://html5advent.com/fr/tools/contrast-checker',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Any (web browser)',
+  description: "Verificateur de contraste de couleurs WCAG gratuit. Saisissez une couleur de texte et de fond pour obtenir le rapport de contraste et voir s'il passe WCAG AA et AAA pour texte normal et large. Dans le navigateur.",
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  isAccessibleForFree: true,
+  inLanguage: 'fr',
+  publisher: { '@type': 'Organization', name: 'HTML5 Advent', url: 'https://html5advent.com' },
+};
+---
+<Base
+  lang='fr'
+  title='Verificateur de contraste WCAG - AA et AAA'
+  description="Verificateur de contraste de couleurs WCAG gratuit. Saisissez une couleur de texte et de fond pour obtenir le rapport de contraste et voir s'il passe WCAG AA et AAA pour texte normal et large. Dans le navigateur."
+  path="tools/contrast-checker"
+  schema={schema}
+  ogType="website"
+>
+  <main class="cc-wrap">
+    <nav class="crumb" aria-label="Breadcrumb"><a href="/fr/">Home</a> &rsaquo; <a href="/fr/tools/">Outils</a> &rsaquo; Verificateur de contraste</nav>
+    <h1>Verificateur de contraste WCAG</h1>
+    <p>Choisissez une couleur de texte et une couleur de fond pour obtenir le rapport de contraste et verifier s'il passe les seuils WCAG AA et AAA pour texte normal et large. Tout s'execute dans votre navigateur.</p>
+
+    <div id="cc" data-pass='Reussi' data-fail='Echoue'
+      data-aan='AA - texte normal (>= 4.5:1)' data-aal='AA - grand texte (>= 3:1)' data-aaan='AAA - texte normal (>= 7:1)' data-aaal='AAA - grand texte (>= 4.5:1)'>
+      <div class="cc-grid">
+        <div class="cc-field">
+          <label for="cc-fg-t">Couleur du texte</label>
+          <div class="cc-inp"><input type="color" id="cc-fg-c" value="#1A1A1A" aria-label='Couleur du texte' /><input type="text" id="cc-fg-t" value="#1A1A1A" spellcheck="false" /></div>
+        </div>
+        <div class="cc-field">
+          <label for="cc-bg-t">Couleur de fond</label>
+          <div class="cc-inp"><input type="color" id="cc-bg-c" value="#FFFFFF" aria-label='Couleur de fond' /><input type="text" id="cc-bg-t" value="#FFFFFF" spellcheck="false" /></div>
+        </div>
+      </div>
+
+      <div class="cc-preview" id="cc-preview">
+        <div class="big">Portez ce vieux whisky au juge blond qui fume</div>
+        <div>Exemple de petit texte a 16px.</div>
+      </div>
+
+      <div class="cc-ratio"><span style="font-size:1rem;font-weight:600;opacity:.7">Rapport de contraste: </span><span id="cc-ratio">-</span></div>
+      <div class="cc-checks" id="cc-checks"></div>
+    </div>
+
+    <h2>Ce que signifient les niveaux</h2>
+    <p>WCAG definit des seuils de contraste pour que le texte reste lisible. AA est la base legale courante : 4.5:1 pour le texte normal, 3:1 pour le grand texte (18,66px gras ou 24px+). AAA est plus strict : 7:1 et 4.5:1. Le grand texte demande moins de contraste car ses traits plus epais sont plus faciles a lire.</p>
+    <p><small>Le rapport est calcule avec la formule de luminance relative WCAG 2. Il verifie les deux couleurs saisies ; les vraies pages doivent aussi etre testees avec le texte reellement rendu.</small></p>
+  </main>
+
+  <style>
+    .cc-wrap { max-width: 760px; }
+    .crumb { font-size: 14px; opacity: .75; margin-bottom: 18px; }
+    .cc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+    .cc-field label { font-weight: 600; display: block; margin-bottom: 6px; }
+    .cc-inp { display: flex; gap: 8px; align-items: center; }
+    .cc-inp input[type=color] { width: 46px; height: 40px; border: 1px solid #cfd3da; border-radius: 8px; padding: 2px; background: #fff; cursor: pointer; }
+    .cc-inp input[type=text] { flex: 1; font-family: ui-monospace, monospace; font-size: 15px; padding: 9px 11px; border: 1px solid #cfd3da; border-radius: 8px; text-transform: uppercase; }
+    .cc-preview { padding: 22px; border-radius: 12px; border: 1px solid #e2e5ea; margin: 8px 0 4px; }
+    .cc-preview .big { font-size: 24px; font-weight: 700; }
+    .cc-ratio { font-size: 2rem; font-weight: 800; margin: 10px 0; }
+    .cc-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .cc-check { padding: 10px 12px; border: 1px solid #e2e5ea; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .cc-badge { padding: 3px 10px; border-radius: 999px; color: #fff; font-size: 13px; font-weight: 700; }
+    @media (max-width: 560px) { .cc-grid, .cc-checks { grid-template-columns: 1fr; } }
+  </style>
+
+  <script is:inline>
+    (function () {
+      var el = document.getElementById('cc'); if (!el) return;
+      var d = el.dataset;
+      var fgC = document.getElementById('cc-fg-c'), fgT = document.getElementById('cc-fg-t'),
+          bgC = document.getElementById('cc-bg-c'), bgT = document.getElementById('cc-bg-t'),
+          prev = document.getElementById('cc-preview'), ratioEl = document.getElementById('cc-ratio'),
+          checks = document.getElementById('cc-checks');
+      function norm(h){ h=(h||'').trim(); if(h[0]!=='#') h='#'+h; if(/^#([0-9a-fA-F]{3})$/.test(h)) h='#'+h.slice(1).split('').map(function(c){return c+c;}).join(''); return /^#([0-9a-fA-F]{6})$/.test(h)?h.toUpperCase():null; }
+      function rgb(h){ var n=parseInt(h.slice(1),16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+      function lum(c){ var a=c.map(function(v){ v/=255; return v<=0.03928? v/12.92 : Math.pow((v+0.055)/1.055,2.4); }); return 0.2126*a[0]+0.7152*a[1]+0.0722*a[2]; }
+      function ratio(fg,bg){ var l1=lum(rgb(fg)), l2=lum(rgb(bg)), hi=Math.max(l1,l2), lo=Math.min(l1,l2); return (hi+0.05)/(lo+0.05); }
+      function rowh(label, pass){ return '<div class="cc-check"><span>'+label+'</span><span class="cc-badge" style="background:'+(pass?'#10b981':'#ef4444')+'">'+(pass?d.pass:d.fail)+'</span></div>'; }
+      function render(){
+        var fg=norm(fgT.value), bg=norm(bgT.value);
+        if(!fg||!bg){ ratioEl.textContent='-'; checks.innerHTML=''; return; }
+        fgC.value=fg; bgC.value=bg;
+        prev.style.color=fg; prev.style.background=bg;
+        var r=ratio(fg,bg); ratioEl.textContent=r.toFixed(2)+':1';
+        checks.innerHTML = rowh(d.aan, r>=4.5) + rowh(d.aal, r>=3) + rowh(d.aaan, r>=7) + rowh(d.aaal, r>=4.5);
+      }
+      fgC.addEventListener('input', function(){ fgT.value=fgC.value.toUpperCase(); render(); });
+      bgC.addEventListener('input', function(){ bgT.value=bgC.value.toUpperCase(); render(); });
+      fgT.addEventListener('input', render); bgT.addEventListener('input', render);
+      render();
+    })();
+  </script>
+</Base>
