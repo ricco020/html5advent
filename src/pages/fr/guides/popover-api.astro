@@ -1,0 +1,70 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="popover-api"
+  title="L’API Popover : popups, menus et infobulles natifs sans bibliothèque"
+  description="L’attribut HTML popover et l’API Popover permettent de créer menus, infobulles et cartes rendus dans la couche supérieure, avec fermeture au clic extérieur et Échap gérées pour vous - sans bibliothèque JavaScript."
+  cat="html"
+  day={16}
+  hero="/img/popover-api-hero.jpg"
+  heroAlt="Des maquettes de pages web ouvertes dans un logiciel de design sur un écran"
+  cluster={null}
+  faq={[{ q: "Qu’est-ce que l’API Popover ?", a: "L’API Popover est une fonctionnalité intégrée au navigateur pour afficher du contenu au-dessus de la page - menus, infobulles, cartes, notifications - sans bibliothèque JavaScript. Vous ajoutez l’attribut popover à un élément et pointez un bouton dessus avec popovertarget. Le navigateur gère alors le rendu dans la couche supérieure, la fermeture au clic extérieur ou avec Échap, et le câblage d’accessibilité de base." }, { q: "Quelle différence entre popover auto et manual ?", a: "Un popover auto (popover ou popover=\"auto\") gère la fermeture douce : il se ferme avec Échap ou un clic extérieur, et ouvrir un autre popover auto ferme le précédent de la même pile. Un popover manual (popover=\"manual\") ne fait rien de tout ça - il reste ouvert jusqu’à ce que votre code appelle hidePopover(). Utilisez auto pour les menus et infobulles, manual pour des éléments comme des toasts que vous contrôlez." }, { q: "Ai-je encore besoin de l’élément dialog ou d’une bibliothèque ?", a: "Pour la plupart des UI en surimpression - menus, infobulles, cartes - l’API Popover remplace le JavaScript que vous écriviez. Pour une vraie boîte de dialogue modale qui bloque la page et capture le focus, l’élément <dialog> reste le meilleur choix. Et pour placer un popover à côté de son déclencheur, associez-le au positionnement d’ancrage CSS plutôt qu’à des calculs de coordonnées." }, { q: "L’API Popover est-elle prise en charge par les navigateurs ?", a: "Oui. L’API Popover fait partie du standard HTML et est prise en charge par les principaux moteurs - navigateurs Chromium, Safari et Firefox. Comme toujours, vérifiez vos propres statistiques, et pour de très vieux navigateurs vous pouvez ajouter un petit repli, mais pour un public moderne vous pouvez l’utiliser directement." }]}
+>
+  <p>L’<strong>API Popover</strong> est la réponse intégrée du navigateur à un problème que chaque développeur a résolu à la main cent fois : afficher un petit morceau d’UI - un menu, une infobulle, une carte, une notification - <em>par-dessus</em> tout le reste, puis le fermer proprement. Avec l’attribut <code>popover</code> et une minuscule interface JavaScript, vous obtenez la couche supérieure, la fermeture douce et la gestion d’Échap gratuitement, sans bibliothèque. Voici comment ça marche.</p>
+
+  <h2>Le popover le plus simple</h2>
+  <p>Tout élément devient un popover en ajoutant l’attribut <code>popover</code>. Un bouton l’ouvre avec <code>popovertarget</code> pointant l’<code>id</code> du popover :</p>
+  <pre><code>{`<button popovertarget="menu">Open menu</button>
+
+<div id="menu" popover>
+  <p>I am a popover. Click outside or press Esc to close me.</p>
+</div>`}</code></pre>
+  <p>C’est tout. Pas de gestionnaire de clic, pas de z-index, pas d’écouteur de clic extérieur. Le navigateur rend le popover dans la <strong>couche supérieure</strong> (au-dessus de toute la page, sans guerre de z-index) et le ferme avec Échap ou un clic extérieur.</p>
+
+  <h2>auto vs manual</h2>
+  <p>Il existe deux sortes de popover, et la différence est : qui les ferme ?</p>
+  <pre><code>{`<!-- auto: light-dismiss, only one open in a stack -->
+<div id="tip" popover="auto">...</div>
+
+<!-- manual: you open and close it yourself -->
+<div id="toast" popover="manual">...</div>`}</code></pre>
+  <p>Un popover <code>auto</code> gère la <strong>fermeture douce</strong> : Échap ou un clic extérieur le ferme, et en ouvrir un nouveau ferme le précédent de la même pile. Un popover <code>manual</code> ignore tout cela et reste ouvert jusqu’à ce que votre code le cache - le bon choix pour un toast ou un panneau persistant.</p>
+
+  <figure>
+    <img src="/img/popover-api-inbody.jpg" alt="Un éditeur de code sur un portable affichant une infobulle pour une variable" width="1280" height="760" loading="lazy" />
+    <figcaption>Un éditeur de code affichant une infobulle pour une variable - exactement le genre de petite UI en surimpression que l’API Popover construit désormais nativement sur le web.</figcaption>
+  </figure>
+
+  <h2>Le contrôler depuis JavaScript</h2>
+  <p>Quand vous devez ouvrir ou fermer un popover en code, trois méthodes suffisent, plus un événement <code>toggle</code> pour réagir aux changements d’état :</p>
+  <pre><code>{`const menu = document.getElementById("menu");
+menu.showPopover();     // open it
+menu.hidePopover();     // close it
+menu.togglePopover();   // flip it
+
+menu.addEventListener("toggle", (e) => {
+  console.log(e.newState); // "open" or "closed"
+});`}</code></pre>
+  <p>Il existe aussi un événement <code>beforetoggle</code> qui se déclenche juste avant le changement d’état, pratique pour charger du contenu à la demande ou lancer une animation d’entrée.</p>
+
+  <h2>Style et positionnement</h2>
+  <p>Stylez un popover quand il est ouvert avec la pseudo-classe <code>:popover-open</code>, et stylez la couche assombrie derrière un popover auto avec <code>::backdrop</code> :</p>
+  <pre><code>{`[popover]:popover-open {
+  /* styles while the popover is shown */
+}
+
+[popover]::backdrop {
+  /* the layer behind an auto popover */
+  background: rgb(0 0 0 / 0.3);
+}`}</code></pre>
+  <p>Pour placer un popover à côté du bouton qui l’a ouvert - comme un vrai menu déroulant - associez-le au <strong>positionnement d’ancrage CSS</strong> (<code>anchor()</code>) au lieu de mesurer des coordonnées en JavaScript. Les deux fonctionnalités sont conçues pour aller ensemble.</p>
+
+  <h2>Quand l’utiliser (et quand non)</h2>
+  <p>Optez pour l’API Popover pour de l’UI transitoire en surimpression : menus déroulants, infobulles, aides contextuelles, petites cartes et notifications. Pour une <strong>boîte de dialogue modale</strong> bloquante qui doit capturer le focus et stopper l’interaction avec la page, l’élément <code>&lt;dialog&gt;</code> reste le meilleur outil. Voyez-les comme complémentaires : popovers pour les surimpressions légères, dialogues pour les vraies modales.</p>
+
+  <h2>En résumé</h2>
+  <p>L’API Popover transforme un tas de JavaScript écrit à la main - rendu en couche supérieure, détection du clic extérieur, gestion d’Échap, jonglage de focus - en un seul attribut HTML plus trois méthodes. Utilisez <code>auto</code> pour les menus et infobulles, <code>manual</code> pour l’UI que vous contrôlez, stylez avec <code>:popover-open</code> et combinez-la avec le positionnement d’ancrage pour de vrais menus déroulants. Elle est prise en charge par les navigateurs modernes aujourd’hui, donc la plupart des sites peuvent l’adopter sans polyfill.</p>
+</Article>
