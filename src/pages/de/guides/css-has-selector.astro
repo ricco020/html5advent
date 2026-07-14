@@ -1,0 +1,75 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="css-has-selector"
+  title="Der CSS :has() Selektor: der Eltern-Selektor, erklärt (2026)"
+  description="Die relationale Pseudoklasse :has() ermöglicht es, ein Element auf Basis seines Inhalts oder des Folgenden zu gestalten - der lang ersehnte Eltern-Selektor. Wie er funktioniert, echte Beispiele, Browser-Unterstützung und die Fallstricke."
+  cat="css"
+  day={17}
+  hero="/img/css-has-selector-hero.jpg"
+  heroAlt="Nahaufnahme farbiger CSS-Codezeilen auf einem Computerbildschirm"
+  cluster={null}
+>
+  <p>Die Pseudoklasse <strong>:has()</strong> ist die Funktion, die CSS-Autoren zwei Jahrzehnte lang gefordert haben: eine Möglichkeit, ein Element auf Basis dessen zu gestalten, was <em>darin</em> steht oder was danach kommt. Man nennt sie meist den "Eltern-Selektor", obwohl sie tatsächlich mächtiger ist als das - sie ist ein <strong>relationaler</strong> Selektor. Sie ist inzwischen in jedem modernen Browser verfügbar, sodass du sie heute im Produktivbetrieb einsetzen kannst.</p>
+
+  <h2>Die Grundidee</h2>
+  <p>Ein normaler CSS-Selektor spricht ein Element über seinen eigenen Typ, seine Klasse oder seinen Zustand an. <code>:has()</code> dreht das um: Es spricht ein Element aufgrund der Elemente an, die es enthält. Du schreibst das Elternelement, dann <code>:has(...)</code> mit einem Selektor für das, was darin sein muss.</p>
+  <pre><code>{`/* Style any .card that contains an <img> */
+.card:has(img) {
+  padding: 0;
+}
+
+/* Style a <figure> only when it has a caption */
+figure:has(figcaption) {
+  border: 1px solid #ddd;
+}`}</code></pre>
+  <p>Das Element, das tatsächlich gestaltet wird, ist dasjenige <em>vor</em> <code>:has()</code> - die <code>.card</code> und die <code>figure</code>, nicht das Bild oder die Bildunterschrift darin. Das ist der ganze Trick: Die Bedingung betrifft die Nachfahren, aber das Ziel ist der Vorfahre.</p>
+
+  <h2>Es ist relational, nicht nur "Eltern"</h2>
+  <p>Da du Kombinatoren innerhalb von <code>:has()</code> platzieren kannst, leistet es weit mehr, als nur auf Kindelemente zu blicken. Du kannst auf Geschwisterelemente reagieren, was in CSS zuvor unmöglich war.</p>
+  <pre><code>{`/* A heading that is immediately followed by a paragraph */
+h2:has(+ p) {
+  margin-bottom: 0.25rem;
+}
+
+/* A form that contains an invalid field */
+form:has(input:invalid) {
+  border-left: 3px solid crimson;
+}
+
+/* A label whose related required input is empty and focused */
+.field:has(input:required:placeholder-shown) .hint {
+  opacity: 1;
+}`}</code></pre>
+  <p>Das zweite Beispiel ist genau die Art von Sache, für die man früher zu JavaScript gegriffen hätte: das Aussehen eines ganzen Formulars (oder eines beliebigen Containers) auf Basis des <em>Zustands</em> eines Steuerelements darin zu ändern. Mit <code>:has()</code> ist es eine Zeile CSS, und sie aktualisiert sich live, während der Nutzer tippt.</p>
+
+  <figure><img src="/img/css-has-selector-inbody.jpg" alt="Nahaufnahme von HTML- und CSS-Code auf einem Bildschirm" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>:has() liest die Beziehung zwischen Elementen, sodass ein Container auf den Inhalt und Zustand darin reagieren kann - ganz ohne JavaScript.</figcaption></figure>
+
+  <h2>Praktische Muster</h2>
+  <ul>
+    <li><strong>Mengen- und Inhaltsabfragen:</strong> gestalte eine Galerie anders, wenn sie genau ein Bild statt vieler enthält - <code>.gallery:has(img:only-child)</code>.</li>
+    <li><strong>Gestaltung des vorherigen Geschwisterelements:</strong> CSS konnte mit <code>+</code> und <code>~</code> immer nur nach vorne blicken; <code>:has()</code> lässt ein früheres Element auf ein späteres reagieren, z. B. <code>label:has(+ input:checked)</code>.</li>
+    <li><strong>Layout, das sich an den Inhalt anpasst:</strong> gib einer Karte nur dann ein zweispaltiges Layout, wenn sie tatsächlich ein Bild enthält, und eine einzelne Spalte, wenn nicht.</li>
+    <li><strong>Formular- und Validierungszustände:</strong> hebe ein ganzes Fieldset hervor, wenn ein Steuerelement darin ungültig ist, ganz ohne eine Zeile Skript.</li>
+  </ul>
+
+  <h2>Browser-Unterstützung</h2>
+  <p>Die Unterstützung ist 2026 breit. <code>:has()</code> erschien in Chrome und Edge 105 (August 2022) und Safari 15.4, wobei Firefox in Version 121 (Dezember 2023) hinzukam. Das bedeutet, dass es nun in den aktuellen Versionen aller großen Browser verfügbar ist und für die meisten Zielgruppen sicher eingesetzt werden kann. Für ältere Browser kannst du <code>:has()</code>-Stile als progressive Verbesserung behandeln, da ein Browser, der den Selektor nicht versteht, die Regel einfach ignoriert.</p>
+
+  <h2>Wissenswerte Fallstricke</h2>
+  <ul>
+    <li><strong>Du kannst innerhalb von :has() keine Pseudoelemente ansprechen.</strong> Selektoren wie <code>::before</code> sind als Argument nicht erlaubt.</li>
+    <li><strong>:has() selbst ist innerhalb von :has() nicht erlaubt.</strong> Du kannst eine relationale Prüfung nicht in einer anderen verschachteln.</li>
+    <li><strong>Halte den Geltungsbereich vernünftig.</strong> Sehr breite Selektoren wie <code>body:has(...)</code>, die den Browser zwingen, große Teile der Seite erneut zu prüfen, können bei großen, sich häufig aktualisierenden Dokumenten Leistung kosten. In der Praxis sind auf Komponenten begrenzte Selektoren in Ordnung; die Engines haben die üblichen Fälle optimiert.</li>
+    <li><strong>Das Ziel ist das Subjekt, nicht die Übereinstimmung.</strong> Wenn eine Regel nicht angewendet wird, prüfe, ob du das Element <em>vor</em> <code>:has()</code> gestaltest und nicht das darin enthaltene.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Ist :has() wirklich der CSS-Eltern-Selektor?</strong> Im Grunde ja, und mehr. Es wählt einen Vorfahren auf Basis seiner Nachfahren aus, was der klassische Anwendungsfall des "Eltern-Selektors" ist, aber da es Kombinatoren akzeptiert, kann es auch auf Basis folgender Geschwisterelemente auswählen, sodass es besser als relationaler Selektor beschrieben wird.</p>
+  <p><strong>Kann ich :has() 2026 im Produktivbetrieb nutzen?</strong> Für die meisten Websites ja - es wird in den aktuellen Versionen aller großen Browser unterstützt. Nutze es als progressive Verbesserung, falls du sehr alte Browser unterstützen musst.</p>
+  <p><strong>Beeinträchtigt :has() die Leistung?</strong> Selten, wenn du die Selektoren eng begrenzt hältst. Extrem breite, dokumentweite :has()-Prüfungen auf großen, sich ständig ändernden Seiten können Kosten verursachen, aber die Nutzung auf Komponentenebene ist in Ordnung.</p>
+
+  <p>Für weiteres modernes CSS siehe unsere Leitfäden zu <a href="/de/guides/css-nesting/">nativem CSS-Nesting</a> und <a href="/de/guides/css-container-queries/">Container-Abfragen</a>.</p>
+</Article>

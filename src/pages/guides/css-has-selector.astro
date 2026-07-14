@@ -1,0 +1,75 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="css-has-selector"
+  title="The CSS :has() Selector: the Parent Selector, Explained (2026)"
+  description="The :has() relational pseudo-class lets you style an element based on what it contains or what follows it - the long-awaited parent selector. How it works, real examples, browser support, and the gotchas."
+  cat="css"
+  day={17}
+  hero="/img/css-has-selector-hero.jpg"
+  heroAlt="Close-up of colorful CSS code lines on a computer screen"
+  cluster={null}
+>
+  <p>The <strong>:has()</strong> pseudo-class is the feature CSS authors asked for for two decades: a way to style an element based on what is <em>inside</em> it, or what comes after it. It is usually called the "parent selector," though it is really more powerful than that - it is a <strong>relational</strong> selector. It now ships in every modern browser, so you can use it in production today.</p>
+
+  <h2>The basic idea</h2>
+  <p>A normal CSS selector targets an element by its own type, class or state. <code>:has()</code> flips that around: it targets an element because of the elements it contains. You write the parent, then <code>:has(...)</code> with a selector for what must be inside.</p>
+  <pre><code>{`/* Style any .card that contains an <img> */
+.card:has(img) {
+  padding: 0;
+}
+
+/* Style a <figure> only when it has a caption */
+figure:has(figcaption) {
+  border: 1px solid #ddd;
+}`}</code></pre>
+  <p>The element that actually gets styled is the one <em>before</em> <code>:has()</code> - the <code>.card</code> and the <code>figure</code>, not the image or caption inside. That is the whole trick: the condition is about the descendants, but the target is the ancestor.</p>
+
+  <h2>It is relational, not just "parent"</h2>
+  <p>Because you can put combinators inside <code>:has()</code>, it does far more than look at children. You can react to siblings, which was impossible in CSS before.</p>
+  <pre><code>{`/* A heading that is immediately followed by a paragraph */
+h2:has(+ p) {
+  margin-bottom: 0.25rem;
+}
+
+/* A form that contains an invalid field */
+form:has(input:invalid) {
+  border-left: 3px solid crimson;
+}
+
+/* A label whose related required input is empty and focused */
+.field:has(input:required:placeholder-shown) .hint {
+  opacity: 1;
+}`}</code></pre>
+  <p>That second example is the kind of thing people used to reach for JavaScript to do: change the look of a whole form (or any container) based on the <em>state</em> of a control inside it. With <code>:has()</code> it is one line of CSS, and it updates live as the user types.</p>
+
+  <figure><img src="/img/css-has-selector-inbody.jpg" alt="Close-up view of HTML and CSS code displayed on a screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>:has() reads the relationship between elements, so a container can respond to the content and state inside it - no JavaScript required.</figcaption></figure>
+
+  <h2>Practical patterns</h2>
+  <ul>
+    <li><strong>Quantity and content queries:</strong> style a gallery differently when it has exactly one image versus many - <code>.gallery:has(img:only-child)</code>.</li>
+    <li><strong>Previous-sibling styling:</strong> CSS could only ever look forward with <code>+</code> and <code>~</code>; <code>:has()</code> lets an earlier element react to a later one, e.g. <code>label:has(+ input:checked)</code>.</li>
+    <li><strong>Layout that adapts to content:</strong> give a card a two-column layout only when it actually contains an image, and a single column when it does not.</li>
+    <li><strong>Form and validation states:</strong> highlight a whole fieldset when any control inside is invalid, without a line of script.</li>
+  </ul>
+
+  <h2>Browser support</h2>
+  <p>Support is broad in 2026. <code>:has()</code> shipped in Chrome and Edge 105 (August 2022) and Safari 15.4, with Firefox joining in version 121 (December 2023). That means it is now available across the current versions of every major browser, and it is safe to rely on for most audiences. For older browsers you can treat <code>:has()</code> styles as a progressive enhancement, since a browser that does not understand the selector simply ignores the rule.</p>
+
+  <h2>Gotchas worth knowing</h2>
+  <ul>
+    <li><strong>You cannot match pseudo-elements inside :has().</strong> Selectors like <code>::before</code> are not allowed as the argument.</li>
+    <li><strong>:has() itself is not allowed inside :has().</strong> You cannot nest one relational check inside another.</li>
+    <li><strong>Keep the scope reasonable.</strong> Very broad selectors like <code>body:has(...)</code> that force the browser to re-check large parts of the page can cost performance on big, frequently-updating documents. In practice, scoped selectors on components are fine; engines have optimised the common cases.</li>
+    <li><strong>The target is the subject, not the match.</strong> If a rule is not applying, check that you are styling the element <em>before</em> <code>:has()</code>, not the one inside it.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <p><strong>Is :has() really the CSS parent selector?</strong> Effectively yes, and more. It selects an ancestor based on its descendants, which is the classic "parent selector" use case, but because it accepts combinators it can also select based on following siblings, so it is better described as a relational selector.</p>
+  <p><strong>Can I use :has() in production in 2026?</strong> For most sites, yes - it is supported in the current versions of all major browsers. Use it as a progressive enhancement if you must support very old browsers.</p>
+  <p><strong>Does :has() hurt performance?</strong> Rarely, if you keep selectors scoped. Extremely broad, document-wide :has() checks on large, constantly changing pages can add cost, but component-level usage is fine.</p>
+
+  <p>For more modern CSS, see our guides on <a href="/guides/css-nesting/">native CSS nesting</a> and <a href="/guides/css-container-queries/">container queries</a>.</p>
+</Article>
