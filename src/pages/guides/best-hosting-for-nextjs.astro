@@ -1,0 +1,88 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="best-hosting-for-nextjs"
+  title="Best hosting for Next.js: managed platforms vs a VPS"
+  description="How to host a Next.js app the right way. The difference between a fully static export and a server-rendered app, why SSR/ISR and API routes need a Node.js runtime, and an honest comparison of managed platforms versus self-hosting on a VPS."
+  cat="hosting"
+  hero="/img/best-hosting-for-nextjs-hero.jpg"
+  heroAlt="Close-up of a server blade in a data center rack"
+  cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo' }}
+>
+  <p><strong>Next.js</strong> is a React framework that can build two very different kinds of output, and your hosting choice follows directly from which one you ship. A fully static site is just files a CDN serves; a server-rendered app is a long-running Node.js process that has to stay alive. Confuse the two and you either overpay for a static site or deploy a dynamic app somewhere that cannot run it. This guide explains the rendering modes, then compares the honest trade-off between a managed platform and a self-hosted VPS.</p>
+
+  <h2>First, decide how your app renders</h2>
+  <p>The single most important question is whether your app is <strong>static</strong> or needs a <strong>server at request time</strong>. Next.js supports both, and they have completely different hosting requirements.</p>
+  <ul>
+    <li><strong>Static export</strong> - with <code>output: 'export'</code>, Next.js builds plain HTML, CSS and JavaScript at build time. There is no server: the result is a folder of files that any static host or CDN can serve. Cheap and simple, but it rules out anything that runs per request.</li>
+    <li><strong>Server-rendered (SSR / ISR / API routes)</strong> - server-side rendering, incremental static regeneration, route handlers and middleware all execute code when a request comes in. That needs a <strong>Node.js runtime</strong> running your build and staying alive to answer requests.</li>
+  </ul>
+  <p>You can check what your project uses: if it relies on <code>getServerSideProps</code>, server components that fetch at request time, API routes under <code>app/api</code> or <code>pages/api</code>, or ISR revalidation, it is a server app. If every page can be generated ahead of time, a static export is on the table.</p>
+
+  <h2>Option 1: a static export on any static host</h2>
+  <p>If your app is fully static, hosting is trivial and cheap. Set the output to export, build, and deploy the generated folder to a static host or CDN:</p>
+  <pre><code>{`// next.config.js
+module.exports = {
+  output: 'export',
+};`}</code></pre>
+  <pre><code>{`# build produces a static 'out/' folder
+npm run build
+
+# 'out/' now contains HTML, CSS and JS you can upload anywhere`}</code></pre>
+  <p>The <code>out/</code> directory is just files, so it works on any static host with a global CDN and free HTTPS. This is the same model covered in our guide on <a href="/guides/static-website-hosting">static website hosting</a>. The catch is that a static export cannot do server-side rendering, ISR, image optimization on the fly, or API routes - those features simply do not exist without a server.</p>
+
+  <figure>
+    <img src="/img/best-hosting-for-nextjs-inbody.jpg" alt="Close-up of a screen showing syntax-highlighted JavaScript source code" width="1280" height="720" loading="lazy" />
+    <figcaption>A server-rendered Next.js app runs as a Node.js process behind a reverse proxy; a static export is just a folder of files a CDN serves.</figcaption>
+  </figure>
+
+  <h2>Option 2: a managed platform</h2>
+  <p>Managed platforms build your app from a Git push and run the server for you, handling scaling, TLS and the build pipeline. <strong>Vercel</strong> is the most notable here because it is the company that develops Next.js, so its platform tracks new framework features closely. Other platforms such as <strong>Netlify</strong> also support Next.js through their own adapters.</p>
+  <p>The appeal is real: you <code>git push</code> and the platform runs the whole flow, so there is no server to patch and no reverse proxy to configure. The trade-off is control and cost. You work within the platform's build and runtime model, and usage-based pricing can climb as traffic, function execution and bandwidth grow. For a small project the free or low tiers are generous; for a busy app the bill scales with usage, which is exactly the point at which self-hosting starts to look attractive.</p>
+
+  <h2>Option 3: self-hosting on a VPS</h2>
+  <p>Because a server-rendered Next.js app is ultimately a Node.js process, you can run it yourself on a <strong>VPS</strong> - the same way you would host any Node app. This is the most flexible and usually the cheapest option at scale, in exchange for doing the operations work yourself. The build produces a server you start with <code>next start</code>:</p>
+  <pre><code>{`# on the server: install deps and build
+npm ci
+npm run build
+
+# start the production server (defaults to port 3000)
+npm run start`}</code></pre>
+  <p>As with any long-running Node process, you should not run <code>next start</code> by hand in an SSH session. Use a process manager such as <strong>PM2</strong> to keep it alive and restart it after a crash or reboot, and put a reverse proxy in front of it. This is the exact pattern from our guide on <a href="/guides/nodejs-hosting">hosting a Node.js app</a>:</p>
+  <pre><code>{`# keep the Next.js server alive with PM2
+pm2 start "npm run start" --name next-app
+pm2 startup
+pm2 save`}</code></pre>
+  <p>Then point <strong>Nginx</strong> at the Node process so it terminates TLS and forwards public traffic to port 3000:</p>
+  <pre><code>{`server {
+  listen 80;
+  server_name yourapp.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}`}</code></pre>
+  <p>Add HTTPS with a free automated certificate (tools like Certbot make this a one-liner). For sizing the machine, the criteria are the same as any web app - memory first, then CPU - covered in our guide on <a href="/guides/best-vps-for-web-hosting">choosing the best VPS for a web project</a>. Providers focused on a strong resource-to-price ratio, such as <strong>Contabo</strong> or <strong>Hetzner</strong>, give you generous RAM and vCPU at a low monthly cost, which suits a Node build and runtime well.</p>
+
+  <h2>How the options compare</h2>
+  <table>
+    <thead><tr><th>Approach</th><th>Runs what</th><th>You manage</th><th>Best when</th></tr></thead>
+    <tbody>
+      <tr><td>Static export</td><td>Files on a CDN (no server)</td><td>Just a build and upload</td><td>Every page can be pre-rendered</td></tr>
+      <tr><td>Managed platform</td><td>SSR, ISR, API routes</td><td>Just your code and env vars</td><td>You want to ship fast, low ops effort</td></tr>
+      <tr><td>VPS (self-hosted)</td><td>SSR, ISR, API routes</td><td>OS, Node, PM2, Nginx, TLS</td><td>You want control and predictable cost</td></tr>
+    </tbody>
+  </table>
+
+  <h2>How to decide</h2>
+  <p>Start from how your app renders, not from a provider's marketing. If every page can be generated ahead of time, ship a static export and host it cheaply on a CDN. If you need SSR, ISR or API routes, you need a Node.js runtime - and then it comes down to a familiar trade-off: a managed platform is the fastest way to ship and the least operations work, while a VPS is cheaper at scale and gives you full control in exchange for running Node, a process manager, a reverse proxy and TLS yourself. Pick the smallest option that covers what your app actually needs, and move up only when scaling or operational overhead becomes the real bottleneck.</p>
+</Article>

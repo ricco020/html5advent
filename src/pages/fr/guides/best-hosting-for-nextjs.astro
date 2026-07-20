@@ -1,0 +1,88 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="best-hosting-for-nextjs"
+  title="Meilleur hébergement pour Next.js : plateformes managées vs VPS"
+  description="Comment héberger correctement une application Next.js. La différence entre un export 100% statique et une application rendue côté serveur, pourquoi le SSR/ISR et les routes API ont besoin d'un runtime Node.js, et une comparaison honnête entre plateformes managées et auto-hébergement sur un VPS."
+  cat="hosting"
+  hero="/img/best-hosting-for-nextjs-hero.jpg"
+  heroAlt="Gros plan d'un serveur lame dans une baie de datacenter"
+  cluster="hosting"
+  commerce={{ type: 'product', key: 'contabo' }}
+>
+  <p><strong>Next.js</strong> est un framework React capable de produire deux types de sortie très différents, et votre choix d'hébergement découle directement de celui que vous déployez. Un site 100% statique n'est qu'un ensemble de fichiers servis par un CDN ; une application rendue côté serveur est un processus Node.js de longue durée qui doit rester en vie. Confondez les deux et vous payez trop cher pour un site statique, ou vous déployez une application dynamique là où elle ne peut pas tourner. Ce guide explique les modes de rendu, puis compare honnêtement le compromis entre une plateforme managée et un VPS auto-hébergé.</p>
+
+  <h2>D'abord, décidez comment votre application rend</h2>
+  <p>La question la plus importante est de savoir si votre application est <strong>statique</strong> ou a besoin d'un <strong>serveur au moment de la requête</strong>. Next.js gère les deux, et ils ont des exigences d'hébergement complètement différentes.</p>
+  <ul>
+    <li><strong>Export statique</strong> - avec <code>output: 'export'</code>, Next.js construit du HTML, du CSS et du JavaScript simples au moment du build. Il n'y a pas de serveur : le résultat est un dossier de fichiers que n'importe quel hébergeur statique ou CDN peut servir. Bon marché et simple, mais cela exclut tout ce qui s'exécute à chaque requête.</li>
+    <li><strong>Rendu côté serveur (SSR / ISR / routes API)</strong> - le rendu côté serveur, la régénération statique incrémentale, les gestionnaires de routes et le middleware exécutent tous du code quand une requête arrive. Cela nécessite un <strong>runtime Node.js</strong> qui fait tourner votre build et reste en vie pour répondre aux requêtes.</li>
+  </ul>
+  <p>Vous pouvez vérifier ce qu'utilise votre projet : s'il repose sur <code>getServerSideProps</code>, des composants serveur qui fetchent à la requête, des routes API sous <code>app/api</code> ou <code>pages/api</code>, ou la revalidation ISR, c'est une application serveur. Si chaque page peut être générée à l'avance, l'export statique est envisageable.</p>
+
+  <h2>Option 1 : un export statique sur n'importe quel hébergeur statique</h2>
+  <p>Si votre application est 100% statique, l'hébergement est trivial et bon marché. Réglez la sortie sur export, buildez, et déployez le dossier généré sur un hébergeur statique ou un CDN :</p>
+  <pre><code>{`// next.config.js
+module.exports = {
+  output: 'export',
+};`}</code></pre>
+  <pre><code>{`# le build produit un dossier statique 'out/'
+npm run build
+
+# 'out/' contient maintenant du HTML, CSS et JS a deposer n'importe ou`}</code></pre>
+  <p>Le dossier <code>out/</code> n'est que des fichiers, il fonctionne donc sur n'importe quel hébergeur statique avec un CDN mondial et du HTTPS gratuit. C'est le même modèle que celui couvert dans notre guide sur l'<a href="/fr/guides/static-website-hosting">hébergement de site statique</a>. Le hic, c'est qu'un export statique ne peut pas faire de rendu côté serveur, d'ISR, d'optimisation d'images à la volée ni de routes API - ces fonctionnalités n'existent tout simplement pas sans serveur.</p>
+
+  <figure>
+    <img src="/img/best-hosting-for-nextjs-inbody.jpg" alt="Gros plan d'un écran affichant du code source JavaScript en coloration syntaxique" width="1280" height="720" loading="lazy" />
+    <figcaption>Une application Next.js rendue côté serveur tourne comme un processus Node.js derrière un reverse proxy ; un export statique n'est qu'un dossier de fichiers servi par un CDN.</figcaption>
+  </figure>
+
+  <h2>Option 2 : une plateforme managée</h2>
+  <p>Les plateformes managées construisent votre application depuis un push Git et font tourner le serveur à votre place, en gérant la montée en charge, le TLS et le pipeline de build. <strong>Vercel</strong> est la plus notable ici car c'est l'entreprise qui développe Next.js, donc sa plateforme suit de près les nouvelles fonctionnalités du framework. D'autres plateformes comme <strong>Netlify</strong> supportent aussi Next.js via leurs propres adaptateurs.</p>
+  <p>L'attrait est réel : vous faites <code>git push</code> et la plateforme exécute tout le flux, il n'y a donc pas de serveur à patcher ni de reverse proxy à configurer. Le compromis, c'est le contrôle et le coût. Vous travaillez dans le modèle de build et d'exécution de la plateforme, et une tarification à l'usage peut grimper à mesure que le trafic, l'exécution des fonctions et la bande passante augmentent. Pour un petit projet, les paliers gratuits ou bas sont généreux ; pour une application chargée, la facture croît avec l'usage, ce qui est précisément le moment où l'auto-hébergement devient intéressant.</p>
+
+  <h2>Option 3 : auto-hébergement sur un VPS</h2>
+  <p>Comme une application Next.js rendue côté serveur est au final un processus Node.js, vous pouvez la faire tourner vous-même sur un <strong>VPS</strong> - exactement comme vous hébergeriez n'importe quelle application Node. C'est l'option la plus flexible et généralement la moins chère à grande échelle, en échange du travail d'exploitation à assumer vous-même. Le build produit un serveur que vous démarrez avec <code>next start</code> :</p>
+  <pre><code>{`# sur le serveur : installer les deps et builder
+npm ci
+npm run build
+
+# demarrer le serveur de production (port 3000 par defaut)
+npm run start`}</code></pre>
+  <p>Comme pour tout processus Node de longue durée, vous ne devriez pas lancer <code>next start</code> à la main dans une session SSH. Utilisez un gestionnaire de processus comme <strong>PM2</strong> pour le maintenir en vie et le redémarrer après un plantage ou un redémarrage, et placez un reverse proxy devant lui. C'est exactement le schéma de notre guide sur l'<a href="/fr/guides/nodejs-hosting">hébergement d'une application Node.js</a> :</p>
+  <pre><code>{`# maintenir le serveur Next.js en vie avec PM2
+pm2 start "npm run start" --name next-app
+pm2 startup
+pm2 save`}</code></pre>
+  <p>Puis pointez <strong>Nginx</strong> vers le processus Node pour qu'il termine le TLS et transmette le trafic public au port 3000 :</p>
+  <pre><code>{`server {
+  listen 80;
+  server_name yourapp.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}`}</code></pre>
+  <p>Ajoutez le HTTPS avec un certificat automatisé gratuit (des outils comme Certbot en font une simple ligne). Pour dimensionner la machine, les critères sont les mêmes que pour toute application web - la mémoire d'abord, puis le CPU - couverts dans notre guide sur le <a href="/fr/guides/best-vps-for-web-hosting">choix du meilleur VPS pour un projet web</a>. Des fournisseurs axés sur un bon rapport ressources-prix, comme <strong>Contabo</strong> ou <strong>Hetzner</strong>, offrent une RAM et des vCPU généreux à un coût mensuel bas, ce qui convient bien à un build et un runtime Node.</p>
+
+  <h2>Comment les options se comparent</h2>
+  <table>
+    <thead><tr><th>Approche</th><th>Exécute quoi</th><th>Vous gérez</th><th>Idéal quand</th></tr></thead>
+    <tbody>
+      <tr><td>Export statique</td><td>Fichiers sur un CDN (pas de serveur)</td><td>Juste un build et un dépôt</td><td>Chaque page peut être pré-générée</td></tr>
+      <tr><td>Plateforme managée</td><td>SSR, ISR, routes API</td><td>Juste votre code et les variables d'env</td><td>Vous voulez livrer vite, peu d'exploitation</td></tr>
+      <tr><td>VPS (auto-hébergé)</td><td>SSR, ISR, routes API</td><td>OS, Node, PM2, Nginx, TLS</td><td>Vous voulez le contrôle et un coût prévisible</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Comment décider</h2>
+  <p>Partez de la façon dont votre application rend, pas du marketing d'un fournisseur. Si chaque page peut être générée à l'avance, livrez un export statique et hébergez-le à bas coût sur un CDN. Si vous avez besoin de SSR, d'ISR ou de routes API, il vous faut un runtime Node.js - et cela revient alors à un compromis familier : une plateforme managée est le moyen le plus rapide de livrer et le moins de travail d'exploitation, tandis qu'un VPS est moins cher à grande échelle et vous donne le contrôle total, en échange de faire tourner vous-même Node, un gestionnaire de processus, un reverse proxy et le TLS. Choisissez la plus petite option qui couvre ce dont votre application a réellement besoin, et montez en gamme seulement quand la montée en charge ou la charge d'exploitation devient le vrai goulot d'étranglement.</p>
+</Article>

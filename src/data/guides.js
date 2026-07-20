@@ -1,5 +1,5 @@
 // Single source of truth for published guides (home grid, hub, listings all derive from this).
-//   day=Advent door (1–24) · cat='apis|css|js|html|hosting' · cluster='hosting'|'deploy'|null
+//   day=Advent door (1-24) · cat='apis|css|js|html|hosting' · cluster='hosting'|'deploy'|null
 //   locales: which locales the page actually exists in (controls links → no 404s)
 const L = ['en', 'fr', 'es', 'de', 'it', 'pt']; // all 6 locales live (articles translated)
 export const GUIDES = [
@@ -85,6 +85,9 @@ export const GUIDES = [
   { slug: 'best-hosting-for-laravel', cat: 'hosting', cluster: 'hosting', locales: L,
     title: { en: 'Hosting a Laravel app: VPS, requirements and deployment' },
     desc: { en: 'Why a VPS fits Laravel, the server requirements that matter, and a real deployment walkthrough (Composer, .env, Nginx, queues).' } },
+  { slug: 'best-hosting-for-nextjs', cat: 'hosting', cluster: 'hosting', locales: L,
+    title: { en: 'Best hosting for Next.js: managed platforms vs a VPS' },
+    desc: { en: 'Static export vs a server-rendered app, why SSR/ISR and API routes need a Node.js runtime, and an honest comparison of managed platforms versus self-hosting on a VPS.' } },
   { slug: 'contabo-review', cat: 'hosting', cluster: 'hosting', locales: L,
     title: { en: 'Contabo review: is it a good VPS for web projects?' },
     desc: { en: 'An honest, no-hype look at Contabo as a VPS host - its resource-for-the-price positioning, the trade-offs, and who it suits.' } },
