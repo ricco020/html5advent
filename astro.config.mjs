@@ -10,6 +10,18 @@ export default defineConfig({
   output: 'static',
   build: { format: 'directory', inlineStylesheets: 'always' },
   integrations: [
-    sitemap({ filter: (page) => !page.includes('/go/') }),
+    sitemap({
+      filter: (page) => !page.includes('/go/'),
+      // Le host (Vercel) 308-redirige chaque /path/ vers /path (canonical sans slash).
+      // build.format 'directory' faisait pourtant emettre au sitemap des URLs AVEC slash
+      // => Google voyait "Page avec redirection" sur les 224 URLs (drag d'indexation, DR51).
+      // On aligne les URLs du sitemap sur le canonical (sans slash), sauf la racine.
+      serialize(item) {
+        if (item.url !== 'https://html5advent.com/') {
+          item.url = item.url.replace(/\/$/, '');
+        }
+        return item;
+      },
+    }),
   ],
 });
