@@ -131,7 +131,7 @@ sudo supervisorctl start app-worker:*`}</code></pre>
   <table>
     <thead><tr><th>App profile</th><th>What it needs</th></tr></thead>
     <tbody>
-      <tr><td>Small app, light traffic</td><td>Entry VPS: a couple of GB RAM, NVMe storage, 1–2 vCPUs - PHP-FPM plus a small database.</td></tr>
+      <tr><td>Small app, light traffic</td><td>Entry VPS: a couple of GB RAM, NVMe storage, 1-2 vCPUs - PHP-FPM plus a small database.</td></tr>
       <tr><td>Queues + Redis + database</td><td>More RAM headroom so Redis, the database and several PHP-FPM and worker processes coexist comfortably.</td></tr>
       <tr><td>Higher traffic / heavy jobs</td><td>Dedicated vCPUs for steady load, more worker processes, room to scale up; consider separating the database later.</td></tr>
     </tbody>

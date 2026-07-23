@@ -12,7 +12,7 @@ import Article from '../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo', offers: true }}
   faq={[
-    { q: 'How much does a VPS cost per month?', a: 'Entry-level unmanaged VPS plans usually start at a few dollars per month; mid-range plans tend to fall in roughly the $10–40 range depending on vCPU, RAM, storage and bandwidth, and managed VPS costs more because support and maintenance are included. RAM and vCPU are the main price drivers.' },
+    { q: 'How much does a VPS cost per month?', a: 'Entry-level unmanaged VPS plans usually start at a few dollars per month; mid-range plans tend to fall in roughly the $10-40 range depending on vCPU, RAM, storage and bandwidth, and managed VPS costs more because support and maintenance are included. RAM and vCPU are the main price drivers.' },
     { q: 'What makes one VPS more expensive than another?', a: 'The biggest drivers are RAM and vCPU, then storage type and amount (NVMe costs more than SATA), the bandwidth allowance, and whether the plan is managed. Backups, DDoS protection and some locations can add extra on top.' },
     { q: 'Is a cheap VPS worth it?', a: "A low price is fine when the provider is transparent about resources and you don't need hand-holding; the risk is over-subscribed hardware, thin bandwidth or paid extras that erase the saving. Judge value by the actual resources and terms, not the headline figure." },
     { q: 'Should I pay for a managed VPS?', a: "Choose unmanaged if you're comfortable administering the server yourself, since it's cheaper; pay for managed if you'd rather the provider handle updates, security and support, which suits teams without a sysadmin." },
@@ -25,9 +25,9 @@ import Article from '../../layouts/Article.astro';
   <table>
     <thead><tr><th>Project</th><th>Typical spec</th><th>Rough monthly cost</th></tr></thead>
     <tbody>
-      <tr><td>Small site / hobby app</td><td>~1–2 vCPU, 2–4 GB RAM, NVMe</td><td>~€4–8</td></tr>
-      <tr><td>Dynamic app + database</td><td>~3–6 vCPU, 8–16 GB RAM</td><td>~€8–20</td></tr>
-      <tr><td>App + DB + cache, steady load</td><td>~6–8 vCPU, 16–32 GB RAM</td><td>~€20–40</td></tr>
+      <tr><td>Small site / hobby app</td><td>~1-2 vCPU, 2-4 GB RAM, NVMe</td><td>~€4-8</td></tr>
+      <tr><td>Dynamic app + database</td><td>~3-6 vCPU, 8-16 GB RAM</td><td>~€8-20</td></tr>
+      <tr><td>App + DB + cache, steady load</td><td>~6-8 vCPU, 16-32 GB RAM</td><td>~€20-40</td></tr>
       <tr><td>High traffic / dedicated vCPU</td><td>Dedicated cores, 32 GB+ RAM</td><td>€40+ and up</td></tr>
     </tbody>
   </table>
@@ -88,5 +88,5 @@ import Article from '../../layouts/Article.astro';
     <li><strong>Decide managed vs unmanaged</strong> - this is the biggest cost lever. Be honest about whether you'll do the sysadmin.</li>
     <li><strong>Add the extras</strong> - backups, control panel, IPv4 - and compare the <em>renewal</em> price, not the intro rate.</li>
   </ol>
-  <p>For most small-to-medium web projects run by someone comfortable with a terminal, an unmanaged VPS in the <strong>€5–15/month</strong> band covers a lot of ground with room to scale up later. Start with the smallest plan that fits your workload with a little headroom - you can almost always resize up if you grow.</p>
+  <p>For most small-to-medium web projects run by someone comfortable with a terminal, an unmanaged VPS in the <strong>€5-15/month</strong> band covers a lot of ground with room to scale up later. Start with the smallest plan that fits your workload with a little headroom - you can almost always resize up if you grow.</p>
 </Article>
