@@ -1,0 +1,45 @@
+---
+import Base from '../../../layouts/Base.astro';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Strumenti per la piattaforma web',
+  url: 'https://html5advent.com/it/tools',
+  description: 'Strumenti front-end gratuiti e interattivi: generatori CSS visuali e playground che funzionano interamente nel tuo browser.',
+};
+const tools = [
+  { href: '/it/tools/contrast-checker', title: 'Verificatore di contrasto WCAG', desc: 'Inserisci un colore di testo e uno di sfondo per ottenere il rapporto di contrasto e verificare i livelli WCAG AA e AAA, per testo normale e grande.' },
+];
+---
+<Base
+  lang="it"
+  title="Strumenti per la piattaforma web - playground CSS e front-end gratuiti"
+  description="Strumenti front-end gratuiti e interattivi: generatori CSS visuali e playground che funzionano interamente nel tuo browser, senza registrazione."
+  path="tools"
+  schema={schema}
+>
+  <main class="tools-wrap">
+    <header class="tools-head">
+      <p class="kicker">// tools</p>
+      <h1>Strumenti per la piattaforma web</h1>
+      <p class="lede">Strumenti front-end gratuiti e interattivi che funzionano interamente nel tuo browser: nulla viene salvato, nessuna registrazione. Pensati per accompagnare le nostre <a href="/it/guides">guide</a>.</p>
+    </header>
+    <ul class="tools-list">
+      {tools.map((tl) => (
+        <li><a href={tl.href}><strong>{tl.title}</strong><span>{tl.desc}</span></a></li>
+      ))}
+    </ul>
+  </main>
+  <style>
+    .tools-wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+    .tools-head .kicker { font-family: var(--mono, monospace); color: var(--accent-blue, #2b6cb0); font-size: .82rem; margin: 0 0 .4rem; }
+    .tools-head h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0; }
+    .lede { color: var(--muted, #5b5046); font-size: 1.1rem; margin: 1rem 0 2rem; }
+    .lede a { color: var(--accent-blue, #2b6cb0); }
+    .tools-list { list-style: none; padding: 0; display: grid; gap: 14px; }
+    .tools-list a { display: grid; gap: 4px; padding: 18px 20px; border: 1px solid var(--border, #e0d6c6); border-radius: 12px; background: var(--soft, #f4ede1); text-decoration: none; color: var(--ink, #211b17); transition: transform .12s ease, box-shadow .12s ease; }
+    .tools-list a:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -12px rgba(0,0,0,.5); }
+    .tools-list strong { font-size: 1.15rem; }
+    .tools-list span { color: var(--muted, #5b5046); font-size: .95rem; }
+  </style>
+</Base>
