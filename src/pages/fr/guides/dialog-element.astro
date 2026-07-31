@@ -1,0 +1,103 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="dialog-element"
+  title="L'élément HTML dialog : de vraies modales sans bibliothèque"
+  description="L'élément HTML dialog vous donne une vraie modale (couche supérieure, page inerte, arrière-plan et gestion d'Échap) à partir d'un simple balisage. Voici showModal contre show, form method=dialog, returnValue, l'attribut closedby et la seule habitude à abandonner."
+  cat="html"
+  day={18}
+  hero="/img/dialog-element-hero.jpg"
+  heroAlt="Un éditeur de code en mode sombre affichant un fichier index.html avec les balises doctype et head"
+  cluster={null}
+  faq={[{ q: "Quelle est la différence entre show() et showModal() ?", a: "showModal() ouvre une boîte de dialogue modale : le navigateur la place dans la couche supérieure, affiche un ::backdrop derrière elle, rend le reste de la page inerte pour que rien à l'extérieur ne puisse être cliqué ni atteint au clavier, et définit implicitement aria-modal=\"true\". show() ouvre une boîte de dialogue non modale : le reste de la page reste interactif, il n'y a ni couche supérieure ni arrière-plan, et aria-modal vaut false. Si vous voulez une vraie modale, c'est showModal() qu'il faut utiliser." }, { q: "Faut-il ouvrir une boîte de dialogue avec l'attribut open ?", a: "Non. MDN indique clairement qu'il est recommandé d'utiliser la méthode show() ou showModal() plutôt que l'attribut open. Une boîte de dialogue affichée via l'attribut open est toujours non modale : vous n'obtenez donc ni la couche supérieure, ni l'arrière-plan, ni l'inertie que vous attendiez probablement. Basculer l'attribut à la main est explicitement décrit comme n'étant pas la pratique recommandée." }, { q: "À quoi sert form method=\"dialog\" ?", a: "Un formulaire placé dans une boîte de dialogue avec method=\"dialog\" ferme celle-ci lors de la soumission au lieu d'envoyer une requête. L'état des contrôles du formulaire est enregistré mais pas soumis, et la propriété returnValue de la boîte de dialogue reçoit la valeur du bouton qui a été activé. Vous savez ainsi quel bouton l'utilisateur a pressé, sans la moindre ligne de JavaScript." }, { q: "La touche Échap ferme-t-elle une boîte de dialogue ?", a: "Pour une modale ouverte avec showModal(), oui : elle peut être fermée avec Échap par défaut. Pour une boîte de dialogue non modale, non, Échap ne la ferme pas par défaut. L'attribut closedby permet de changer cela : closerequest autorise Échap, any autorise en plus un clic à l'extérieur, et none signifie que seul votre propre code peut la fermer." }, { q: "Pourquoi ma boîte de dialogue ne se ferme-t-elle pas quand le formulaire contient un champ requis ?", a: "Parce que le formulaire exécute quand même la validation. Si la boîte de dialogue contient des champs required, un simple bouton de soumission ne peut pas la fermer tant que ces champs sont invalides. Ajoutez formnovalidate au bouton censé fermer la boîte de dialogue, ou appelez dialog.close() depuis votre propre code à la place." }]}
+>
+  <p>Chaque développeur front-end a déjà construit une modale à la main : un div en position fixe, une guerre de z-index, un écouteur de clic à l'extérieur, un gestionnaire d'Échap, et quelques acrobaties de focus pour que le clavier ne parte pas se promener derrière la surcouche. L'élément <code>&lt;dialog&gt;</code> remplace tout cela par une balise et un appel de méthode. Voici ce qu'il fait réellement, et les deux ou trois détails qui décident si votre boîte de dialogue se comporte correctement.</p>
+
+  <h2>La plus petite boîte de dialogue fonctionnelle</h2>
+  <p>Une boîte de dialogue n'est qu'un balisage inerte tant que vous ne l'ouvrez pas depuis JavaScript :</p>
+  <pre><code>{`<dialog id="confirm">
+  <p>Supprimer ce fichier ?</p>
+  <button autofocus>Annuler</button>
+</dialog>
+
+<button id="open">Supprimer</button>`}</code></pre>
+  <pre><code>{`const dialog = document.getElementById("confirm");
+document.getElementById("open")
+  .addEventListener("click", () => dialog.showModal());`}</code></pre>
+  <p>Ce simple appel à <code>showModal()</code> fait considérablement plus que rendre un élément visible.</p>
+
+  <h2>showModal() contre show() : la différence qui compte</h2>
+  <p>Ces deux méthodes ne sont pas des variations sur un même thème. Elles produisent des résultats réellement différents.</p>
+  <p><strong><code>showModal()</code></strong> ouvre une boîte de dialogue modale. Le navigateur la place dans la <strong>couche supérieure</strong>, elle s'affiche donc au-dessus de toute la page sans qu'aucun z-index n'intervienne. Il affiche un pseudo-élément <code>::backdrop</code> derrière elle. Il rend tout le reste <strong>inerte</strong>, ce qui signifie que le reste du document ne peut être ni cliqué ni atteint au clavier. Et il définit implicitement <code>aria-modal="true"</code>.</p>
+  <p><strong><code>show()</code></strong> ouvre une boîte de dialogue non modale. La page reste interactive, il n'y a pas de couche supérieure, pas d'arrière-plan, et <code>aria-modal</code> vaut false.</p>
+  <p>L'inertie est la partie que l'on sous-estime. Rendre l'arrière-plan non cliquable est facile ; le rendre inaccessible à la tabulation est ce que les modales faites main ratent presque toujours, et ici c'est le navigateur qui s'en charge pour vous.</p>
+
+  <h2>L'habitude à abandonner : l'attribut open</h2>
+  <p>Un <code>&lt;dialog&gt;</code> possède aussi un attribut booléen <code>open</code>, et y recourir est l'erreur la plus fréquente avec cet élément.</p>
+  <pre><code>{`<!-- ça marche, mais ce n'est PAS une modale -->
+<dialog open>Je suis non modale, quoi que vous ayez attendu.</dialog>`}</code></pre>
+  <p>Une boîte de dialogue affichée via l'attribut <code>open</code> est toujours <strong>non modale</strong>. Pas de couche supérieure, pas d'arrière-plan, pas de page inerte. MDN recommande d'utiliser <code>show()</code> ou <code>showModal()</code> plutôt que l'attribut, et décrit le basculement manuel de <code>open</code> comme n'étant pas la pratique recommandée. Si votre modale a l'air correcte mais que la page derrière elle répond encore aux clics, c'est presque certainement la raison.</p>
+
+  <figure>
+    <img src="/img/dialog-element-inbody.jpg" alt="Un wireframe dessiné à la main sur papier, avec des rectangles barrés à la place des images et des lignes réglées pour le texte" width="1280" height="760" loading="lazy" />
+    <figcaption>Un wireframe d'interface dessiné à la main, avec des rectangles barrés à la place des images et des lignes réglées pour le texte. Les boîtes de dialogue de confirmation sont généralement esquissées à ce stade, puis reconstruites de zéro dans chaque projet.</figcaption>
+  </figure>
+
+  <h2>form method="dialog" : la fonctionnalité sans équivalent</h2>
+  <p>C'est la partie de <code>&lt;dialog&gt;</code> que rien d'autre ne reproduit, et c'est la raison pour laquelle une boîte de dialogue de confirmation peut se passer de tout JavaScript au-delà de son ouverture.</p>
+  <pre><code>{`<dialog id="confirm">
+  <form method="dialog">
+    <p>Supprimer ce fichier ?</p>
+    <button value="cancel" autofocus>Annuler</button>
+    <button value="delete">Supprimer</button>
+  </form>
+</dialog>`}</code></pre>
+  <p>Quand un formulaire situé dans une boîte de dialogue est soumis avec <code>method="dialog"</code>, la boîte de dialogue se ferme au lieu d'envoyer une requête. L'état des contrôles du formulaire est enregistré mais pas soumis, et la propriété <code>returnValue</code> de la boîte de dialogue reçoit <strong>la valeur du bouton qui a été activé</strong>.</p>
+  <p>Vous lisez donc la réponse ensuite :</p>
+  <pre><code>{`dialog.addEventListener("close", () => {
+  if (dialog.returnValue === "delete") {
+    // l'utilisateur a confirmé
+  }
+});`}</code></pre>
+  <p>Deux boutons, un attribut, et vous savez lequel a été pressé. Pas de gestionnaires de clic, pas d'enrobage en promesse, pas de variable d'état.</p>
+
+  <h2>Le piège du champ requis</h2>
+  <p>Un comportement surprend tout le monde la première fois et mérite d'être connu avant qu'il ne vous coûte un après-midi.</p>
+  <p>Si la boîte de dialogue contient un formulaire avec des champs <strong>required</strong>, la soumission déclenche quand même la validation. Un simple bouton ne peut pas fermer la boîte de dialogue tant que ces champs sont invalides, ce qui veut dire que votre bouton Annuler cesse de fonctionner précisément quand l'utilisateur en a le plus besoin. Les réponses documentées consistent à ajouter <code>formnovalidate</code> au bouton de fermeture, ou à appeler <code>dialog.close()</code> depuis votre propre code :</p>
+  <pre><code>{`<button value="cancel" formnovalidate>Annuler</button>`}</code></pre>
+
+  <h2>Échap, et l'attribut closedby</h2>
+  <p>La fermeture au clavier n'est pas uniforme, et la différence suit la séparation modale / non modale.</p>
+  <p>Une boîte de dialogue ouverte avec <code>showModal()</code> peut être fermée avec <strong>Échap</strong> par défaut. Une boîte de dialogue non modale ne se ferme <strong>pas</strong> avec Échap par défaut.</p>
+  <p>L'attribut <code>closedby</code> rend cela explicite plutôt qu'implicite :</p>
+  <pre><code>{`<dialog closedby="any">     <!-- Échap, clic à l'extérieur, ou votre code -->
+<dialog closedby="closerequest">  <!-- Échap ou votre code -->
+<dialog closedby="none">    <!-- votre code uniquement -->`}</code></pre>
+  <p><code>closedby="any"</code> est ce qui vous donne la fermeture légère, ce comportement de clic à l'extérieur que l'on écrit habituellement à la main. <code>closedby="none"</code> est réservé à la rare boîte de dialogue qui ne doit pas être fermée accidentellement, et il s'accompagne d'une obligation : vous devez fournir une sortie visible.</p>
+
+  <h2>Réussir l'accessibilité</h2>
+  <p>L'élément vous offre l'essentiel, mais trois points restent à votre charge.</p>
+  <p><strong>Utilisez autofocus délibérément.</strong> Avec <code>showModal()</code>, le focus se pose sur le premier élément focalisable imbriqué. Ce n'est souvent pas celui que vous voulez. Placez <code>autofocus</code> sur l'élément avec lequel l'utilisateur doit interagir immédiatement, ou sur le bouton de fermeture si rien d'autre n'est plus urgent.</p>
+  <p><strong>Fournissez toujours un bouton de fermeture.</strong> Le moyen le plus robuste de garantir que chaque utilisateur puisse quitter la boîte de dialogue est un bouton explicite, pas seulement Échap ou un clic à l'extérieur.</p>
+  <p><strong>Ne mettez pas de tabindex sur la boîte de dialogue elle-même.</strong> Elle n'est pas interactive et ne reçoit pas le focus. Ce sont ses contenus qui le reçoivent.</p>
+
+  <h2>Styler l'arrière-plan</h2>
+  <p>La couche assombrie derrière une modale est un véritable pseudo-élément que vous pouvez styler :</p>
+  <pre><code>{`dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(2px);
+}`}</code></pre>
+  <p>Il n'existe que pour les boîtes de dialogue ouvertes avec <code>showModal()</code>, ce qui est une autre façon de vérifier d'un coup d'œil si vous êtes réellement en mode modal.</p>
+
+  <h2>dialog ou popover ?</h2>
+  <p>Les deux s'affichent dans la couche supérieure, la question revient donc sans arrêt. La distinction porte sur l'<em>interruption</em>.</p>
+  <p>Utilisez <code>&lt;dialog&gt;</code> avec <code>showModal()</code> quand l'utilisateur doit traiter quelque chose avant de continuer : une confirmation, un choix obligatoire, un formulaire qui bloque le parcours. Bloquer la page est tout l'intérêt.</p>
+  <p>Utilisez l'<a href="/fr/guides/popover-api">API Popover</a> pour les surcouches d'interface passagères qui ne doivent pas interrompre : menus, infobulles, cartes, notifications. Là, la page doit rester utilisable.</p>
+  <p>Un test utile : s'il serait fâcheux que l'utilisateur l'ignore et poursuive, c'est une boîte de dialogue. Si l'ignorer est une réaction parfaitement raisonnable, c'est un popover.</p>
+
+  <h2>En résumé</h2>
+  <p>L'élément <code>&lt;dialog&gt;</code> transforme un morceau d'interface réellement difficile en simple balisage. Ouvrez-le avec <code>showModal()</code> et vous obtenez la couche supérieure, un arrière-plan, une page inerte et la gestion d'Échap sans en écrire une ligne. Utilisez <code>form method="dialog"</code> et <code>returnValue</code> et vous obtenez la réponse de l'utilisateur sans un seul gestionnaire de clic. Évitez l'attribut <code>open</code>, pensez à <code>formnovalidate</code> sur votre bouton d'annulation, et placez <code>autofocus</code> vous-même.</p>
+  <p>Il reste une boîte de dialogue de confirmation en une quinzaine de lignes de HTML qui se comporte correctement pour les utilisateurs de clavier et de lecteur d'écran, ce qui est plus que la plupart de celles faites main qu'elle remplace.</p>
+</Article>

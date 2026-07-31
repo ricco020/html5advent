@@ -1,0 +1,103 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="dialog-element"
+  title="O elemento HTML dialog: modais reais sem biblioteca"
+  description="O elemento HTML dialog oferece um modal de verdade: camada superior, página inerte, backdrop e tratamento do Esc, apenas com marcação simples. Veja showModal vs show, form method=dialog, returnValue, o atributo closedby e o hábito a evitar."
+  cat="html"
+  day={18}
+  hero="/img/dialog-element-hero.jpg"
+  heroAlt="Um editor de código em modo escuro a mostrar um ficheiro index.html com as etiquetas doctype e head"
+  cluster={null}
+  faq={[{ q: "Qual é a diferença entre show() e showModal()?", a: "O showModal() abre uma caixa de diálogo modal: o navegador coloca-a na camada superior, desenha um ::backdrop por trás dela, torna o resto da página inerte para que nada no exterior possa ser clicado ou alcançado com o tabulador, e define implicitamente aria-modal=\"true\". O show() abre uma caixa de diálogo não modal: o resto da página continua interativo, não há camada superior nem backdrop, e aria-modal é false. Se quer um modal a sério, showModal() é o método certo." }, { q: "Devo abrir uma caixa de diálogo com o atributo open?", a: "Não. A MDN afirma claramente que é recomendado usar o método show() ou showModal() em vez do atributo open. Uma caixa de diálogo mostrada através do atributo open é sempre não modal, por isso não obtém nada da camada superior, do backdrop ou da inércia que provavelmente pretendia. Alternar o atributo à mão é explicitamente descrito como não sendo a prática recomendada." }, { q: "O que faz o form method=\"dialog\"?", a: "Um formulário dentro de uma caixa de diálogo com method=\"dialog\" fecha a caixa quando é submetido, em vez de enviar um pedido. Os estados dos controlos do formulário são guardados mas não submetidos, e a propriedade returnValue da caixa de diálogo passa a ter o valor do botão que foi ativado. Isso diz-lhe que botão o utilizador carregou sem qualquer JavaScript." }, { q: "A tecla Esc fecha uma caixa de diálogo?", a: "Para um modal aberto com showModal(), sim: pode ser dispensado com Esc por predefinição. Para uma caixa de diálogo não modal, não, o Esc não a dispensa por predefinição. O atributo closedby permite alterar isto: closerequest permite o Esc, any permite também um clique no exterior, e none significa que só o seu próprio código a pode fechar." }, { q: "Porque é que a minha caixa de diálogo não fecha quando o formulário tem um campo obrigatório?", a: "Porque o formulário continua a executar a validação. Se a caixa de diálogo contiver campos obrigatórios, um botão de submissão simples não a consegue fechar enquanto esses campos forem inválidos. Adicione formnovalidate ao botão destinado a dispensar a caixa de diálogo, ou chame dialog.close() a partir do seu próprio código." }]}
+>
+  <p>Todos os programadores front-end já construíram um modal à mão: uma div com posição fixa, uma guerra de z-index, um listener de clique no exterior, um tratador do Esc e alguns malabarismos com o foco para que o teclado não se perca por trás da sobreposição. O elemento <code>&lt;dialog&gt;</code> substitui tudo isso por uma etiqueta e uma chamada de método. Eis o que ele faz na realidade, e os dois ou três detalhes que decidem se a sua caixa de diálogo se comporta como deve.</p>
+
+  <h2>A caixa de diálogo funcional mais pequena</h2>
+  <p>Uma caixa de diálogo é marcação inerte até que a abra a partir do JavaScript:</p>
+  <pre><code>{`<dialog id="confirm">
+  <p>Eliminar este ficheiro?</p>
+  <button autofocus>Cancelar</button>
+</dialog>
+
+<button id="open">Eliminar</button>`}</code></pre>
+  <pre><code>{`const dialog = document.getElementById("confirm");
+document.getElementById("open")
+  .addEventListener("click", () => dialog.showModal());`}</code></pre>
+  <p>Essa única chamada a <code>showModal()</code> faz consideravelmente mais do que tornar um elemento visível.</p>
+
+  <h2>showModal() versus show(): a diferença que conta</h2>
+  <p>Estes dois métodos não são variações sobre o mesmo tema. Produzem coisas genuinamente diferentes.</p>
+  <p>O <strong><code>showModal()</code></strong> abre uma caixa de diálogo modal. O navegador coloca-a na <strong>camada superior</strong>, por isso ela é desenhada acima de toda a página sem envolver qualquer z-index. Desenha um pseudo-elemento <code>::backdrop</code> por trás dela. Torna todo o resto <strong>inerte</strong>, o que significa que o resto do documento não pode ser clicado nem alcançado com o tabulador. E define implicitamente <code>aria-modal="true"</code>.</p>
+  <p>O <strong><code>show()</code></strong> abre uma caixa de diálogo não modal. A página continua interativa, não há camada superior, não há backdrop, e <code>aria-modal</code> é false.</p>
+  <p>A inércia é a parte que as pessoas subestimam. Tornar o fundo não clicável é fácil; torná-lo inacessível ao tabulador é a parte que os modais feitos à mão quase sempre erram, e aqui o navegador trata disso por si.</p>
+
+  <h2>O hábito a abandonar: o atributo open</h2>
+  <p>Um <code>&lt;dialog&gt;</code> tem também um atributo booleano <code>open</code>, e recorrer a ele é o erro mais comum com este elemento.</p>
+  <pre><code>{`<!-- funciona, mas isto NÃO é um modal -->
+<dialog open>Sou não modal, independentemente do que esperava.</dialog>`}</code></pre>
+  <p>Uma caixa de diálogo mostrada através do atributo <code>open</code> é sempre <strong>não modal</strong>. Sem camada superior, sem backdrop, sem página inerte. A MDN recomenda usar <code>show()</code> ou <code>showModal()</code> em vez do atributo, e descreve alternar <code>open</code> à mão como não sendo a prática recomendada. Se o seu modal parece correto mas a página por trás dele continua a responder aos cliques, é quase de certeza por isto.</p>
+
+  <figure>
+    <img src="/img/dialog-element-inbody.jpg" alt="Um wireframe desenhado à mão em papel, com retângulos cruzados a representar imagens e linhas pautadas a representar texto corrido" width="1280" height="760" loading="lazy" />
+    <figcaption>Um wireframe de interface desenhado à mão, com retângulos cruzados a representar imagens e linhas pautadas a representar texto. As caixas de diálogo de confirmação costumam ser esboçadas nesta fase e reconstruídas de raiz em cada projeto.</figcaption>
+  </figure>
+
+  <h2>form method="dialog": a funcionalidade sem equivalente</h2>
+  <p>Esta é a parte do <code>&lt;dialog&gt;</code> que nada mais replica, e é a razão pela qual uma caixa de diálogo de confirmação pode não precisar de JavaScript algum para além do que a abre.</p>
+  <pre><code>{`<dialog id="confirm">
+  <form method="dialog">
+    <p>Eliminar este ficheiro?</p>
+    <button value="cancel" autofocus>Cancelar</button>
+    <button value="delete">Eliminar</button>
+  </form>
+</dialog>`}</code></pre>
+  <p>Quando um formulário dentro de uma caixa de diálogo é submetido com <code>method="dialog"</code>, a caixa fecha-se em vez de enviar um pedido. Os estados dos controlos do formulário são guardados mas não submetidos, e o <code>returnValue</code> da caixa de diálogo passa a ter <strong>o valor do botão que foi ativado</strong>.</p>
+  <p>Depois basta ler a resposta:</p>
+  <pre><code>{`dialog.addEventListener("close", () => {
+  if (dialog.returnValue === "delete") {
+    // o utilizador confirmou
+  }
+});`}</code></pre>
+  <p>Dois botões, um atributo, e fica a saber qual foi carregado. Sem tratadores de clique, sem invólucro de promessa, sem variável de estado.</p>
+
+  <h2>A armadilha dos campos obrigatórios</h2>
+  <p>Um comportamento surpreende as pessoas à primeira vez e vale a pena conhecê-lo antes que lhe custe uma tarde.</p>
+  <p>Se a caixa de diálogo contiver um formulário com campos <strong>obrigatórios</strong>, a submissão continua a executar a validação. Um botão simples não consegue fechar a caixa enquanto esses campos forem inválidos, o que significa que o seu botão Cancelar deixa de funcionar precisamente quando o utilizador mais precisa dele. As respostas documentadas são adicionar <code>formnovalidate</code> ao botão que dispensa a caixa, ou chamar <code>dialog.close()</code> a partir do seu próprio código:</p>
+  <pre><code>{`<button value="cancel" formnovalidate>Cancelar</button>`}</code></pre>
+
+  <h2>O Esc e o atributo closedby</h2>
+  <p>A dispensa pelo teclado não é uniforme, e a diferença segue a divisão entre modal e não modal.</p>
+  <p>Uma caixa de diálogo aberta com <code>showModal()</code> pode ser dispensada com <strong>Esc</strong> por predefinição. Uma caixa de diálogo não modal <strong>não</strong> se dispensa com Esc por predefinição.</p>
+  <p>O atributo <code>closedby</code> torna isto explícito em vez de implícito:</p>
+  <pre><code>{`<dialog closedby="any">     <!-- Esc, clique no exterior, ou o seu código -->
+<dialog closedby="closerequest">  <!-- Esc ou o seu código -->
+<dialog closedby="none">    <!-- apenas o seu código -->`}</code></pre>
+  <p>O <code>closedby="any"</code> é o que lhe dá o light-dismiss, o comportamento de clique no exterior que normalmente se escreve à mão. O <code>closedby="none"</code> destina-se à rara caixa de diálogo que não pode ser dispensada acidentalmente, e traz consigo uma obrigação: tem de fornecer uma saída visível.</p>
+
+  <h2>Acertar na acessibilidade</h2>
+  <p>O elemento entrega-lhe a maior parte disto, mas três pontos ficam do seu lado.</p>
+  <p><strong>Use o autofocus de forma deliberada.</strong> Com <code>showModal()</code>, o foco recai sobre o primeiro elemento focável aninhado. Muitas vezes não é aquele que quer. Coloque <code>autofocus</code> no elemento com que o utilizador deve interagir de imediato, ou no botão de fechar se nada mais for mais urgente.</p>
+  <p><strong>Forneça sempre um botão de fechar.</strong> A forma mais robusta de garantir que todos os utilizadores conseguem sair da caixa de diálogo é um botão explícito, não apenas o Esc ou um clique no exterior.</p>
+  <p><strong>Não coloque tabindex na própria caixa de diálogo.</strong> Ela não é interativa e não recebe o foco. O seu conteúdo é que recebe.</p>
+
+  <h2>Estilizar o backdrop</h2>
+  <p>A camada escurecida por trás de um modal é um pseudo-elemento real que pode estilizar:</p>
+  <pre><code>{`dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(2px);
+}`}</code></pre>
+  <p>Só existe para caixas de diálogo abertas com <code>showModal()</code>, o que é outra forma de verificar de relance se está mesmo em modo modal.</p>
+
+  <h2>dialog ou popover?</h2>
+  <p>Ambos são desenhados na camada superior, por isso a questão surge constantemente. A distinção tem a ver com a <em>interrupção</em>.</p>
+  <p>Use <code>&lt;dialog&gt;</code> com <code>showModal()</code> quando o utilizador tem de resolver algo antes de continuar: uma confirmação, uma escolha obrigatória, um formulário que bloqueia o fluxo. Bloquear a página é precisamente o objetivo.</p>
+  <p>Use a <a href="/pt/guides/popover-api">Popover API</a> para interfaces de sobreposição transitórias que não devem interromper: menus, tooltips, cartões, notificações. Aí a página deve continuar utilizável.</p>
+  <p>Um teste útil: se fosse errado o utilizador ignorá-lo e seguir em frente, é uma caixa de diálogo. Se ignorá-lo for uma resposta perfeitamente razoável, é um popover.</p>
+
+  <h2>Em resumo</h2>
+  <p>O elemento <code>&lt;dialog&gt;</code> transforma um pedaço genuinamente difícil de interface em marcação. Abra-o com <code>showModal()</code> e obtém a camada superior, um backdrop, uma página inerte e o tratamento do Esc sem escrever nada disso. Use <code>form method="dialog"</code> e <code>returnValue</code> e obtém a resposta do utilizador sem um único tratador de clique. Evite o atributo <code>open</code>, lembre-se do <code>formnovalidate</code> no seu botão de cancelar, e coloque o <code>autofocus</code> você mesmo.</p>
+  <p>O que fica é uma caixa de diálogo de confirmação em cerca de quinze linhas de HTML que se comporta corretamente para utilizadores de teclado e de leitores de ecrã, o que é mais do que a maioria das que foram construídas à mão e que ela substitui.</p>
+</Article>

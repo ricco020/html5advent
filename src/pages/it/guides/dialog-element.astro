@@ -1,0 +1,103 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="dialog-element"
+  title="L’elemento HTML dialog: vere finestre modali senza librerie"
+  description="L’elemento HTML dialog ti offre una vera finestra modale (livello superiore, pagina inerte, backdrop e gestione di Esc) con del semplice markup. Ecco showModal contro show, form method=dialog, returnValue, l’attributo closedby e l’abitudine da evitare."
+  cat="html"
+  day={18}
+  hero="/img/dialog-element-hero.jpg"
+  heroAlt="Un editor di codice in modalità scura che mostra un file index.html con i tag doctype e head"
+  cluster={null}
+  faq={[{ q: "Qual è la differenza tra show() e showModal()?", a: "showModal() apre una finestra di dialogo modale: il browser la colloca nel livello superiore, disegna un ::backdrop dietro di essa, rende inerte il resto della pagina in modo che nulla all’esterno possa essere cliccato o raggiunto con il tasto Tab, e imposta implicitamente aria-modal=\"true\". show() apre una finestra di dialogo non modale: il resto della pagina resta interattivo, non ci sono né livello superiore né backdrop, e aria-modal è false. Se vuoi una vera finestra modale, showModal() è il metodo giusto." }, { q: "Devo aprire una finestra di dialogo con l’attributo open?", a: "No. MDN afferma chiaramente che è consigliabile usare il metodo show() o showModal() invece dell’attributo open. Una finestra di dialogo mostrata tramite l’attributo open è sempre non modale, quindi non ottieni né il livello superiore, né il backdrop, né l’inerzia che probabilmente volevi. Attivare e disattivare l’attributo a mano è esplicitamente descritto come una pratica non consigliata." }, { q: "Che cosa fa form method=\"dialog\"?", a: "Un form all’interno di una finestra di dialogo con method=\"dialog\" chiude la finestra quando viene inviato, invece di mandare una richiesta. Gli stati dei controlli del form vengono salvati ma non inviati, e la proprietà returnValue della finestra di dialogo viene impostata sul valore del pulsante che è stato attivato. Così sai quale pulsante ha premuto l’utente senza scrivere una riga di JavaScript." }, { q: "Il tasto Esc chiude una finestra di dialogo?", a: "Per una finestra modale aperta con showModal(), sì: può essere chiusa con Esc per impostazione predefinita. Per una finestra di dialogo non modale, no, Esc non la chiude per impostazione predefinita. L’attributo closedby ti permette di cambiare questo comportamento: closerequest consente Esc, any consente anche un clic esterno, e none significa che solo il tuo codice può chiuderla." }, { q: "Perché la mia finestra di dialogo non si chiude quando il form ha un campo obbligatorio?", a: "Perché il form esegue comunque la validazione. Se la finestra di dialogo contiene input required, un semplice pulsante di invio non può chiuderla finché quei campi non sono validi. Aggiungi formnovalidate al pulsante destinato a chiudere la finestra, oppure chiama dialog.close() dal tuo codice." }]}
+>
+  <p>Ogni sviluppatore front-end ha costruito una finestra modale a mano: un div in posizione fissa, una guerra di z-index, un listener per il clic esterno, un gestore di Esc e un po’ di acrobazie sul focus perché la tastiera non finisca a vagare dietro l’overlay. L’elemento <code>&lt;dialog&gt;</code> sostituisce tutto questo con un tag e una chiamata di metodo. Ecco che cosa fa davvero, e i due o tre dettagli che decidono se la tua finestra di dialogo si comporta correttamente.</p>
+
+  <h2>La finestra di dialogo funzionante più piccola</h2>
+  <p>Una finestra di dialogo è markup inerte finché non la apri da JavaScript:</p>
+  <pre><code>{`<dialog id="confirm">
+  <p>Eliminare questo file?</p>
+  <button autofocus>Annulla</button>
+</dialog>
+
+<button id="open">Elimina</button>`}</code></pre>
+  <pre><code>{`const dialog = document.getElementById("confirm");
+document.getElementById("open")
+  .addEventListener("click", () => dialog.showModal());`}</code></pre>
+  <p>Quell’unica chiamata a <code>showModal()</code> fa molto più che rendere visibile un elemento.</p>
+
+  <h2>showModal() contro show(): la differenza che conta</h2>
+  <p>Questi due metodi non sono varianti dello stesso tema. Producono risultati davvero diversi.</p>
+  <p><strong><code>showModal()</code></strong> apre una finestra di dialogo modale. Il browser la colloca nel <strong>livello superiore</strong>, quindi viene disegnata sopra l’intera pagina senza alcun z-index in gioco. Disegna uno pseudo-elemento <code>::backdrop</code> dietro di essa. Rende tutto il resto <strong>inerte</strong>, il che significa che nel resto del documento non si può cliccare né entrare con il tasto Tab. E imposta implicitamente <code>aria-modal="true"</code>.</p>
+  <p><strong><code>show()</code></strong> apre una finestra di dialogo non modale. La pagina resta interattiva, non c’è livello superiore, non c’è backdrop, e <code>aria-modal</code> è false.</p>
+  <p>L’inerzia è l’aspetto che si tende a sottovalutare. Rendere lo sfondo non cliccabile è facile; renderlo non raggiungibile con il tasto Tab è la parte che le finestre modali fatte a mano sbagliano quasi sempre, e qui è il browser a occuparsene per te.</p>
+
+  <h2>L’abitudine da abbandonare: l’attributo open</h2>
+  <p>Un elemento <code>&lt;dialog&gt;</code> ha anche un attributo booleano <code>open</code>, e ricorrere a quello è l’errore più comune con questo elemento.</p>
+  <pre><code>{`<!-- funziona, ma questa NON è una finestra modale -->
+<dialog open>Sono non modale, qualunque cosa ti aspettassi.</dialog>`}</code></pre>
+  <p>Una finestra di dialogo mostrata tramite l’attributo <code>open</code> è sempre <strong>non modale</strong>. Nessun livello superiore, nessun backdrop, nessuna pagina inerte. MDN consiglia di usare <code>show()</code> o <code>showModal()</code> invece dell’attributo, e descrive l’attivazione manuale di <code>open</code> come una pratica non consigliata. Se la tua finestra modale sembra corretta ma la pagina dietro risponde ancora ai clic, quasi certamente il motivo è questo.</p>
+
+  <figure>
+    <img src="/img/dialog-element-inbody.jpg" alt="Un wireframe disegnato a mano su carta, con rettangoli barrati al posto delle immagini e righe tracciate per il testo del corpo" width="1280" height="760" loading="lazy" />
+    <figcaption>Un wireframe di interfaccia disegnato a mano, con rettangoli barrati al posto delle immagini e righe tracciate per il testo. Le finestre di dialogo di conferma vengono di solito abbozzate in questa fase e ricostruite da zero in ogni progetto.</figcaption>
+  </figure>
+
+  <h2>form method="dialog": la funzionalità senza equivalenti</h2>
+  <p>Questa è la parte di <code>&lt;dialog&gt;</code> che nient’altro replica, ed è il motivo per cui una finestra di dialogo di conferma può non richiedere JavaScript oltre a quello che serve per aprirla.</p>
+  <pre><code>{`<dialog id="confirm">
+  <form method="dialog">
+    <p>Eliminare questo file?</p>
+    <button value="cancel" autofocus>Annulla</button>
+    <button value="delete">Elimina</button>
+  </form>
+</dialog>`}</code></pre>
+  <p>Quando un form all’interno di una finestra di dialogo viene inviato con <code>method="dialog"</code>, la finestra si chiude invece di mandare una richiesta. Gli stati dei controlli del form vengono salvati ma non inviati, e il <code>returnValue</code> della finestra di dialogo viene impostato sul <strong>valore del pulsante che è stato attivato</strong>.</p>
+  <p>Quindi leggi la risposta in un secondo momento:</p>
+  <pre><code>{`dialog.addEventListener("close", () => {
+  if (dialog.returnValue === "delete") {
+    // l’utente ha confermato
+  }
+});`}</code></pre>
+  <p>Due pulsanti, un attributo, e sai quale è stato premuto. Nessun gestore di clic, nessun wrapper con promise, nessuna variabile di stato.</p>
+
+  <h2>La trappola del campo obbligatorio</h2>
+  <p>C’è un comportamento che sorprende la prima volta e che vale la pena conoscere prima che ti costi un pomeriggio.</p>
+  <p>Se la finestra di dialogo contiene un form con input <strong>required</strong>, l’invio esegue comunque la validazione. Un semplice pulsante non può chiudere la finestra finché quei campi non sono validi, il che significa che il tuo pulsante Annulla smette di funzionare proprio quando l’utente ne ha più bisogno. Le soluzioni documentate sono aggiungere <code>formnovalidate</code> al pulsante di chiusura, oppure chiamare <code>dialog.close()</code> dal tuo codice:</p>
+  <pre><code>{`<button value="cancel" formnovalidate>Annulla</button>`}</code></pre>
+
+  <h2>Esc e l’attributo closedby</h2>
+  <p>La chiusura da tastiera non è uniforme, e la differenza segue la distinzione tra modale e non modale.</p>
+  <p>Una finestra di dialogo aperta con <code>showModal()</code> può essere chiusa con <strong>Esc</strong> per impostazione predefinita. Una finestra di dialogo non modale <strong>non</strong> si chiude con Esc per impostazione predefinita.</p>
+  <p>L’attributo <code>closedby</code> rende tutto questo esplicito invece che implicito:</p>
+  <pre><code>{`<dialog closedby="any">     <!-- Esc, clic esterno o il tuo codice -->
+<dialog closedby="closerequest">  <!-- Esc o il tuo codice -->
+<dialog closedby="none">    <!-- solo il tuo codice -->`}</code></pre>
+  <p><code>closedby="any"</code> è ciò che ti dà la chiusura leggera, cioè il comportamento di clic esterno che di solito si scrive a mano. <code>closedby="none"</code> serve per quelle rare finestre di dialogo che non devono essere chiuse per errore, e comporta un obbligo: devi fornire una via d’uscita visibile.</p>
+
+  <h2>Curare bene l’accessibilità</h2>
+  <p>L’elemento ti offre gran parte del lavoro già fatto, ma tre punti restano a carico tuo.</p>
+  <p><strong>Usa autofocus in modo consapevole.</strong> Con <code>showModal()</code>, il focus arriva sul primo elemento focalizzabile annidato. Spesso non è quello che vuoi. Metti <code>autofocus</code> sull’elemento con cui l’utente deve interagire subito, oppure sul pulsante di chiusura se non c’è nulla di più urgente.</p>
+  <p><strong>Fornisci sempre un pulsante di chiusura.</strong> Il modo più solido per garantire che ogni utente possa uscire dalla finestra di dialogo è un pulsante esplicito, non soltanto Esc o un clic esterno.</p>
+  <p><strong>Non mettere tabindex sull’elemento dialog stesso.</strong> Non è interattivo e non riceve il focus. Sono i suoi contenuti a riceverlo.</p>
+
+  <h2>Applicare stili al backdrop</h2>
+  <p>Il livello oscurato dietro una finestra modale è un vero pseudo-elemento a cui puoi applicare degli stili:</p>
+  <pre><code>{`dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(2px);
+}`}</code></pre>
+  <p>Esiste solo per le finestre di dialogo aperte con <code>showModal()</code>, il che è un altro modo per verificare a colpo d’occhio se sei davvero in modalità modale.</p>
+
+  <h2>dialog o popover?</h2>
+  <p>Entrambi vengono disegnati nel livello superiore, quindi la domanda torna di continuo. La distinzione riguarda l’<em>interruzione</em>.</p>
+  <p>Usa <code>&lt;dialog&gt;</code> con <code>showModal()</code> quando l’utente deve occuparsi di qualcosa prima di proseguire: una conferma, una scelta obbligatoria, un form che blocca il flusso. Bloccare la pagina è esattamente il punto.</p>
+  <p>Usa la <a href="/it/guides/popover-api">Popover API</a> per la UI sovrapposta e transitoria che non deve interrompere: menu, tooltip, schede, notifiche. Lì la pagina deve restare utilizzabile.</p>
+  <p>Un test utile: se sarebbe sbagliato che l’utente lo ignorasse e tirasse dritto, è una finestra di dialogo. Se ignorarlo è una risposta perfettamente ragionevole, è un popover.</p>
+
+  <h2>In sintesi</h2>
+  <p>L’elemento <code>&lt;dialog&gt;</code> trasforma un pezzo di UI davvero difficile in semplice markup. Aprilo con <code>showModal()</code> e ottieni il livello superiore, un backdrop, una pagina inerte e la gestione di Esc senza scriverne una riga. Usa <code>form method="dialog"</code> e <code>returnValue</code> e ottieni la risposta dell’utente senza un solo gestore di clic. Evita l’attributo <code>open</code>, ricordati <code>formnovalidate</code> sul pulsante di annullamento, e posiziona tu stesso <code>autofocus</code>.</p>
+  <p>Quello che resta è una finestra di dialogo di conferma in una quindicina di righe di HTML che si comporta correttamente per chi usa la tastiera e per chi usa uno screen reader, il che è più di quanto facciano la maggior parte di quelle costruite a mano che sostituisce.</p>
+</Article>

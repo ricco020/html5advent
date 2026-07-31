@@ -63,7 +63,7 @@ menu.addEventListener("toggle", (e) => {
   <p>To place a popover next to the button that opened it - like a real dropdown menu - pair it with <strong>CSS Anchor Positioning</strong> (<code>anchor()</code>) instead of measuring coordinates in JavaScript. The two features are designed to work together.</p>
 
   <h2>When to use it (and when not)</h2>
-  <p>Reach for the Popover API for transient, overlay UI: dropdown menus, tooltips, teaching hints, small cards and notifications. For a blocking <strong>modal dialog</strong> that should trap focus and stop interaction with the page, the <code>&lt;dialog&gt;</code> element is still the better tool. Think of them as complements: popovers for lightweight overlays, dialogs for true modals.</p>
+  <p>Reach for the Popover API for transient, overlay UI: dropdown menus, tooltips, teaching hints, small cards and notifications. For a blocking <strong>modal dialog</strong> that should trap focus and stop interaction with the page, the <a href="/guides/dialog-element"><code>&lt;dialog&gt;</code></a> element is still the better tool. Think of them as complements: popovers for lightweight overlays, dialogs for true modals.</p>
 
   <h2>The bottom line</h2>
   <p>The Popover API turns a pile of hand-written JavaScript - top-layer rendering, outside-click detection, Esc handling, focus juggling - into a single HTML attribute plus three methods. Use <code>auto</code> for menus and tooltips, <code>manual</code> for UI you control, style with <code>:popover-open</code>, and combine it with anchor positioning for real dropdowns. It is supported across modern browsers today, so most sites can adopt it without a polyfill.</p>

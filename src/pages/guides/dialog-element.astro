@@ -1,0 +1,103 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="dialog-element"
+  title="The HTML dialog element: real modals without a library"
+  description="The HTML dialog element gives you a true modal - top layer, inert page, backdrop and Esc handling - from plain markup. Here is showModal vs show, form method=dialog, returnValue, the closedby attribute and the one habit to avoid."
+  cat="html"
+  day={18}
+  hero="/img/dialog-element-hero.jpg"
+  heroAlt="A code editor in dark mode showing an index.html file with the doctype and head tags"
+  cluster={null}
+  faq={[{ q: "What is the difference between show() and showModal()?", a: "showModal() opens a modal dialog: the browser puts it in the top layer, renders a ::backdrop behind it, makes the rest of the page inert so nothing outside can be clicked or tabbed to, and implicitly sets aria-modal=\"true\". show() opens a non-modal dialog: the rest of the page stays interactive, there is no top layer and no backdrop, and aria-modal is false. If you want a real modal, showModal() is the one." }, { q: "Should I open a dialog with the open attribute?", a: "No. MDN states plainly that it is recommended to use the show() or showModal() method rather than the open attribute. A dialog shown through the open attribute is always non-modal, so you get none of the top layer, backdrop or inertness you probably wanted. Toggling the attribute by hand is explicitly described as not the recommended practice." }, { q: "What does form method=\"dialog\" do?", a: "A form inside a dialog with method=\"dialog\" closes the dialog when submitted instead of sending a request. The states of the form controls are saved but not submitted, and the dialog's returnValue property is set to the value of the button that was activated. That gives you which button the user pressed with no JavaScript at all." }, { q: "Does the Esc key close a dialog?", a: "For a modal opened with showModal(), yes: it can be dismissed with Esc by default. For a non-modal dialog, no, Esc does not dismiss it by default. The closedby attribute lets you change this: closerequest allows Esc, any also allows an outside click, and none means only your own code can close it." }, { q: "Why will my dialog not close when the form has a required field?", a: "Because the form still runs validation. If the dialog contains required inputs, a plain submit button cannot close it while those fields are invalid. Add formnovalidate to the button meant to dismiss the dialog, or call dialog.close() from your own code instead." }]}
+>
+  <p>Every front-end developer has built a modal by hand: a fixed-position div, a z-index war, a click-outside listener, an Esc handler, and some focus juggling so the keyboard does not wander off behind the overlay. The <code>&lt;dialog&gt;</code> element replaces all of it with one tag and one method call. This is what it actually does, and the two or three details that decide whether your dialog behaves properly.</p>
+
+  <h2>The smallest working dialog</h2>
+  <p>A dialog is inert markup until you open it from JavaScript:</p>
+  <pre><code>{`<dialog id="confirm">
+  <p>Delete this file?</p>
+  <button autofocus>Cancel</button>
+</dialog>
+
+<button id="open">Delete</button>`}</code></pre>
+  <pre><code>{`const dialog = document.getElementById("confirm");
+document.getElementById("open")
+  .addEventListener("click", () => dialog.showModal());`}</code></pre>
+  <p>That single <code>showModal()</code> call is doing considerably more than making an element visible.</p>
+
+  <h2>showModal() versus show(): the difference that matters</h2>
+  <p>These two methods are not variations on a theme. They produce genuinely different things.</p>
+  <p><strong><code>showModal()</code></strong> opens a modal dialog. The browser puts it in the <strong>top layer</strong>, so it renders above the entire page with no z-index involved. It renders a <code>::backdrop</code> pseudo-element behind it. It makes everything else <strong>inert</strong>, which means the rest of the document cannot be clicked or tabbed into. And it implicitly sets <code>aria-modal="true"</code>.</p>
+  <p><strong><code>show()</code></strong> opens a non-modal dialog. The page stays interactive, there is no top layer, no backdrop, and <code>aria-modal</code> is false.</p>
+  <p>The inertness is the part people underestimate. Making the background unclickable is easy; making it untabbable is the part hand-rolled modals almost always get wrong, and here the browser does it for you.</p>
+
+  <h2>The habit to drop: the open attribute</h2>
+  <p>A <code>&lt;dialog&gt;</code> also has a boolean <code>open</code> attribute, and reaching for it is the single most common mistake with this element.</p>
+  <pre><code>{`<!-- works, but this is NOT a modal -->
+<dialog open>I am non-modal, whatever you expected.</dialog>`}</code></pre>
+  <p>A dialog shown through the <code>open</code> attribute is always <strong>non-modal</strong>. No top layer, no backdrop, no inert page. MDN recommends using <code>show()</code> or <code>showModal()</code> rather than the attribute, and describes toggling <code>open</code> by hand as not the recommended practice. If your modal looks right but the page behind it still responds to clicks, this is almost certainly why.</p>
+
+  <figure>
+    <img src="/img/dialog-element-inbody.jpg" alt="A hand-drawn wireframe on paper, with crossed rectangles standing in for images and ruled lines for body text" width="1280" height="760" loading="lazy" />
+    <figcaption>A hand-drawn interface wireframe, with crossed rectangles standing in for images and ruled lines for text. Confirmation dialogs are usually sketched at this stage and rebuilt from scratch in every project.</figcaption>
+  </figure>
+
+  <h2>form method="dialog": the feature with no equivalent</h2>
+  <p>This is the part of <code>&lt;dialog&gt;</code> that nothing else replicates, and it is the reason a confirmation dialog can need no JavaScript beyond opening it.</p>
+  <pre><code>{`<dialog id="confirm">
+  <form method="dialog">
+    <p>Delete this file?</p>
+    <button value="cancel" autofocus>Cancel</button>
+    <button value="delete">Delete</button>
+  </form>
+</dialog>`}</code></pre>
+  <p>When a form inside a dialog is submitted with <code>method="dialog"</code>, the dialog closes instead of sending a request. The states of the form controls are saved but not submitted, and the dialog's <code>returnValue</code> is set to <strong>the value of the button that was activated</strong>.</p>
+  <p>So you read the answer afterwards:</p>
+  <pre><code>{`dialog.addEventListener("close", () => {
+  if (dialog.returnValue === "delete") {
+    // the user confirmed
+  }
+});`}</code></pre>
+  <p>Two buttons, one attribute, and you know which one was pressed. No click handlers, no promise wrapper, no state variable.</p>
+
+  <h2>The required-field trap</h2>
+  <p>One behaviour surprises people the first time and is worth knowing before it costs you an afternoon.</p>
+  <p>If the dialog contains a form with <strong>required</strong> inputs, submitting still runs validation. A plain button cannot close the dialog while those fields are invalid, which means your Cancel button stops working precisely when the user wants it most. The documented answers are to add <code>formnovalidate</code> to the dismissing button, or to call <code>dialog.close()</code> from your own code:</p>
+  <pre><code>{`<button value="cancel" formnovalidate>Cancel</button>`}</code></pre>
+
+  <h2>Esc, and the closedby attribute</h2>
+  <p>Keyboard dismissal is not uniform, and the difference follows the modal split.</p>
+  <p>A dialog opened with <code>showModal()</code> can be dismissed with <strong>Esc</strong> by default. A non-modal dialog does <strong>not</strong> dismiss with Esc by default.</p>
+  <p>The <code>closedby</code> attribute makes this explicit rather than implied:</p>
+  <pre><code>{`<dialog closedby="any">     <!-- Esc, outside click, or your code -->
+<dialog closedby="closerequest">  <!-- Esc or your code -->
+<dialog closedby="none">    <!-- only your code -->`}</code></pre>
+  <p><code>closedby="any"</code> is what gives you light-dismiss, the outside-click behaviour people usually write by hand. <code>closedby="none"</code> is for the rare dialog that must not be dismissed accidentally, and it comes with an obligation: you have to provide a visible way out.</p>
+
+  <h2>Getting the accessibility right</h2>
+  <p>The element hands you most of this, but three points are on you.</p>
+  <p><strong>Use autofocus deliberately.</strong> With <code>showModal()</code>, focus lands on the first nested focusable element. That is often not the one you want. Put <code>autofocus</code> on the element the user should interact with immediately, or on the close button if nothing else is more urgent.</p>
+  <p><strong>Always provide a close button.</strong> The most robust way to ensure every user can leave the dialog is an explicit button, not only Esc or an outside click.</p>
+  <p><strong>Do not put tabindex on the dialog itself.</strong> It is not interactive and does not receive focus. Its contents do.</p>
+
+  <h2>Styling the backdrop</h2>
+  <p>The dimmed layer behind a modal is a real pseudo-element you can style:</p>
+  <pre><code>{`dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(2px);
+}`}</code></pre>
+  <p>It only exists for dialogs opened with <code>showModal()</code>, which is another way to check at a glance whether you are actually in modal mode.</p>
+
+  <h2>dialog or popover?</h2>
+  <p>Both render in the top layer, so the question comes up constantly. The distinction is about <em>interruption</em>.</p>
+  <p>Use <code>&lt;dialog&gt;</code> with <code>showModal()</code> when the user must deal with something before continuing: a confirmation, a required choice, a form that blocks the flow. Blocking the page is the entire point.</p>
+  <p>Use the <a href="/guides/popover-api">Popover API</a> for transient overlay UI that must not interrupt: menus, tooltips, cards, notifications. There the page should stay usable.</p>
+  <p>A useful test: if it would be wrong for the user to ignore it and carry on, it is a dialog. If ignoring it is a perfectly reasonable response, it is a popover.</p>
+
+  <h2>The bottom line</h2>
+  <p>The <code>&lt;dialog&gt;</code> element turns a genuinely hard piece of UI into markup. Open it with <code>showModal()</code> and you get the top layer, a backdrop, an inert page and Esc handling without writing any of it. Use <code>form method="dialog"</code> and <code>returnValue</code> and you get the user's answer without a single click handler. Avoid the <code>open</code> attribute, remember <code>formnovalidate</code> on your cancel button, and place <code>autofocus</code> yourself.</p>
+  <p>What remains is a confirmation dialog in about fifteen lines of HTML that behaves correctly for keyboard and screen reader users, which is more than most of the hand-built ones it replaces.</p>
+</Article>

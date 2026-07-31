@@ -1,0 +1,103 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="dialog-element"
+  title="Das HTML-Element dialog: echte Modals ohne Bibliothek"
+  description="Das HTML-Element dialog liefert dir ein echtes Modal - Top-Layer, inerte Seite, Backdrop und Esc-Handling - aus reinem Markup. Hier sind showModal vs. show, form method=dialog, returnValue, das Attribut closedby und die eine Gewohnheit, die du ablegen solltest."
+  cat="html"
+  day={18}
+  hero="/img/dialog-element-hero.jpg"
+  heroAlt="Ein Code-Editor im Dark Mode zeigt eine index.html-Datei mit dem Doctype und den head-Tags"
+  cluster={null}
+  faq={[{ q: "Was ist der Unterschied zwischen show() und showModal()?", a: "showModal() öffnet einen modalen Dialog: Der Browser legt ihn in den Top-Layer, rendert dahinter ein ::backdrop, macht den Rest der Seite inert, sodass nichts außerhalb angeklickt oder per Tab erreicht werden kann, und setzt implizit aria-modal=\"true\". show() öffnet einen nicht-modalen Dialog: Der Rest der Seite bleibt bedienbar, es gibt keinen Top-Layer und kein Backdrop, und aria-modal ist false. Wenn du ein echtes Modal willst, ist showModal() die richtige Wahl." }, { q: "Sollte ich einen Dialog über das Attribut open öffnen?", a: "Nein. MDN sagt klar, dass es empfohlen wird, die Methode show() oder showModal() statt des Attributs open zu verwenden. Ein über das Attribut open angezeigter Dialog ist immer nicht-modal, du bekommst also weder Top-Layer noch Backdrop noch eine inerte Seite, was du wahrscheinlich wolltest. Das Attribut von Hand umzuschalten wird ausdrücklich als nicht empfohlene Praxis beschrieben." }, { q: "Was macht form method=\"dialog\"?", a: "Ein Formular innerhalb eines Dialogs mit method=\"dialog\" schließt den Dialog beim Absenden, statt eine Anfrage zu senden. Die Zustände der Formularelemente werden gespeichert, aber nicht übermittelt, und die Eigenschaft returnValue des Dialogs wird auf den Wert des ausgelösten Buttons gesetzt. So weißt du ganz ohne JavaScript, welchen Button die Nutzerin oder der Nutzer gedrückt hat." }, { q: "Schließt die Esc-Taste einen Dialog?", a: "Bei einem mit showModal() geöffneten Modal ja: Es lässt sich standardmäßig mit Esc schließen. Bei einem nicht-modalen Dialog nein, Esc schließt ihn standardmäßig nicht. Mit dem Attribut closedby kannst du das ändern: closerequest erlaubt Esc, any erlaubt zusätzlich einen Klick außerhalb, und none bedeutet, dass nur dein eigener Code schließen kann." }, { q: "Warum schließt sich mein Dialog nicht, wenn das Formular ein Pflichtfeld enthält?", a: "Weil das Formular weiterhin validiert wird. Enthält der Dialog required-Felder, kann ein einfacher Submit-Button ihn nicht schließen, solange diese Felder ungültig sind. Ergänze formnovalidate am Button, der den Dialog schließen soll, oder rufe stattdessen dialog.close() aus deinem eigenen Code auf." }]}
+>
+  <p>Jede Frontend-Entwicklerin und jeder Frontend-Entwickler hat schon einmal ein Modal von Hand gebaut: ein div mit fixer Positionierung, ein z-index-Krieg, ein Listener für Klicks außerhalb, ein Esc-Handler und etwas Fokus-Jonglage, damit die Tastatur nicht hinter das Overlay abwandert. Das Element <code>&lt;dialog&gt;</code> ersetzt das alles durch ein Tag und einen Methodenaufruf. Das hier macht es tatsächlich, und das sind die zwei, drei Details, die darüber entscheiden, ob sich dein Dialog korrekt verhält.</p>
+
+  <h2>Der kleinstmögliche funktionierende Dialog</h2>
+  <p>Ein Dialog ist reines Markup ohne Wirkung, bis du ihn aus JavaScript heraus öffnest:</p>
+  <pre><code>{`<dialog id="confirm">
+  <p>Diese Datei löschen?</p>
+  <button autofocus>Abbrechen</button>
+</dialog>
+
+<button id="open">Löschen</button>`}</code></pre>
+  <pre><code>{`const dialog = document.getElementById("confirm");
+document.getElementById("open")
+  .addEventListener("click", () => dialog.showModal());`}</code></pre>
+  <p>Dieser eine Aufruf von <code>showModal()</code> leistet erheblich mehr, als ein Element sichtbar zu machen.</p>
+
+  <h2>showModal() gegen show(): der Unterschied, auf den es ankommt</h2>
+  <p>Diese beiden Methoden sind keine Varianten desselben Themas. Sie erzeugen wirklich verschiedene Dinge.</p>
+  <p><strong><code>showModal()</code></strong> öffnet einen modalen Dialog. Der Browser legt ihn in den <strong>Top-Layer</strong>, sodass er über der gesamten Seite rendert, ganz ohne z-index. Er rendert dahinter ein Pseudo-Element <code>::backdrop</code>. Er macht alles andere <strong>inert</strong>, das heißt, das restliche Dokument lässt sich weder anklicken noch per Tab erreichen. Und er setzt implizit <code>aria-modal="true"</code>.</p>
+  <p><strong><code>show()</code></strong> öffnet einen nicht-modalen Dialog. Die Seite bleibt bedienbar, es gibt keinen Top-Layer, kein Backdrop, und <code>aria-modal</code> ist false.</p>
+  <p>Die Inertheit ist der Teil, den man unterschätzt. Den Hintergrund unklickbar zu machen ist leicht; ihn für die Tab-Navigation zu sperren ist der Teil, den handgebaute Modals fast immer falsch machen, und hier erledigt ihn der Browser für dich.</p>
+
+  <h2>Die Gewohnheit, die du ablegen solltest: das Attribut open</h2>
+  <p>Ein <code>&lt;dialog&gt;</code> hat auch ein boolesches Attribut <code>open</code>, und danach zu greifen ist der mit Abstand häufigste Fehler bei diesem Element.</p>
+  <pre><code>{`<!-- funktioniert, ist aber KEIN Modal -->
+<dialog open>Ich bin nicht-modal, was auch immer du erwartet hast.</dialog>`}</code></pre>
+  <p>Ein über das Attribut <code>open</code> angezeigter Dialog ist immer <strong>nicht-modal</strong>. Kein Top-Layer, kein Backdrop, keine inerte Seite. MDN empfiehlt, <code>show()</code> oder <code>showModal()</code> statt des Attributs zu verwenden, und beschreibt das Umschalten von <code>open</code> per Hand als nicht empfohlene Praxis. Wenn dein Modal richtig aussieht, die Seite dahinter aber weiterhin auf Klicks reagiert, ist das mit ziemlicher Sicherheit der Grund.</p>
+
+  <figure>
+    <img src="/img/dialog-element-inbody.jpg" alt="Ein handgezeichnetes Wireframe auf Papier, mit durchgestrichenen Rechtecken als Platzhalter für Bilder und Linien für den Fließtext" width="1280" height="760" loading="lazy" />
+    <figcaption>Ein handgezeichnetes Interface-Wireframe, mit durchgestrichenen Rechtecken als Platzhalter für Bilder und Linien für Text. Bestätigungsdialoge werden meist in dieser Phase skizziert und dann in jedem Projekt von Grund auf neu gebaut.</figcaption>
+  </figure>
+
+  <h2>form method="dialog": die Funktion ohne Entsprechung</h2>
+  <p>Das ist der Teil von <code>&lt;dialog&gt;</code>, den nichts anderes nachbildet, und der Grund dafür, dass ein Bestätigungsdialog außer dem Öffnen kein JavaScript braucht.</p>
+  <pre><code>{`<dialog id="confirm">
+  <form method="dialog">
+    <p>Diese Datei löschen?</p>
+    <button value="cancel" autofocus>Abbrechen</button>
+    <button value="delete">Löschen</button>
+  </form>
+</dialog>`}</code></pre>
+  <p>Wird ein Formular innerhalb eines Dialogs mit <code>method="dialog"</code> abgesendet, schließt sich der Dialog, statt eine Anfrage zu senden. Die Zustände der Formularelemente werden gespeichert, aber nicht übermittelt, und <code>returnValue</code> des Dialogs wird auf <strong>den Wert des ausgelösten Buttons</strong> gesetzt.</p>
+  <p>Die Antwort liest du also im Nachhinein aus:</p>
+  <pre><code>{`dialog.addEventListener("close", () => {
+  if (dialog.returnValue === "delete") {
+    // die Nutzerin oder der Nutzer hat bestätigt
+  }
+});`}</code></pre>
+  <p>Zwei Buttons, ein Attribut, und du weißt, welcher gedrückt wurde. Keine Click-Handler, kein Promise-Wrapper, keine Zustandsvariable.</p>
+
+  <h2>Die Falle mit den Pflichtfeldern</h2>
+  <p>Ein Verhalten überrascht beim ersten Mal und ist es wert, bekannt zu sein, bevor es dich einen Nachmittag kostet.</p>
+  <p>Enthält der Dialog ein Formular mit <strong>required</strong>-Feldern, läuft beim Absenden weiterhin die Validierung. Ein einfacher Button kann den Dialog nicht schließen, solange diese Felder ungültig sind, das heißt, dein Abbrechen-Button funktioniert genau dann nicht mehr, wenn er am dringendsten gebraucht wird. Die dokumentierten Lösungen sind, <code>formnovalidate</code> am schließenden Button zu ergänzen oder <code>dialog.close()</code> aus deinem eigenen Code aufzurufen:</p>
+  <pre><code>{`<button value="cancel" formnovalidate>Abbrechen</button>`}</code></pre>
+
+  <h2>Esc und das Attribut closedby</h2>
+  <p>Das Schließen per Tastatur ist nicht einheitlich, und der Unterschied folgt der Trennung zwischen modal und nicht-modal.</p>
+  <p>Ein mit <code>showModal()</code> geöffneter Dialog lässt sich standardmäßig mit <strong>Esc</strong> schließen. Ein nicht-modaler Dialog schließt sich standardmäßig <strong>nicht</strong> mit Esc.</p>
+  <p>Das Attribut <code>closedby</code> macht das explizit statt implizit:</p>
+  <pre><code>{`<dialog closedby="any">     <!-- Esc, Klick außerhalb oder dein Code -->
+<dialog closedby="closerequest">  <!-- Esc oder dein Code -->
+<dialog closedby="none">    <!-- nur dein Code -->`}</code></pre>
+  <p><code>closedby="any"</code> gibt dir Light-Dismiss, also das Verhalten beim Klick außerhalb, das man sonst von Hand schreibt. <code>closedby="none"</code> ist für den seltenen Dialog gedacht, der nicht versehentlich geschlossen werden darf, und bringt eine Pflicht mit sich: Du musst einen sichtbaren Ausweg anbieten.</p>
+
+  <h2>Barrierefreiheit richtig umsetzen</h2>
+  <p>Das Element nimmt dir das meiste davon ab, aber drei Punkte liegen bei dir.</p>
+  <p><strong>Setze autofocus bewusst ein.</strong> Mit <code>showModal()</code> landet der Fokus auf dem ersten verschachtelten fokussierbaren Element. Das ist oft nicht das gewünschte. Setze <code>autofocus</code> auf das Element, mit dem sofort interagiert werden soll, oder auf den Schließen-Button, wenn nichts anderes dringender ist.</p>
+  <p><strong>Biete immer einen Schließen-Button an.</strong> Der zuverlässigste Weg, damit alle Nutzerinnen und Nutzer den Dialog verlassen können, ist ein expliziter Button, nicht nur Esc oder ein Klick außerhalb.</p>
+  <p><strong>Setze kein tabindex auf den Dialog selbst.</strong> Er ist nicht interaktiv und erhält keinen Fokus. Seine Inhalte dagegen schon.</p>
+
+  <h2>Das Backdrop gestalten</h2>
+  <p>Die abgedunkelte Ebene hinter einem Modal ist ein echtes Pseudo-Element, das du gestalten kannst:</p>
+  <pre><code>{`dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(2px);
+}`}</code></pre>
+  <p>Es existiert nur bei Dialogen, die mit <code>showModal()</code> geöffnet wurden, was eine weitere Möglichkeit ist, auf einen Blick zu prüfen, ob du tatsächlich im modalen Modus bist.</p>
+
+  <h2>dialog oder popover?</h2>
+  <p>Beide rendern im Top-Layer, deshalb kommt die Frage ständig auf. Der Unterschied liegt in der <em>Unterbrechung</em>.</p>
+  <p>Nutze <code>&lt;dialog&gt;</code> mit <code>showModal()</code>, wenn etwas erledigt werden muss, bevor es weitergeht: eine Bestätigung, eine erforderliche Entscheidung, ein Formular, das den Ablauf blockiert. Die Seite zu blockieren ist genau der Sinn der Sache.</p>
+  <p>Nutze die <a href="/de/guides/popover-api">Popover API</a> für flüchtige Overlay-UI, die nicht unterbrechen darf: Menüs, Tooltips, Karten, Benachrichtigungen. Dort soll die Seite bedienbar bleiben.</p>
+  <p>Ein nützlicher Test: Wäre es falsch, das Element zu ignorieren und einfach weiterzumachen, ist es ein Dialog. Ist Ignorieren eine völlig vernünftige Reaktion, ist es ein Popover.</p>
+
+  <h2>Das Fazit</h2>
+  <p>Das Element <code>&lt;dialog&gt;</code> verwandelt ein wirklich schwieriges Stück UI in Markup. Öffne es mit <code>showModal()</code> und du bekommst Top-Layer, Backdrop, inerte Seite und Esc-Handling, ohne etwas davon zu schreiben. Nutze <code>form method="dialog"</code> und <code>returnValue</code> und du bekommst die Antwort ohne einen einzigen Click-Handler. Vermeide das Attribut <code>open</code>, denk an <code>formnovalidate</code> an deinem Abbrechen-Button, und platziere <code>autofocus</code> selbst.</p>
+  <p>Übrig bleibt ein Bestätigungsdialog in etwa fünfzehn Zeilen HTML, der sich für Tastatur- und Screenreader-Nutzende korrekt verhält, was mehr ist als bei den meisten handgebauten Dialogen, die er ersetzt.</p>
+</Article>
