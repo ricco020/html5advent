@@ -1,0 +1,52 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="css-cascade-layers"
+  title="CSS Cascade Layers: how @layer makes specificity negotiable"
+  description="Cascade layers let you decide which rules win by ordering layers instead of escalating selectors. How @layer works, and the two places where the priority order inverts."
+  cat="css"
+  day={19}
+  hero="/img/css-cascade-layers-hero.jpg"
+  heroAlt="A sandstone cliff face showing horizontal layers stacked one above another, pale bands over darker rock"
+  cluster={null}
+>
+  <p>Most CSS specificity problems are not really about specificity. They are about two stylesheets disagreeing, and the only tool available being to make one selector heavier than the other. <strong>Cascade layers</strong> replace that arms race with an explicit order.</p>
+
+  <h2>What a layer actually changes</h2>
+  <p>MDN puts the benefit plainly: rules within a cascade layer cascade together, giving more control over the cascade to web developers. The consequence is the interesting part, because it removes a constraint you have probably worked around for years.</p>
+  <p>You can use simpler selectors, because you no longer have to ensure a selector has high enough specificity to override a competing rule. All you need to ensure is that it appears in a <strong>later layer</strong>.</p>
+  <p>The mechanism is blunt: once the layer order has been established, <strong>specificity and order of appearance are ignored</strong> between layers. A rule in a later layer applies even if it has lower specificity than the rule it overrides. Inside a single layer, normal specificity rules still decide between competing rules, so nothing you know is wasted, it just stops applying across layer boundaries.</p>
+
+  <h2>Declaring the order up front</h2>
+  <p>The order is set by the order of declaration: the first declared layer gets the lowest priority, and the last declared layer gets the highest.</p>
+  <p>That makes the statement form the one worth reaching for, because it fixes the whole order in a single line before any rule exists:</p>
+  <pre><code>{`@layer theme, layout, utilities;`}</code></pre>
+  <p>From then on, anything in <code>utilities</code> beats anything in <code>layout</code>, which beats anything in <code>theme</code>, regardless of how the selectors are written.</p>
+  <p>One detail makes this robust in a real codebase. Having declared the names, you add rules to a layer by re-declaring its name, and the styles are appended to that layer without changing the order. So you can spread a layer across many files, imported in any sequence, and the priority you decided in that first line still holds.</p>
+
+  <figure>
+    <img src="/img/css-cascade-layers-inbody.jpg" alt="Two blocks of blue-green glass stacked one on the other, an iridescent seam running along the join" width="1280" height="853" loading="lazy" />
+    <figcaption>Two blocks of blue-green glass stacked one on the other, an iridescent seam running along the join. Which one sits on top is settled before you look at either of them.</figcaption>
+  </figure>
+
+  <h2>The first inversion: unlayered styles win</h2>
+  <p>Here is where intuition fails most people, and it is worth stating in the strongest terms MDN uses.</p>
+  <p><strong>Styles that are not defined in a layer always override styles declared in named and anonymous layers.</strong></p>
+  <p>Read that against the natural assumption. You would expect layers to be a hierarchy that ordinary CSS joins at the bottom. It is the opposite: unlayered CSS sits <em>above</em> every layer you declared, for normal declarations.</p>
+  <p>This is not an accident, and it is genuinely useful once you see the shape of it. Put a third-party stylesheet or a reset into a layer and your own unlayered rules override it without a single specificity fight. The trap is only for the person who layers everything except one forgotten file, then cannot work out why that file always wins.</p>
+
+  <h2>The second inversion: !important flips the whole thing</h2>
+  <p>The other surprise is that the priority order among important rules is the <strong>inverse</strong> of normal rules.</p>
+  <p>MDN spells out both halves. Within author styles, all important declarations inside CSS layers take precedence over important declarations outside a layer. And all normal declarations inside layers have lower priority than declarations outside a layer.</p>
+  <p>So the same code base has two orders running in opposite directions at once. For normal declarations, the last layer wins and unlayered CSS wins over everything. For <code>!important</code> declarations, the <strong>first</strong> declared layer wins, and layered styles beat unlayered ones.</p>
+  <p>Practically, this means a reset placed in your first layer can make a declaration genuinely unoverridable by marking it important, which is a real capability and a real footgun. It also means that debugging a cascade issue requires knowing whether the declaration involved is important before reasoning about layer order at all.</p>
+
+  <h2>How to use it without surprises</h2>
+  <p>Three habits cover most of it.</p>
+  <p><strong>Declare the full order in one line, early.</strong> A single <code>@layer</code> statement at the top of your entry stylesheet is the whole configuration. Anyone reading it knows what beats what without opening another file.</p>
+  <p><strong>Decide deliberately what stays unlayered.</strong> Since unlayered CSS outranks every layer for normal declarations, leaving styles outside a layer is a choice with consequences, not a neutral default. Either put everything in a layer, or keep the unlayered set small and intentional.</p>
+  <p><strong>Treat important declarations as a separate system.</strong> They do not follow the order you designed, they follow its mirror image. If you find yourself reaching for <code>!important</code> inside a layered architecture, the layer order is usually the thing that needed adjusting.</p>
+  <p>Cascade layers do not make CSS simpler to learn, they add a mechanism with two counterintuitive inversions. What they do is make the outcome of a conflict something you decided in advance rather than something you discovered by counting selectors.</p>
+</Article>

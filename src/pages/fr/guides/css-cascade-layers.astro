@@ -1,0 +1,52 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="css-cascade-layers"
+  title="Couches de cascade CSS : comment @layer rend la spécificité négociable"
+  description="Les couches de cascade permettent de décider quelles règles l'emportent en ordonnant des couches plutôt qu'en surenchérissant sur les sélecteurs. Fonctionnement de @layer et les deux endroits où l'ordre de priorité s'inverse."
+  cat="css"
+  day={19}
+  hero="/img/css-cascade-layers-hero.jpg"
+  heroAlt="Une falaise de grès montrant des couches horizontales empilées les unes sur les autres, des bandes claires sur une roche plus sombre"
+  cluster={null}
+>
+  <p>La plupart des problèmes de spécificité CSS ne relèvent pas vraiment de la spécificité. Ils viennent de deux feuilles de style en désaccord, avec pour seul outil disponible le fait de rendre un sélecteur plus lourd que l'autre. Les <strong>couches de cascade</strong> remplacent cette course à l'armement par un ordre explicite.</p>
+
+  <h2>Ce qu'une couche change réellement</h2>
+  <p>MDN énonce le bénéfice sans détour : les règles d'une même couche de cascade cascadent ensemble, ce qui donne aux développeurs web davantage de contrôle sur la cascade. La conséquence est la partie intéressante, car elle lève une contrainte que vous contournez probablement depuis des années.</p>
+  <p>Vous pouvez utiliser des sélecteurs plus simples, puisque vous n'avez plus à vous assurer qu'un sélecteur a une spécificité suffisante pour l'emporter sur une règle concurrente. Il suffit qu'il apparaisse dans une <strong>couche postérieure</strong>.</p>
+  <p>Le mécanisme est sans nuance : une fois l'ordre des couches établi, <strong>la spécificité et l'ordre d'apparition sont ignorés</strong> entre les couches. Une règle située dans une couche postérieure s'applique même si sa spécificité est inférieure à celle de la règle qu'elle écrase. À l'intérieur d'une même couche, les règles normales de spécificité tranchent toujours entre règles concurrentes : rien de ce que vous savez n'est perdu, cela cesse simplement de s'appliquer d'une couche à l'autre.</p>
+
+  <h2>Déclarer l'ordre d'emblée</h2>
+  <p>L'ordre est fixé par l'ordre de déclaration : la première couche déclarée reçoit la priorité la plus basse, et la dernière déclarée la plus haute.</p>
+  <p>C'est ce qui rend la forme instruction si intéressante : elle fige tout l'ordre en une seule ligne, avant même qu'une règle existe.</p>
+  <pre><code>{`@layer theme, layout, utilities;`}</code></pre>
+  <p>À partir de là, tout ce qui se trouve dans <code>utilities</code> l'emporte sur tout ce qui se trouve dans <code>layout</code>, qui l'emporte sur tout ce qui se trouve dans <code>theme</code>, quelle que soit l'écriture des sélecteurs.</p>
+  <p>Un détail rend l'approche robuste dans une vraie base de code. Une fois les noms déclarés, vous ajoutez des règles à une couche en redéclarant son nom, et les styles sont ajoutés à cette couche sans modifier l'ordre. Vous pouvez donc répartir une couche sur de nombreux fichiers, importés dans n'importe quel ordre : la priorité décidée dans cette première ligne tient toujours.</p>
+
+  <figure>
+    <img src="/img/css-cascade-layers-inbody.jpg" alt="Deux blocs de verre bleu-vert empilés l'un sur l'autre, une jointure irisée courant le long du raccord" width="1280" height="853" loading="lazy" />
+    <figcaption>Deux blocs de verre bleu-vert empilés l'un sur l'autre, une jointure irisée courant le long de la ligne de contact. Lequel est au-dessus se décide avant qu'on les regarde.</figcaption>
+  </figure>
+
+  <h2>Première inversion : les styles hors couche l'emportent</h2>
+  <p>C'est ici que l'intuition trompe la plupart des gens, et cela mérite d'être formulé dans les termes les plus forts employés par MDN.</p>
+  <p><strong>Les styles qui ne sont pas définis dans une couche écrasent toujours les styles déclarés dans des couches nommées ou anonymes.</strong></p>
+  <p>Relisez cela à l'aune de l'hypothèse naturelle. On s'attendrait à ce que les couches forment une hiérarchie que le CSS ordinaire rejoindrait par le bas. C'est l'inverse : le CSS hors couche se situe <em>au-dessus</em> de toutes les couches que vous avez déclarées, pour les déclarations normales.</p>
+  <p>Ce n'est pas un accident, et c'est réellement utile une fois qu'on en saisit la forme. Placez une feuille de style tierce ou un reset dans une couche, et vos propres règles hors couche l'écrasent sans le moindre combat de spécificité. Le piège ne concerne que celui qui met tout en couche sauf un fichier oublié, puis n'arrive pas à comprendre pourquoi ce fichier gagne systématiquement.</p>
+
+  <h2>Deuxième inversion : !important renverse tout</h2>
+  <p>L'autre surprise, c'est que l'ordre de priorité entre les règles importantes est l'<strong>inverse</strong> de celui des règles normales.</p>
+  <p>MDN détaille les deux moitiés. Au sein des styles d'auteur, toutes les déclarations importantes situées dans des couches CSS priment sur les déclarations importantes situées hors couche. Et toutes les déclarations normales situées dans des couches ont une priorité inférieure aux déclarations situées hors couche.</p>
+  <p>La même base de code comporte donc deux ordres qui courent simultanément en sens opposés. Pour les déclarations normales, la dernière couche l'emporte et le CSS hors couche l'emporte sur tout le reste. Pour les déclarations <code>!important</code>, c'est la <strong>première</strong> couche déclarée qui l'emporte, et les styles en couche battent ceux hors couche.</p>
+  <p>Concrètement, cela signifie qu'un reset placé dans votre première couche peut rendre une déclaration véritablement inécrasable en la marquant importante, ce qui est à la fois une vraie capacité et un vrai piège. Cela signifie aussi que déboguer un problème de cascade suppose de savoir si la déclaration concernée est importante, avant même de raisonner sur l'ordre des couches.</p>
+
+  <h2>Comment s'en servir sans mauvaise surprise</h2>
+  <p>Trois habitudes couvrent l'essentiel.</p>
+  <p><strong>Déclarez l'ordre complet en une ligne, tôt.</strong> Une seule instruction <code>@layer</code> en tête de votre feuille de style d'entrée constitue toute la configuration. Quiconque la lit sait ce qui bat quoi sans ouvrir un autre fichier.</p>
+  <p><strong>Décidez délibérément ce qui reste hors couche.</strong> Puisque le CSS hors couche prime sur toutes les couches pour les déclarations normales, laisser des styles en dehors d'une couche est un choix qui a des conséquences, pas un défaut neutre. Soit vous mettez tout dans une couche, soit vous gardez l'ensemble hors couche restreint et intentionnel.</p>
+  <p><strong>Traitez les déclarations importantes comme un système à part.</strong> Elles ne suivent pas l'ordre que vous avez conçu, elles en suivent l'image miroir. Si vous vous surprenez à recourir à <code>!important</code> dans une architecture en couches, c'est en général l'ordre des couches qu'il fallait ajuster.</p>
+  <p>Les couches de cascade ne rendent pas le CSS plus simple à apprendre, elles ajoutent un mécanisme assorti de deux inversions contre-intuitives. Ce qu'elles font, c'est transformer l'issue d'un conflit en quelque chose que vous avez décidé à l'avance plutôt qu'en quelque chose que vous découvrez en comptant des sélecteurs.</p>
+</Article>

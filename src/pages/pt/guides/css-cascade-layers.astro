@@ -1,0 +1,52 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="css-cascade-layers"
+  title="CSS Cascade Layers: como o @layer torna a especificidade negociável"
+  description="As camadas de cascata permitem decidir que regras vencem ordenando camadas em vez de escalar seletores. Como funciona o @layer, e os dois pontos onde a ordem de prioridade se inverte."
+  cat="css"
+  day={19}
+  hero="/img/css-cascade-layers-hero.jpg"
+  heroAlt="A face de uma falésia de arenito mostrando camadas horizontais empilhadas umas sobre as outras, faixas pálidas sobre rocha mais escura"
+  cluster={null}
+>
+  <p>A maioria dos problemas de especificidade em CSS não é realmente sobre especificidade. É sobre duas folhas de estilo em desacordo, sendo a única ferramenta disponível tornar um seletor mais pesado do que o outro. As <strong>camadas de cascata</strong> substituem essa corrida ao armamento por uma ordem explícita.</p>
+
+  <h2>O que uma camada muda na realidade</h2>
+  <p>A MDN expõe o benefício de forma simples: as regras dentro de uma camada de cascata cascateiam em conjunto, dando aos programadores web mais controlo sobre a cascata. A consequência é a parte interessante, porque remove uma restrição que provavelmente contornou durante anos.</p>
+  <p>Pode usar seletores mais simples, porque deixa de ter de garantir que um seletor tem especificidade suficientemente alta para se sobrepor a uma regra concorrente. Tudo o que precisa de garantir é que ele apareça numa <strong>camada posterior</strong>.</p>
+  <p>O mecanismo é direto: uma vez estabelecida a ordem das camadas, <strong>a especificidade e a ordem de aparecimento são ignoradas</strong> entre camadas. Uma regra numa camada posterior aplica-se mesmo que tenha especificidade inferior à da regra que sobrepõe. Dentro de uma mesma camada, as regras normais de especificidade continuam a decidir entre regras concorrentes, portanto nada do que sabe é desperdiçado, apenas deixa de se aplicar através das fronteiras entre camadas.</p>
+
+  <h2>Declarar a ordem à partida</h2>
+  <p>A ordem é definida pela ordem de declaração: a primeira camada declarada recebe a prioridade mais baixa, e a última camada declarada recebe a mais alta.</p>
+  <p>Isso faz da forma de instrução a que vale a pena usar, porque fixa toda a ordem numa única linha antes de existir qualquer regra:</p>
+  <pre><code>{`@layer theme, layout, utilities;`}</code></pre>
+  <p>A partir daí, qualquer coisa em <code>utilities</code> vence qualquer coisa em <code>layout</code>, que vence qualquer coisa em <code>theme</code>, independentemente de como os seletores estão escritos.</p>
+  <p>Um pormenor torna isto robusto numa base de código real. Tendo declarado os nomes, adiciona regras a uma camada voltando a declarar o seu nome, e os estilos são acrescentados a essa camada sem alterar a ordem. Assim, pode espalhar uma camada por muitos ficheiros, importados em qualquer sequência, e a prioridade que decidiu naquela primeira linha mantém-se.</p>
+
+  <figure>
+    <img src="/img/css-cascade-layers-inbody.jpg" alt="Dois blocos de vidro azul-esverdeado empilhados um sobre o outro, com uma junta iridescente a percorrer a união" width="1280" height="853" loading="lazy" />
+    <figcaption>Dois blocos de vidro azul-esverdeado empilhados um sobre o outro, com uma junta iridescente ao longo da linha de contacto. Qual fica por cima é decidido antes de os olharmos.</figcaption>
+  </figure>
+
+  <h2>A primeira inversão: os estilos sem camada vencem</h2>
+  <p>É aqui que a intuição falha à maioria das pessoas, e vale a pena afirmá-lo nos termos mais fortes que a MDN usa.</p>
+  <p><strong>Os estilos que não estão definidos numa camada sobrepõem-se sempre aos estilos declarados em camadas nomeadas e anónimas.</strong></p>
+  <p>Leia isso à luz do pressuposto natural. Esperaria que as camadas fossem uma hierarquia à qual o CSS comum se junta na base. É o contrário: o CSS sem camada situa-se <em>acima</em> de todas as camadas que declarou, no caso das declarações normais.</p>
+  <p>Isto não é um acidente, e é genuinamente útil assim que se percebe a sua forma. Coloque uma folha de estilo de terceiros ou um reset numa camada e as suas próprias regras sem camada sobrepõem-se a ela sem uma única disputa de especificidade. A armadilha é apenas para quem coloca tudo em camadas exceto um ficheiro esquecido, e depois não consegue perceber porque é que esse ficheiro vence sempre.</p>
+
+  <h2>A segunda inversão: o !important vira tudo do avesso</h2>
+  <p>A outra surpresa é que a ordem de prioridade entre regras importantes é a <strong>inversa</strong> das regras normais.</p>
+  <p>A MDN explicita ambas as metades. Dentro dos estilos de autor, todas as declarações importantes dentro de camadas CSS têm precedência sobre as declarações importantes fora de uma camada. E todas as declarações normais dentro de camadas têm prioridade inferior às declarações fora de uma camada.</p>
+  <p>Assim, a mesma base de código tem duas ordens a correr em direções opostas ao mesmo tempo. Para as declarações normais, vence a última camada e o CSS sem camada vence tudo. Para as declarações <code>!important</code>, vence a <strong>primeira</strong> camada declarada, e os estilos em camadas vencem os que não têm camada.</p>
+  <p>Na prática, isto significa que um reset colocado na sua primeira camada pode tornar uma declaração genuinamente insubstituível ao marcá-la como importante, o que é uma capacidade real e uma armadilha real. Significa também que depurar um problema de cascata exige saber se a declaração envolvida é importante antes sequer de raciocinar sobre a ordem das camadas.</p>
+
+  <h2>Como usá-las sem surpresas</h2>
+  <p>Três hábitos cobrem a maior parte.</p>
+  <p><strong>Declare a ordem completa numa linha, cedo.</strong> Uma única instrução <code>@layer</code> no topo da sua folha de estilo de entrada é toda a configuração. Quem a ler sabe o que vence o quê sem abrir outro ficheiro.</p>
+  <p><strong>Decida deliberadamente o que fica sem camada.</strong> Uma vez que o CSS sem camada supera todas as camadas no caso das declarações normais, deixar estilos fora de uma camada é uma escolha com consequências, não um valor por omissão neutro. Ou coloca tudo numa camada, ou mantém o conjunto sem camada pequeno e intencional.</p>
+  <p><strong>Trate as declarações importantes como um sistema à parte.</strong> Não seguem a ordem que desenhou, seguem a sua imagem ao espelho. Se der por si a recorrer a <code>!important</code> dentro de uma arquitetura em camadas, o que normalmente precisava de ajuste era a ordem das camadas.</p>
+  <p>As camadas de cascata não tornam o CSS mais simples de aprender, acrescentam um mecanismo com duas inversões contraintuitivas. O que fazem é tornar o resultado de um conflito algo que decidiu antecipadamente em vez de algo que descobriu a contar seletores.</p>
+</Article>

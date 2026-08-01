@@ -1,0 +1,52 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="css-cascade-layers"
+  title="Capas de cascada CSS: cómo @layer hace negociable la especificidad"
+  description="Las capas de cascada permiten decidir qué reglas ganan ordenando capas en lugar de escalar selectores. Cómo funciona @layer y los dos puntos donde el orden de prioridad se invierte."
+  cat="css"
+  day={19}
+  hero="/img/css-cascade-layers-hero.jpg"
+  heroAlt="Un acantilado de arenisca con capas horizontales apiladas una sobre otra, franjas pálidas sobre roca más oscura"
+  cluster={null}
+>
+  <p>La mayoría de los problemas de especificidad en CSS no son realmente problemas de especificidad. Son dos hojas de estilo en desacuerdo, y la única herramienta disponible es hacer un selector más pesado que el otro. Las <strong>capas de cascada</strong> sustituyen esa carrera armamentística por un orden explícito.</p>
+
+  <h2>Qué cambia realmente una capa</h2>
+  <p>MDN expone el beneficio sin rodeos: las reglas dentro de una capa de cascada se aplican en cascada juntas, lo que da a quienes desarrollan para la web más control sobre la cascada. La consecuencia es la parte interesante, porque elimina una restricción que probablemente llevas años sorteando.</p>
+  <p>Puedes usar selectores más simples, porque ya no tienes que asegurarte de que un selector tenga la especificidad suficiente para anular a una regla competidora. Basta con asegurarte de que aparezca en una <strong>capa posterior</strong>.</p>
+  <p>El mecanismo es contundente: una vez establecido el orden de las capas, <strong>la especificidad y el orden de aparición se ignoran</strong> entre capas. Una regla de una capa posterior se aplica aunque tenga menos especificidad que la regla a la que anula. Dentro de una misma capa, las reglas normales de especificidad siguen decidiendo entre reglas competidoras, así que nada de lo que sabes se pierde: simplemente deja de aplicarse a través de las fronteras entre capas.</p>
+
+  <h2>Declarar el orden por adelantado</h2>
+  <p>El orden lo fija el orden de declaración: la primera capa declarada recibe la prioridad más baja, y la última capa declarada la más alta.</p>
+  <p>Eso convierte la forma de sentencia en la más útil a la que recurrir, porque fija todo el orden en una sola línea antes de que exista ninguna regla:</p>
+  <pre><code>{`@layer theme, layout, utilities;`}</code></pre>
+  <p>A partir de ahí, cualquier cosa en <code>utilities</code> gana a cualquier cosa en <code>layout</code>, que gana a cualquier cosa en <code>theme</code>, sin importar cómo estén escritos los selectores.</p>
+  <p>Un detalle hace que esto sea robusto en una base de código real. Una vez declarados los nombres, se añaden reglas a una capa volviendo a declarar su nombre, y los estilos se anexan a esa capa sin alterar el orden. Así puedes repartir una capa entre muchos archivos, importados en cualquier secuencia, y la prioridad que decidiste en esa primera línea sigue vigente.</p>
+
+  <figure>
+    <img src="/img/css-cascade-layers-inbody.jpg" alt="Dos bloques de vidrio azul verdoso apilados uno sobre otro, con una junta iridiscente recorriendo la unión" width="1280" height="853" loading="lazy" />
+    <figcaption>Dos bloques de vidrio azul verdoso apilados uno sobre otro, con una junta iridiscente a lo largo de la unión. Cuál queda encima se decide antes de mirarlos.</figcaption>
+  </figure>
+
+  <h2>La primera inversión: los estilos sin capa ganan</h2>
+  <p>Aquí es donde la intuición falla a casi todo el mundo, y merece la pena enunciarlo en los términos más rotundos que usa MDN.</p>
+  <p><strong>Los estilos que no están definidos en una capa siempre anulan a los estilos declarados en capas con nombre y anónimas.</strong></p>
+  <p>Léelo frente a la suposición natural. Esperarías que las capas fueran una jerarquía a la que el CSS corriente se incorpora por abajo. Es justo lo contrario: el CSS sin capa se sitúa <em>por encima</em> de todas las capas que declaraste, en el caso de las declaraciones normales.</p>
+  <p>Esto no es un accidente, y resulta genuinamente útil en cuanto le ves la forma. Mete una hoja de estilo de terceros o un reset en una capa y tus propias reglas sin capa la anulan sin una sola pelea de especificidad. La trampa solo existe para quien pone todo en capas salvo un archivo olvidado, y luego no consigue entender por qué ese archivo siempre gana.</p>
+
+  <h2>La segunda inversión: !important le da la vuelta a todo</h2>
+  <p>La otra sorpresa es que el orden de prioridad entre reglas importantes es el <strong>inverso</strong> del de las reglas normales.</p>
+  <p>MDN detalla ambas mitades. Dentro de los estilos de autor, todas las declaraciones importantes situadas dentro de capas CSS tienen precedencia sobre las declaraciones importantes situadas fuera de una capa. Y todas las declaraciones normales dentro de capas tienen menos prioridad que las declaraciones fuera de una capa.</p>
+  <p>Así que una misma base de código tiene dos órdenes corriendo en direcciones opuestas a la vez. Para las declaraciones normales, gana la última capa y el CSS sin capa gana a todo. Para las declaraciones <code>!important</code>, gana la <strong>primera</strong> capa declarada, y los estilos en capas ganan a los que no están en ninguna.</p>
+  <p>En la práctica, esto significa que un reset colocado en tu primera capa puede hacer que una declaración sea realmente inanulable marcándola como importante, lo cual es una capacidad real y también un arma de doble filo real. También significa que depurar un problema de cascada exige saber si la declaración implicada es importante antes siquiera de razonar sobre el orden de las capas.</p>
+
+  <h2>Cómo usarlo sin sorpresas</h2>
+  <p>Tres hábitos cubren casi todo.</p>
+  <p><strong>Declara el orden completo en una línea, pronto.</strong> Una sola sentencia <code>@layer</code> al principio de tu hoja de estilo de entrada es toda la configuración. Quien la lea sabe qué gana a qué sin abrir otro archivo.</p>
+  <p><strong>Decide deliberadamente qué se queda fuera de las capas.</strong> Dado que el CSS sin capa está por encima de todas las capas en las declaraciones normales, dejar estilos fuera de una capa es una decisión con consecuencias, no un valor por defecto neutro. O metes todo en una capa, o mantienes el conjunto sin capa pequeño e intencionado.</p>
+  <p><strong>Trata las declaraciones importantes como un sistema aparte.</strong> No siguen el orden que diseñaste, siguen su imagen especular. Si te descubres recurriendo a <code>!important</code> dentro de una arquitectura en capas, lo que normalmente había que ajustar era el orden de las capas.</p>
+  <p>Las capas de cascada no hacen que CSS sea más fácil de aprender, añaden un mecanismo con dos inversiones contraintuitivas. Lo que sí hacen es convertir el desenlace de un conflicto en algo que decidiste de antemano en lugar de algo que descubriste contando selectores.</p>
+</Article>

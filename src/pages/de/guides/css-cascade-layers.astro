@@ -1,0 +1,52 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="css-cascade-layers"
+  title="CSS Cascade Layers: wie @layer die Spezifität verhandelbar macht"
+  description="Mit Cascade Layers entscheidest du über die Reihenfolge der Layer, welche Regeln gewinnen, statt Selektoren immer weiter aufzurüsten. Wie @layer funktioniert und die zwei Stellen, an denen sich die Prioritätsreihenfolge umkehrt."
+  cat="css"
+  day={19}
+  hero="/img/css-cascade-layers-hero.jpg"
+  heroAlt="Eine Sandsteinwand mit waagerechten Schichten übereinander, helle Bänder über dunklerem Gestein"
+  cluster={null}
+>
+  <p>Die meisten Spezifitätsprobleme in CSS drehen sich in Wirklichkeit gar nicht um Spezifität. Sie entstehen, weil zwei Stylesheets uneins sind und das einzige verfügbare Werkzeug darin besteht, einen Selektor schwerer zu machen als den anderen. <strong>Cascade Layers</strong> ersetzen dieses Wettrüsten durch eine ausdrückliche Reihenfolge.</p>
+
+  <h2>Was ein Layer tatsächlich verändert</h2>
+  <p>MDN benennt den Vorteil klar: Regeln innerhalb eines Cascade Layers kaskadieren gemeinsam und geben Webentwicklern damit mehr Kontrolle über die Kaskade. Die Konsequenz ist der spannende Teil, denn sie beseitigt eine Einschränkung, um die du wahrscheinlich seit Jahren herumarbeitest.</p>
+  <p>Du kannst einfachere Selektoren verwenden, weil du nicht mehr dafür sorgen musst, dass ein Selektor eine ausreichend hohe Spezifität besitzt, um eine konkurrierende Regel zu überschreiben. Du musst nur noch dafür sorgen, dass er in einem <strong>späteren Layer</strong> auftaucht.</p>
+  <p>Der Mechanismus ist unmissverständlich: sobald die Layer-Reihenfolge festgelegt ist, werden <strong>Spezifität und Reihenfolge des Auftretens ignoriert</strong>, wenn es zwischen Layern geht. Eine Regel in einem späteren Layer greift selbst dann, wenn sie eine geringere Spezifität hat als die Regel, die sie überschreibt. Innerhalb eines einzelnen Layers entscheiden weiterhin die normalen Spezifitätsregeln zwischen konkurrierenden Regeln, dein Wissen ist also nicht verschwendet, es gilt nur nicht mehr über Layer-Grenzen hinweg.</p>
+
+  <h2>Die Reihenfolge vorab festlegen</h2>
+  <p>Die Reihenfolge ergibt sich aus der Reihenfolge der Deklaration: der zuerst deklarierte Layer bekommt die niedrigste Priorität, der zuletzt deklarierte die höchste.</p>
+  <p>Damit ist die Statement-Form diejenige, zu der es sich zu greifen lohnt, denn sie legt die gesamte Reihenfolge in einer einzigen Zeile fest, bevor überhaupt eine Regel existiert:</p>
+  <pre><code>{`@layer theme, layout, utilities;`}</code></pre>
+  <p>Von da an schlägt alles in <code>utilities</code> alles in <code>layout</code>, was wiederum alles in <code>theme</code> schlägt, ganz gleich, wie die Selektoren geschrieben sind.</p>
+  <p>Ein Detail macht das in einer echten Codebasis robust. Sind die Namen einmal deklariert, fügst du einem Layer Regeln hinzu, indem du seinen Namen erneut deklarierst, und die Stile werden diesem Layer angehängt, ohne die Reihenfolge zu verändern. Du kannst einen Layer also über viele Dateien verteilen, in beliebiger Reihenfolge importiert, und die Priorität, die du in jener ersten Zeile bestimmt hast, gilt weiterhin.</p>
+
+  <figure>
+    <img src="/img/css-cascade-layers-inbody.jpg" alt="Zwei Blöcke aus blaugrünem Glas übereinandergestapelt, mit einer schillernden Naht entlang der Fuge" width="1280" height="853" loading="lazy" />
+    <figcaption>Zwei Blöcke aus blaugrünem Glas übereinander gestapelt, entlang der Fuge schimmert eine irisierende Naht. Welcher oben liegt, ist entschieden, bevor man hinsieht.</figcaption>
+  </figure>
+
+  <h2>Die erste Umkehrung: Stile ohne Layer gewinnen</h2>
+  <p>Hier versagt bei den meisten Menschen die Intuition, und es lohnt sich, das in den stärksten Worten zu sagen, die MDN verwendet.</p>
+  <p><strong>Stile, die nicht in einem Layer definiert sind, überschreiben immer Stile, die in benannten und anonymen Layern deklariert wurden.</strong></p>
+  <p>Halte das gegen die naheliegende Annahme. Du würdest erwarten, dass Layer eine Hierarchie bilden, zu der gewöhnliches CSS ganz unten dazustößt. Es ist genau umgekehrt: CSS ohne Layer sitzt <em>über</em> jedem Layer, den du deklariert hast, und zwar für normale Deklarationen.</p>
+  <p>Das ist kein Versehen, und es ist wirklich nützlich, sobald man die Form dahinter erkennt. Packe ein fremdes Stylesheet oder ein Reset in einen Layer, und deine eigenen Regeln ohne Layer überschreiben es ohne einen einzigen Spezifitätskampf. Zur Falle wird es nur für denjenigen, der alles in Layer legt bis auf eine vergessene Datei, und dann nicht herausfindet, warum ausgerechnet diese Datei immer gewinnt.</p>
+
+  <h2>Die zweite Umkehrung: !important dreht das Ganze um</h2>
+  <p>Die andere Überraschung ist, dass die Prioritätsreihenfolge unter wichtigen Regeln die <strong>Umkehrung</strong> der Reihenfolge normaler Regeln ist.</p>
+  <p>MDN führt beide Hälften aus. Innerhalb der Autorenstile haben alle wichtigen Deklarationen innerhalb von CSS-Layern Vorrang vor wichtigen Deklarationen außerhalb eines Layers. Und alle normalen Deklarationen innerhalb von Layern haben eine niedrigere Priorität als Deklarationen außerhalb eines Layers.</p>
+  <p>Dieselbe Codebasis hat also zwei Reihenfolgen, die gleichzeitig in entgegengesetzte Richtungen laufen. Bei normalen Deklarationen gewinnt der letzte Layer, und CSS ohne Layer gewinnt über alles. Bei <code>!important</code>-Deklarationen gewinnt der <strong>zuerst</strong> deklarierte Layer, und Stile in Layern schlagen die ohne Layer.</p>
+  <p>Praktisch heißt das: ein Reset in deinem ersten Layer kann eine Deklaration tatsächlich unüberschreibbar machen, indem er sie als wichtig markiert, was eine echte Fähigkeit und zugleich eine echte Fußangel ist. Es heißt auch, dass man beim Debuggen eines Kaskadenproblems wissen muss, ob die beteiligte Deklaration wichtig ist, bevor man überhaupt über die Layer-Reihenfolge nachdenkt.</p>
+
+  <h2>Wie du es ohne Überraschungen einsetzt</h2>
+  <p>Drei Gewohnheiten decken das meiste ab.</p>
+  <p><strong>Deklariere die vollständige Reihenfolge in einer Zeile, und zwar früh.</strong> Ein einzelnes <code>@layer</code>-Statement am Anfang deines Einstiegs-Stylesheets ist die gesamte Konfiguration. Wer es liest, weiß, was was schlägt, ohne eine weitere Datei zu öffnen.</p>
+  <p><strong>Entscheide bewusst, was ohne Layer bleibt.</strong> Da CSS ohne Layer bei normalen Deklarationen über jedem Layer rangiert, ist es eine Entscheidung mit Folgen und keine neutrale Voreinstellung, Stile außerhalb eines Layers zu lassen. Entweder du packst alles in einen Layer, oder du hältst die Menge ohne Layer klein und absichtsvoll.</p>
+  <p><strong>Behandle wichtige Deklarationen als eigenes System.</strong> Sie folgen nicht der Reihenfolge, die du entworfen hast, sondern ihrem Spiegelbild. Wenn du in einer geschichteten Architektur zu <code>!important</code> greifst, ist meist die Layer-Reihenfolge das, was angepasst werden musste.</p>
+  <p>Cascade Layers machen CSS nicht einfacher zu lernen, sie fügen einen Mechanismus mit zwei kontraintuitiven Umkehrungen hinzu. Was sie leisten: der Ausgang eines Konflikts wird zu etwas, das du im Voraus entschieden hast, statt zu etwas, das du durch Zählen von Selektoren herausgefunden hast.</p>
+</Article>

@@ -1,0 +1,52 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="css-cascade-layers"
+  title="CSS Cascade Layers: come @layer rende negoziabile la specificità"
+  description="I cascade layer ti permettono di decidere quali regole vincono ordinando i layer invece di far scalare i selettori. Come funziona @layer e i due punti in cui l'ordine di priorità si inverte."
+  cat="css"
+  day={19}
+  hero="/img/css-cascade-layers-hero.jpg"
+  heroAlt="La parete di una scogliera di arenaria con strati orizzontali sovrapposti uno sull'altro, bande chiare su roccia più scura"
+  cluster={null}
+>
+  <p>La maggior parte dei problemi di specificità in CSS non riguarda davvero la specificità. Riguarda due fogli di stile in disaccordo, con l'unico strumento disponibile che consiste nel rendere un selettore più pesante dell'altro. I <strong>cascade layer</strong> sostituiscono quella corsa agli armamenti con un ordine esplicito.</p>
+
+  <h2>Cosa cambia davvero un layer</h2>
+  <p>MDN espone il beneficio in modo diretto: le regole all'interno di un cascade layer entrano in cascata insieme, dando agli sviluppatori web più controllo sulla cascata. La conseguenza è la parte interessante, perché rimuove un vincolo che probabilmente hai aggirato per anni.</p>
+  <p>Puoi usare selettori più semplici, perché non devi più assicurarti che un selettore abbia una specificità sufficientemente alta da sovrascrivere una regola concorrente. Tutto ciò che devi garantire è che compaia in un <strong>layer successivo</strong>.</p>
+  <p>Il meccanismo è netto: una volta stabilito l'ordine dei layer, tra i layer <strong>la specificità e l'ordine di apparizione vengono ignorati</strong>. Una regola in un layer successivo si applica anche se ha una specificità inferiore rispetto alla regola che sovrascrive. All'interno di un singolo layer, le normali regole di specificità decidono ancora tra le regole concorrenti, quindi nulla di ciò che sai va sprecato: semplicemente smette di applicarsi oltre i confini dei layer.</p>
+
+  <h2>Dichiarare l'ordine in anticipo</h2>
+  <p>L'ordine è stabilito dall'ordine di dichiarazione: il primo layer dichiarato ottiene la priorità più bassa e l'ultimo layer dichiarato ottiene la più alta.</p>
+  <p>Questo rende la forma a istruzione quella su cui vale la pena puntare, perché fissa l'intero ordine in una sola riga prima che esista qualsiasi regola:</p>
+  <pre><code>{`@layer theme, layout, utilities;`}</code></pre>
+  <p>Da quel momento in poi, qualsiasi cosa in <code>utilities</code> batte qualsiasi cosa in <code>layout</code>, che batte qualsiasi cosa in <code>theme</code>, indipendentemente da come sono scritti i selettori.</p>
+  <p>Un dettaglio rende tutto questo robusto in una codebase reale. Una volta dichiarati i nomi, aggiungi regole a un layer ri-dichiarandone il nome, e gli stili vengono accodati a quel layer senza modificare l'ordine. Puoi quindi distribuire un layer su molti file, importati in qualsiasi sequenza, e la priorità che hai deciso in quella prima riga continua a valere.</p>
+
+  <figure>
+    <img src="/img/css-cascade-layers-inbody.jpg" alt="Due blocchi di vetro blu-verde sovrapposti uno sull'altro, con una giuntura iridescente che corre lungo l'unione" width="1280" height="853" loading="lazy" />
+    <figcaption>Due blocchi di vetro blu-verde impilati uno sull'altro, con una giuntura iridescente lungo la linea di contatto. Quale stia sopra è deciso prima di guardarli.</figcaption>
+  </figure>
+
+  <h2>La prima inversione: gli stili senza layer vincono</h2>
+  <p>È qui che l'intuizione tradisce la maggior parte delle persone, e vale la pena dirlo nei termini più forti usati da MDN.</p>
+  <p><strong>Gli stili che non sono definiti in un layer sovrascrivono sempre gli stili dichiarati nei layer con nome e nei layer anonimi.</strong></p>
+  <p>Leggilo alla luce dell'ipotesi naturale. Ti aspetteresti che i layer siano una gerarchia a cui il CSS ordinario si unisce dal basso. È l'opposto: il CSS senza layer sta <em>sopra</em> ogni layer che hai dichiarato, per le dichiarazioni normali.</p>
+  <p>Non è un incidente, ed è genuinamente utile una volta che ne cogli la forma. Metti un foglio di stile di terze parti o un reset dentro un layer e le tue regole senza layer lo sovrascrivono senza una singola battaglia di specificità. La trappola scatta solo per chi mette in layer tutto tranne un file dimenticato, e poi non riesce a capire perché quel file vinca sempre.</p>
+
+  <h2>La seconda inversione: !important ribalta tutto</h2>
+  <p>L'altra sorpresa è che l'ordine di priorità tra le regole important è l'<strong>inverso</strong> di quello delle regole normali.</p>
+  <p>MDN esplicita entrambe le metà. All'interno degli stili d'autore, tutte le dichiarazioni important dentro i layer CSS hanno la precedenza sulle dichiarazioni important fuori da un layer. E tutte le dichiarazioni normali dentro i layer hanno priorità inferiore rispetto alle dichiarazioni fuori da un layer.</p>
+  <p>Quindi la stessa codebase ha due ordini che corrono in direzioni opposte allo stesso tempo. Per le dichiarazioni normali, vince l'ultimo layer e il CSS senza layer vince su tutto. Per le dichiarazioni <code>!important</code>, vince il <strong>primo</strong> layer dichiarato, e gli stili nei layer battono quelli senza layer.</p>
+  <p>In pratica, questo significa che un reset collocato nel tuo primo layer può rendere una dichiarazione davvero non sovrascrivibile marcandola important, il che è al tempo stesso una capacità reale e un vero autogol. Significa anche che fare il debug di un problema di cascata richiede di sapere se la dichiarazione coinvolta è important prima ancora di ragionare sull'ordine dei layer.</p>
+
+  <h2>Come usarli senza sorprese</h2>
+  <p>Tre abitudini coprono quasi tutto.</p>
+  <p><strong>Dichiara l'ordine completo in una riga, presto.</strong> Una singola istruzione <code>@layer</code> in cima al tuo foglio di stile di ingresso è l'intera configurazione. Chiunque la legga sa cosa batte cosa senza aprire un altro file.</p>
+  <p><strong>Decidi deliberatamente cosa resta fuori dai layer.</strong> Dato che il CSS senza layer sopravanza ogni layer per le dichiarazioni normali, lasciare degli stili fuori da un layer è una scelta con conseguenze, non un default neutro. O metti tutto in un layer, oppure mantieni l'insieme senza layer piccolo e intenzionale.</p>
+  <p><strong>Tratta le dichiarazioni important come un sistema separato.</strong> Non seguono l'ordine che hai progettato, seguono la sua immagine speculare. Se ti ritrovi a ricorrere a <code>!important</code> dentro un'architettura a layer, di solito è l'ordine dei layer la cosa che andava sistemata.</p>
+  <p>I cascade layer non rendono il CSS più semplice da imparare, aggiungono un meccanismo con due inversioni controintuitive. Quello che fanno è rendere l'esito di un conflitto qualcosa che hai deciso in anticipo, invece di qualcosa che hai scoperto contando i selettori.</p>
+</Article>
