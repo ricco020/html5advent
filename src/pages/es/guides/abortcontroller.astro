@@ -1,0 +1,146 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="abortcontroller"
+  title="AbortController: cancelar fetch, tiempos de espera y escuchadores de eventos"
+  description="Un solo controlador cancela un fetch, un tiempo de espera y un montón de escuchadores de eventos. Cómo funcionan AbortController y AbortSignal, por qué una cancelación manual y un timeout lanzan errores distintos, y el truco de limpieza que casi todo el mundo pasa por alto."
+  cat="apis"
+  day={20}
+  hero="/img/abortcontroller-hero.jpg"
+  heroAlt="Una palanca roja de freno de emergencia montada en la pared interior de un vagón de tren, con la indicación Notbremse"
+  cluster={null}
+  faq={[
+    { q: `¿Para qué sirve AbortController?`, a: `MDN lo describe como un objeto controlador que te permite abortar una o varias peticiones Web cuando lo desees. Creas un controlador, entregas su signal a lo que hayas iniciado y llamas a abort() cuando quieres detenerlo. No se limita a fetch: cualquier cosa que acepte un AbortSignal puede cancelarse de la misma manera.` },
+    { q: `¿Qué error lanza un fetch abortado?`, a: `Depende de cómo se haya abortado, y ahí es donde mucha gente tropieza. Cuando llamas tú mismo a AbortController.abort(), la promesa del fetch se rechaza con una DOMException llamada AbortError. Cuando el signal venía de AbortSignal.timeout(), la promesa se rechaza en su lugar con una DOMException TimeoutError. El código que solo comprueba AbortError se saltará en silencio el caso del tiempo de espera.` },
+    { q: `¿Cómo añado un tiempo de espera a un fetch?`, a: `AbortSignal.timeout() devuelve una instancia de AbortSignal que abortará automáticamente después de un tiempo determinado, así que pasas AbortSignal.timeout(5000) como signal y no necesitas ni controlador, ni setTimeout, ni clearTimeout. Recuerda que rechaza con TimeoutError, no con AbortError.` },
+    { q: `¿Puede un solo controlador cancelar varias cosas a la vez?`, a: `Sí, y ese es el sentido del nombre. Un signal puede entregarse a cualquier número de operaciones, de modo que una única llamada a abort() detiene todos los fetch y elimina todos los escuchadores de eventos que lo recibieron. Es la limpieza más ordenada disponible cuando se desmonta una vista.` },
+    { q: `¿Puedo combinar un tiempo de espera con una cancelación manual?`, a: `AbortSignal.any() devuelve un AbortSignal que aborta cuando aborta cualquiera de las señales de aborto indicadas. Pásale el signal de tu controlador y un signal de timeout, y la operación se detendrá con lo que ocurra primero.` },
+  ]}
+>
+  <p>Iniciar una operación asíncrona es fácil. Detener una que ya no te importa es la parte que la mayoría del código se salta, y de ahí vienen las fugas de memoria, las condiciones de carrera y los resultados obsoletos. <strong>AbortController</strong> es la respuesta única del navegador a todo ello.</p>
+
+  <h2>Un controlador, un signal</h2>
+  <p>MDN lo define con claridad: la interfaz <code>AbortController</code> <strong>representa un objeto controlador que te permite abortar una o varias peticiones Web cuando lo desees</strong>. La forma es siempre la misma. Creas un controlador, lees su <code>signal</code> y entregas ese signal a lo que estés iniciando.</p>
+  <p>La propiedad <code>signal</code> <strong>devuelve una instancia de objeto <code>AbortSignal</code>, que puede usarse para comunicarse con una operación asíncrona, o para abortarla</strong>. El controlador es lo que te quedas; el signal es lo que entregas.</p>
+  <pre><code>{`const controller = new AbortController();
+
+const res = await fetch('/api/articles', { signal: controller.signal });
+
+// en otro sitio, más tarde:
+controller.abort();`}</code></pre>
+  <p>Fíjate en la dirección. El código que hace el trabajo nunca decide detenerse; solo accede a escuchar. Esa separación es lo que permite que un único llamante cancele muchas operaciones a la vez.</p>
+
+  <h2>Los dos errores, y por qué importa</h2>
+  <p>Esta es la parte que merece leerse con atención, porque la misma cancelación puede lanzar dos cosas distintas.</p>
+  <p>Cuando llamas tú mismo a <code>abort()</code>, la promesa de <code>fetch()</code> <strong>se rechaza con una <code>DOMException</code> llamada <code>AbortError</code></strong>. Cuando el signal venía de <code>AbortSignal.timeout()</code>, la promesa de <code>fetch()</code> <strong>se rechaza en su lugar con una <code>DOMException</code> <code>TimeoutError</code></strong>.</p>
+  <p>Así que la comprobación habitual está incompleta:</p>
+  <pre><code>{`try {
+  const res = await fetch(url, { signal });
+} catch (err) {
+  if (err.name === 'AbortError') {
+    // el usuario o nuestro propio código lo canceló
+  } else if (err.name === 'TimeoutError') {
+    // se agotó el plazo - una situación completamente distinta
+  } else {
+    throw err; // un fallo real de red o de análisis
+  }
+}`}</code></pre>
+  <p>Fundir ambos casos hace perder información real. Que un usuario abandone la página no es un problema; que una petición se quede sin tiempo probablemente sí lo sea, y merece registrarse o reintentarse. El código que solo busca <code>AbortError</code> trata cada tiempo de espera agotado como un no-evento silencioso.</p>
+
+  <h2>Tiempos de espera sin fontanería</h2>
+  <p>El patrón que la mayoría sigue escribiendo combina un controlador con un <code>setTimeout</code> y un <code>clearTimeout</code> en un bloque <code>finally</code>. Funciona, y ya no es necesario.</p>
+  <p><code>AbortSignal.timeout()</code> <strong>devuelve una instancia de <code>AbortSignal</code> que abortará automáticamente después de un tiempo determinado</strong>. Sin controlador, sin temporizador que limpiar, sin nada que pueda quedar colgando:</p>
+  <pre><code>{`// Antes: tres piezas móviles
+const controller = new AbortController();
+const timer = setTimeout(() => controller.abort(), 5000);
+try {
+  const res = await fetch(url, { signal: controller.signal });
+} finally {
+  clearTimeout(timer);
+}
+
+// Ahora: una
+const res = await fetch(url, { signal: AbortSignal.timeout(5000) });`}</code></pre>
+  <p>Vigila el nombre del error cuando hagas este cambio. La versión antigua lanzaba <code>AbortError</code>; la nueva lanza <code>TimeoutError</code>, así que cualquier bloque <code>catch</code> que ya tuvieras habrá que actualizarlo.</p>
+
+  <figure>
+    <img src="/img/abortcontroller-inbody.jpg" alt="Un botón de parada de emergencia rojo con cabeza de seta, desgastado, sobre una caja amarilla, junto a un interruptor basculante negro, montado en una máquina" width="1280" height="853" loading="lazy" />
+    <figcaption>Un botón de parada de emergencia desgastado en una máquina, junto a su interruptor corriente. Un mando arranca las cosas de una en una; el otro lo detiene todo a la vez, que es exactamente el reparto de tareas entre un signal y un controlador.</figcaption>
+  </figure>
+
+  <h2>El truco que casi todo el mundo pasa por alto: los escuchadores de eventos</h2>
+  <p>AbortSignal no es una función de fetch. <code>addEventListener</code> acepta un <code>signal</code> entre sus opciones y, cuando ese signal aborta, el escuchador se elimina por ti. Esto sustituye discretamente el código de limpieza más tedioso del trabajo front-end.</p>
+  <p>Compáralo con eliminar escuchadores a mano, lo que obliga a conservar una referencia a cada función que has pasado:</p>
+  <pre><code>{`// Antes: debes guardar cada manejador para poder eliminarlo
+function onScroll() { /* ... */ }
+function onResize() { /* ... */ }
+window.addEventListener('scroll', onScroll);
+window.addEventListener('resize', onResize);
+
+function teardown() {
+  window.removeEventListener('scroll', onScroll);
+  window.removeEventListener('resize', onResize);
+}`}</code></pre>
+  <p>Con un signal, los manejadores pueden volver a ser funciones en línea, y una sola llamada los elimina todos:</p>
+  <pre><code>{`const controller = new AbortController();
+const { signal } = controller;
+
+window.addEventListener('scroll', () => { /* ... */ }, { signal });
+window.addEventListener('resize', () => { /* ... */ }, { signal });
+document.addEventListener('keydown', () => { /* ... */ }, { signal });
+
+// una sola llamada elimina los tres
+controller.abort();`}</code></pre>
+  <p>El mismo controlador puede además estar sosteniendo el signal de un <code>fetch</code> en curso. Desmontar una vista se convierte entonces en un único <code>abort()</code> que cancela la petición y desvincula todos los escuchadores a la vez.</p>
+
+  <h2>Combinar señales y leer su estado</h2>
+  <p><code>AbortSignal.any()</code> <strong>devuelve un <code>AbortSignal</code> que aborta cuando aborta cualquiera de las señales de aborto indicadas</strong>. Así es como consigues un plazo límite y una cancelación manual sobre la misma operación:</p>
+  <pre><code>{`const controller = new AbortController();
+
+const signal = AbortSignal.any([
+  controller.signal,          // el usuario pulsó Cancelar
+  AbortSignal.timeout(10000), // o pasaron diez segundos
+]);
+
+const res = await fetch(url, { signal });`}</code></pre>
+  <p>Un signal también te dice en qué punto está. <code>aborted</code> es <strong>un booleano que indica si la petición o peticiones con las que el signal se comunica están abortadas</strong>, y <code>reason</code> es <strong>un valor JavaScript que proporciona el motivo del aborto, una vez que el signal ha abortado</strong>. Pasar tu propio motivo a <code>abort()</code> es la manera de distinguir causas más adelante:</p>
+  <pre><code>{`controller.abort(new Error('User navigated away'));
+
+// más tarde
+if (signal.aborted) console.log(signal.reason.message);`}</code></pre>
+  <p>También existe un evento <code>abort</code>, <strong>que se invoca cuando las operaciones asíncronas con las que el signal se comunica son abortadas</strong>, lo que permite que coopere tu propio código de larga duración, y no solo las API integradas.</p>
+
+  <h2>Hacer que tu propia función sea abortable</h2>
+  <p>Todo lo que acepta un signal entra en el mismo sistema. El patrón consiste en comprobar <code>aborted</code> antes de empezar y escuchar el evento <code>abort</code> mientras se ejecuta:</p>
+  <pre><code>{`function wait(ms, { signal } = {}) {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) return reject(signal.reason);
+    const id = setTimeout(resolve, ms);
+    signal?.addEventListener('abort', () => {
+      clearTimeout(id);
+      reject(signal.reason);
+    }, { once: true });
+  });
+}`}</code></pre>
+  <p>Ahora tu propia función auxiliar puede cancelarse con el mismo controlador que cancela tus fetch, que es justamente el sentido de que haya un mecanismo y no varios.</p>
+
+  <h2>Referencia rápida</h2>
+  <table>
+    <thead><tr><th>Objetivo</th><th>Llamada</th></tr></thead>
+    <tbody>
+      <tr><td>Cancelar manualmente</td><td><code>controller.abort()</code>, lanza <code>AbortError</code></td></tr>
+      <tr><td>Añadir un plazo límite</td><td><code>AbortSignal.timeout(ms)</code>, lanza <code>TimeoutError</code></td></tr>
+      <tr><td>Cualquiera de los dos</td><td><code>AbortSignal.any([a, b])</code></td></tr>
+      <tr><td>Eliminar un escuchador automáticamente</td><td><code>addEventListener(type, fn, &#123; signal &#125;)</code></td></tr>
+      <tr><td>Comprobar el estado</td><td><code>signal.aborted</code></td></tr>
+      <tr><td>Averiguar el motivo</td><td><code>signal.reason</code></td></tr>
+      <tr><td>Reaccionar a la cancelación</td><td>el evento <code>abort</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>AbortController es una API pequeña que resuelve discretamente una gran categoría de problemas de limpieza. Entrega un solo signal a tus peticiones, a tus escuchadores y a tus propias funciones asíncronas, y luego detenlos todos con una única llamada. Solo recuerda qué error estás capturando, porque una cancelación manual y un plazo agotado no son el mismo suceso.</p>
+
+  <p>Para la parte de las peticiones, consulta nuestra guía de <a href="/es/guides/fetch-api-javascript">la API Fetch en JavaScript</a>.</p>
+</Article>

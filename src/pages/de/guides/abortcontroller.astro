@@ -1,0 +1,146 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="abortcontroller"
+  title="AbortController: Fetches, Zeitlimits und Event-Listener abbrechen"
+  description="Ein einziger Controller bricht einen Fetch, ein Zeitlimit und einen ganzen Stapel Event-Listener ab. Wie AbortController und AbortSignal funktionieren, warum ein manueller Abbruch und ein Zeitlimit unterschiedliche Fehler werfen, und der Aufräum-Trick, den die meisten übersehen."
+  cat="apis"
+  day={20}
+  hero="/img/abortcontroller-hero.jpg"
+  heroAlt="Ein roter Notbremsgriff an der Innenwand eines Eisenbahnwagens, beschriftet mit Notbremse"
+  cluster={null}
+  faq={[
+    { q: `Wofür ist AbortController da?`, a: `MDN beschreibt ihn als ein Controller-Objekt, mit dem du eine oder mehrere Web-Anfragen nach Bedarf abbrechen kannst. Du erzeugst einen Controller, gibst sein signal an das weiter, was du gestartet hast, und rufst abort() auf, wenn es aufhören soll. Das ist nicht auf fetch beschränkt: Alles, was ein AbortSignal entgegennimmt, lässt sich auf dieselbe Weise abbrechen.` },
+    { q: `Welchen Fehler wirft ein abgebrochener Fetch?`, a: `Das hängt davon ab, wie er abgebrochen wurde, und genau daran scheitern viele. Wenn du AbortController.abort() selbst aufrufst, wird das Promise des Fetch mit einer DOMException namens AbortError abgelehnt. Kam das Signal von AbortSignal.timeout(), wird das Promise stattdessen mit einer TimeoutError-DOMException abgelehnt. Code, der nur auf AbortError prüft, übergeht den Zeitlimit-Fall stillschweigend.` },
+    { q: `Wie ergänze ich einen Fetch um ein Zeitlimit?`, a: `AbortSignal.timeout() gibt eine AbortSignal-Instanz zurück, die nach einer angegebenen Zeit automatisch abbricht. Du übergibst also AbortSignal.timeout(5000) als Signal und brauchst weder Controller noch setTimeout noch clearTimeout. Denk daran, dass es mit TimeoutError abgelehnt wird, nicht mit AbortError.` },
+    { q: `Kann ein Controller mehrere Dinge gleichzeitig abbrechen?`, a: `Ja, und genau darum geht es. Ein Signal lässt sich an beliebig viele Operationen weitergeben, sodass ein einziger abort()-Aufruf jeden Fetch stoppt und jeden Event-Listener entfernt, der es erhalten hat. Das ist die sauberste Aufräummöglichkeit, wenn eine Ansicht abgebaut wird.` },
+    { q: `Kann ich ein Zeitlimit mit einem manuellen Abbruch kombinieren?`, a: `AbortSignal.any() gibt ein AbortSignal zurück, das abbricht, sobald eines der übergebenen Abbruchsignale abbricht. Übergib ihm das Signal deines Controllers und ein Zeitlimit-Signal, und die Operation stoppt bei dem, was zuerst eintritt.` },
+  ]}
+>
+  <p>Eine asynchrone Operation zu starten ist leicht. Eine zu stoppen, die dich nicht mehr interessiert, ist der Teil, den der meiste Code auslässt, und genau daher kommen Speicherlecks, Race Conditions und veraltete Ergebnisse. <strong>AbortController</strong> ist die eine Antwort des Browsers auf all das.</p>
+
+  <h2>Ein Controller, ein Signal</h2>
+  <p>MDN definiert es unmissverständlich: Die Schnittstelle <code>AbortController</code> <strong>repräsentiert ein Controller-Objekt, mit dem du eine oder mehrere Web-Anfragen nach Bedarf abbrechen kannst</strong>. Die Form ist immer dieselbe. Du erzeugst einen Controller, liest sein <code>signal</code> und gibst dieses Signal an das weiter, was du gerade startest.</p>
+  <p>Die Eigenschaft <code>signal</code> <strong>gibt eine <code>AbortSignal</code>-Objektinstanz zurück, die verwendet werden kann, um mit einer asynchronen Operation zu kommunizieren oder sie abzubrechen</strong>. Den Controller behältst du; das Signal ist das, was du weggibst.</p>
+  <pre><code>{`const controller = new AbortController();
+
+const res = await fetch('/api/articles', { signal: controller.signal });
+
+// an anderer Stelle, später:
+controller.abort();`}</code></pre>
+  <p>Achte auf die Richtung. Der Code, der die Arbeit macht, entscheidet nie selbst aufzuhören; er willigt nur ein zuzuhören. Diese Trennung ist es, die es einem einzigen Aufrufer erlaubt, viele Operationen auf einmal abzubrechen.</p>
+
+  <h2>Die zwei Fehler, und warum das zählt</h2>
+  <p>Das ist der Teil, den man sorgfältig lesen sollte, denn derselbe Abbruch kann zwei verschiedene Dinge werfen.</p>
+  <p>Wenn du <code>abort()</code> selbst aufrufst, <strong>wird das Promise von <code>fetch()</code> mit einer <code>DOMException</code> namens <code>AbortError</code> abgelehnt</strong>. Kam das Signal von <code>AbortSignal.timeout()</code>, <strong>wird das Promise von <code>fetch()</code> stattdessen mit einer <code>TimeoutError</code>-<code>DOMException</code> abgelehnt</strong>.</p>
+  <p>Die gewohnte Prüfung ist also unvollständig:</p>
+  <pre><code>{`try {
+  const res = await fetch(url, { signal });
+} catch (err) {
+  if (err.name === 'AbortError') {
+    // die Nutzerin oder unser eigener Code hat abgebrochen
+  } else if (err.name === 'TimeoutError') {
+    // die Frist ist abgelaufen - eine ganz andere Situation
+  } else {
+    throw err; // ein echter Netzwerk- oder Parsing-Fehler
+  }
+}`}</code></pre>
+  <p>Beides zusammenzuwerfen kostet echte Information. Wenn jemand weiternavigiert, ist das kein Problem; eine Anfrage, der die Zeit ausgegangen ist, wahrscheinlich schon, und sie ist es wert, gemeldet oder wiederholt zu werden. Code, der nur nach <code>AbortError</code> schaut, behandelt jedes Zeitlimit als stilles Nicht-Ereignis.</p>
+
+  <h2>Zeitlimits ohne Drumherum</h2>
+  <p>Das Muster, das die meisten immer noch schreiben, kombiniert einen Controller mit einem <code>setTimeout</code> und einem <code>clearTimeout</code> in einem <code>finally</code>-Block. Es funktioniert, und es ist nicht mehr nötig.</p>
+  <p><code>AbortSignal.timeout()</code> <strong>gibt eine <code>AbortSignal</code>-Instanz zurück, die nach einer angegebenen Zeit automatisch abbricht</strong>. Kein Controller, kein Timer zum Aufräumen, nichts, was lecken kann:</p>
+  <pre><code>{`// Früher: drei bewegliche Teile
+const controller = new AbortController();
+const timer = setTimeout(() => controller.abort(), 5000);
+try {
+  const res = await fetch(url, { signal: controller.signal });
+} finally {
+  clearTimeout(timer);
+}
+
+// Jetzt: eines
+const res = await fetch(url, { signal: AbortSignal.timeout(5000) });`}</code></pre>
+  <p>Achte bei diesem Wechsel auf den Fehlernamen. Die alte Version warf <code>AbortError</code>, die neue wirft <code>TimeoutError</code>, jeder bereits vorhandene <code>catch</code>-Block muss also angepasst werden.</p>
+
+  <figure>
+    <img src="/img/abortcontroller-inbody.jpg" alt="Ein abgenutzter roter Not-Aus-Pilzkopftaster auf einem gelben Gehäuse, daneben ein schwarzer Wippschalter, an einer Maschine montiert" width="1280" height="853" loading="lazy" />
+    <figcaption>Ein abgenutzter Not-Aus-Taster an einer Maschine, neben ihrem gewöhnlichen Schalter. Das eine Bedienelement startet die Dinge eines nach dem anderen, das andere stoppt alles auf einmal, und genau so ist die Arbeit zwischen einem Signal und einem Controller verteilt.</figcaption>
+  </figure>
+
+  <h2>Der Trick, den die meisten übersehen: Event-Listener</h2>
+  <p>AbortSignal ist keine Fetch-Funktion. <code>addEventListener</code> nimmt in seinen Optionen ein <code>signal</code> entgegen, und wenn dieses Signal abbricht, wird der Listener für dich entfernt. Das ersetzt ganz nebenbei den mühsamsten Aufräumcode der Frontend-Arbeit.</p>
+  <p>Vergleiche das mit dem Entfernen von Listenern per Hand, das eine Referenz auf jede übergebene Funktion voraussetzt:</p>
+  <pre><code>{`// Vorher: du musst jeden Handler behalten, um ihn zu entfernen
+function onScroll() { /* ... */ }
+function onResize() { /* ... */ }
+window.addEventListener('scroll', onScroll);
+window.addEventListener('resize', onResize);
+
+function teardown() {
+  window.removeEventListener('scroll', onScroll);
+  window.removeEventListener('resize', onResize);
+}`}</code></pre>
+  <p>Mit einem Signal dürfen die Handler wieder inline stehen, und ein einziger Aufruf entfernt sie alle:</p>
+  <pre><code>{`const controller = new AbortController();
+const { signal } = controller;
+
+window.addEventListener('scroll', () => { /* ... */ }, { signal });
+window.addEventListener('resize', () => { /* ... */ }, { signal });
+document.addEventListener('keydown', () => { /* ... */ }, { signal });
+
+// ein Aufruf entfernt alle drei
+controller.abort();`}</code></pre>
+  <p>Derselbe Controller kann außerdem das Signal für einen laufenden <code>fetch</code> halten. Eine Ansicht abzubauen wird damit zu einem einzigen <code>abort()</code>, das die Anfrage abbricht und alle Listener zugleich löst.</p>
+
+  <h2>Signale kombinieren und den Zustand auslesen</h2>
+  <p><code>AbortSignal.any()</code> <strong>gibt ein <code>AbortSignal</code> zurück, das abbricht, sobald eines der übergebenen Abbruchsignale abbricht</strong>. So bekommst du eine Frist und einen manuellen Abbruch für dieselbe Operation:</p>
+  <pre><code>{`const controller = new AbortController();
+
+const signal = AbortSignal.any([
+  controller.signal,          // die Nutzerin hat auf Abbrechen gedrückt
+  AbortSignal.timeout(10000), // oder es sind zehn Sekunden vergangen
+]);
+
+const res = await fetch(url, { signal });`}</code></pre>
+  <p>Ein Signal verrät dir auch, woran es ist. <code>aborted</code> ist <strong>ein Boolean, der angibt, ob die Anfrage oder Anfragen, mit denen das Signal kommuniziert, abgebrochen sind</strong>, und <code>reason</code> ist <strong>ein JavaScript-Wert, der den Abbruchgrund liefert, sobald das Signal abgebrochen hat</strong>. Einen eigenen Grund an <code>abort()</code> zu übergeben ist der Weg, die Ursachen später zu unterscheiden:</p>
+  <pre><code>{`controller.abort(new Error('User navigated away'));
+
+// später
+if (signal.aborted) console.log(signal.reason.message);`}</code></pre>
+  <p>Es gibt zudem ein <code>abort</code>-Ereignis, <strong>das ausgelöst wird, wenn die asynchronen Operationen, mit denen das Signal kommuniziert, abgebrochen werden</strong>. Damit kann auch dein eigener lang laufender Code mitspielen und nicht nur die eingebauten APIs.</p>
+
+  <h2>Die eigene Funktion abbrechbar machen</h2>
+  <p>Alles, was ein Signal entgegennimmt, gehört zum selben System. Das Muster: vor dem Start <code>aborted</code> prüfen und während der Ausführung auf das <code>abort</code>-Ereignis hören:</p>
+  <pre><code>{`function wait(ms, { signal } = {}) {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) return reject(signal.reason);
+    const id = setTimeout(resolve, ms);
+    signal?.addEventListener('abort', () => {
+      clearTimeout(id);
+      reject(signal.reason);
+    }, { once: true });
+  });
+}`}</code></pre>
+  <p>Jetzt lässt sich dein eigener Helfer von demselben Controller abbrechen, der auch deine Fetches abbricht, und genau darum gibt es einen Mechanismus statt mehrerer.</p>
+
+  <h2>Kurzreferenz</h2>
+  <table>
+    <thead><tr><th>Ziel</th><th>Aufruf</th></tr></thead>
+    <tbody>
+      <tr><td>Manuell abbrechen</td><td><code>controller.abort()</code>, wirft <code>AbortError</code></td></tr>
+      <tr><td>Eine Frist ergänzen</td><td><code>AbortSignal.timeout(ms)</code>, wirft <code>TimeoutError</code></td></tr>
+      <tr><td>Eines von beiden</td><td><code>AbortSignal.any([a, b])</code></td></tr>
+      <tr><td>Listener automatisch entfernen</td><td><code>addEventListener(type, fn, &#123; signal &#125;)</code></td></tr>
+      <tr><td>Zustand prüfen</td><td><code>signal.aborted</code></td></tr>
+      <tr><td>Den Grund herausfinden</td><td><code>signal.reason</code></td></tr>
+      <tr><td>Auf den Abbruch reagieren</td><td>das <code>abort</code>-Ereignis</td></tr>
+    </tbody>
+  </table>
+
+  <p>AbortController ist eine kleine API, die unauffällig eine große Klasse von Aufräumproblemen löst. Gib ein Signal an deine Anfragen, deine Listener und deine eigenen asynchronen Helfer, und stoppe sie dann alle mit einem einzigen Aufruf. Denk nur daran, welchen Fehler du gerade abfängst, denn ein manueller Abbruch und eine abgelaufene Frist sind nicht dasselbe Ereignis.</p>
+
+  <p>Zur Anfrageseite davon siehe unseren Leitfaden zur <a href="/de/guides/fetch-api-javascript">Fetch-API in JavaScript</a>.</p>
+</Article>

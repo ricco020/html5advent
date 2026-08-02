@@ -1,0 +1,146 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="abortcontroller"
+  title="AbortController: cancelling fetches, timeouts and event listeners"
+  description="One controller cancels a fetch, a timeout and a pile of event listeners. How AbortController and AbortSignal work, why a manual abort and a timeout throw different errors, and the cleanup trick most people miss."
+  cat="apis"
+  day={20}
+  hero="/img/abortcontroller-hero.jpg"
+  heroAlt="A red emergency brake handle mounted on the wall inside a train carriage, labelled Notbremse"
+  cluster={null}
+  faq={[
+    { q: 'What is AbortController for?', a: 'MDN describes it as a controller object that allows you to abort one or more Web requests as and when desired. You create a controller, hand its signal to whatever you started, and call abort() when you want it stopped. It is not limited to fetch: anything that accepts an AbortSignal can be cancelled the same way.' },
+    { q: 'What error does an aborted fetch throw?', a: 'It depends on how it was aborted, and this trips people up. When you call AbortController.abort() yourself, the fetch promise rejects with a DOMException named AbortError. When the signal came from AbortSignal.timeout(), the promise rejects with a TimeoutError DOMException instead. Code that only checks for AbortError will silently miss the timeout case.' },
+    { q: 'How do I add a timeout to a fetch?', a: 'AbortSignal.timeout() returns an AbortSignal instance that will automatically abort after a specified time, so you pass AbortSignal.timeout(5000) as the signal and need no controller, no setTimeout and no clearTimeout. Remember it rejects with TimeoutError, not AbortError.' },
+    { q: 'Can one controller cancel several things at once?', a: 'Yes, and that is the point of the name. A signal can be handed to any number of operations, so a single abort() call stops every fetch and removes every event listener that received it. It is the tidiest cleanup available when a view is torn down.' },
+    { q: 'Can I combine a timeout with a manual cancel?', a: 'AbortSignal.any() returns an AbortSignal that aborts when any of the given abort signals abort. Pass it your controller signal and a timeout signal, and the operation stops on whichever happens first.' },
+  ]}
+>
+  <p>Starting an asynchronous operation is easy. Stopping one you no longer care about is the part most code skips, and it is where memory leaks, race conditions and stale results come from. <strong>AbortController</strong> is the browser's single answer to all of it.</p>
+
+  <h2>One controller, one signal</h2>
+  <p>MDN defines it plainly: the <code>AbortController</code> interface <strong>represents a controller object that allows you to abort one or more Web requests as and when desired</strong>. The shape is always the same. You create a controller, read its <code>signal</code>, and hand that signal to whatever you are starting.</p>
+  <p>The <code>signal</code> property <strong>returns an <code>AbortSignal</code> object instance, which can be used to communicate with, or to abort, an asynchronous operation</strong>. The controller is the thing you keep; the signal is the thing you give away.</p>
+  <pre><code>{`const controller = new AbortController();
+
+const res = await fetch('/api/articles', { signal: controller.signal });
+
+// somewhere else, later:
+controller.abort();`}</code></pre>
+  <p>Note the direction. The code doing the work never decides to stop; it only agrees to listen. That separation is what lets one caller cancel many operations at once.</p>
+
+  <h2>The two errors, and why it matters</h2>
+  <p>This is the part worth reading carefully, because the same cancellation can throw two different things.</p>
+  <p>When you call <code>abort()</code> yourself, the <code>fetch()</code> promise <strong>rejects with a <code>DOMException</code> named <code>AbortError</code></strong>. When the signal came from <code>AbortSignal.timeout()</code>, the <code>fetch()</code> promise <strong>rejects with a <code>TimeoutError</code> <code>DOMException</code></strong> instead.</p>
+  <p>So the familiar check is incomplete:</p>
+  <pre><code>{`try {
+  const res = await fetch(url, { signal });
+} catch (err) {
+  if (err.name === 'AbortError') {
+    // the user or our own code cancelled it
+  } else if (err.name === 'TimeoutError') {
+    // the deadline passed - a different situation entirely
+  } else {
+    throw err; // a real network or parsing failure
+  }
+}`}</code></pre>
+  <p>Collapsing the two loses real information. A user navigating away is not a problem; a request that ran out of time probably is, and is worth reporting or retrying. Code that only looks for <code>AbortError</code> treats every timeout as a silent non-event.</p>
+
+  <h2>Timeouts without the plumbing</h2>
+  <p>The pattern most people still write pairs a controller with a <code>setTimeout</code> and a <code>clearTimeout</code> in a <code>finally</code> block. It works, and it is no longer necessary.</p>
+  <p><code>AbortSignal.timeout()</code> <strong>returns an <code>AbortSignal</code> instance that will automatically abort after a specified time</strong>. No controller, no timer to clear, nothing to leak:</p>
+  <pre><code>{`// Old: three moving parts
+const controller = new AbortController();
+const timer = setTimeout(() => controller.abort(), 5000);
+try {
+  const res = await fetch(url, { signal: controller.signal });
+} finally {
+  clearTimeout(timer);
+}
+
+// Now: one
+const res = await fetch(url, { signal: AbortSignal.timeout(5000) });`}</code></pre>
+  <p>Watch the error name when you make this swap. The old version threw <code>AbortError</code>; the new one throws <code>TimeoutError</code>, so any <code>catch</code> block you already had will need updating.</p>
+
+  <figure>
+    <img src="/img/abortcontroller-inbody.jpg" alt="A worn red mushroom-head emergency stop button on a yellow housing, beside a black rocker switch, mounted on a machine" width="1280" height="853" loading="lazy" />
+    <figcaption>A worn emergency stop button on a machine, next to its ordinary switch. One control starts things one at a time; the other stops everything at once, which is exactly the division of labour between a signal and a controller.</figcaption>
+  </figure>
+
+  <h2>The trick most people miss: event listeners</h2>
+  <p>AbortSignal is not a fetch feature. <code>addEventListener</code> accepts a <code>signal</code> in its options, and when that signal aborts, the listener is removed for you. This quietly replaces the most tedious cleanup code in front-end work.</p>
+  <p>Compare removing listeners by hand, which requires keeping a reference to every function you passed:</p>
+  <pre><code>{`// Before: you must keep every handler to remove it
+function onScroll() { /* ... */ }
+function onResize() { /* ... */ }
+window.addEventListener('scroll', onScroll);
+window.addEventListener('resize', onResize);
+
+function teardown() {
+  window.removeEventListener('scroll', onScroll);
+  window.removeEventListener('resize', onResize);
+}`}</code></pre>
+  <p>With a signal, the handlers can be inline again, and one call removes all of them:</p>
+  <pre><code>{`const controller = new AbortController();
+const { signal } = controller;
+
+window.addEventListener('scroll', () => { /* ... */ }, { signal });
+window.addEventListener('resize', () => { /* ... */ }, { signal });
+document.addEventListener('keydown', () => { /* ... */ }, { signal });
+
+// one call removes all three
+controller.abort();`}</code></pre>
+  <p>The same controller can also be holding the signal for an in-flight <code>fetch</code>. Tearing down a view then becomes a single <code>abort()</code> that cancels the request and unbinds every listener together.</p>
+
+  <h2>Combining signals, and reading state</h2>
+  <p><code>AbortSignal.any()</code> <strong>returns an <code>AbortSignal</code> that aborts when any of the given abort signals abort</strong>. That is how you get a deadline and a manual cancel on the same operation:</p>
+  <pre><code>{`const controller = new AbortController();
+
+const signal = AbortSignal.any([
+  controller.signal,          // the user pressed Cancel
+  AbortSignal.timeout(10000), // or ten seconds passed
+]);
+
+const res = await fetch(url, { signal });`}</code></pre>
+  <p>A signal also tells you where it stands. <code>aborted</code> is <strong>a Boolean that indicates whether the request(s) the signal is communicating with is/are aborted</strong>, and <code>reason</code> is <strong>a JavaScript value providing the abort reason, once the signal has aborted</strong>. Passing your own reason to <code>abort()</code> is how you distinguish causes later:</p>
+  <pre><code>{`controller.abort(new Error('User navigated away'));
+
+// later
+if (signal.aborted) console.log(signal.reason.message);`}</code></pre>
+  <p>There is also an <code>abort</code> event, <strong>invoked when the asynchronous operations the signal is communicating with is/are aborted</strong>, which lets your own long-running code cooperate rather than only built-in APIs.</p>
+
+  <h2>Making your own function abortable</h2>
+  <p>Anything that takes a signal joins the same system. The pattern is to check <code>aborted</code> before starting and to listen for the <code>abort</code> event while running:</p>
+  <pre><code>{`function wait(ms, { signal } = {}) {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) return reject(signal.reason);
+    const id = setTimeout(resolve, ms);
+    signal?.addEventListener('abort', () => {
+      clearTimeout(id);
+      reject(signal.reason);
+    }, { once: true });
+  });
+}`}</code></pre>
+  <p>Now your own helper can be cancelled by the same controller that cancels your fetches, which is the whole point of there being one mechanism rather than several.</p>
+
+  <h2>Quick reference</h2>
+  <table>
+    <thead><tr><th>Goal</th><th>Call</th></tr></thead>
+    <tbody>
+      <tr><td>Cancel manually</td><td><code>controller.abort()</code>, throws <code>AbortError</code></td></tr>
+      <tr><td>Add a deadline</td><td><code>AbortSignal.timeout(ms)</code>, throws <code>TimeoutError</code></td></tr>
+      <tr><td>Either of the two</td><td><code>AbortSignal.any([a, b])</code></td></tr>
+      <tr><td>Auto-remove a listener</td><td><code>addEventListener(type, fn, &#123; signal &#125;)</code></td></tr>
+      <tr><td>Check state</td><td><code>signal.aborted</code></td></tr>
+      <tr><td>Find out why</td><td><code>signal.reason</code></td></tr>
+      <tr><td>React to cancellation</td><td>the <code>abort</code> event</td></tr>
+    </tbody>
+  </table>
+
+  <p>AbortController is a small API that quietly solves a large category of cleanup problems. Hand one signal to your requests, your listeners and your own async helpers, then stop all of them with a single call. Just remember which error you are catching, because a manual abort and an expired deadline are not the same event.</p>
+
+  <p>For the request side of this, see our guide to <a href="/guides/fetch-api-javascript">the Fetch API in JavaScript</a>.</p>
+</Article>
