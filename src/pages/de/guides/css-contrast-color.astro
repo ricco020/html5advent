@@ -1,0 +1,73 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="css-contrast-color"
+  title="CSS contrast-color(): automatisch schwarzer oder weißer Text, und die eine echte Grenze"
+  description="contrast-color() wählt schwarzen oder weißen Text passend zur Hintergrundfarbe. Die Syntax, der Theming-Fall, das Mittelton-Problem, vor dem MDN warnt, und die Browserunterstützung."
+  cat="css"
+  day={21}
+  hero="/img/css-contrast-color-hero.jpg"
+  heroAlt="Ein aufgefächertes Farbmusterheft, jeder Streifen mit einem Farbcode bedruckt"
+  cluster={null}
+>
+  <p><strong><code>contrast-color()</code></strong> ist eine CSS-Funktion, die eine Farbe entgegennimmt und die Textfarbe zurückgibt, die sich darauf am besten liest. Sie ist in allen vier großen Engines angekommen und wurde im <strong>April 2026 Baseline Newly available</strong>. Sie loest ein kleines, lästiges Problem, auf das themenfaehige Oberflaechen ständig stossen, und sie hat eine Grenze, die man leicht übersieht.</p>
+
+  <h2>Was sie wirklich zurückgibt</h2>
+  <p>Nur zwei Werte: <code>white</code> oder <code>black</code>. Sonst nichts. Die Funktion vergleicht den Kontrast beider zur übergebenen Farbe und gibt den hoeheren zurück. Sind beide exakt gleich, gibt sie <code>white</code> zurück.</p>
+  <p>Diese Enge ist der Punkt. Es ist keine allgemeine Funktion zur Farbableitung: Sie erzeugt weder ein getoentes Grau noch einen markennahen Ton. Sie beantwortet genau eine Frage: Liest sich auf diesem Hintergrund dunkler oder heller Text besser?</p>
+
+  <h2>Die Syntax</h2>
+  <p>Du übergibst einen beliebigen gültigen <code>&lt;color&gt;</code>-Wert, auch eine Custom Property:</p>
+  <pre><code>{`button {
+  background-color: var(--button-color);
+  color: contrast-color(var(--button-color));
+}`}</code></pre>
+  <p>Diese eine Zeile ist der Fall, für den sie gebaut wurde. Eine themenfaehige Komponente bekommt ihren Hintergrund aus einer Variablen, und die Textfarbe folgt automatisch: keine zweite Variable, die synchron gehalten werden muss, kein JavaScript, das den berechneten Stil ausliest.</p>
+
+  <figure><img src="/img/css-contrast-color-inbody.jpg" alt="Reihen von Farbmustertafeln in Holzrahmen, aufrecht stehend" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Mustertafeln im Showroom: Jeder Ton braucht ein Etikett, das darauf lesbar bleibt, genau das Problem, das contrast-color() in CSS automatisiert.</figcaption></figure>
+
+  <h2>Wo sie sich lohnt</h2>
+  <p>Hell- und Dunkelmodus ist der klarste Fall. Den Hintergrund einmal je Schema definieren und den Text folgen lassen:</p>
+  <pre><code>{`:root {
+  --background-color: navy;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color: wheat;
+  }
+}
+
+body,
+a {
+  background-color: var(--background-color);
+  color: contrast-color(var(--background-color));
+}`}</code></pre>
+  <p>Dasselbe Muster gilt für eine vom Nutzer gewählte Akzentfarbe, nach Kategorie eingefaerbte Chips und jede Komponentenbibliothek, in der jemand einen Hintergrund uebergibt, den du nicht vorhersehen kannst. Vor dieser Funktion war die uebliche Antwort eine handgepflegte Zuordnung von Hintergrund zu Text oder eine Berechnung zur Build-Zeit.</p>
+
+  <h2>Die Grenze, die man kennen sollte</h2>
+  <p>MDN veroeffentlicht dazu eine ausdrueckliche Warnung, und sie gehoert wiederholt: <strong>WCAG-AA-Kontrast (4,5:1) ist nicht auf jedem Hintergrund erreichbar</strong>. Mitteltöne scheitern in der Regel sowohl gegen Schwarz als auch gegen Weiß. Das dokumentierte Beispiel ist ein Königsblau, <code>#2277d3</code>: <code>contrast-color()</code> gibt Schwarz zurück, und dieses Schwarz auf diesem Blau ist in kleinen Textgrößen nicht lesbar.</p>
+  <p>Die Funktion sagt dir also, welche der zwei Optionen die <em>bessere</em> ist, nicht dass das Ergebnis <em>gut genug</em> ist. Auf einem Mittelton ist keine der beiden gut genug. Die praktische Regel ist die von MDN: mit klar hellen oder klar dunklen Farben verwenden und für alles dazwischen eine echte Kontrastprüfung im Prozess behalten.</p>
+
+  <p>Wenn du unsicher bist, ob ein Hintergrund in diese Mittelton-Falle fällt, schick ihn vor dem Ausliefern durch <a href="/de/tools/contrast-checker">unseren WCAG-Kontrastprüfer</a>.</p>
+
+  <h2>Browserunterstützung</h2>
+  <p>Baseline Newly available seit April 2026, also verfuegbar in den aktuellen stabilen Versionen von Chrome, Edge, Firefox und Safari, auf Desktop und Mobil. Der Unterschied zwischen „Newly" und „Widely" zählt: alte Geraete und nicht aktualisierte Browser haben sie nicht. Da die Deklaration dort, wo sie nicht unterstuetzt wird, schlicht nicht geparst wird, wirkt eine zuvor in derselben Regel notierte <code>color</code>-Deklaration als natürlicher Fallback.</p>
+
+  <h2>Kurzreferenz</h2>
+  <table>
+    <thead><tr><th>Frage</th><th>Antwort</th></tr></thead>
+    <tbody>
+      <tr><td>Mögliche Rückgabewerte</td><td>nur <code>white</code> oder <code>black</code></td></tr>
+      <tr><td>Gleichstand</td><td>gibt <code>white</code> zurück</td></tr>
+      <tr><td>Nimmt eine Custom Property</td><td>ja: <code>contrast-color(var(--c))</code></td></tr>
+      <tr><td>Garantiert WCAG AA</td><td>nein: Mitteltöne scheitern beidseitig</td></tr>
+      <tr><td>Baseline-Status</td><td>Newly available, April 2026</td></tr>
+      <tr><td>Fallback</td><td><code>color</code> davor in derselben Regel deklarieren</td></tr>
+    </tbody>
+  </table>
+
+  <p>Setze sie dort ein, wo der Hintergrund wirklich unvorhersehbar und klar hell oder dunkel ist. Mach sie nicht zum Ersatz dafür, von vornherein lesbare Farben zu waehlen: Sie trifft die bessere von zwei Entscheidungen, was nicht dasselbe ist wie eine gute.</p>
+</Article>

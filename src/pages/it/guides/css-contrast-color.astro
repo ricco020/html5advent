@@ -1,0 +1,73 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="css-contrast-color"
+  title="CSS contrast-color(): testo nero o bianco automatico, e il suo limite reale"
+  description="contrast-color() sceglie testo nero o bianco in base al colore di sfondo. La sintassi, il caso di theming che risolve, il problema dei toni medi segnalato da MDN e il supporto dei browser."
+  cat="css"
+  day={21}
+  hero="/img/css-contrast-color-hero.jpg"
+  heroAlt="Un ventaglio di mazzette colore aperto, ogni striscia stampata con un codice colore"
+  cluster={null}
+>
+  <p><strong><code>contrast-color()</code></strong> è una funzione CSS che prende un colore e restituisce il colore di testo che vi si legge meglio. È arrivata su tutti e quattro i motori principali ed è diventata <strong>Baseline Newly available ad aprile 2026</strong>. Risolve un problema piccolo e fastidioso in cui le interfacce personalizzabili inciampano di continuo, e ha un limite facile da mancare.</p>
+
+  <h2>Cosa restituisce davvero</h2>
+  <p>Solo due valori: <code>white</code> o <code>black</code>. Nient'altro. La funzione confronta il contrasto di entrambi con il colore passato e restituisce quello più alto. Se i due sono esattamente uguali, restituisce <code>white</code>.</p>
+  <p>Questa ristrettezza è proprio il punto. Non è una funzione generale di derivazione del colore: non produrra un grigio virato né una tinta vicina al tuo brand. Risponde a una sola domanda: su questo sfondo si legge meglio un testo scuro o uno chiaro?</p>
+
+  <h2>La sintassi</h2>
+  <p>Le passi qualsiasi valore <code>&lt;color&gt;</code> valido, inclusa una proprietà personalizzata:</p>
+  <pre><code>{`button {
+  background-color: var(--button-color);
+  color: contrast-color(var(--button-color));
+}`}</code></pre>
+  <p>Quella singola riga è il caso per cui e stata pensata. Un componente personalizzabile riceve lo sfondo da una variabile e il colore del testo segue in automatico: niente seconda variabile da tenere sincronizzata, niente JavaScript che legge lo stile calcolato.</p>
+
+  <figure><img src="/img/css-contrast-color-inbody.jpg" alt="File di pannelli di campioni colore con cornice in legno, appoggiàti in piedi" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Pannelli di campioni in uno showroom: ogni tinta ha bisogno di un'etichetta che vi resti leggibile, esattamente il problema che contrast-color() automatizza in CSS.</figcaption></figure>
+
+  <h2>Dove si guadagna il posto</h2>
+  <p>La modalita chiara e scura e il caso più netto. Definisci lo sfondo una volta per schema e lascia che il testo segua:</p>
+  <pre><code>{`:root {
+  --background-color: navy;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color: wheat;
+  }
+}
+
+body,
+a {
+  background-color: var(--background-color);
+  color: contrast-color(var(--background-color));
+}`}</code></pre>
+  <p>Lo stesso schema vale per un colore d'accento scelto dall'utente, chip colorati per categoria e qualsiasi libreria di componenti in cui chi la usa passa uno sfondo che non puòi prevedere. Prima di questa funzione la risposta abituale era una mappa sfondo-testo mantenuta a mano, o un calcolo in fase di build.</p>
+
+  <h2>Il limite da conoscere</h2>
+  <p>MDN pubblica un avviso esplicito al riguardo, e vale la pena ripeterlo: <strong>il contrasto WCAG AA (4,5:1) non è raggiungibile su ogni sfondo</strong>. I toni medi falliscono in genere sia contro il nero sia contro il bianco. L'esempio documentato è un blu reale, <code>#2277d3</code>: <code>contrast-color()</code> restituisce nero, e quel nero su quel blu non è leggibile a corpi piccoli.</p>
+  <p>La funzione ti dice quindi quale delle due opzioni e <em>migliore</em>, non che il risultato sia <em>sufficiente</em>. Su uno sfondo di tono medio nessuna delle due lo è. La regola pratica è quella data da MDN: usala con colori chiaramente chiari o chiaramente scuri, e tieni una verifica reale del contrasto nel tuo processo per tutto cio che sta in mezzo.</p>
+
+  <p>Se hai dubbi che uno sfondo cada in quella trappola dei toni medi, passalo per <a href="/it/tools/contrast-checker">il nostro verificatore di contrasto WCAG</a> prima di pubblicare.</p>
+
+  <h2>Supporto dei browser</h2>
+  <p>Baseline Newly available da aprile 2026, cioè funziona nelle versioni stabili attuali di Chrome, Edge, Firefox e Safari, su desktop e mobile. La differenza tra «Newly» e «Widely» conta: i dispositivi vecchi e i browser non aggiornati non ce l'hanno. Poiché dove non è supportata la dichiarazione semplicemente non viene interpretata, una dichiarazione <code>color</code> messa prima nella stessa regola funge da fallback naturale.</p>
+
+  <h2>Riferimento rapido</h2>
+  <table>
+    <thead><tr><th>Domanda</th><th>Risposta</th></tr></thead>
+    <tbody>
+      <tr><td>Valori di ritorno possibili</td><td>solo <code>white</code> o <code>black</code></td></tr>
+      <tr><td>Parita tra i due</td><td>restituisce <code>white</code></td></tr>
+      <tr><td>Accetta una proprietà personalizzata</td><td>si: <code>contrast-color(var(--c))</code></td></tr>
+      <tr><td>Garantisce WCAG AA</td><td>no: i toni medi falliscono da entrambi i lati</td></tr>
+      <tr><td>Stato Baseline</td><td>Newly available, aprile 2026</td></tr>
+      <tr><td>Fallback</td><td>dichiarare <code>color</code> prima nella stessa regola</td></tr>
+    </tbody>
+  </table>
+
+  <p>Usala dove lo sfondo è davvero imprevedibile e chiaramente chiaro o scuro. Non farne un sostituto della scelta di colori leggibili in partenza: sceglie la migliore fra due opzioni, che non è la stessa cosa che produrne una buona.</p>
+</Article>

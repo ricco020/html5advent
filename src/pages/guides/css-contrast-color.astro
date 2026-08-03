@@ -1,0 +1,73 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="css-contrast-color"
+  title="CSS contrast-color(): automatic black or white text, and its one real limit"
+  description="contrast-color() picks black or white text against any background colour. The syntax, the theming case it solves, the mid-tone problem MDN warns about, and browser support."
+  cat="css"
+  day={21}
+  hero="/img/css-contrast-color-hero.jpg"
+  heroAlt="A fan of paper paint swatches spread open, each strip printed with a colour code"
+  cluster={null}
+>
+  <p><strong><code>contrast-color()</code></strong> is a CSS function that takes a colour and returns the text colour that reads best on it. It shipped across all four major engines and became <strong>Baseline Newly available in April 2026</strong>. It solves a small, annoying problem that themeable interfaces run into constantly - and it has one limit that is easy to miss.</p>
+
+  <h2>What it actually returns</h2>
+  <p>Only two values: <code>white</code> or <code>black</code>. Nothing else. The function compares the contrast of both against the colour you pass and returns whichever is higher. If the two are exactly equal, it returns <code>white</code>.</p>
+  <p>That narrowness is the point. It is not a general colour-derivation function and it will not produce a tinted grey or a brand-adjacent shade. It answers one question: on this background, does dark text or light text read better?</p>
+
+  <h2>The syntax</h2>
+  <p>You pass any valid <code>&lt;color&gt;</code> value, including a custom property:</p>
+  <pre><code>{`button {
+  background-color: var(--button-color);
+  color: contrast-color(var(--button-color));
+}`}</code></pre>
+  <p>That single line is the case it was built for. A themeable component gets its background from a variable, and the text colour follows automatically - no second variable to keep in sync, no JavaScript reading the computed style.</p>
+
+  <figure><img src="/img/css-contrast-color-inbody.jpg" alt="Rows of colour sample boards in wooden frames standing upright" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Sample boards in a showroom: every swatch needs a label that stays readable on it, which is the problem contrast-color() automates in CSS.</figcaption></figure>
+
+  <h2>Where it earns its place</h2>
+  <p>Light and dark mode is the clearest case. Define the background once per scheme and let the text follow:</p>
+  <pre><code>{`:root {
+  --background-color: navy;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color: wheat;
+  }
+}
+
+body,
+a {
+  background-color: var(--background-color);
+  color: contrast-color(var(--background-color));
+}`}</code></pre>
+  <p>The same pattern works for user-chosen accent colours, tag chips coloured by category, and any component library where a consumer passes a background you cannot predict. Before this function, the usual answer was a hand-maintained map of background-to-text pairs, or a build-time calculation.</p>
+
+  <h2>The limit worth knowing</h2>
+  <p>MDN publishes an explicit warning about this, and it deserves repeating: <strong>WCAG AA contrast (4.5:1) is not achievable on every background</strong>. Mid-tone colours generally fail against both black and white. The documented example is a royal blue, <code>#2277d3</code>: <code>contrast-color()</code> returns black, and black on that blue is not readable at small text sizes.</p>
+  <p>So the function tells you which of two options is <em>better</em>, not that the result is <em>good enough</em>. On mid-tone backgrounds neither option is. The practical rule is the one MDN gives: use it with colours that are clearly light or clearly dark, and keep a real contrast check in your process for anything in between.</p>
+
+  <p>If you are unsure whether a background falls in that mid-tone trap, run it through <a href="/tools/contrast-checker">our WCAG contrast checker</a> before shipping.</p>
+
+  <h2>Browser support</h2>
+  <p>Baseline Newly available since April 2026, meaning it works in the current stable versions of Chrome, Edge, Firefox and Safari, on desktop and mobile. "Newly" rather than "Widely" matters: older devices and browsers that people have not updated will not have it. Because the declaration simply fails to parse where it is unsupported, an earlier <code>color</code> declaration in the same rule acts as a natural fallback.</p>
+
+  <h2>Quick reference</h2>
+  <table>
+    <thead><tr><th>Question</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>Possible return values</td><td><code>white</code> or <code>black</code> only</td></tr>
+      <tr><td>Tie between the two</td><td>returns <code>white</code></td></tr>
+      <tr><td>Accepts a custom property</td><td>yes - <code>contrast-color(var(--c))</code></td></tr>
+      <tr><td>Guarantees WCAG AA</td><td>no - mid-tones fail against both</td></tr>
+      <tr><td>Baseline status</td><td>Newly available, April 2026</td></tr>
+      <tr><td>Fallback</td><td>declare <code>color</code> before it in the same rule</td></tr>
+    </tbody>
+  </table>
+
+  <p>Use it where the background is genuinely unpredictable and clearly light or dark. Do not use it as a substitute for choosing readable colours in the first place - it makes the better of two choices, which is not the same as making a good one.</p>
+</Article>
