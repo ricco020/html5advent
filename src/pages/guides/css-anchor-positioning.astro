@@ -1,0 +1,66 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="css-anchor-positioning"
+  title="CSS anchor positioning: what it does, and why MDN still says limited availability"
+  description="anchor-name, position-anchor and anchor() tether a tooltip to its trigger without JavaScript. What the syntax looks like, and why MDN's own banner contradicts the posts telling you to delete your positioning library."
+  cat="css"
+  day={22}
+  hero="/img/css-anchor-positioning-hero.jpg"
+  heroAlt="Rusted anchor chain links piled on top of one another"
+  cluster={null}
+>
+  <p><strong>CSS anchor positioning</strong> lets you tether an absolutely positioned element to another element, so a tooltip follows its button without a line of JavaScript. It is genuinely elegant. It is also, according to MDN's own banner, <strong>not something you can ship unconditionally yet</strong> - and a lot of writing published in 2026 says otherwise.</p>
+
+  <h2>The three pieces</h2>
+  <p>The model is small. You name an element as an anchor, you point another element at that name, and you position against it.</p>
+  <pre><code>{`.trigger {
+  anchor-name: --my-trigger;
+}
+
+.tooltip {
+  position: absolute;
+  position-anchor: --my-trigger;
+  top: anchor(bottom);
+  left: anchor(left);
+}`}</code></pre>
+  <p><code>anchor-name</code> registers the element under a custom identifier. <code>position-anchor</code> associates the positioned element with that identifier. The <code>anchor()</code> function then resolves to an edge of the anchor, so <code>anchor(bottom)</code> is the anchor's bottom edge expressed in the positioned element's coordinate space.</p>
+
+  <p>The part that makes it more than syntactic sugar is what happens near the edge of the viewport. A tooltip pinned below its trigger should flip above it rather than get clipped, and that flip is exactly the logic every positioning library exists to provide. Anchor positioning offers it declaratively through position-try fallbacks: you list alternative placements, and the browser picks the first that fits.</p>
+
+  <figure><img src="/img/css-anchor-positioning-inbody.jpg" alt="A wall completely covered in handwritten sticky notes in many colours" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>A wall covered in handwritten sticky notes, each one attached to a spot on the surface behind it, which is the relationship anchor positioning expresses in CSS.</figcaption></figure>
+
+  <h2>Why the enthusiasm outran the support</h2>
+  <p>Chrome shipped anchor positioning in 2024, and a wave of posts followed announcing that native CSS had replaced tooltip libraries. Search for it in 2026 and you will find claims of Baseline status and coverage percentages in the nineties.</p>
+  <p>MDN's page for <code>position-anchor</code> currently carries a different banner: <strong>Limited availability</strong>, with the explanation that <em>this feature is not Baseline because it does not work in some of the most widely-used browsers</em>. That is the reference documentation for the property itself, and it is the line worth trusting when secondary sources disagree with it.</p>
+  <p>This is not a reason to ignore the feature. It is a reason to check the banner on MDN yourself, on the day you plan to ship, rather than inheriting a claim from an article that was optimistic when it was written.</p>
+
+  <h2>How to use it without betting on it</h2>
+  <p>Feature-query it. <code>@supports</code> is the difference between progressive enhancement and a broken layout for whoever is on the wrong engine:</p>
+  <pre><code>{`.tooltip {
+  /* fallback placement that works everywhere */
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+@supports (anchor-name: --x) {
+  .trigger { anchor-name: --my-trigger; }
+  .tooltip {
+    position-anchor: --my-trigger;
+    top: anchor(bottom);
+    left: anchor(left);
+  }
+}`}</code></pre>
+  <p>Write the ordinary positioning first and let the anchored version override it inside the query. Browsers that understand anchoring get the good behaviour; the others get something that still works.</p>
+
+  <p>The honest summary of where this leaves you: anchor positioning is the right direction and worth learning now, but a production tooltip in 2026 still needs a path for engines that do not support it. Deleting the library outright is a decision to make from the compatibility table, not from a headline.</p>
+
+  <h2>Where it fits with the rest of the platform</h2>
+  <p>Anchor positioning pairs naturally with the <a href="/guides/popover-api">Popover API</a>, which handles the showing and dismissing while anchoring handles the placement, and with the <a href="/guides/dialog-element">dialog element</a> for the cases that need a real modal. Those two are further along in support, which is part of why they are worth reaching for first.</p>
+
+  <h2>The short version</h2>
+  <p><code>anchor-name</code> marks the anchor, <code>position-anchor</code> connects to it, <code>anchor()</code> resolves its edges, and position-try fallbacks handle the flip near a viewport edge. MDN lists the property as limited availability and explicitly not Baseline. Use it behind <code>@supports</code>, keep an ordinary fallback, and check the compatibility table on the day you ship rather than trusting a percentage from a blog post.</p>
+</Article>

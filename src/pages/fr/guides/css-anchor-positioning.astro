@@ -1,0 +1,66 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="css-anchor-positioning"
+  title="CSS anchor positioning : ce que ça fait, et pourquoi MDN parle encore de disponibilité limitée"
+  description="anchor-name, position-anchor et anchor() rattachent une infobulle à son déclencheur sans JavaScript. À quoi ressemble la syntaxe, et pourquoi la bannière de MDN contredit les articles qui vous disent de supprimer votre bibliothèque de positionnement."
+  cat="css"
+  day={22}
+  hero="/img/css-anchor-positioning-hero.jpg"
+  heroAlt="Des maillons de chaîne d'ancre rouillés empilés les uns sur les autres"
+  cluster={null}
+>
+  <p><strong>Le positionnement par ancre en CSS</strong> permet de rattacher un élément positionné en absolu à un autre élément, de sorte qu'une infobulle suive son bouton sans une ligne de JavaScript. C'est réellement élégant. C'est aussi, d'après la bannière de MDN elle-même, <strong>quelque chose que vous ne pouvez pas encore livrer sans condition</strong> - et beaucoup de ce qui a été publié en 2026 affirme le contraire.</p>
+
+  <h2>Les trois pièces</h2>
+  <p>Le modèle est simple. Vous nommez un élément comme ancre, vous pointez un autre élément vers ce nom, et vous positionnez par rapport à lui.</p>
+  <pre><code>{`.trigger {
+  anchor-name: --my-trigger;
+}
+
+.tooltip {
+  position: absolute;
+  position-anchor: --my-trigger;
+  top: anchor(bottom);
+  left: anchor(left);
+}`}</code></pre>
+  <p><code>anchor-name</code> enregistre l'élément sous un identifiant personnalisé. <code>position-anchor</code> associe l'élément positionné à cet identifiant. La fonction <code>anchor()</code> se résout ensuite en un bord de l'ancre : <code>anchor(bottom)</code> désigne le bord inférieur de l'ancre exprimé dans le repère de l'élément positionné.</p>
+
+  <p>Ce qui en fait plus qu'un sucre syntaxique, c'est le comportement près du bord de la fenêtre. Une infobulle épinglée sous son déclencheur devrait basculer au-dessus plutôt que d'être rognée, et ce basculement est exactement la logique pour laquelle existent toutes les bibliothèques de positionnement. Le positionnement par ancre l'offre de façon déclarative via les positions de repli : vous listez des placements alternatifs, et le navigateur retient le premier qui tient.</p>
+
+  <figure><img src="/img/css-anchor-positioning-inbody.jpg" alt="Un mur entièrement recouvert de notes autocollantes manuscrites de toutes les couleurs" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Un mur couvert de notes autocollantes manuscrites, chacune attachée à un endroit de la surface derrière elle, ce qui est exactement la relation qu'exprime le positionnement par ancre en CSS.</figcaption></figure>
+
+  <h2>Pourquoi l'enthousiasme a devancé le support</h2>
+  <p>Chrome a livré le positionnement par ancre en 2024, et une vague d'articles a suivi pour annoncer que le CSS natif avait remplacé les bibliothèques d'infobulles. Cherchez le sujet en 2026 et vous trouverez des affirmations de statut Baseline et des pourcentages de couverture dans les quatre-vingt-dix.</p>
+  <p>La page MDN de <code>position-anchor</code> porte actuellement une autre bannière : <strong>disponibilité limitée</strong>, avec l'explication que <em>cette fonctionnalité n'est pas Baseline parce qu'elle ne fonctionne pas dans certains des navigateurs les plus utilisés</em>. C'est la documentation de référence de la propriété elle-même, et c'est la ligne à retenir quand les sources secondaires la contredisent.</p>
+  <p>Ce n'est pas une raison d'ignorer la fonctionnalité. C'est une raison d'aller vérifier vous-même la bannière sur MDN, le jour où vous prévoyez de livrer, plutôt que d'hériter d'une affirmation d'un article qui était optimiste au moment de sa rédaction.</p>
+
+  <h2>Comment l'utiliser sans parier dessus</h2>
+  <p>Passez par une requête de fonctionnalité. <code>@supports</code> fait la différence entre une amélioration progressive et une mise en page cassée pour qui se trouve sur le mauvais moteur :</p>
+  <pre><code>{`.tooltip {
+  /* placement de repli qui fonctionne partout */
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+@supports (anchor-name: --x) {
+  .trigger { anchor-name: --my-trigger; }
+  .tooltip {
+    position-anchor: --my-trigger;
+    top: anchor(bottom);
+    left: anchor(left);
+  }
+}`}</code></pre>
+  <p>Écrivez d'abord le positionnement ordinaire, puis laissez la version ancrée le surcharger à l'intérieur de la requête. Les navigateurs qui comprennent l'ancrage obtiennent le bon comportement ; les autres obtiennent quelque chose qui fonctionne quand même.</p>
+
+  <p>Le résumé honnête de la situation : le positionnement par ancre va dans la bonne direction et mérite d'être appris dès maintenant, mais une infobulle de production en 2026 a encore besoin d'un chemin pour les moteurs qui ne le supportent pas. Supprimer la bibliothèque purement et simplement est une décision à prendre depuis le tableau de compatibilité, pas depuis un titre d'article.</p>
+
+  <h2>Sa place dans le reste de la plateforme</h2>
+  <p>Le positionnement par ancre s'associe naturellement à l'<a href="/fr/guides/popover-api">API Popover</a>, qui gère l'affichage et la fermeture pendant que l'ancrage gère le placement, et à l'<a href="/fr/guides/dialog-element">élément dialog</a> pour les cas qui demandent une vraie fenêtre modale. Ces deux-là sont plus avancés côté support, ce qui explique en partie pourquoi il vaut mieux s'y appuyer d'abord.</p>
+
+  <h2>En bref</h2>
+  <p><code>anchor-name</code> désigne l'ancre, <code>position-anchor</code> s'y connecte, <code>anchor()</code> en résout les bords, et les positions de repli gèrent le basculement près d'un bord de fenêtre. MDN classe la propriété en disponibilité limitée et explicitement hors Baseline. Utilisez-la derrière <code>@supports</code>, gardez un repli ordinaire, et consultez le tableau de compatibilité le jour où vous livrez plutôt que de vous fier à un pourcentage lu dans un billet de blog.</p>
+</Article>

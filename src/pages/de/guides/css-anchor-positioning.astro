@@ -1,0 +1,66 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="css-anchor-positioning"
+  title="CSS Anchor Positioning: was es kann, und warum MDN weiterhin von eingeschränkter Verfügbarkeit spricht"
+  description="anchor-name, position-anchor und anchor() binden ein Tooltip ohne JavaScript an seinen Auslöser. Wie die Syntax aussieht und warum MDNs Banner den Beiträgen widerspricht, die Ihnen raten, Ihre Positionierungsbibliothek zu löschen."
+  cat="css"
+  day={22}
+  hero="/img/css-anchor-positioning-hero.jpg"
+  heroAlt="Rostige Ankerkettenglieder, übereinander gestapelt"
+  cluster={null}
+>
+  <p><strong>CSS Anchor Positioning</strong> bindet ein absolut positioniertes Element an ein anderes, sodass ein Tooltip seinem Button ohne eine Zeile JavaScript folgt. Das ist wirklich elegant. Es ist laut MDNs eigenem Banner aber auch <strong>noch nichts, was man bedingungslos ausliefern kann</strong> - und vieles, was 2026 veröffentlicht wurde, behauptet das Gegenteil.</p>
+
+  <h2>Die drei Bausteine</h2>
+  <p>Das Modell ist klein. Sie benennen ein Element als Anker, richten ein anderes Element auf diesen Namen aus und positionieren relativ dazu.</p>
+  <pre><code>{`.trigger {
+  anchor-name: --my-trigger;
+}
+
+.tooltip {
+  position: absolute;
+  position-anchor: --my-trigger;
+  top: anchor(bottom);
+  left: anchor(left);
+}`}</code></pre>
+  <p><code>anchor-name</code> registriert das Element unter einem eigenen Bezeichner. <code>position-anchor</code> verknüpft das positionierte Element mit diesem Bezeichner. Die Funktion <code>anchor()</code> löst sich dann zu einer Kante des Ankers auf: <code>anchor(bottom)</code> ist die Unterkante des Ankers, ausgedrückt im Koordinatenraum des positionierten Elements.</p>
+
+  <p>Mehr als syntaktischer Zucker wird es durch das Verhalten am Rand des Viewports. Ein Tooltip, das unter seinem Auslöser hängt, sollte nach oben klappen statt abgeschnitten zu werden, und genau diese Logik ist der Grund, warum es überhaupt Positionierungsbibliotheken gibt. Anchor Positioning bietet sie deklarativ über Ausweichpositionen: Sie führen alternative Platzierungen auf, und der Browser nimmt die erste, die passt.</p>
+
+  <figure><img src="/img/css-anchor-positioning-inbody.jpg" alt="Eine vollständig mit handgeschriebenen Haftnotizen in vielen Farben bedeckte Wand" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Eine Wand voller handgeschriebener Haftnotizen, jede an einer Stelle der Fläche dahinter befestigt, und genau diese Beziehung drückt Anchor Positioning in CSS aus.</figcaption></figure>
+
+  <h2>Warum die Begeisterung dem Support vorauseilte</h2>
+  <p>Chrome lieferte Anchor Positioning 2024 aus, und eine Welle von Beiträgen verkündete daraufhin, natives CSS habe Tooltip-Bibliotheken abgelöst. Suchen Sie 2026 danach, finden Sie Behauptungen über Baseline-Status und Abdeckungswerte in den Neunzigern.</p>
+  <p>Die MDN-Seite zu <code>position-anchor</code> trägt derzeit ein anderes Banner: <strong>eingeschränkte Verfügbarkeit</strong>, mit der Erläuterung, dass <em>dieses Feature nicht Baseline ist, weil es in einigen der meistgenutzten Browser nicht funktioniert</em>. Das ist die Referenzdokumentation der Eigenschaft selbst, und ihr ist zu trauen, wenn Sekundärquellen ihr widersprechen.</p>
+  <p>Das ist kein Grund, das Feature zu ignorieren. Es ist ein Grund, das Banner an dem Tag, an dem Sie ausliefern wollen, selbst auf MDN nachzusehen, statt eine Aussage aus einem Artikel zu übernehmen, der beim Schreiben optimistisch war.</p>
+
+  <h2>Wie man es nutzt, ohne darauf zu wetten</h2>
+  <p>Fragen Sie das Feature ab. <code>@supports</code> ist der Unterschied zwischen Progressive Enhancement und einem kaputten Layout für alle auf der falschen Engine:</p>
+  <pre><code>{`.tooltip {
+  /* Ausweichplatzierung, die überall funktioniert */
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+@supports (anchor-name: --x) {
+  .trigger { anchor-name: --my-trigger; }
+  .tooltip {
+    position-anchor: --my-trigger;
+    top: anchor(bottom);
+    left: anchor(left);
+  }
+}`}</code></pre>
+  <p>Schreiben Sie zuerst die gewöhnliche Positionierung und lassen Sie die verankerte Variante sie innerhalb der Abfrage überschreiben. Browser, die Verankerung verstehen, bekommen das gute Verhalten; die anderen bekommen etwas, das trotzdem funktioniert.</p>
+
+  <p>Die ehrliche Zusammenfassung: Anchor Positioning weist in die richtige Richtung und lohnt sich schon jetzt zu lernen, aber ein Produktions-Tooltip braucht 2026 weiterhin einen Weg für Engines ohne Unterstützung. Die Bibliothek ersatzlos zu löschen ist eine Entscheidung, die man aus der Kompatibilitätstabelle trifft, nicht aus einer Überschrift.</p>
+
+  <h2>Wo es in die übrige Plattform passt</h2>
+  <p>Anchor Positioning ergänzt sich natürlich mit der <a href="/de/guides/popover-api">Popover-API</a>, die das Anzeigen und Schließen übernimmt, während die Verankerung die Platzierung übernimmt, und mit dem <a href="/de/guides/dialog-element">dialog-Element</a> für Fälle, die einen echten Modal brauchen. Beide sind beim Support weiter, was mit ein Grund ist, zuerst dorthin zu greifen.</p>
+
+  <h2>Kurz gefasst</h2>
+  <p><code>anchor-name</code> markiert den Anker, <code>position-anchor</code> verbindet sich damit, <code>anchor()</code> löst dessen Kanten auf, und Ausweichpositionen regeln das Umklappen nahe einer Viewport-Kante. MDN führt die Eigenschaft als eingeschränkt verfügbar und ausdrücklich nicht als Baseline. Nutzen Sie sie hinter <code>@supports</code>, behalten Sie einen gewöhnlichen Fallback, und schauen Sie am Tag der Auslieferung in die Kompatibilitätstabelle, statt einem Prozentwert aus einem Blogbeitrag zu vertrauen.</p>
+</Article>

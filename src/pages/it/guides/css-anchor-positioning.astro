@@ -1,0 +1,66 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="css-anchor-positioning"
+  title="CSS anchor positioning: cosa fa e perché MDN parla ancora di disponibilità limitata"
+  description="anchor-name, position-anchor e anchor() legano un tooltip al suo elemento scatenante senza JavaScript. Com'è la sintassi e perché il banner di MDN contraddice gli articoli che ti dicono di cancellare la libreria di posizionamento."
+  cat="css"
+  day={22}
+  hero="/img/css-anchor-positioning-hero.jpg"
+  heroAlt="Maglie di catena d'ancora arrugginite accatastate una sull'altra"
+  cluster={null}
+>
+  <p><strong>Il posizionamento con ancora in CSS</strong> permette di legare un elemento posizionato in assoluto a un altro elemento, così che un tooltip segua il suo pulsante senza una riga di JavaScript. È davvero elegante. È anche, stando al banner di MDN, <strong>qualcosa che non puoi ancora rilasciare senza condizioni</strong> - e molto di ciò che è stato pubblicato nel 2026 afferma il contrario.</p>
+
+  <h2>I tre pezzi</h2>
+  <p>Il modello è piccolo. Dai un nome a un elemento come ancora, punti un altro elemento a quel nome e posizioni rispetto a esso.</p>
+  <pre><code>{`.trigger {
+  anchor-name: --my-trigger;
+}
+
+.tooltip {
+  position: absolute;
+  position-anchor: --my-trigger;
+  top: anchor(bottom);
+  left: anchor(left);
+}`}</code></pre>
+  <p><code>anchor-name</code> registra l'elemento sotto un identificatore personalizzato. <code>position-anchor</code> associa l'elemento posizionato a quell'identificatore. La funzione <code>anchor()</code> si risolve poi in un bordo dell'ancora: <code>anchor(bottom)</code> è il bordo inferiore dell'ancora espresso nello spazio di coordinate dell'elemento posizionato.</p>
+
+  <p>Ciò che lo rende più di uno zucchero sintattico è il comportamento vicino al bordo della finestra. Un tooltip fissato sotto il suo elemento scatenante dovrebbe ribaltarsi sopra invece di essere tagliato, e quel ribaltamento è esattamente la logica per cui esistono tutte le librerie di posizionamento. L'ancoraggio la offre in modo dichiarativo tramite posizioni di ripiego: elenchi collocazioni alternative e il browser sceglie la prima che entra.</p>
+
+  <figure><img src="/img/css-anchor-positioning-inbody.jpg" alt="Una parete completamente coperta di foglietti adesivi scritti a mano di molti colori" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>Una parete coperta di foglietti adesivi scritti a mano, ognuno attaccato a un punto della superficie dietro di esso, che è proprio la relazione espressa dall'ancoraggio in CSS.</figcaption></figure>
+
+  <h2>Perché l'entusiasmo ha superato il supporto</h2>
+  <p>Chrome ha rilasciato l'ancoraggio nel 2024, e ne è seguita un'ondata di articoli che annunciavano che il CSS nativo aveva sostituito le librerie per i tooltip. Cerca l'argomento nel 2026 e troverai affermazioni di stato Baseline e percentuali di copertura sopra il novanta.</p>
+  <p>La pagina MDN di <code>position-anchor</code> porta attualmente un banner diverso: <strong>disponibilità limitata</strong>, con la spiegazione che <em>questa funzionalità non è Baseline perché non funziona in alcuni dei browser più usati</em>. È la documentazione di riferimento della proprietà stessa, ed è la riga di cui fidarsi quando le fonti secondarie la contraddicono.</p>
+  <p>Non è un motivo per ignorare la funzionalità. È un motivo per controllare tu stesso il banner su MDN il giorno in cui prevedi di rilasciare, invece di ereditare un'affermazione da un articolo che era ottimista quando è stato scritto.</p>
+
+  <h2>Come usarlo senza scommetterci</h2>
+  <p>Interrogalo con una feature query. <code>@supports</code> è la differenza tra miglioramento progressivo e un layout rotto per chi si trova sul motore sbagliato:</p>
+  <pre><code>{`.tooltip {
+  /* collocazione di ripiego che funziona ovunque */
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+@supports (anchor-name: --x) {
+  .trigger { anchor-name: --my-trigger; }
+  .tooltip {
+    position-anchor: --my-trigger;
+    top: anchor(bottom);
+    left: anchor(left);
+  }
+}`}</code></pre>
+  <p>Scrivi prima il posizionamento ordinario e lascia che la versione ancorata lo sovrascriva dentro la query. I browser che capiscono l'ancoraggio ottengono il comportamento buono; gli altri ottengono qualcosa che funziona comunque.</p>
+
+  <p>Il riassunto onesto: l'ancoraggio va nella direzione giusta e vale la pena impararlo ora, ma un tooltip in produzione nel 2026 ha ancora bisogno di una strada per i motori che non lo supportano. Cancellare la libreria del tutto è una decisione da prendere dalla tabella di compatibilità, non da un titolo.</p>
+
+  <h2>Dove si colloca nel resto della piattaforma</h2>
+  <p>L'ancoraggio si abbina naturalmente all'<a href="/it/guides/popover-api">API Popover</a>, che gestisce apertura e chiusura mentre l'ancoraggio gestisce la collocazione, e all'<a href="/it/guides/dialog-element">elemento dialog</a> per i casi che richiedono una vera finestra modale. Quei due sono più avanti sul supporto, ed è anche per questo che conviene rivolgersi prima a loro.</p>
+
+  <h2>In breve</h2>
+  <p><code>anchor-name</code> segna l'ancora, <code>position-anchor</code> vi si collega, <code>anchor()</code> ne risolve i bordi e le posizioni di ripiego gestiscono il ribaltamento vicino a un bordo della finestra. MDN elenca la proprietà come a disponibilità limitata ed esplicitamente fuori Baseline. Usala dietro <code>@supports</code>, tieni un fallback ordinario e consulta la tabella di compatibilità il giorno del rilascio invece di fidarti di una percentuale letta su un blog.</p>
+</Article>
