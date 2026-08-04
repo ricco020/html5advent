@@ -1,9 +1,9 @@
 // Affiliate offers - REAL, verified, trackable links only (no untracked fallback).
-// Contabo CJ link verified full-chain (vpnsmith 99e1f7a, 2026-06-25): tkqlhce.com/click-101765100-<LINK_ID>.
+// Contabo CJ link verified full-chain (vpnsmith 99e1f7a, 2026-06-25): tkqlhce.com/click-101853517-<LINK_ID>.
 // EPC drives prioritisation: Contabo (~46€) >> O2switch (3.84€) → Contabo primary on VPS/server pages.
 export const OFFERS = {
   contabo: {
-    url: 'https://www.tkqlhce.com/click-101765100-12454592', // Contabo VPS textlink EN (verified)
+    url: 'https://www.tkqlhce.com/click-101853517-12454592', // Contabo VPS textlink EN (verified)
     label: 'Contabo',
     epc: 46,
   },
