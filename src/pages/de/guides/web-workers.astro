@@ -1,0 +1,70 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="web-workers"
+  title="Was ist ein Web Worker? Ein zweiter Thread, und die Kopie, die entscheidet, ob es sich lohnt"
+  description="Ein Web Worker führt Ihr Skript auf einem eigenen Thread aus, damit schwere Arbeit die Oberfläche nicht mehr blockiert. Worauf er zugreifen kann und worauf nicht, warum postMessage kopiert statt zu teilen, wie das Übertragen eines ArrayBuffers diese Kopie vermeidet, und worin er sich von einem Service Worker unterscheidet."
+  cat="apis"
+  day={24}
+  hero="/img/web-workers-hero.jpg"
+  heroAlt="Eine Schnellstraße von oben, durch einen Mittelstreifen geteilt, mit einem einzelnen dunklen Auto auf der rechten Fahrbahn"
+  cluster={null}
+>
+  <p>JavaScript läuft auf einem einzigen Thread, und dieser Thread bearbeitet auch Klicks, Scrollen und Rendering. Eine lange Berechnung dort verlangsamt die Seite nicht, sie hält sie an. Ein <strong>Web Worker</strong> ist der Standardausweg: ein Skript auf einem eigenen Thread, das die teure Arbeit erledigt, während die Oberfläche reaktionsfähig bleibt.</p>
+
+  <h2>Was ein Worker tatsächlich ist</h2>
+  <p>Sie richten einen Worker auf eine Skriptdatei. Er startet seinen eigenen JavaScript-Kontext, mit eigenem globalem Gültigkeitsbereich und eigener Ereignisschleife, und läuft, bis Sie ihn beenden oder die Seite verschwindet.</p>
+  <pre><code>{`// main.js
+const worker = new Worker('./heavy.js', { type: 'module' });
+
+worker.postMessage({ rows: 250000 });
+
+worker.onmessage = (event) => {
+  render(event.data.total);
+};
+
+worker.onerror = (event) => console.error(event.message);`}</code></pre>
+  <p>Im Worker ist das globale Objekt <code>self</code> statt <code>window</code>, und die Form ist auf beiden Seiten dieselbe: auf Nachrichten hören, die Arbeit tun, das Ergebnis zurückschicken.</p>
+  <pre><code>{`// heavy.js
+self.onmessage = (event) => {
+  let total = 0;
+  for (let i = 0; i < event.data.rows; i++) total += compute(i);
+  self.postMessage({ total });
+};`}</code></pre>
+  <p>Nichts davon ist im Worker asynchron. Die Schleife blockiert genauso, wie sie überall blockieren würde; sie blockiert nur einen Thread, den niemand ansieht.</p>
+
+  <h2>Kein DOM, und genau das ist der Entwurf</h2>
+  <p>Ein Worker hat kein <code>window</code>, kein <code>document</code> und keine Möglichkeit, ein Element anzufassen. Das ist kein Versehen. Das DOM ist nicht dafür gedacht, von mehreren Threads bearbeitet zu werden, und zwei Threads Zugriff zu geben würde genau die Wettlaufsituationen erzeugen, die die Plattform vermeiden will.</p>
+  <p>Was er dafür bekommt, ist fast alles andere: <code>fetch</code>, <code>WebSocket</code>, <code>IndexedDB</code>, Timer, <code>crypto</code> und <code>importScripts</code> für klassische Worker. Ein Worker kann also herunterladen, parsen, rechnen und speichern. Er kann nur nichts anzeigen, weshalb jedes Ergebnis zum Haupt-Thread zurückreisen muss, um gerendert zu werden.</p>
+
+  <figure>
+    <img src="/img/web-workers-inbody.jpg" alt="Ein Koch richtet Garnelen und Gemüse auf einem Tablett in einer Edelstahlküche an. Ein Worker ist ein zweites Paar Hände: er bereitet parallel vor und gibt das Ergebnis zurück, serviert aber nie selbst am Tisch." width="1280" height="853" loading="lazy" />
+    <figcaption>Ein Koch richtet Garnelen und Gemüse auf einem Tablett in einer Edelstahlküche an. Ein Worker ist ein zweites Paar Hände: er bereitet parallel vor und gibt das Ergebnis zurück, serviert aber nie selbst am Tisch.</figcaption>
+  </figure>
+
+
+  <h2>Mit ihm reden: postMessage kopiert, Übertragen verschiebt</h2>
+  <p>Nachrichten sind keine geteilten Referenzen. Der gesendete Wert wird mit dem Structured-Clone-Algorithmus dupliziert, demselben, den IndexedDB verwendet, und beide Seiten haben am Ende unabhängige Kopien. Funktionen und DOM-Knoten sind nicht klonbar und werfen einen Fehler.</p>
+  <p>Diese Kopie ist der versteckte Preis, und dort verliert naiver Worker-Code. Sechzig Megabyte typisiertes Array hinüberzuschicken heißt, sechzig Megabyte zu serialisieren und zu duplizieren, was die eingesparte Rechenzeit leicht übersteigen kann.</p>
+  <p>Der Ausweg ist <strong>Übertragen</strong> statt Kopieren. Übergeben Sie den Buffer als zweites Argument, und sein Besitz wandert zum Worker, statt dupliziert zu werden; die sendende Seite behält einen leeren Buffer, und genau das ist der Sinn.</p>
+  <pre><code>{`const buffer = new ArrayBuffer(64 * 1024 * 1024);
+
+// Copied: the main thread keeps its own version.
+worker.postMessage(buffer);
+
+// Transferred: ownership moves, nothing is copied,
+// and buffer.byteLength becomes 0 on this side.
+worker.postMessage(buffer, [buffer]);`}</code></pre>
+  <p>Transferables erklären, warum Bildverarbeitung und Audio in Workern gut funktionieren: die Pixel wandern einmal, sie werden nicht zweimal kopiert.</p>
+
+  <h2>Web Worker, Shared Worker, Service Worker</h2>
+  <p>Drei Dinge tragen das Wort Worker, ohne austauschbar zu sein, und dort sitzt der größte Teil der Verwirrung.</p>
+  <p>Ein <strong>dedizierter Worker</strong>, der hier beschriebene, gehört der einen Seite, die ihn erzeugt hat, und stirbt mit ihr. Ein <strong>Shared Worker</strong> ist von mehreren Seiten derselben Origin erreichbar, nützlich für eine über Tabs geteilte Verbindung. Ein <strong>Service Worker</strong> ist etwas ganz anderes: er sitzt als Proxy zwischen Seite und Netzwerk, arbeitet ereignisgesteuert, der Browser startet und stoppt ihn nach Belieben, und er ermöglicht Offline-Verhalten und Push-Benachrichtigungen. Wir behandeln ihn getrennt unter <a href="/de/guides/service-worker">was ein Service Worker ist</a>.</p>
+  <p>Die kurze Regel: ein Web Worker, um Berechnung vom Haupt-Thread zu holen, ein Service Worker, um zu steuern, was mit Netzwerkanfragen geschieht. Einen Service Worker zu nehmen, um eine Berechnung zu beschleunigen, ist ein Kategorienfehler.</p>
+
+  <h2>Wann es sich lohnt und wann nicht</h2>
+  <p>Ein Worker rechnet sich, wenn die Arbeit wirklich schwer ist und die Daten, die die Grenze überqueren, im Vergleich klein sind. Eine große CSV parsen, Text für die Suche indexieren, komprimieren, hashen, Bilder dekodieren: all das rechnet viel und gibt wenig zurück.</p>
+  <p>Er rechnet sich nicht, wenn die Aufgabe klein ist, denn einen Worker zu starten heißt, einen JavaScript-Kontext zu starten, und das ist nicht kostenlos, und auch nicht, wenn die Daten riesig und die Berechnung trivial sind, denn die Ersparnis geht in der Kopie verloren. Messen Sie, bevor Sie annehmen: die Grenzkosten sind der Teil, den man vergisst.</p>
+  <p>Wenn Sie wegen eines Performance-Werts hier sind und nicht wegen einer konkret langsamen Funktion: genau das ist der Hebel dahinter, Arbeit vom Haupt-Thread zu holen, was <a href="/de/guides/what-is-the-event-loop">die Ereignisschleife</a> von vornherein unumgänglich macht.</p></Article>

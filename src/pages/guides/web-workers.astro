@@ -1,0 +1,70 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="web-workers"
+  title="What is a Web Worker? A second thread, and the copy that decides if it is worth it"
+  description="A Web Worker runs your script on a separate thread so heavy work stops blocking the interface. What it can and cannot reach, why postMessage copies rather than shares, how transferring an ArrayBuffer avoids that copy, and how it differs from a Service Worker."
+  cat="apis"
+  day={24}
+  hero="/img/web-workers-hero.jpg"
+  heroAlt="A dual carriageway seen from above, split by a central reservation, with a single dark car on the right-hand side"
+  cluster={null}
+>
+  <p>JavaScript runs on one thread, and that thread also handles clicks, scrolling and rendering. A long computation there does not slow the page down, it stops it. A <strong>Web Worker</strong> is the standard way out: a script running on a separate thread, doing the expensive work while the interface stays responsive.</p>
+
+  <h2>What a worker actually is</h2>
+  <p>You point a worker at a script file. It starts its own JavaScript context, with its own global scope and its own event loop, and it runs until you terminate it or the page goes away.</p>
+  <pre><code>{`// main.js
+const worker = new Worker('./heavy.js', { type: 'module' });
+
+worker.postMessage({ rows: 250000 });
+
+worker.onmessage = (event) => {
+  render(event.data.total);
+};
+
+worker.onerror = (event) => console.error(event.message);`}</code></pre>
+  <p>Inside the worker, the global object is <code>self</code> rather than <code>window</code>, and the shape is the same on both sides: listen for messages, do the work, post the result back.</p>
+  <pre><code>{`// heavy.js
+self.onmessage = (event) => {
+  let total = 0;
+  for (let i = 0; i < event.data.rows; i++) total += compute(i);
+  self.postMessage({ total });
+};`}</code></pre>
+  <p>Nothing about this is asynchronous inside the worker. The loop is as blocking as it would be anywhere; it simply blocks a thread that nobody is looking at.</p>
+
+  <h2>No DOM, and that is the whole design</h2>
+  <p>A worker has no <code>window</code>, no <code>document</code>, and no way to touch an element. That is not an oversight. The DOM is not thread-safe, and giving two threads access to it would produce exactly the race conditions the platform is built to avoid.</p>
+  <p>What it does get is most of the rest: <code>fetch</code>, <code>WebSocket</code>, <code>IndexedDB</code>, timers, <code>crypto</code>, and <code>importScripts</code> for classic workers. So a worker can download, parse, compute and store. It just cannot show anything, which is why every result has to travel back to the main thread to be rendered.</p>
+
+  <figure>
+    <img src="/img/web-workers-inbody.jpg" alt="A chef plating prawns and vegetables onto a tray in a stainless-steel kitchen. A worker is a second pair of hands: it prepares in parallel and hands the result back, but it never serves the table itself." width="1280" height="853" loading="lazy" />
+    <figcaption>A chef plating prawns and vegetables onto a tray in a stainless-steel kitchen. A worker is a second pair of hands: it prepares in parallel and hands the result back, but it never serves the table itself.</figcaption>
+  </figure>
+
+
+  <h2>Talking to it: postMessage copies, transfer moves</h2>
+  <p>Messages are not shared references. The value you post is duplicated with the structured clone algorithm, the same mechanism used by IndexedDB, so both sides end up with independent copies. Functions and DOM nodes cannot be cloned and will throw.</p>
+  <p>That copy is the hidden cost, and it is where naive worker code loses. Sending sixty megabytes of typed array across means serialising and duplicating sixty megabytes, which can easily exceed the time the computation saved.</p>
+  <p>The escape hatch is <strong>transferring</strong> rather than copying. Pass the buffer in the second argument and its ownership moves to the worker instead of being duplicated; the sending side is left with an empty buffer, which is the point.</p>
+  <pre><code>{`const buffer = new ArrayBuffer(64 * 1024 * 1024);
+
+// Copied: the main thread keeps its own version.
+worker.postMessage(buffer);
+
+// Transferred: ownership moves, nothing is copied,
+// and buffer.byteLength becomes 0 on this side.
+worker.postMessage(buffer, [buffer]);`}</code></pre>
+  <p>Transferables are why image processing and audio work well in workers: the pixels move once, they are not copied twice.</p>
+
+  <h2>Web Worker, Shared Worker, Service Worker</h2>
+  <p>Three things carry the word worker and they are not interchangeable, which is where most of the confusion sits.</p>
+  <p>A <strong>dedicated worker</strong>, the one described here, belongs to the single page that created it and dies with it. A <strong>shared worker</strong> can be reached by several pages of the same origin, which is useful for a single connection shared across tabs. A <strong>service worker</strong> is a different animal entirely: it sits between the page and the network as a proxy, it is event-driven, the browser starts and stops it at will, and it is what makes offline behaviour and push notifications possible. We cover it separately in <a href="/guides/service-worker">what a service worker is</a>.</p>
+  <p>The short rule: use a web worker to move computation off the main thread, and a service worker to control what happens to network requests. Reaching for a service worker to speed up a calculation is a category error.</p>
+
+  <h2>When it is worth it, and when it is not</h2>
+  <p>A worker pays for itself when the work is genuinely heavy and the data crossing the boundary is small relative to it. Parsing a large CSV, indexing text for search, compressing, hashing, decoding images: all of these compute a lot and return little.</p>
+  <p>It does not pay when the task is small, because starting a worker means starting a JavaScript context and that is not free, and it does not pay when the data is enormous and the computation is trivial, because you will spend the saving on the copy. Measure before assuming; the boundary cost is the part people forget.</p>
+  <p>If the reason you are here is a performance score rather than a specific slow feature, note that this is exactly the lever behind moving work off the main thread, which is what <a href="/guides/what-is-the-event-loop">the event loop</a> makes unavoidable in the first place.</p></Article>

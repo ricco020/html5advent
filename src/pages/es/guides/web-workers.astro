@@ -1,0 +1,70 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="web-workers"
+  title="Qué es un Web Worker: un segundo hilo, y la copia que decide si merece la pena"
+  description="Un Web Worker ejecuta tu script en un hilo aparte para que el trabajo pesado deje de bloquear la interfaz. A qué tiene acceso y a qué no, por qué postMessage copia en vez de compartir, cómo transferir un ArrayBuffer evita esa copia, y en qué se diferencia de un Service Worker."
+  cat="apis"
+  day={24}
+  hero="/img/web-workers-hero.jpg"
+  heroAlt="Una vía rápida vista desde arriba, separada por una mediana, con un único coche oscuro en la calzada derecha"
+  cluster={null}
+>
+  <p>JavaScript se ejecuta en un solo hilo, y ese hilo también atiende clics, desplazamiento y renderizado. Un cálculo largo ahí no ralentiza la página, la detiene. Un <strong>Web Worker</strong> es la salida estándar: un script que corre en un hilo aparte y hace el trabajo caro mientras la interfaz sigue respondiendo.</p>
+
+  <h2>Qué es realmente un worker</h2>
+  <p>Apuntas un worker a un fichero de script. Arranca su propio contexto JavaScript, con su ámbito global y su bucle de eventos, y funciona hasta que lo terminas o la página desaparece.</p>
+  <pre><code>{`// main.js
+const worker = new Worker('./heavy.js', { type: 'module' });
+
+worker.postMessage({ rows: 250000 });
+
+worker.onmessage = (event) => {
+  render(event.data.total);
+};
+
+worker.onerror = (event) => console.error(event.message);`}</code></pre>
+  <p>Dentro del worker el objeto global es <code>self</code> y no <code>window</code>, y la forma es la misma en ambos lados: escuchar mensajes, hacer el trabajo, devolver el resultado.</p>
+  <pre><code>{`// heavy.js
+self.onmessage = (event) => {
+  let total = 0;
+  for (let i = 0; i < event.data.rows; i++) total += compute(i);
+  self.postMessage({ total });
+};`}</code></pre>
+  <p>Nada de esto es asíncrono dentro del worker. El bucle bloquea igual que bloquearía en cualquier sitio; simplemente bloquea un hilo que nadie está mirando.</p>
+
+  <h2>Sin DOM, y ese es todo el diseño</h2>
+  <p>Un worker no tiene <code>window</code>, ni <code>document</code>, ni forma alguna de tocar un elemento. No es un descuido. El DOM no está pensado para manipularse desde varios hilos, y dar acceso a dos hilos produciría exactamente las condiciones de carrera que la plataforma trata de evitar.</p>
+  <p>Lo que sí obtiene es casi todo lo demás: <code>fetch</code>, <code>WebSocket</code>, <code>IndexedDB</code>, temporizadores, <code>crypto</code> e <code>importScripts</code> para los workers clásicos. Un worker puede descargar, analizar, calcular y almacenar. Solo que no puede mostrar nada, y por eso cada resultado tiene que volver al hilo principal para renderizarse.</p>
+
+  <figure>
+    <img src="/img/web-workers-inbody.jpg" alt="Un cocinero emplata gambas y verduras en una bandeja en una cocina de acero inoxidable. Un worker es un segundo par de manos: prepara en paralelo y devuelve el resultado, pero nunca sirve la mesa él mismo." width="1280" height="853" loading="lazy" />
+    <figcaption>Un cocinero emplata gambas y verduras en una bandeja en una cocina de acero inoxidable. Un worker es un segundo par de manos: prepara en paralelo y devuelve el resultado, pero nunca sirve la mesa él mismo.</figcaption>
+  </figure>
+
+
+  <h2>Hablar con él: postMessage copia, transferir mueve</h2>
+  <p>Los mensajes no son referencias compartidas. El valor que envías se duplica con el algoritmo de clonado estructurado, el mismo que usa IndexedDB, y ambos lados acaban con copias independientes. Las funciones y los nodos del DOM no son clonables y lanzan error.</p>
+  <p>Esa copia es el coste oculto, y es donde pierde el código ingenuo. Enviar sesenta megabytes de array tipado significa serializar y duplicar sesenta megabytes, lo que puede superar con facilidad el tiempo que el cálculo ahorró.</p>
+  <p>La vía de escape es <strong>transferir</strong> en vez de copiar. Pasa el buffer como segundo argumento y su propiedad se mueve al worker en lugar de duplicarse; el emisor se queda con un buffer vacío, que es justamente el objetivo.</p>
+  <pre><code>{`const buffer = new ArrayBuffer(64 * 1024 * 1024);
+
+// Copied: the main thread keeps its own version.
+worker.postMessage(buffer);
+
+// Transferred: ownership moves, nothing is copied,
+// and buffer.byteLength becomes 0 on this side.
+worker.postMessage(buffer, [buffer]);`}</code></pre>
+  <p>Los transferibles explican por qué el procesamiento de imagen y el audio funcionan bien en un worker: los píxeles se mueven una vez, no se copian dos.</p>
+
+  <h2>Web Worker, Shared Worker, Service Worker</h2>
+  <p>Tres cosas llevan la palabra worker sin ser intercambiables, y ahí está la mayor parte de la confusión.</p>
+  <p>Un <strong>worker dedicado</strong>, el descrito aquí, pertenece a la única página que lo creó y muere con ella. Un <strong>shared worker</strong> es alcanzable desde varias páginas del mismo origen, útil para compartir una conexión entre pestañas. Un <strong>service worker</strong> es otra cosa por completo: se sitúa entre la página y la red como un proxy, funciona por eventos, el navegador lo arranca y lo detiene a su antojo, y es lo que hace posible el modo sin conexión y las notificaciones push. Lo tratamos aparte en <a href="/es/guides/service-worker">qué es un service worker</a>.</p>
+  <p>La regla corta: un web worker para sacar cálculo del hilo principal, un service worker para controlar qué ocurre con las peticiones de red. Recurrir a un service worker para acelerar un cálculo es un error de categoría.</p>
+
+  <h2>Cuándo merece la pena y cuándo no</h2>
+  <p>Un worker se amortiza cuando el trabajo es de verdad pesado y los datos que cruzan la frontera son pequeños en comparación. Analizar un CSV grande, indexar texto para una búsqueda, comprimir, calcular hashes, decodificar imágenes: todo eso calcula mucho y devuelve poco.</p>
+  <p>No se amortiza cuando la tarea es pequeña, porque arrancar un worker es arrancar un contexto JavaScript y eso no es gratis, ni cuando los datos son enormes y el cálculo trivial, porque el ahorro se irá en la copia. Mide antes de suponer: el coste de la frontera es la parte que se olvida.</p>
+  <p>Si estás aquí por una puntuación de rendimiento y no por una función lenta concreta, ten en cuenta que esta es exactamente la palanca detrás de sacar trabajo del hilo principal, algo que <a href="/es/guides/what-is-the-event-loop">el bucle de eventos</a> vuelve inevitable de entrada.</p></Article>

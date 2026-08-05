@@ -1,0 +1,70 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="web-workers"
+  title="Web Worker, c'est quoi ? Un second thread, et la copie qui décide si ça vaut le coup"
+  description="Un Web Worker exécute votre script sur un thread séparé, pour que le travail lourd cesse de bloquer l'interface. Ce à quoi il a accès ou non, pourquoi postMessage copie au lieu de partager, comment transférer un ArrayBuffer évite cette copie, et en quoi il diffère d'un Service Worker."
+  cat="apis"
+  day={24}
+  hero="/img/web-workers-hero.jpg"
+  heroAlt="Une voie express vue de dessus, séparée par un terre-plein central, avec une seule voiture sombre sur la chaussée de droite"
+  cluster={null}
+>
+  <p>JavaScript s'exécute sur un seul thread, et ce thread gère aussi les clics, le défilement et le rendu. Un calcul long n'y ralentit pas la page, il l'arrête. Un <strong>Web Worker</strong> est la sortie standard : un script qui tourne sur un thread séparé et fait le travail coûteux pendant que l'interface reste réactive.</p>
+
+  <h2>Ce qu'est réellement un worker</h2>
+  <p>Vous pointez un worker vers un fichier de script. Il démarre son propre contexte JavaScript, avec sa portée globale et sa boucle d'événements, et il tourne jusqu'à ce que vous l'arrêtiez ou que la page disparaisse.</p>
+  <pre><code>{`// main.js
+const worker = new Worker('./heavy.js', { type: 'module' });
+
+worker.postMessage({ rows: 250000 });
+
+worker.onmessage = (event) => {
+  render(event.data.total);
+};
+
+worker.onerror = (event) => console.error(event.message);`}</code></pre>
+  <p>À l'intérieur du worker, l'objet global est <code>self</code> et non <code>window</code>, et la forme est la même des deux côtés : écouter les messages, faire le travail, renvoyer le résultat.</p>
+  <pre><code>{`// heavy.js
+self.onmessage = (event) => {
+  let total = 0;
+  for (let i = 0; i < event.data.rows; i++) total += compute(i);
+  self.postMessage({ total });
+};`}</code></pre>
+  <p>Rien de tout cela n'est asynchrone à l'intérieur du worker. La boucle bloque autant qu'elle bloquerait ailleurs ; elle bloque simplement un thread que personne ne regarde.</p>
+
+  <h2>Pas de DOM, et c'est tout le principe</h2>
+  <p>Un worker n'a ni <code>window</code>, ni <code>document</code>, ni aucun moyen de toucher un élément. Ce n'est pas un oubli. Le DOM n'est pas conçu pour être manipulé par plusieurs threads, et y donner accès à deux threads produirait exactement les situations de concurrence que la plateforme cherche à éviter.</p>
+  <p>Ce qu'il obtient en revanche, c'est presque tout le reste : <code>fetch</code>, <code>WebSocket</code>, <code>IndexedDB</code>, les minuteries, <code>crypto</code>, et <code>importScripts</code> pour les workers classiques. Un worker peut donc télécharger, analyser, calculer et stocker. Il ne peut simplement rien afficher, ce qui explique que chaque résultat doive repartir vers le thread principal pour être rendu.</p>
+
+  <figure>
+    <img src="/img/web-workers-inbody.jpg" alt="Un cuisinier dresse des crevettes et des légumes sur un plateau dans une cuisine en inox. Un worker est une seconde paire de mains : il prépare en parallèle et rend le résultat, mais il ne sert jamais la table lui-même." width="1280" height="853" loading="lazy" />
+    <figcaption>Un cuisinier dresse des crevettes et des légumes sur un plateau dans une cuisine en inox. Un worker est une seconde paire de mains : il prépare en parallèle et rend le résultat, mais il ne sert jamais la table lui-même.</figcaption>
+  </figure>
+
+
+  <h2>Lui parler : postMessage copie, le transfert déplace</h2>
+  <p>Les messages ne sont pas des références partagées. La valeur envoyée est dupliquée par l'algorithme de clonage structuré, celui-là même qu'utilise IndexedDB, et les deux côtés se retrouvent avec des copies indépendantes. Les fonctions et les nœuds du DOM ne sont pas clonables et lèvent une erreur.</p>
+  <p>Cette copie est le coût caché, et c'est là que le code naïf perd. Envoyer soixante mégaoctets de tableau typé signifie sérialiser et dupliquer soixante mégaoctets, ce qui peut facilement dépasser le temps que le calcul a fait gagner.</p>
+  <p>L'échappatoire est de <strong>transférer</strong> plutôt que de copier. Passez le buffer en second argument et sa propriété part vers le worker au lieu d'être dupliquée ; l'émetteur se retrouve avec un buffer vide, et c'est précisément le but.</p>
+  <pre><code>{`const buffer = new ArrayBuffer(64 * 1024 * 1024);
+
+// Copied: the main thread keeps its own version.
+worker.postMessage(buffer);
+
+// Transferred: ownership moves, nothing is copied,
+// and buffer.byteLength becomes 0 on this side.
+worker.postMessage(buffer, [buffer]);`}</code></pre>
+  <p>Les transférables expliquent pourquoi le traitement d'image et l'audio fonctionnent bien dans un worker : les pixels se déplacent une fois, ils ne sont pas copiés deux fois.</p>
+
+  <h2>Web Worker, Shared Worker, Service Worker</h2>
+  <p>Trois choses portent le mot worker sans être interchangeables, et c'est là que se loge l'essentiel de la confusion.</p>
+  <p>Un <strong>worker dédié</strong>, celui décrit ici, appartient à la seule page qui l'a créé et meurt avec elle. Un <strong>shared worker</strong> peut être atteint par plusieurs pages de la même origine, ce qui sert à partager une connexion entre onglets. Un <strong>service worker</strong> est d'une tout autre nature : il se place entre la page et le réseau comme un mandataire, il est piloté par événements, le navigateur le démarre et l'arrête à sa guise, et c'est lui qui rend possibles le hors-ligne et les notifications push. Nous le traitons à part dans <a href="/fr/guides/service-worker">ce qu'est un service worker</a>.</p>
+  <p>La règle courte : un web worker pour sortir du calcul du thread principal, un service worker pour contrôler ce qui arrive aux requêtes réseau. Prendre un service worker pour accélérer un calcul est une erreur de catégorie.</p>
+
+  <h2>Quand cela vaut le coup, et quand non</h2>
+  <p>Un worker se rentabilise quand le travail est réellement lourd et que les données qui traversent la frontière sont petites en comparaison. Analyser un gros CSV, indexer du texte pour une recherche, compresser, hacher, décoder des images : tout cela calcule beaucoup et renvoie peu.</p>
+  <p>Il ne se rentabilise pas quand la tâche est petite, car démarrer un worker revient à démarrer un contexte JavaScript et ce n'est pas gratuit, ni quand les données sont énormes et le calcul trivial, car le gain repartira dans la copie. Mesurez avant de supposer : le coût de la frontière est la partie qu'on oublie.</p>
+  <p>Si vous êtes ici pour un score de performance plutôt que pour une fonctionnalité lente précise, notez que c'est exactement le levier derrière le fait de sortir du travail du thread principal, ce que <a href="/fr/guides/what-is-the-event-loop">la boucle d'événements</a> rend inévitable au départ.</p></Article>
