@@ -1,0 +1,83 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="indexeddb"
+  title="What is IndexedDB? The browser database explained"
+  description="IndexedDB is the browser's real database - asynchronous, transactional and far bigger than localStorage. How onupgradeneeded works, why transactions close on you, what indexes are for, and when to use it instead of Web Storage."
+  cat="apis"
+  day={23}
+  hero="/img/indexeddb-hero.jpg"
+  heroAlt="A wall of wooden card catalogue drawers with brass label holders and handwritten numbers"
+  cluster={null}
+>
+  <p><strong>IndexedDB</strong> is the browser's real database. Where <a href="/guides/localstorage-vs-sessionstorage">Web Storage</a> gives you a synchronous box of strings capped around 5&nbsp;MB, IndexedDB gives you an asynchronous, transactional store for structured data, sized in hundreds of megabytes or more. It is not SQL. It is a key-value store with indexes, and once that clicks the rest of the API follows.</p>
+
+  <h2>Opening a database, and the only place you can change its shape</h2>
+  <p>You open a database by name and <strong>version number</strong>. If the version you ask for is higher than the one on disk, the browser fires <code>upgradeneeded</code>, and that event handler is the <em>only</em> place where you may create or delete object stores and indexes.</p>
+  <pre><code>{`const request = indexedDB.open('notes-db', 1);
+
+request.onupgradeneeded = (event) => {
+  const db = event.target.result;
+  const store = db.createObjectStore('notes', { keyPath: 'id', autoIncrement: true });
+  store.createIndex('by_tag', 'tag', { unique: false });
+};
+
+request.onsuccess = (event) => {
+  const db = event.target.result;
+};
+
+request.onerror = () => console.error(request.error);`}</code></pre>
+  <p>This catches people out because it inverts the usual habit. You cannot create a store lazily the first time you need it. The schema lives in one function, keyed to a version number you bump when the shape changes.</p>
+
+  <h2>Everything is a request, and requests are asynchronous</h2>
+  <p>Almost every IndexedDB call returns an <code>IDBRequest</code> rather than a value. You read the result in <code>onsuccess</code> and handle failure in <code>onerror</code>. Nothing blocks the main thread, which is the whole reason to prefer it over <code>localStorage</code> for anything sizeable.</p>
+
+  <figure>
+    <img src="/img/indexeddb-inbody.jpg" alt="An open drawer of index cards with dividers numbered 166 to 169. An IndexedDB index is exactly this: a second ordering of the same records, kept so you can look them up by something other than their key." width="1280" height="960" loading="lazy" />
+    <figcaption>An open drawer of index cards with dividers numbered 166 to 169. An IndexedDB index is exactly this: a second ordering of the same records, kept so you can look them up by something other than their key.</figcaption>
+  </figure>
+
+
+  <h2>Reads and writes happen inside a transaction</h2>
+  <p>You cannot touch a store directly. You open a transaction over one or more stores, in <code>readonly</code> or <code>readwrite</code> mode, and work through it.</p>
+  <pre><code>{`const tx = db.transaction('notes', 'readwrite');
+const store = tx.objectStore('notes');
+
+store.add({ title: 'Buy milk', tag: 'errand', done: false });
+
+tx.oncomplete = () => console.log('written');
+tx.onerror = () => console.error(tx.error);`}</code></pre>
+  <p>Here is the trap worth knowing in advance. A transaction <strong>commits automatically</strong> once there is no more pending work for it. If you await something unrelated in the middle of one, such as a <code>fetch</code>, the transaction closes while you wait and the next call throws <code>TransactionInactiveError</code>. Do the outside work first, then open the transaction.</p>
+
+  <h2>Indexes, which are the point of the name</h2>
+  <p>Records are fetched by primary key by default. An <strong>index</strong> is a second ordering over the same records so you can query by another property.</p>
+  <pre><code>{`const tx = db.transaction('notes', 'readonly');
+const index = tx.objectStore('notes').index('by_tag');
+
+const req = index.getAll('errand');
+req.onsuccess = () => console.log(req.result);`}</code></pre>
+  <p>For ranges rather than exact matches, combine an index with <code>IDBKeyRange</code> and a cursor, which walks results one at a time instead of loading them all into memory.</p>
+
+  <h2>What it can store, and how much</h2>
+  <p>IndexedDB accepts anything the structured clone algorithm handles: objects, arrays, <code>Date</code>, <code>Blob</code>, <code>File</code>, <code>ArrayBuffer</code>. Functions and DOM nodes are not clonable and will throw. No <code>JSON.stringify</code> round trip is needed, which also means numbers stay numbers and dates stay dates.</p>
+  <p>The quota is a share of available disk rather than a fixed 5&nbsp;MB, so it is the right home for cached API responses, offline documents or media. That storage is <em>best-effort</em> by default and can be evicted under disk pressure; call <code>navigator.storage.persist()</code> if the data must survive that, and check <code>navigator.storage.estimate()</code> to see what you are using.</p>
+
+  <h2>IndexedDB or localStorage?</h2>
+  <table>
+    <thead><tr><th> </th><th>localStorage</th><th>IndexedDB</th></tr></thead>
+    <tbody>
+      <tr><td>API style</td><td>Synchronous, blocks the main thread</td><td>Asynchronous, event based</td></tr>
+      <tr><td>Values</td><td>Strings only</td><td>Structured clonable values</td></tr>
+      <tr><td>Rough size</td><td>About 5&nbsp;MB per origin</td><td>A share of free disk space</td></tr>
+      <tr><td>Querying</td><td>By key only</td><td>By key, by index, by range with cursors</td></tr>
+      <tr><td>Good for</td><td>Theme, flags, small preferences</td><td>Offline data, caches, files, large lists</td></tr>
+    </tbody>
+  </table>
+  <p>Both are scoped to the origin and neither is a place for secrets: any script on the page can read them.</p>
+
+  <h2>Should you use a wrapper?</h2>
+  <p>The raw API is verbose because it predates promises. Small helper libraries wrap requests in promises and remove most of the boilerplate, and they are a reasonable default for application code. Learn the underlying model first anyway: <code>upgradeneeded</code>, transactions and their auto-commit behave the same way underneath, and every confusing bug you will hit comes from those three, not from the wrapper.</p>
+  <p>Reach for IndexedDB when data is structured, large, or needs to be there offline, often alongside a <a href="/guides/service-worker">service worker</a>. Keep <code>localStorage</code> for the handful of small flags where a synchronous read is genuinely simpler.</p>
+</Article>

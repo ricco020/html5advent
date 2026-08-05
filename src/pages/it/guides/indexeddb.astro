@@ -1,0 +1,83 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="indexeddb"
+  title="IndexedDB cos'è: il database del browser spiegato"
+  description="IndexedDB è il vero database del browser: asincrono, transazionale e molto più capiente di localStorage. Come funziona onupgradeneeded, perché le transazioni si chiudono da sole, a cosa servono gli indici e quando usarlo al posto del Web Storage."
+  cat="apis"
+  day={23}
+  hero="/img/indexeddb-hero.jpg"
+  heroAlt="Una parete di cassetti di schedario in legno con portaetichette in ottone e numeri scritti a mano"
+  cluster={null}
+>
+  <p><strong>IndexedDB</strong> è il vero database del browser. Dove il <a href="/it/guides/localstorage-vs-sessionstorage">Web Storage</a> ti dà una scatola sincrona di stringhe con un tetto attorno ai 5&nbsp;MB, IndexedDB offre un archivio asincrono e transazionale per dati strutturati, dimensionato in centinaia di megabyte o più. Non è SQL. È un archivio chiave-valore con indici, e una volta afferrato questo il resto dell'API viene da sé.</p>
+
+  <h2>Aprire un database, e l'unico posto dove puoi cambiarne la forma</h2>
+  <p>Un database si apre per nome e <strong>numero di versione</strong>. Se la versione che chiedi è più alta di quella su disco, il browser scatena <code>upgradeneeded</code>, e quel gestore è l'<em>unico</em> punto in cui puoi creare o eliminare object store e indici.</p>
+  <pre><code>{`const request = indexedDB.open('notes-db', 1);
+
+request.onupgradeneeded = (event) => {
+  const db = event.target.result;
+  const store = db.createObjectStore('notes', { keyPath: 'id', autoIncrement: true });
+  store.createIndex('by_tag', 'tag', { unique: false });
+};
+
+request.onsuccess = (event) => {
+  const db = event.target.result;
+};
+
+request.onerror = () => console.error(request.error);`}</code></pre>
+  <p>Questo spiazza perché ribalta l'abitudine. Non puoi creare uno store pigramente la prima volta che ti serve. Lo schema vive in una sola funzione, legata a un numero di versione che alzi quando la struttura cambia.</p>
+
+  <h2>Tutto è una richiesta, e le richieste sono asincrone</h2>
+  <p>Quasi ogni chiamata IndexedDB restituisce un <code>IDBRequest</code> invece di un valore. Il risultato si legge in <code>onsuccess</code> e l'errore si gestisce in <code>onerror</code>. Niente blocca il thread principale, ed è tutta la ragione per preferirlo a <code>localStorage</code> quando il volume conta.</p>
+
+  <figure>
+    <img src="/img/indexeddb-inbody.jpg" alt="Un cassetto aperto di schede con separatori numerati dal 166 al 169. Un indice di IndexedDB è esattamente questo: un secondo ordinamento degli stessi record, tenuto per poterli cercare con qualcosa di diverso dalla loro chiave." width="1280" height="960" loading="lazy" />
+    <figcaption>Un cassetto aperto di schede con separatori numerati dal 166 al 169. Un indice di IndexedDB è esattamente questo: un secondo ordinamento degli stessi record, tenuto per poterli cercare con qualcosa di diverso dalla loro chiave.</figcaption>
+  </figure>
+
+
+  <h2>Letture e scritture avvengono dentro una transazione</h2>
+  <p>Uno store non si tocca direttamente. Si apre una transazione su uno o più store, in modalità <code>readonly</code> o <code>readwrite</code>, e ci si lavora attraverso.</p>
+  <pre><code>{`const tx = db.transaction('notes', 'readwrite');
+const store = tx.objectStore('notes');
+
+store.add({ title: 'Buy milk', tag: 'errand', done: false });
+
+tx.oncomplete = () => console.log('written');
+tx.onerror = () => console.error(tx.error);`}</code></pre>
+  <p>Ecco la trappola che conviene conoscere in anticipo. Una transazione <strong>viene confermata automaticamente</strong> appena non ha più lavoro in sospeso. Se nel mezzo attendi qualcosa di estraneo, per esempio un <code>fetch</code>, la transazione si chiude durante l'attesa e la chiamata successiva solleva <code>TransactionInactiveError</code>. Fai prima il lavoro esterno, poi apri la transazione.</p>
+
+  <h2>Gli indici, che spiegano il nome</h2>
+  <p>Per impostazione predefinita i record si recuperano dalla chiave primaria. Un <strong>indice</strong> è un secondo ordinamento degli stessi record, che consente di interrogare per un'altra proprietà.</p>
+  <pre><code>{`const tx = db.transaction('notes', 'readonly');
+const index = tx.objectStore('notes').index('by_tag');
+
+const req = index.getAll('errand');
+req.onsuccess = () => console.log(req.result);`}</code></pre>
+  <p>Per intervalli anziché corrispondenze esatte, combina un indice con <code>IDBKeyRange</code> e un cursore, che scorre i risultati uno alla volta invece di caricarli tutti in memoria.</p>
+
+  <h2>Che cosa può conservare, e quanto</h2>
+  <p>IndexedDB accetta tutto ciò che l'algoritmo di clonazione strutturata gestisce: oggetti, array, <code>Date</code>, <code>Blob</code>, <code>File</code>, <code>ArrayBuffer</code>. Funzioni e nodi del DOM non sono clonabili e sollevano un errore. Non serve alcun passaggio da <code>JSON.stringify</code>, il che significa anche che i numeri restano numeri e le date restano date.</p>
+  <p>La quota è una quota del disco disponibile e non un tetto fisso di 5&nbsp;MB, quindi è il posto giusto per risposte API in cache, documenti offline o file multimediali. Quell'archiviazione è <em>best effort</em> per impostazione predefinita e può essere sfrattata sotto pressione di spazio; chiama <code>navigator.storage.persist()</code> se i dati devono sopravvivere, e <code>navigator.storage.estimate()</code> per vedere quanto stai usando.</p>
+
+  <h2>IndexedDB o localStorage?</h2>
+  <table>
+    <thead><tr><th> </th><th>localStorage</th><th>IndexedDB</th></tr></thead>
+    <tbody>
+      <tr><td>Stile di API</td><td>Sincrona, blocca il thread principale</td><td>Asincrona, basata su eventi</td></tr>
+      <tr><td>Valori</td><td>Solo stringhe</td><td>Valori clonabili strutturati</td></tr>
+      <tr><td>Dimensione indicativa</td><td>Circa 5&nbsp;MB per origine</td><td>Una quota dello spazio libero su disco</td></tr>
+      <tr><td>Interrogazioni</td><td>Solo per chiave</td><td>Per chiave, per indice, per intervallo con cursori</td></tr>
+      <tr><td>Adatto a</td><td>Tema, flag, piccole preferenze</td><td>Dati offline, cache, file, liste grandi</td></tr>
+    </tbody>
+  </table>
+  <p>Entrambi sono limitati all'origine e nessuno dei due è un posto per i segreti: qualsiasi script della pagina può leggerli.</p>
+
+  <h2>Conviene usare un wrapper?</h2>
+  <p>L'API grezza è verbosa perché precede le promise. Piccole librerie avvolgono le richieste in promise e tolgono quasi tutto il codice ripetitivo, e sono una scelta predefinita ragionevole per il codice applicativo. Impara comunque prima il modello sottostante: <code>upgradeneeded</code>, le transazioni e la loro conferma automatica si comportano allo stesso modo sotto, e ogni bug sconcertante che incontrerai viene da quei tre punti, non dal wrapper.</p>
+  <p>Scegli IndexedDB quando i dati sono strutturati, voluminosi o devono essere disponibili offline, spesso accanto a un <a href="/it/guides/service-worker">service worker</a>. Tieni <code>localStorage</code> per la manciata di piccoli flag dove una lettura sincrona è davvero più semplice.</p>
+</Article>
