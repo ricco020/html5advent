@@ -1,0 +1,74 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="pt"
+  slug="resizeobserver"
+  title="O que é o ResizeObserver? O redimensionamento ao nível do elemento, e o erro de ciclo que toda a gente encontra"
+  description="O evento resize da window não diz nada sobre um elemento em concreto. O ResizeObserver diz. O que reporta, a diferença entre content box e border box, e porque aparece na sua consola «ResizeObserver loop completed with undelivered notifications»."
+  cat="apis"
+  hero="/img/resizeobserver-hero.jpg"
+  heroAlt="Uma fita métrica amarela esticada na diagonal sobre um fundo cinzento, com graduações de 21 a 42 e o 30 e o 40 impressos a vermelho"
+  cluster={null}
+>
+
+  <p>O evento <code>resize</code> na <code>window</code> dispara quando o viewport muda. É tudo o que sabe. Um elemento pode mudar de tamanho por causa de um contentor flex, de uma barra lateral que abre, de um tipo de letra que acaba de carregar ou de um textarea que se arrasta, e a <code>window</code> nunca saberá de nada disso.</p>
+
+  <p>O <strong>ResizeObserver</strong> é a API que vigia um elemento em vez da janela.</p>
+
+  <h2>O que reporta realmente</h2>
+
+  <p>A MDN formula-o com precisão: a interface <em>«reporta alterações às dimensões da content box ou da border box de um <code>Element</code>, ou da bounding box de um <code>SVGElement</code>»</em>.</p>
+
+  <p>Essas duas caixas não são a mesma coisa, e escolher a errada é uma fonte clássica de erros de poucos píxeis. A content box é onde vai o conteúdo: a border box menos o padding e a borda. A border box envolve em conjunto o conteúdo, o padding e a borda.</p>
+
+  <pre><code>{`const observer = new ResizeObserver((entries) =&gt; {
+  for (const entry of entries) {
+    const { width, height } = entry.contentRect;
+    entry.target.classList.toggle('is-narrow', width &lt; 400);
+  }
+});
+
+observer.observe(document.querySelector('.card'));`}</code></pre>
+
+  <p>O callback recebe um array de entradas porque um mesmo observador pode vigiar vários elementos e vários podem mudar no mesmo frame. Ler <code>entry.contentRect</code> dá a content box; <code>entry.borderBoxSize</code> e <code>entry.contentBoxSize</code> dão as caixas como arrays de objetos de dimensões.</p>
+
+  <h2>O erro que toda a gente encontra: «loop completed with undelivered notifications»</h2>
+
+  <p>Mais cedo ou mais tarde aparece na consola, e merece ser compreendido em vez de silenciado.</p>
+
+  <p>O problema de que protege é circular: o seu callback muda o tamanho de algo, essa mudança volta a disparar o observador, que muda outra vez o tamanho. Entregue a si mesma, a página nunca estabilizaria.</p>
+
+  <pre><code>{`// Boucle: le callback change la taille de ce qu il observe
+const bad = new ResizeObserver(([entry]) =&gt; {
+  entry.target.style.height = entry.contentRect.height + 1 + 'px';
+});`}</code></pre>
+
+  <p>A resposta da especificação, nas palavras da MDN, é que <em>«os ciclos infinitos por dependências cíclicas são resolvidos processando em cada iteração apenas os elementos mais profundos no DOM»</em>. Tudo o que não cumpra essa condição é adiado para o paint seguinte, e é emitido um evento de erro na <code>window</code> com uma mensagem fixa:</p>
+
+  <p><code>ResizeObserver loop completed with undelivered notifications.</code></p>
+
+  <img src="/img/resizeobserver-inbody.jpg" alt="Uma pessoa a fotografar-se num espelho de casa de banho colocado em frente a outro espelho, de modo que o reflexo se repete ao longe em molduras cada vez mais pequenas, com toda a cena tingida de azul esverdeado" width="1280" height="853" loading="lazy" />
+
+  <p>Eis a parte que mais importa, e a MDN enuncia-a sem rodeios: <strong><em>«isto apenas evita o bloqueio do navegador, não o ciclo infinito em si»</em></strong>. O navegador protege-se a si próprio, não corrige o seu código. A mensagem é um sintoma, e o ciclo continua lá.</p>
+
+  <p>Poderá também ver <code>ResizeObserver loop limit exceeded</code>, uma redação antiga do Chrome para a mesma família de problema. Cadeia diferente, a mesma coisa a corrigir.</p>
+
+  <h2>Como deixar de o provocar</h2>
+
+  <p><strong>Não escreva no callback nada que altere o tamanho daquilo que observa.</strong> Alternar uma classe que só muda uma cor é inofensivo. Definir uma altura a partir de uma altura medida é o ciclo dos manuais.</p>
+
+  <p><strong>Observe o pai, estilize o filho.</strong> Como o algoritmo processa primeiro os elementos mais profundos no DOM, agir para baixo e não para cima mantém-no do lado certo.</p>
+
+  <p><strong>Adie a escrita.</strong> Envolver a mutação em <code>requestAnimationFrame</code> retira-a da passagem de observação. Encare isto como um contorno: se a dependência for mesmo circular, adiou-a, não a eliminou.</p>
+
+  <h2>Quando não precisa dele de todo</h2>
+
+  <p>Se só quer estilizar um componente conforme a sua própria largura, <a href="/pt/guides/css-container-queries">as container queries de CSS</a> fazem-no em CSS, sem callback nem ciclo com que se preocupar. Guarde o ResizeObserver para quando precisar do número em JavaScript: redesenhar um canvas, compor um gráfico, recalcular algo que o CSS não sabe exprimir.</p>
+
+  <p>E se o que espera é a entrada de um elemento no viewport e não uma mudança de tamanho, esse é outro observador: veja <a href="/pt/guides/intersection-observer-api">a Intersection Observer API</a>.</p>
+
+  <h2>Em resumo</h2>
+
+  <p>O ResizeObserver é a resposta ao nível do elemento para um evento ao nível da janela. Escolha a caixa certa, nunca redimensione a partir do callback aquilo que observa, e leia o erro de ciclo como um sinal verdadeiro e não como ruído de consola: o navegador apenas se impediu de congelar, não resolveu o ciclo.</p>
+</Article>

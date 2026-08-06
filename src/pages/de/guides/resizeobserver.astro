@@ -1,0 +1,74 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="resizeobserver"
+  title="Was ist ResizeObserver? Größenänderung auf Elementebene, und der Schleifenfehler, den jeder trifft"
+  description="Das resize-Ereignis von window sagt nichts über ein einzelnes Element. ResizeObserver schon. Was er meldet, der Unterschied zwischen Content-Box und Border-Box, und warum „ResizeObserver loop completed with undelivered notifications“ in Ihrer Konsole auftaucht."
+  cat="apis"
+  hero="/img/resizeobserver-hero.jpg"
+  heroAlt="Ein gelbes Maßband, diagonal über einen grauen Hintergrund gespannt, mit Teilstrichen von 21 bis 42 und der 30 und 40 in Rot gedruckt"
+  cluster={null}
+>
+
+  <p>Das <code>resize</code>-Ereignis auf <code>window</code> feuert, wenn sich der Viewport ändert. Mehr weiß es nicht. Ein Element kann durch einen Flex-Container, eine sich öffnende Seitenleiste, eine endlich geladene Schrift oder ein gezogenes Textarea seine Größe ändern - <code>window</code> erfährt davon nie etwas.</p>
+
+  <p><strong>ResizeObserver</strong> ist die API, die ein Element statt des Fensters beobachtet.</p>
+
+  <h2>Was er tatsächlich meldet</h2>
+
+  <p>MDN formuliert es präzise: die Schnittstelle <em>„meldet Änderungen der Abmessungen der Content- oder Border-Box eines <code>Element</code> oder der Bounding-Box eines <code>SVGElement</code>“</em>.</p>
+
+  <p>Diese beiden Boxen sind nicht dasselbe, und die falsche zu wählen ist eine klassische Quelle für Fehler von wenigen Pixeln. Die Content-Box ist der Ort für den Inhalt: die Border-Box abzüglich Padding und Rahmen. Die Border-Box umschließt Inhalt, Padding und Rahmen gemeinsam.</p>
+
+  <pre><code>{`const observer = new ResizeObserver((entries) =&gt; {
+  for (const entry of entries) {
+    const { width, height } = entry.contentRect;
+    entry.target.classList.toggle('is-narrow', width &lt; 400);
+  }
+});
+
+observer.observe(document.querySelector('.card'));`}</code></pre>
+
+  <p>Der Callback erhält ein Array von Einträgen, weil ein Observer viele Elemente beobachten kann und sich mehrere im selben Frame ändern können. <code>entry.contentRect</code> liefert die Content-Box; <code>entry.borderBoxSize</code> und <code>entry.contentBoxSize</code> liefern die Boxen als Arrays von Dimensionsobjekten.</p>
+
+  <h2>Der Fehler, den jeder trifft: „loop completed with undelivered notifications“</h2>
+
+  <p>Früher oder später steht er in der Konsole, und er verdient Verständnis statt Stummschaltung.</p>
+
+  <p>Das Problem, vor dem er schützt, ist zirkulär: Ihr Callback ändert die Größe von etwas, diese Änderung löst den Observer erneut aus, der wieder die Größe ändert. Sich selbst überlassen, käme die Seite nie zur Ruhe.</p>
+
+  <pre><code>{`// Boucle: le callback change la taille de ce qu il observe
+const bad = new ResizeObserver(([entry]) =&gt; {
+  entry.target.style.height = entry.contentRect.height + 1 + 'px';
+});`}</code></pre>
+
+  <p>Die Antwort der Spezifikation lautet, in MDNs Worten, dass <em>„Endlosschleifen aus zyklischen Abhängigkeiten dadurch angegangen werden, dass in jeder Iteration nur tiefer im DOM liegende Elemente verarbeitet werden“</em>. Alles, was diese Bedingung nicht erfüllt, wird auf den nächsten Paint verschoben, und auf <code>window</code> wird ein Fehlerereignis mit einer festen Meldung ausgelöst:</p>
+
+  <p><code>ResizeObserver loop completed with undelivered notifications.</code></p>
+
+  <img src="/img/resizeobserver-inbody.jpg" alt="Eine Person fotografiert sich in einem Badezimmerspiegel, der einem weiteren Spiegel gegenübersteht, sodass sich die Spiegelung in immer kleineren Rahmen in die Tiefe wiederholt, die ganze Szene blaugrün getönt" width="1280" height="853" loading="lazy" />
+
+  <p>Hier ist der wichtigste Teil, und MDN sagt ihn unumwunden: <strong><em>„das verhindert nur ein Einfrieren des Browsers, nicht die Endlosschleife selbst“</em></strong>. Der Browser schützt sich selbst, er repariert Ihren Code nicht. Die Meldung ist ein Symptom, und die Schleife besteht weiter.</p>
+
+  <p>Möglicherweise sehen Sie auch <code>ResizeObserver loop limit exceeded</code>, eine ältere Chrome-Formulierung für dieselbe Problemfamilie. Andere Zeichenkette, dasselbe zu beheben.</p>
+
+  <h2>Wie Sie aufhören, ihn auszulösen</h2>
+
+  <p><strong>Schreiben Sie im Callback nichts, was die Größe des Beobachteten ändert.</strong> Eine Klasse umzuschalten, die nur eine Farbe ändert, ist unbedenklich. Eine Höhe aus einer gemessenen Höhe zu setzen, ist die Lehrbuchschleife.</p>
+
+  <p><strong>Beobachten Sie das Elternelement, stylen Sie das Kind.</strong> Da der Algorithmus tiefer liegende Elemente zuerst verarbeitet, hält Sie ein Wirken nach unten statt nach oben auf der richtigen Seite.</p>
+
+  <p><strong>Verschieben Sie den Schreibvorgang.</strong> Die Mutation in <code>requestAnimationFrame</code> zu verpacken, nimmt sie aus dem Beobachtungsdurchlauf heraus. Betrachten Sie das als Notlösung: Ist die Abhängigkeit wirklich zirkulär, haben Sie sie aufgeschoben, nicht beseitigt.</p>
+
+  <h2>Wann Sie ihn gar nicht brauchen</h2>
+
+  <p>Wollen Sie nur eine Komponente nach ihrer eigenen Breite stylen, erledigen das <a href="/de/guides/css-container-queries">CSS Container Queries</a> in CSS, ohne Callback und ohne Schleifensorgen. Greifen Sie zu ResizeObserver, wenn Sie die Zahl selbst in JavaScript brauchen: ein Canvas neu zeichnen, ein Diagramm layouten, etwas neu berechnen, das CSS nicht ausdrücken kann.</p>
+
+  <p>Und wenn Sie darauf warten, dass ein Element in den Viewport tritt, statt seine Größe zu ändern, ist das ein ganz anderer Observer: siehe <a href="/de/guides/intersection-observer-api">die Intersection Observer API</a>.</p>
+
+  <h2>Kurz gefasst</h2>
+
+  <p>ResizeObserver ist die Antwort auf Elementebene für ein Ereignis auf Fensterebene. Wählen Sie die richtige Box, ändern Sie im Callback nie die Größe des Beobachteten, und lesen Sie den Schleifenfehler als echtes Signal statt als Konsolenrauschen: Der Browser hat sich nur vor dem Einfrieren bewahrt, den Zyklus hat er nicht behoben.</p>
+</Article>

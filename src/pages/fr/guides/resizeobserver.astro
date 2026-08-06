@@ -1,0 +1,74 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="resizeobserver"
+  title="ResizeObserver, c'est quoi ? Le redimensionnement au niveau de l'élément, et l'erreur de boucle que tout le monde rencontre"
+  description="L'événement resize de window ne dit rien d'un élément précis. ResizeObserver, si. Ce qu'il rapporte, la différence entre content box et border box, et pourquoi « ResizeObserver loop completed with undelivered notifications » apparaît dans votre console."
+  cat="apis"
+  hero="/img/resizeobserver-hero.jpg"
+  heroAlt="Un mètre ruban jaune tendu en diagonale sur fond gris, graduations de 21 à 42 avec le 30 et le 40 imprimés en rouge"
+  cluster={null}
+>
+
+  <p>L'événement <code>resize</code> sur <code>window</code> se déclenche quand la fenêtre d'affichage change. C'est tout ce qu'il sait. Un élément peut être redimensionné par un conteneur flex, par l'ouverture d'une barre latérale, par une police qui finit par se charger ou par un textarea qu'on étire : <code>window</code> n'en saura jamais rien.</p>
+
+  <p><strong>ResizeObserver</strong> est l'API qui surveille un élément plutôt que la fenêtre.</p>
+
+  <h2>Ce qu'il rapporte réellement</h2>
+
+  <p>MDN le formule précisément : l'interface <em>« rapporte les changements de dimensions de la content box ou de la border box d'un <code>Element</code>, ou de la bounding box d'un <code>SVGElement</code> »</em>.</p>
+
+  <p>Ces deux boîtes ne sont pas la même chose, et se tromper de l'une pour l'autre est une source classique de bugs à quelques pixels près. La content box est l'endroit où va le contenu : la border box moins le padding et la bordure. La border box englobe ensemble le contenu, le padding et la bordure.</p>
+
+  <pre><code>{`const observer = new ResizeObserver((entries) =&gt; {
+  for (const entry of entries) {
+    const { width, height } = entry.contentRect;
+    entry.target.classList.toggle('is-narrow', width &lt; 400);
+  }
+});
+
+observer.observe(document.querySelector('.card'));`}</code></pre>
+
+  <p>Le callback reçoit un tableau d'entrées, parce qu'un même observateur peut surveiller plusieurs éléments et que plusieurs d'entre eux peuvent changer dans la même frame. Lire <code>entry.contentRect</code> donne la content box ; <code>entry.borderBoxSize</code> et <code>entry.contentBoxSize</code> donnent les boîtes sous forme de tableaux d'objets de dimensions.</p>
+
+  <h2>L'erreur que tout le monde croise : « loop completed with undelivered notifications »</h2>
+
+  <p>Tôt ou tard, elle apparaît dans la console, et elle mérite d'être comprise plutôt que réduite au silence.</p>
+
+  <p>Le problème dont elle protège est circulaire : votre callback change la taille de quelque chose, ce changement redéclenche l'observateur, qui change de nouveau la taille. Livrée à elle-même, la page ne se stabiliserait jamais.</p>
+
+  <pre><code>{`// Boucle: le callback change la taille de ce qu il observe
+const bad = new ResizeObserver(([entry]) =&gt; {
+  entry.target.style.height = entry.contentRect.height + 1 + 'px';
+});`}</code></pre>
+
+  <p>La réponse de la spécification, dans les termes de MDN, est que <em>« les boucles infinies dues à des dépendances cycliques sont traitées en ne traitant, à chaque itération, que les éléments plus profonds dans le DOM »</em>. Tout ce qui ne remplit pas cette condition est reporté au prochain rendu, et un événement d'erreur est déclenché sur <code>window</code> avec un message fixe :</p>
+
+  <p><code>ResizeObserver loop completed with undelivered notifications.</code></p>
+
+  <img src="/img/resizeobserver-inbody.jpg" alt="Une personne se photographiant dans un miroir de salle de bain faisant face à un autre miroir, si bien que le reflet se répète en s'éloignant dans des cadres de plus en plus petits, la scène entière teintée de bleu-vert" width="1280" height="853" loading="lazy" />
+
+  <p>Voici la partie qui compte le plus, et MDN l'énonce sans détour : <strong><em>« cela empêche seulement le figeage du navigateur, pas la boucle infinie elle-même »</em></strong>. Le navigateur se protège, il ne corrige pas votre code. Le message est un symptôme, et la boucle est toujours là.</p>
+
+  <p>Vous verrez peut-être aussi <code>ResizeObserver loop limit exceeded</code>, une ancienne formulation de Chrome pour la même famille de problème. Chaîne différente, même chose à corriger.</p>
+
+  <h2>Comment cesser de la provoquer</h2>
+
+  <p><strong>N'écrivez, dans le callback, rien qui change la taille de ce que vous observez.</strong> Basculer une classe qui ne change qu'une couleur est sans risque. Fixer une hauteur à partir d'une hauteur mesurée est la boucle des manuels.</p>
+
+  <p><strong>Observez le parent, stylez l'enfant.</strong> Puisque l'algorithme traite d'abord les éléments plus profonds dans le DOM, agir vers le bas plutôt que vers le haut vous maintient du bon côté.</p>
+
+  <p><strong>Différez l'écriture.</strong> Envelopper la mutation dans <code>requestAnimationFrame</code> la sort de la passe d'observation. À considérer comme un contournement : si la dépendance est réellement circulaire, vous l'avez repoussée, pas supprimée.</p>
+
+  <h2>Quand vous n'en avez pas besoin du tout</h2>
+
+  <p>Si vous voulez seulement styler un composant selon sa propre largeur, <a href="/fr/guides/css-container-queries">les container queries CSS</a> le font en CSS, sans callback ni boucle à surveiller. Réservez ResizeObserver aux cas où vous avez besoin du nombre lui-même en JavaScript : redessiner un canvas, disposer un graphique, recalculer ce que CSS ne sait pas exprimer.</p>
+
+  <p>Et si vous guettez l'entrée d'un élément dans la fenêtre d'affichage plutôt qu'un changement de taille, c'est un tout autre observateur : voir <a href="/fr/guides/intersection-observer-api">l'API Intersection Observer</a>.</p>
+
+  <h2>En résumé</h2>
+
+  <p>ResizeObserver est la réponse au niveau de l'élément à un événement au niveau de la fenêtre. Choisissez la bonne boîte, ne redimensionnez jamais depuis le callback ce que vous observez, et lisez l'erreur de boucle comme un vrai signal plutôt que comme du bruit de console : le navigateur s'est seulement empêché de figer, il n'a pas corrigé le cycle.</p>
+</Article>
