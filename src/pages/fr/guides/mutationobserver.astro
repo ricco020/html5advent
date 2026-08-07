@@ -1,0 +1,63 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="mutationobserver"
+  title="MutationObserver, c'est quoi ? Le troisième observateur, et la file qui le rend utilisable"
+  description="IntersectionObserver surveille la visibilité, ResizeObserver la taille, MutationObserver le DOM lui-même. Ce qu'il rapporte, pourquoi il a remplacé les Mutation Events, et la méthode qui révèle comment la livraison fonctionne réellement."
+  cat="apis"
+  hero="https://images.pexels.com/photos/164645/pexels-photo-164645.jpeg?auto=compress&cs=tinysrgb&w=1600"
+  heroAlt="Un carnet à spirale ouvert sur des pages quadrillées vierges avec un stylo noir posé dessus, à côté d'un passeport et d'un smartphone sur une table en bois"
+  cluster={null}
+>
+
+  <p>La plateforme compte trois observateurs, et ils se partagent le travail proprement. <a href="/fr/guides/intersection-observer-api">IntersectionObserver</a> vous dit quand un élément entre dans la fenêtre d'affichage. <a href="/fr/guides/resizeobserver">ResizeObserver</a> vous dit quand il change de taille. <strong>MutationObserver</strong> vous dit quand le DOM lui-même change.</p>
+
+  <p>MDN le formule en une ligne : l'interface <em>« offre la possibilité de surveiller les changements apportés à l'arbre DOM »</em>.</p>
+
+  <h2>Ce qu'il peut surveiller</h2>
+  <p>Trois types de changement, choisis par les options que vous passez :</p>
+  <ul>
+    <li><code>childList</code> — des nœuds ajoutés ou retirés</li>
+    <li><code>attributes</code> — un attribut modifié sur l'élément observé</li>
+    <li><code>characterData</code> — le contenu textuel d'un nœud modifié</li>
+  </ul>
+  <p>Plus <code>subtree</code>, qui étend n'importe lequel des précédents à tous les descendants plutôt qu'à la seule cible. Ce mot fait toute la différence entre surveiller un conteneur et surveiller tout ce qu'il contient.</p>
+
+  <pre><code>{`const observer = new MutationObserver((records) =&gt; {
+  for (const record of records) {
+    if (record.type === 'childList') {
+      console.log(record.addedNodes.length, 'node(s) added');
+    }
+  }
+});
+
+observer.observe(targetNode, {
+  attributes: true,
+  childList: true,
+  subtree: true,
+});`}</code></pre>
+
+  <h2>Pourquoi il a remplacé les Mutation Events</h2>
+  <p>MDN est explicite sur la filiation : MutationObserver <em>« est conçu comme un remplacement de l'ancienne fonctionnalité Mutation Events, qui faisait partie de la spécification DOM3 Events »</em>.</p>
+  <p>Les Mutation Events se déclenchaient de façon synchrone, un événement par changement, au milieu de ce qui modifiait le DOM. Un script insérant cent nœuds produisait cent interruptions, et un gestionnaire qui touchait au DOM pouvait déclencher d'autres événements alors qu'il traitait encore le premier. Ils ont été retirés pour de bonnes raisons.</p>
+
+  <h2>La file d'attente est la conception</h2>
+  <p>La partie intéressante n'est pas le callback mais ce qui l'alimente, et une méthode le trahit. <code>takeRecords()</code> <em>« retire toutes les notifications en attente de la file de notifications du MutationObserver et les renvoie dans un nouveau tableau d'objets MutationRecord »</em>.</p>
+
+  <img src="https://images.pexels.com/photos/193340/pexels-photo-193340.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Gros plan d'un bloc-notes en papier sur un bureau, avec un stylo et une paire de lunettes à côté" width="1200" height="850" loading="lazy" />
+
+  <p>Une <strong>file de notifications en attente</strong> signifie que la livraison n'est pas immédiate. Les changements s'accumulent, et votre callback reçoit un tableau d'enregistrements plutôt qu'un appel par changement. C'est précisément ce qui rend l'API utilisable là où les Mutation Events ne l'étaient pas : cent insertions deviennent un callback avec cent enregistrements, et votre code ne peut pas interrompre l'opération qui les a causés.</p>
+  <p>Cela explique aussi quand <code>takeRecords()</code> gagne sa place. Avant d'appeler <code>disconnect()</code>, tout ce qui est déjà en file mais pas encore livré serait perdu : vider la file d'abord permet de le traiter.</p>
+
+  <h2>Deux choses qui piègent</h2>
+  <p><strong>Vos propres écritures sont observées aussi.</strong> Si le callback modifie le DOM à l'intérieur du sous-arbre observé, ces modifications entrent en file et vous rappellent. Le remède habituel est un drapeau de garde, ou un resserrement des options pour que vos propres écritures tombent hors de ce que vous surveillez.</p>
+  <p><strong>Les enregistrements d'attribut ne portent pas la nouvelle valeur par défaut.</strong> Vous obtenez le nom de l'attribut, et <code>attributeOldValue: true</code> dans les options si vous voulez la précédente. La valeur actuelle, vous la lisez vous-même sur l'élément.</p>
+
+  <h2>Quand y recourir</h2>
+  <p>MutationObserver est le bon outil quand le DOM est modifié par quelque chose que vous ne contrôlez pas : un widget tiers, un bloc injecté par un CMS, un éditeur. C'est le mauvais outil pour l'état de votre propre application, où vous savez déjà quand les choses changent et où les observer revient à vous poser lentement une question que vous pouvez trancher directement.</p>
+  <p>Et <code>disconnect()</code> compte plus qu'il n'en a l'air : MDN le décrit comme arrêtant les notifications <em>« jusqu'à ce qu'observe() soit appelé de nouveau, et seulement dans ce cas »</em>. Un observateur posé sur un sous-arbre et qui survit au composant qui le surveillait est une fuite que personne ne remarque avant une heure de page ouverte.</p>
+
+  <p><em>Un bloc-notes en attente d'être lu. takeRecords() fait exactement cela : il vide la file d'attente de l'observateur et vous remet ce qui s'y est accumulé depuis la dernière livraison.</em></p>
+</Article>

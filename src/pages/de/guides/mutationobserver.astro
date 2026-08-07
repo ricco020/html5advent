@@ -1,0 +1,63 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="de"
+  slug="mutationobserver"
+  title="Was ist MutationObserver? Der dritte Observer und die Warteschlange, die ihn brauchbar macht"
+  description="IntersectionObserver beobachtet Sichtbarkeit, ResizeObserver die Größe, MutationObserver das DOM selbst. Was er meldet, warum er die Mutation Events ablöste, und die Methode, die verrät, wie die Zustellung wirklich funktioniert."
+  cat="apis"
+  hero="https://images.pexels.com/photos/164645/pexels-photo-164645.jpeg?auto=compress&cs=tinysrgb&w=1600"
+  heroAlt="Ein aufgeschlagener Spiralblock mit leeren karierten Seiten und einem schwarzen Stift darauf, daneben ein Reisepass und ein Smartphone auf einem Holztisch"
+  cluster={null}
+>
+
+  <p>Die Plattform hat drei Observer, und sie teilen sich die Arbeit sauber auf. <a href="/de/guides/intersection-observer-api">IntersectionObserver</a> tells you when an element enters the viewport. <a href="/de/guides/resizeobserver">ResizeObserver</a> tells you when it changes size. <strong>MutationObserver</strong> tells you when the DOM itself changes.</p>
+
+  <p>MDN bringt es auf eine Zeile: Die Schnittstelle <em>„bietet die Möglichkeit, Änderungen am DOM-Baum zu beobachten"</em>.</p>
+
+  <h2>What it can watch</h2>
+  <p>Three kinds of change, selected through the options you pass:</p>
+  <ul>
+    <li><code>childList</code> — nodes added or removed</li>
+    <li><code>attributes</code> — an attribute changed on the observed element</li>
+    <li><code>characterData</code> — the text content of a node changed</li>
+  </ul>
+  <p>Plus <code>subtree</code>, which extends any of the above to every descendant rather than the target alone. That one word is the difference between watching a container and watching everything inside it.</p>
+
+  <pre><code>{`const observer = new MutationObserver((records) =&gt; {
+  for (const record of records) {
+    if (record.type === 'childList') {
+      console.log(record.addedNodes.length, 'node(s) added');
+    }
+  }
+});
+
+observer.observe(targetNode, {
+  attributes: true,
+  childList: true,
+  subtree: true,
+});`}</code></pre>
+
+  <h2>Why it replaced Mutation Events</h2>
+  <p>MDN is explicit about the lineage: MutationObserver <em>"is designed as a replacement for the older Mutation Events feature, which was part of the DOM3 Events specification"</em>.</p>
+  <p>Mutation Events fired synchronously, one event per change, in the middle of whatever was modifying the DOM. A script inserting a hundred nodes produced a hundred interruptions, and a handler that touched the DOM could trigger more events while still handling the first. They were removed for good reason.</p>
+
+  <h2>The queue is the design</h2>
+  <p>The interesting part is not the callback but what feeds it, and one method gives it away. <code>takeRecords()</code> <em>"removes all pending notifications from the MutationObserver's notification queue and returns them in a new Array of MutationRecord objects"</em>.</p>
+
+  <img src="https://images.pexels.com/photos/193340/pexels-photo-193340.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Nahaufnahme eines Papierblocks auf einem Schreibtisch, daneben ein Stift und eine Brille" width="1200" height="850" loading="lazy" />
+
+  <p>A <strong>pending notification queue</strong> means delivery is not immediate. Changes accumulate, and your callback receives an array of records rather than one call per change. That is precisely what makes the API usable where Mutation Events were not: a hundred insertions become one callback with a hundred records, and your code cannot interrupt the operation that caused them.</p>
+  <p>It also explains when <code>takeRecords()</code> earns its place. Before calling <code>disconnect()</code>, anything already queued but not yet delivered would be lost - draining the queue first lets you handle it.</p>
+
+  <h2>Two things that catch people out</h2>
+  <p><strong>Your own writes are observed too.</strong> If the callback modifies the DOM inside the observed subtree, those modifications queue up and call you again. The usual remedy is a guard flag, or narrowing the options so your own writes fall outside what you watch.</p>
+  <p><strong>Attribute records do not carry the new value by default.</strong> You get the attribute name, and <code>attributeOldValue: true</code> in the options if you want the previous one. The current value you read from the element yourself.</p>
+
+  <h2>When to reach for it</h2>
+  <p>MutationObserver is the right tool when the DOM is changed by something you do not control: a third-party widget, a CMS-injected block, an editor. It is the wrong tool for your own application state, where you already know when things change and observing them is a slower way of asking yourself a question you can answer directly.</p>
+  <p>And <code>disconnect()</code> matters more than it looks - MDN describes it as stopping notifications <em>"until and unless observe() is called again"</em>. An observer on a subtree that outlives the component watching it is a leak that no one notices until the page has been open for an hour.</p>
+
+  <p><em>Ein Notizblock, der darauf wartet, gelesen zu werden. Genau das tut takeRecords(): Es leert die anstehende Warteschlange des Observers und übergibt Ihnen, was sich seit der letzten Zustellung angesammelt hat.</em></p>
+</Article>
