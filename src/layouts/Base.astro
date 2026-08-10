@@ -46,6 +46,33 @@ const year = 2026;
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', id);
+
+          // Mesure des clics affilies, ajoutee le 2026-08-10. Ce site fait 72
+          // sessions sur 30 jours et sert des encarts /go/, mais GA4 n en recevait
+          // QUE page_view, session_start, first_visit et user_engagement : aucun
+          // evenement de clic, pas meme le 'click' automatique. Sa conversion
+          // n etait pas mauvaise, elle etait inobservable.
+          // Memes noms d evenement et de parametres que vpnsmith, wethepurple et
+          // secure-os, pour que les quatre soient comparables dans GA4.
+          document.addEventListener('click', function (e) {
+            var link = e.target && e.target.closest ? e.target.closest('a[href*="/go/"]') : null;
+            if (!link) return;
+            var slug = (link.getAttribute('href') || '').split('/go/')[1] || '';
+            slug = slug.split(/[?#]/)[0].replace(/\/$/, '');
+            if (!slug) return;
+            var path = window.location.pathname;
+            var seg = path.split('/').filter(Boolean)[0];
+            var params = {
+              affiliate_program: slug.split('-')[0],
+              affiliate_slug: slug,
+              landing_path: path,
+              locale: seg && /^[a-z]{2}$/i.test(seg) ? seg.toLowerCase() : '',
+              link_url: link.href,
+              transport_type: 'beacon'
+            };
+            gtag('event', 'affiliate_click', params);
+            gtag('event', 'go_click', params);
+          }, true);
         </script>
       </>
     )}
