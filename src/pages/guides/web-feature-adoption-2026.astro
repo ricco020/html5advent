@@ -1,0 +1,85 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="web-feature-adoption-2026"
+  title="We measured 18 modern web features on 600 real sites. :has() is at 50%, dialog at 3.8%"
+  description="Support is documented everywhere. Actual use is not. We fetched the home pages of the Tranco top 600, read the served HTML and CSS, and counted what is really there - with the full method, the raw CSV, and the limits."
+  cat="css"
+  hero="/img/web-feature-adoption-2026-hero.jpg"
+  heroAlt="Three measuring instruments photographed from above on a white surface: a yellow tape measure marked 5m/16ft in inches and centimetres, a translucent plastic ruler marked METER, and a steel rule with fine graduations"
+  cluster={null}
+  updated="2026-08-10"
+>
+  <p>Whether a browser <em>supports</em> a feature is documented in a dozen places: MDN, caniuse, Baseline. Whether developers actually <em>use</em> it is documented far less often, and almost never in a form you can re-run yourself.</p>
+
+  <p>So we measured it. On <strong>10 August 2026</strong> we fetched the home page of the first 600 domains of the <a href="https://tranco-list.eu/list/W3779" rel="noopener">Tranco list W3779</a>, read the HTML they served plus their linked stylesheets, and counted eighteen modern platform features by literal pattern matching.</p>
+
+  <p>The raw data, the summary and the collection script are deposited on Zenodo under <a href="https://doi.org/10.5281/zenodo.21870382" rel="noopener">DOI 10.5281/zenodo.21870382</a>, CC BY 4.0. You can re-run the whole thing against any dated Tranco list.</p>
+
+  <h2>What we found</h2>
+
+  <p>Denominators first, because they decide what the percentages mean. <strong>320 of the 600 domains returned HTTP 200</strong>; those are the basis for HTML features. <strong>306 of those exposed at least one readable stylesheet</strong>; those are the basis for CSS features.</p>
+
+  <table>
+    <thead><tr><th>Feature</th><th>Sites</th><th>Share</th></tr></thead>
+    <tbody>
+      <tr><td>CSS custom properties</td><td>250</td><td>81.7%</td></tr>
+      <tr><td><code>aspect-ratio</code></td><td>157</td><td>51.3%</td></tr>
+      <tr><td><code>:has()</code></td><td>153</td><td>50.0%</td></tr>
+      <tr><td><code>srcset</code></td><td>150</td><td>46.9%</td></tr>
+      <tr><td><code>loading="lazy"</code></td><td>137</td><td>42.8%</td></tr>
+      <tr><td><code>fetchpriority</code></td><td>100</td><td>31.2%</td></tr>
+      <tr><td><code>&lt;picture&gt;</code></td><td>92</td><td>28.8%</td></tr>
+      <tr><td><code>type="module"</code></td><td>74</td><td>23.1%</td></tr>
+      <tr><td><code>text-wrap: balance</code></td><td>65</td><td>21.2%</td></tr>
+      <tr><td><code>color-mix()</code></td><td>62</td><td>20.3%</td></tr>
+      <tr><td><code>@container</code></td><td>56</td><td>18.3%</td></tr>
+      <tr><td><code>@layer</code></td><td>32</td><td>10.5%</td></tr>
+      <tr><td><code>subgrid</code></td><td>32</td><td>10.5%</td></tr>
+      <tr><td><code>&lt;details&gt;</code></td><td>14</td><td>4.4%</td></tr>
+      <tr><td><code>&lt;dialog&gt;</code></td><td>12</td><td>3.8%</td></tr>
+      <tr><td>CSS nesting (<code>&amp;</code>)</td><td>5</td><td>1.6%</td></tr>
+      <tr><td><code>popover</code></td><td>3</td><td>0.9%</td></tr>
+      <tr><td><code>importmap</code></td><td>2</td><td>0.6%</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <img src="/img/web-feature-adoption-2026-inbody.jpg" alt="Overhead view of a desk: a hand holding a pen above a printed sheet showing a colour bar chart titled Simple Column Chart with Index Labels, next to a mouse, a keyboard and other printed forms" width="1280" height="853" loading="lazy" />
+    <figcaption>Counting what is on the page is the easy part. Choosing the denominator, and saying out loud what the count cannot see, is the part that decides whether the number means anything.</figcaption>
+  </figure>
+
+  <h2>The gap worth arguing about</h2>
+
+  <p><a href="/guides/css-has-selector"><code>:has()</code></a> is on <strong>half</strong> the sites that answered. <a href="/guides/dialog-element"><code>&lt;dialog&gt;</code></a> is on <strong>3.8%</strong>. Both have been available across modern browsers for a comparable stretch of time, so support alone does not explain a thirteen-fold difference.</p>
+
+  <p>One reading - which this dataset does <em>not</em> establish, and which we offer as a hypothesis rather than a finding - is that the cost of adoption differs enormously. Adding <code>:has()</code> means editing a stylesheet: nothing else in the page has to change, and if the rule does not match, nothing breaks. Adopting <code>&lt;dialog&gt;</code> means rewriting a modal component that already works, including its focus handling, its close behaviour and whatever library currently owns it. The second is a refactor; the first is a line of CSS.</p>
+
+  <p>The same shape shows up further down. <a href="/guides/css-container-queries"><code>@container</code></a> at 18.3% and <code>subgrid</code> at 10.5% are additive - you can use them on one component and leave the rest alone. <a href="/guides/css-nesting">CSS nesting</a> at 1.6% is not: authors who want nesting have had it in Sass for a decade, and the native version competes with a build step that already works.</p>
+
+  <p><a href="/guides/popover-api"><code>popover</code></a> at 0.9% and <code>importmap</code> at 0.6% are simply early. They are the two youngest features in this list, and this is what the bottom of an adoption curve looks like.</p>
+
+  <h2>What this measurement cannot see</h2>
+
+  <p>These limits are not caveats added for form. Each one changes how you should read the table.</p>
+
+  <ul>
+    <li><strong>Only what is served.</strong> We read the bytes that come back from a single GET. Anything a framework injects after hydration is invisible to us, so client-rendered sites under-report on every HTML feature.</li>
+    <li><strong>Home pages only.</strong> A feature used on a product page and not on the home page counts as absent here.</li>
+    <li><strong>Declared use, not rendered use.</strong> A marker proves the code is present. A CSS rule may never match anything; a <code>&lt;dialog&gt;</code> may never open.</li>
+    <li><strong>Four stylesheets per page.</strong> Sites that split CSS across many files can be under-counted.</li>
+    <li><strong>Non-responders are excluded, not counted as zero.</strong> 280 domains did not return 200: 205 unreachable, 38 refused the request, 16 returned 404, the rest assorted. Much of that is the top of the Tranco list being DNS and CDN infrastructure that serves no web page at all.</li>
+    <li><strong>One run, one day.</strong> No trend is claimed here, and none can be read from a single snapshot.</li>
+  </ul>
+
+  <h2>Re-run it yourself</h2>
+
+  <p>The point of publishing the script is that you do not have to take our word for any of this.</p>
+
+  <pre><code>{`curl -sL "https://tranco-list.eu/download/W3779/1000000" -o tranco.csv
+python3 web-feature-adoption.py --n 600 --out .`}</code></pre>
+
+  <p>Your numbers will differ from ours: sites change, and the sample is a live snapshot. If they differ a lot, we would rather know.</p>
+</Article>
