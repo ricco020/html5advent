@@ -1,0 +1,96 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="es"
+  slug="css-subgrid"
+  title="Subgrid CSS: que las rejillas anidadas compartan las líneas del padre"
+  description="Una rejilla anidada inventa sus propias pistas, así que las tarjetas vecinas nunca se alinean. Subgrid hace que el hijo adopte las líneas de su padre: qué resuelve, las dos reglas que hay que recordar y en qué se diferencia de display: contents."
+  cat="css"
+  day={16}
+  hero="/img/css-subgrid-hero.jpg"
+  heroAlt="Un muro de piedra seca de bloques de caliza clara toscamente escuadrados, con hiladas irregulares y sin alinear, y cascotes a sus pies"
+  cluster={null}
+>
+  <p><strong>Subgrid</strong> resuelve una frustración concreta, y conviene enunciarla con precisión porque todo lo demás se deriva de ahí: una rejilla anidada crea <em>sus propias</em> pistas, que no tienen nada que ver con las del padre. Tres tarjetas en fila, cada una organizando su título, su cuerpo y su pie como rejilla interna, dimensionarán esas filas de forma independiente - y los pies no quedarán alineados.</p>
+
+  <p>Subgrid le dice al hijo que deje de inventar pistas y use las líneas del padre.</p>
+
+  <h2>El problema, en concreto</h2>
+  <p>Este es el diseño con el que todo el mundo tropieza. Una rejilla exterior de tarjetas, y cada tarjeta es a su vez una rejilla de tres filas:</p>
+  <pre><code>{`.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}`}</code></pre>
+  <p>Ahora cada tarjeta dimensiona sus tres filas a partir de su propio contenido. Una tarjeta con un título de dos líneas obtiene una primera fila más alta que su vecina con el título en una sola. El resultado: tres tarjetas cuyos elementos internos están todos ligeramente desfasados - y ningún estilo aplicado <em>dentro</em> de la tarjeta lo arregla, porque cada tarjeta mide de forma aislada.</p>
+
+  <h2>La solución, y las dos reglas</h2>
+  <p>Convierte la tarjeta en una <em>subgrid</em> en el eje que quieras alinear:</p>
+  <pre><code>{`.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+}`}</code></pre>
+  <p>Ahora las tres filas de cada tarjeta <em>son</em> las tres filas del padre. El título más alto del conjunto define la fila 1 para todas, de modo que títulos, cuerpos y pies caen sobre las mismas líneas a lo largo de toda la fila.</p>
+
+  <p>Merece la pena memorizar dos reglas, porque casi todos los casos de « subgrid no funciona » se reducen a una de ellas:</p>
+  <ul>
+    <li><strong>El elemento debe ser hijo directo de la rejilla cuyas pistas adopta.</strong> Subgrid no atraviesa un envoltorio: mete un <code>&lt;div&gt;</code> corriente entre la rejilla padre y la tarjeta y la relación se rompe.</li>
+    <li><strong>Solo adopta las pistas que abarca.</strong> Una tarjeta que abarca tres filas adopta tres. Si no declaras el span, abarca una, y obtienes una sola pista - lo que se parece exactamente a un subgrid que no hace nada.</li>
+  </ul>
+
+  <figure>
+    <img src="/img/css-subgrid-inbody.jpg" alt="Un muro de ladrillo plano en tonos amarillos, rosas y grises, con una pequeña ventana de arco cuya reja metálica está dividida en nueve cuarterones rectangulares" loading="lazy" width="639" height="406" />
+    <figcaption>Un muro de ladrillo en hiladas regulares con una pequeña ventana de arco abierta en él; la reja metálica de la ventana está a su vez dividida en nueve cuarterones, y sus divisiones se alinean con el aparejo del ladrillo en lugar de seguir su propia trama.</figcaption>
+  </figure>
+
+  <h2>Funciona eje por eje</h2>
+  <p>Subgrid se aplica a filas y columnas de forma independiente. Un hijo puede tomar las columnas del padre y definir sus propias filas, algo muy habitual:</p>
+  <pre><code>{`.child {
+  display: grid;
+  grid-column: span 4;
+  grid-template-columns: subgrid;  /* columnas del padre */
+  grid-template-rows: auto auto;   /* sus propias filas */
+}`}</code></pre>
+  <p>Así se alinea un bloque anidado con un sistema de columnas válido para toda la página sin renunciar al control de su ritmo vertical.</p>
+
+  <h2>Los huecos y las líneas con nombre vienen incluidos</h2>
+  <p>Dos comodidades fáciles de pasar por alto:</p>
+  <ul>
+    <li><strong>El hueco se hereda</strong> del padre en el eje subgridado, que suele ser lo que quieres. Declara <code>gap</code> en el hijo para sobrescribirlo.</li>
+    <li><strong>Las líneas con nombre también se heredan</strong>: si el padre define <code>[content-start]</code> y <code>[content-end]</code>, el hijo puede colocar elementos directamente sobre esos nombres.</li>
+  </ul>
+
+  <h2>Subgrid frente a display: contents</h2>
+  <p>Antes de subgrid, el apaño habitual era <code>display: contents</code> en el envoltorio, que elimina su caja y promueve a sus hijos a elementos de la rejilla exterior. Alinea, y cuesta la caja: sin fondo, sin borde, sin padding, sin border-radius en la tarjeta, porque la tarjeta ya no genera una caja donde pintarlos.</p>
+
+  <table>
+    <thead><tr><th></th><th><code>display: contents</code></th><th><code>subgrid</code></th></tr></thead>
+    <tbody>
+      <tr><td>Alineación entre vecinos</td><td>Sí</td><td>Sí</td></tr>
+      <tr><td>Conserva la caja del envoltorio</td><td>No</td><td>Sí</td></tr>
+      <tr><td>Fondo, borde, padding</td><td>Se pierden</td><td>Se conservan</td></tr>
+      <tr><td>Control por eje</td><td>No</td><td>Sí</td></tr>
+    </tbody>
+  </table>
+
+  <p>Si la tarjeta tiene que parecer una tarjeta, subgrid es la respuesta, y <code>display: contents</code> nunca lo fue.</p>
+
+  <h2>Compatibilidad con navegadores</h2>
+  <p>Firefox lanzó subgrid primero, ya en 2019, y pasó varios años siendo el único motor que lo tenía. Safari lo añadió en 2022 y Chrome en 2023, así que está disponible en las versiones actuales de todos los navegadores principales - lo bastante reciente como para que convenga comprobar tu propio objetivo de compatibilidad en vez de darlo por hecho.</p>
+
+  <p>El modelo mental es sencillo en cuanto encaja: una rejilla anidada normal pregunta « ¿cuánto espacio tengo y cómo lo reparto? ». Una subgrid pregunta « ¿dónde están las líneas de mi padre? » - y es esa segunda pregunta la que hace que una fila de tarjetas parezca diseñada en lugar de simplemente colocada. Si aún estás eligiendo mecanismo de maquetación, empieza por <a href="/es/guides/css-grid-vs-flexbox">CSS Grid frente a Flexbox</a>; y para componentes que deben adaptarse al espacio que reciben y no a la pantalla, combínalo con las <a href="/es/guides/css-container-queries">container queries</a>.</p>
+</Article>

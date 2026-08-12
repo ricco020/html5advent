@@ -1,0 +1,96 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="css-subgrid"
+  title="CSS Subgrid: make nested grids share the parent's lines"
+  description="A nested grid invents its own tracks, so sibling cards never line up. Subgrid makes a child adopt its parent's track lines - what it fixes, the two rules to remember, and how it differs from display: contents."
+  cat="css"
+  day={16}
+  hero="/img/css-subgrid-hero.jpg"
+  heroAlt="A free-standing dry-stone wall of pale roughly-squared limestone blocks, its courses irregular and unaligned, with rubble at its foot"
+  cluster={null}
+>
+  <p><strong>Subgrid</strong> solves one specific frustration, and it is worth stating precisely because everything else follows from it: a nested grid creates <em>its own</em> tracks, which have nothing to do with the parent's. So three cards in a row, each laying out its title, body and footer as an internal grid, will each size those rows independently - and the footers will not line up.</p>
+
+  <p>Subgrid tells a child to stop inventing tracks and use the parent's lines instead.</p>
+
+  <h2>The problem, concretely</h2>
+  <p>Here is the layout everybody hits. An outer grid of cards, and each card is itself a grid of three rows:</p>
+  <pre><code>{`.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}`}</code></pre>
+  <p>Each card now sizes its own three rows from its own content. A card with a two-line title gets a taller first row than its neighbour with a one-line title. The result is three cards whose internal elements are all slightly out of step - and no amount of styling inside the card can fix it, because each card is measuring in isolation.</p>
+
+  <h2>The fix, and the two rules</h2>
+  <p>Make the card a <em>subgrid</em> on the axis you want aligned:</p>
+  <pre><code>{`.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+}`}</code></pre>
+  <p>Now every card's three rows <em>are</em> the parent's three rows. The tallest title in the set defines row 1 for all of them, so every title, body and footer sits on the same line across the row.</p>
+
+  <p>Two rules are worth committing to memory, because almost every "subgrid is not working" question comes down to one of them:</p>
+  <ul>
+    <li><strong>The element must be a grid item of the grid it is subgridding.</strong> Subgrid is not inherited across a wrapper - put a plain <code>&lt;div&gt;</code> between the parent grid and the card and the relationship is broken.</li>
+    <li><strong>It only adopts the tracks it spans.</strong> A card spanning three rows adopts three rows. If you do not declare the span, it spans one, and you get one track - which looks exactly like subgrid doing nothing.</li>
+  </ul>
+
+  <figure>
+    <img src="/img/css-subgrid-inbody.jpg" alt="A flat brick wall in mottled yellow, pink and grey, with a small arched window set into it, its metal grille divided into nine rectangular panes" loading="lazy" width="639" height="406" />
+    <figcaption>A brick wall in regular courses with a small arched window let into it; the window's metal grille is itself divided into nine panes, and its divisions sit square with the brickwork around it rather than at their own angle.</figcaption>
+  </figure>
+
+  <h2>It works per axis</h2>
+  <p>You subgrid rows and columns independently. A child can take the parent's columns while defining its own rows, which is common:</p>
+  <pre><code>{`.child {
+  display: grid;
+  grid-column: span 4;
+  grid-template-columns: subgrid;  /* parent's columns */
+  grid-template-rows: auto auto;   /* its own rows */
+}`}</code></pre>
+  <p>That combination is how you align a nested block to a page-wide column system without giving up control of its vertical rhythm.</p>
+
+  <h2>Gaps and named lines come along</h2>
+  <p>Two conveniences that are easy to miss:</p>
+  <ul>
+    <li><strong>Gap is inherited</strong> from the parent on the subgridded axis, which is usually what you want. Set <code>gap</code> on the child to override it.</li>
+    <li><strong>Named grid lines are inherited too</strong>, so if the parent defines <code>[content-start]</code> and <code>[content-end]</code>, the child can place items against those names directly.</li>
+  </ul>
+
+  <h2>Subgrid versus display: contents</h2>
+  <p>Before subgrid, the usual workaround was <code>display: contents</code> on the wrapper, which removes its box and promotes its children to grid items of the outer grid. It aligns things, and it costs you the box: no background, no border, no padding, no border-radius on the card, because the card no longer generates a box to paint them on.</p>
+
+  <table>
+    <thead><tr><th></th><th><code>display: contents</code></th><th><code>subgrid</code></th></tr></thead>
+    <tbody>
+      <tr><td>Alignment across siblings</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Keeps the wrapper's box</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Background, border, padding</td><td>Lost</td><td>Kept</td></tr>
+      <tr><td>Per-axis control</td><td>No</td><td>Yes</td></tr>
+    </tbody>
+  </table>
+
+  <p>If you need the card to look like a card, subgrid is the answer and <code>display: contents</code> never was.</p>
+
+  <h2>Browser support</h2>
+  <p>Firefox shipped subgrid first, back in 2019, and spent several years as the only engine with it. Safari added it in 2022 and Chrome in 2023, so it is available across current versions of all major browsers - which is recent enough that it is worth checking your own support target rather than assuming.</p>
+
+  <p>The mental model is simple once it clicks: a normal nested grid asks "how much room do I have, and how shall I divide it?" A subgrid asks "where are my parent's lines?" - and that second question is the one that makes rows of cards look designed rather than merely arranged. If you are still choosing between layout mechanisms in the first place, start with <a href="/guides/css-grid-vs-flexbox">CSS Grid vs Flexbox</a>; and for components that must adapt to the space they are given rather than to the screen, pair this with <a href="/guides/css-container-queries">container queries</a>.</p>
+</Article>

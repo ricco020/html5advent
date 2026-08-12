@@ -1,0 +1,96 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="css-subgrid"
+  title="Subgrid CSS : faire partager au sous-grille les lignes du parent"
+  description="Une grille imbriquée invente ses propres pistes, donc les cartes voisines ne s'alignent jamais. Subgrid fait adopter à l'enfant les lignes de son parent : ce que ça règle, les deux règles à retenir, et la différence avec display: contents."
+  cat="css"
+  day={16}
+  hero="/img/css-subgrid-hero.jpg"
+  heroAlt="Un mur de pierres sèches en blocs de calcaire clair grossièrement équarris, aux assises irrégulières et non alignées, avec des gravats à son pied"
+  cluster={null}
+>
+  <p><strong>Subgrid</strong> règle une frustration précise, et il vaut mieux l'énoncer exactement parce que tout le reste en découle : une grille imbriquée crée <em>ses propres</em> pistes, qui n'ont aucun rapport avec celles du parent. Trois cartes côte à côte, chacune disposant son titre, son corps et son pied en grille interne, dimensionneront donc ces lignes indépendamment - et les pieds ne s'aligneront pas.</p>
+
+  <p>Subgrid dit à l'enfant d'arrêter d'inventer des pistes et d'utiliser les lignes du parent.</p>
+
+  <h2>Le problème, concrètement</h2>
+  <p>Voici la mise en page que tout le monde rencontre. Une grille extérieure de cartes, et chaque carte est elle-même une grille de trois lignes :</p>
+  <pre><code>{`.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}`}</code></pre>
+  <p>Chaque carte dimensionne maintenant ses trois lignes à partir de son propre contenu. Une carte au titre sur deux lignes obtient une première ligne plus haute que sa voisine au titre sur une seule. Résultat : trois cartes dont les éléments internes sont tous légèrement décalés - et aucun style appliqué <em>dans</em> la carte n'y changera rien, puisque chaque carte mesure isolément.</p>
+
+  <h2>La correction, et les deux règles</h2>
+  <p>Faites de la carte une <em>subgrid</em> sur l'axe que vous voulez aligner :</p>
+  <pre><code>{`.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+}`}</code></pre>
+  <p>Désormais les trois lignes de chaque carte <em>sont</em> les trois lignes du parent. Le titre le plus haut de la série définit la ligne 1 pour toutes, si bien que titres, corps et pieds tombent sur les mêmes lignes d'un bout à l'autre de la rangée.</p>
+
+  <p>Deux règles méritent d'être retenues, parce que la quasi-totalité des « subgrid ne marche pas » se ramène à l'une des deux :</p>
+  <ul>
+    <li><strong>L'élément doit être un enfant direct de la grille dont il reprend les pistes.</strong> Subgrid ne traverse pas un wrapper : glissez un <code>&lt;div&gt;</code> ordinaire entre la grille parente et la carte, et la relation est rompue.</li>
+    <li><strong>Il n'adopte que les pistes qu'il enjambe.</strong> Une carte qui enjambe trois lignes en adopte trois. Sans déclaration de span, elle en enjambe une, et vous obtenez une seule piste - ce qui ressemble exactement à un subgrid sans effet.</li>
+  </ul>
+
+  <figure>
+    <img src="/img/css-subgrid-inbody.jpg" alt="Un mur de briques plat, aux teintes jaunes, roses et grises, percé d'une petite fenêtre cintrée dont la grille métallique est divisée en neuf carreaux rectangulaires" loading="lazy" width="639" height="406" />
+    <figcaption>Un mur de briques en assises régulières, percé d'une petite fenêtre cintrée ; la grille métallique de la fenêtre est elle-même divisée en neuf carreaux, et ses divisions s'alignent avec l'appareillage de briques au lieu de suivre leur propre trame.</figcaption>
+  </figure>
+
+  <h2>Ça fonctionne axe par axe</h2>
+  <p>On applique subgrid aux lignes et aux colonnes indépendamment. Un enfant peut reprendre les colonnes du parent tout en définissant ses propres lignes, cas très courant :</p>
+  <pre><code>{`.child {
+  display: grid;
+  grid-column: span 4;
+  grid-template-columns: subgrid;  /* colonnes du parent */
+  grid-template-rows: auto auto;   /* ses propres lignes */
+}`}</code></pre>
+  <p>C'est ainsi qu'on aligne un bloc imbriqué sur un système de colonnes valable pour toute la page sans renoncer au contrôle de son rythme vertical.</p>
+
+  <h2>Gouttières et lignes nommées suivent</h2>
+  <p>Deux commodités faciles à manquer :</p>
+  <ul>
+    <li><strong>La gouttière est héritée</strong> du parent sur l'axe subgridé, ce qui est en général le comportement souhaité. Déclarez <code>gap</code> sur l'enfant pour la surcharger.</li>
+    <li><strong>Les lignes nommées sont héritées aussi</strong> : si le parent définit <code>[content-start]</code> et <code>[content-end]</code>, l'enfant peut placer ses éléments directement sur ces noms.</li>
+  </ul>
+
+  <h2>Subgrid contre display: contents</h2>
+  <p>Avant subgrid, le contournement habituel était <code>display: contents</code> sur le wrapper, qui supprime sa boîte et promeut ses enfants au rang d'éléments de la grille extérieure. Ça aligne, et ça coûte la boîte : plus de fond, plus de bordure, plus de padding, plus de border-radius sur la carte, puisque la carte ne génère plus de boîte où les peindre.</p>
+
+  <table>
+    <thead><tr><th></th><th><code>display: contents</code></th><th><code>subgrid</code></th></tr></thead>
+    <tbody>
+      <tr><td>Alignement entre voisins</td><td>Oui</td><td>Oui</td></tr>
+      <tr><td>Conserve la boîte du wrapper</td><td>Non</td><td>Oui</td></tr>
+      <tr><td>Fond, bordure, padding</td><td>Perdus</td><td>Conservés</td></tr>
+      <tr><td>Contrôle par axe</td><td>Non</td><td>Oui</td></tr>
+    </tbody>
+  </table>
+
+  <p>Si la carte doit ressembler à une carte, subgrid est la réponse, et <code>display: contents</code> ne l'a jamais été.</p>
+
+  <h2>Support navigateurs</h2>
+  <p>Firefox a livré subgrid le premier, dès 2019, et est resté plusieurs années le seul moteur à le proposer. Safari l'a ajouté en 2022 et Chrome en 2023 : c'est donc disponible dans les versions actuelles de tous les grands navigateurs - assez récent pour qu'il vaille mieux vérifier votre propre cible de support que de le supposer.</p>
+
+  <p>Le modèle mental est simple une fois saisi : une grille imbriquée ordinaire demande « de combien de place je dispose, et comment la découper ? ». Une subgrid demande « où sont les lignes de mon parent ? » - et c'est cette seconde question qui fait qu'une rangée de cartes paraît dessinée plutôt que simplement posée. Si le choix du mécanisme de mise en page n'est pas encore tranché, commencez par <a href="/fr/guides/css-grid-vs-flexbox">CSS Grid contre Flexbox</a> ; et pour des composants qui doivent s'adapter à la place qu'on leur donne plutôt qu'à l'écran, associez ceci aux <a href="/fr/guides/css-container-queries">container queries</a>.</p>
+</Article>
