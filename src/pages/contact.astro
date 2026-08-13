@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+const schema = {
+  '@context': 'https://schema.org', '@type': 'ContactPage',
+  name: 'Contact - HTML5 Advent',
+  url: 'https://html5advent.com/contact',
+  description: 'How to reach HTML5 Advent: corrections, questions and rights requests.',
+  publisher: { '@type': 'Organization', name: 'HTML5 Advent', url: 'https://html5advent.com', email: 'referencement.frb@gmail.com' },
+  inLanguage: 'en',
+};
+---
+<Base lang="en" title="Contact - HTML5 Advent" description="How to reach HTML5 Advent: corrections, questions and rights requests." schema={schema}>
+  <article class="prose">
+    <h1>Contact</h1>
+
+    <p>HTML5 Advent is an independent publication of web platform guides. If something here is
+    wrong or has stopped being true, we would rather hear it than leave it standing.</p>
+
+    <h2>Email</h2>
+    <p><a href="mailto:referencement.frb@gmail.com">referencement.frb@gmail.com</a></p>
+    <p>There is no form on this page and no third-party service in between: the link opens your own
+    mail client, and nothing you type is sent to this site.</p>
+
+    <h2>What is worth writing about</h2>
+    <ul>
+      <li><strong>Factual corrections.</strong> A browser that changed its behaviour, an API that
+      shipped or was removed, a snippet that no longer runs. Include the page URL and the browser
+      version you tested with — it makes the fix much faster.</li>
+      <li><strong>Questions a guide should have answered.</strong> Those gaps usually mean the guide
+      needs work, and they are the most useful thing you can send.</li>
+      <li><strong>Rights and attribution</strong> concerning anything published here.</li>
+    </ul>
+
+    <h2>Who publishes this</h2>
+    <p>See the <a href="/about">about page</a> for who edits the site, how guides are written and
+    how it is funded.</p>
+  </article>
+</Base>
