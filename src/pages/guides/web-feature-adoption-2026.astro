@@ -82,4 +82,12 @@ import Article from '../../layouts/Article.astro';
 python3 web-feature-adoption.py --n 600 --out .`}</code></pre>
 
   <p>Your numbers will differ from ours: sites change, and the sample is a live snapshot. If they differ a lot, we would rather know.</p>
+
+  <h2>The raw data</h2>
+
+  <p>The measurements behind every figure on this page are published as a single CSV: <a href="/data/web-feature-adoption-2026.csv" download>web-feature-adoption-2026.csv</a> (600 rows, one per domain).</p>
+
+  <p>One row per domain from the Tranco sample, with the HTTP status, the final host after redirects, the number of CSS bytes we were able to read, and a 0/1 column for each of the 18 features. Rows where <code>ok</code> is 0 are the ones we could not measure - they are kept in the file rather than dropped, because the count of what failed is part of the result: <strong>320 of the 600 domains produced a usable measurement</strong>, and every percentage on this page is computed over those 320, not over 600.</p>
+
+  <p>Checking one figure against the file is the fastest way to see whether you trust the rest. <code>dialog_element</code> is set on 12 of the 320 measurable domains - the 3.8% quoted at the top.</p>
 </Article>
