@@ -67,4 +67,6 @@ import Article from '../../layouts/Article.astro';
   <p>Same-document transitions ship in Chromium browsers and Safari; cross-document support is rolling out and Firefox is implementing both. Because you guard with <code>if (!document.startViewTransition)</code> and the cross-document version is a pure CSS opt-in, the API degrades gracefully: unsupported browsers simply update the page with no animation. That makes it safe to add today as a progressive enhancement.</p>
 
   <p>Reach for view transitions when a jump between states feels abrupt. A small amount of motion gives users a sense of continuity - where things came from and where they went - without you hand-writing a single keyframe in most cases.</p>
+
+  <p>A transition hides the seam between two pages; it does not make the second one arrive any sooner. If the wait itself is the problem, that is what <a href="/guides/speculation-rules-api">the Speculation Rules API</a> addresses - by fetching or building the next page before the click, with the costs that implies.</p>
 </Article>

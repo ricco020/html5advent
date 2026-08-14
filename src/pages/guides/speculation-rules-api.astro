@@ -1,0 +1,75 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="speculation-rules-api"
+  title="The Speculation Rules API: prerendering the next page, and the bill that comes with it"
+  description="Speculation Rules let the browser prefetch or prerender the page a visitor is likely to open next, making the click feel instant. How the JSON syntax works, the difference between prefetch and prerender, the eagerness settings, and what it costs the people you guessed wrong about."
+  cat="html"
+  hero="https://images.pexels.com/photos/434450/pexels-photo-434450.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+  heroAlt="A long-exposure night photograph looking down on a road: white and red light trails sweep diagonally into the distance, with dark tree silhouettes either side and a red STOP sign at the roadside"
+  cluster={null}
+  faq={[{ q: "What is the Speculation Rules API?", a: "It is a way to tell the browser, in a small block of JSON, which pages a visitor is likely to navigate to next - so the browser can fetch or even fully render them in advance. When the visitor does click, the page is already there and the navigation feels instant. It replaces the older <link rel=\"prefetch\"> approach with something more expressive: you can match URLs by pattern, and you can choose how eager the browser should be." }, { q: "What is the difference between prefetch and prerender?", a: "Prefetch downloads the document but does nothing with it. Prerender goes much further: it builds the page in a hidden tab, runs its JavaScript and fires its requests. Prerender gives the more dramatic result and costs far more - it is a full page load for a visit that may never happen. Start with prefetch, and reserve prerender for the one or two destinations you are genuinely confident about." }, { q: "What do the eagerness settings do?", a: "Eagerness tells the browser when to act on a rule. 'immediate' acts as soon as the rules are parsed, 'eager' close to it, 'moderate' waits for a hover of roughly 200 ms, and 'conservative' waits for the pointer or touch to actually go down on the link. Moderate and conservative are the ones that respect a visitor's data: they only speculate once there is a real signal of intent." }, { q: "Is it safe to prerender any page?", a: "No, and this is the part worth reading twice. A prerendered page runs as though it had been visited, so anything with a side effect is dangerous: logout links, one-click actions, endpoints that record a view or consume a token. Analytics also need care, or you will count visits that never happened. Restrict speculation to safe, idempotent destinations." }, { q: "Which browsers support Speculation Rules?", a: "Support is strongest in Chromium-based browsers, where the API originated and where prerendering is most complete. Other engines have been more cautious, and support differs between prefetch and prerender rather than being a single yes or no. Treat it as a progressive enhancement: browsers that do not understand the rules simply ignore the script block, and everyone still gets a working site." }]}
+>
+  <p>The <strong>Speculation Rules API</strong> lets you tell the browser which page a visitor will probably open next, so it can be fetched - or fully built - before they click. Done well, the next navigation appears to take no time at all. Done carelessly, you are downloading whole pages for people who were never going to visit them.</p>
+
+  <p>Both halves of that sentence matter, and most introductions only cover the first.</p>
+
+  <h2>What it looks like</h2>
+
+  <p>Rules go in a script block, as JSON:</p>
+
+  <pre><code>{`<script type="speculationrules">
+{
+  "prerender": [{
+    "where": { "href_matches": "/guides/*" },
+    "eagerness": "moderate"
+  }]
+}
+`}{`</script>`}</code></pre>
+
+  <p>That says: when a visitor shows real interest in any link under <code>/guides/</code>, start building that page in the background. No <code>&lt;link&gt;</code> tags to maintain per destination, and the pattern does the work.</p>
+
+  <h2>Prefetch or prerender: not a small difference</h2>
+
+  <p><strong>Prefetch</strong> downloads the document and stops there. It is cheap, and it removes the network round trip from the click.</p>
+
+  <p><strong>Prerender</strong> builds the whole page in a hidden tab: it parses the HTML, applies the CSS, <em>runs the JavaScript</em> and lets that JavaScript make its own requests. The click then costs almost nothing, because the work is already done.</p>
+
+  <p>The cost follows the same ratio. A prerender is a complete page load, paid in advance, for a visit that may never occur - on someone's mobile data, on someone's battery. <strong>Prefetch is the sensible default; prerender is for the one destination you are genuinely sure about</strong>, like the first result on a search page.</p>
+
+  <img src="https://images.pexels.com/photos/15560907/pexels-photo-15560907.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="A blurred view through a car windscreen on a road at night: the trees and sky are stretched outward by motion, the white lane markings rush toward the centre, and a few red and white vehicle lights sit far ahead" width="940" height="627" loading="lazy" />
+  <p><em>The road ahead seen from a moving car, everything at the edges smeared by motion, a few distant lights in the middle. Speculation is a bet on where someone is heading - and it is paid for whether or not the bet lands.</em></p>
+
+  <h2>Eagerness: the setting that decides who pays</h2>
+
+  <p>Four values, and the choice is really about how much you are willing to spend on a guess.</p>
+
+  <ul>
+    <li><code>immediate</code> - act as soon as the rules are parsed. No signal of intent at all.</li>
+    <li><code>eager</code> - act on the slightest interaction.</li>
+    <li><code>moderate</code> - wait for a hover of roughly 200 ms.</li>
+    <li><code>conservative</code> - wait for pointer-down or touch-start, the moment just before the click.</li>
+  </ul>
+
+  <p><strong>Moderate and conservative are the two that respect the visitor</strong>, because they only spend data once a person has shown genuine intent. Immediate on a page of fifty links is how you turn one visit into fifty page loads.</p>
+
+  <h2>The part that can break your site</h2>
+
+  <p>A prerendered page <em>runs</em>. Its JavaScript executes, its requests fire, and it behaves as if it had been visited - because as far as it knows, it has been.</p>
+
+  <p>So anything with a side effect is a hazard: a logout link, a one-click action, an endpoint that increments a counter or burns a single-use token. Analytics deserve their own thought, or you will record visits that never took place; the Page Visibility API and the <code>prerenderingchange</code> event exist precisely to let a page hold that work back until it is genuinely shown.</p>
+
+  <p><strong>Restrict speculation to destinations that are safe to load twice</strong>, and never to anything that changes state.</p>
+
+  <h2>Should you use it?</h2>
+
+  <p>Yes, with <code>prefetch</code> and <code>moderate</code>, on a site where the next click is reasonably predictable - documentation, articles, product listings, search results. That combination is close to free and the improvement is real.</p>
+
+  <p>Be much more careful with <code>prerender</code>, and think about who is paying for the guesses you get wrong. Browsers that do not understand the block ignore it entirely, so there is no fallback to write.</p>
+
+  <p>One honest note about support: it is strongest in Chromium-based browsers, where the API originated, and the picture differs between prefetch and prerender rather than being a single yes or no. Check current support for the specific one you use rather than trusting a summary - including this one.</p>
+
+  <p>If you want to know which modern features are actually deployed in the wild rather than merely supported, we measured eighteen of them across the Tranco top 600 and published <a href="/guides/web-feature-adoption-2026">the results and the raw data</a>. Speculation Rules was not part of that run - so we have no first-hand figure for it, and we are not going to invent one.</p>
+</Article>
