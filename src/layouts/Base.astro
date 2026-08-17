@@ -13,11 +13,15 @@ const {
   path = '',            // path without locale prefix, e.g. "guides/web-storage"
   schema = null,        // optional JSON-LD object
   ogType = 'website',
+  localized = true,     // false = page servie en EN seulement (pas de variantes /fr/... )
 } = Astro.props;
 
 const site = 'https://html5advent.com';
 const canonical = site + localePath(lang, path);
-const alternates = LOCALES.map((l) => ({ l, href: site + localePath(l, path) }));
+// Une page non localisee ne doit pas annoncer d alternates qui repondent 404.
+const alternates = localized
+  ? LOCALES.map((l) => ({ l, href: site + localePath(l, path) }))
+  : [];
 const year = 2026;
 ---
 <!doctype html>
