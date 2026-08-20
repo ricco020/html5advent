@@ -29,7 +29,18 @@ const article = {
   datePublished: updated,
   dateModified: updated,
   author: { '@type': 'Organization', name: 'HTML5 Advent' },
-  publisher: { '@type': 'Organization', name: 'HTML5 Advent', url: 'https://html5advent.com' },
+  /* publisher.logo est EXIGE par Google pour Article et ses derives. Il
+     manquait sur les 257 guides du site — 10 URL sondees dans 6 langues, 10
+     sans logo — donc aucun de ces guides ne pouvait obtenir de resultat
+     enrichi. favicon.svg est la seule image de marque que le site serve:
+     verifiee 200 avant d'etre ecrite ici, tandis que /og.png et /img/logo.png
+     rendent 404. */
+  publisher: {
+    '@type': 'Organization',
+    name: 'HTML5 Advent',
+    url: 'https://html5advent.com',
+    logo: { '@type': 'ImageObject', url: 'https://html5advent.com/favicon.svg' },
+  },
   mainEntityOfPage: url,
   image: hero ? `https://html5advent.com${hero}` : undefined,
 };
