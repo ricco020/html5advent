@@ -1,0 +1,106 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="web-app-manifest"
+  title="Web app manifest: I checked 40 major sites, 10 are actually installable"
+  description="What a web app manifest needs to be installable, and how many big sites get it right. I measured 40 domains on 2026-08-24: 10 pass, 19 have no manifest at all, 3 are incomplete, and 7 only refused my probe. Open dataset with a DOI."
+  cat="html"
+  {/* Les 24 jours du calendrier sont pris, et 16 comme 21 le sont deja DEUX fois.
+      Ajouter un troisieme doublon afficherait « advent #21 » sur trois guides
+      differents, ce qui est faux pour un lecteur qui lit ce numero comme une
+      position dans le calendrier. Le gabarit teste `day ?` et omet le kicker
+      quand il est nul: un guide hors calendrier se declare hors calendrier. */}
+  day={null}
+  hero="/img/web-app-manifest-hero.jpg"
+  heroAlt="Black and white close-up of an Android phone lying at an angle on a speckled surface, its home screen showing a Google search bar, a clock reading 16:26 on Saturday 27 May, and app icons labelled in Polish including Wiadomosci, WhatsApp, Facebook, Messenger, Galeria, Aparat and Kalendarz"
+  cluster={null}
+  faq={[
+    { q: 'What is a web app manifest?', a: 'It is a JSON file, linked from your HTML with <link rel="manifest" href="...">, that tells the browser how your site should behave when installed to a home screen: what name to show under the icon, which icons to use, which URL to open, and whether to run inside a browser frame or in its own window. Without it the browser has nothing to install and no install prompt appears.' },
+    { q: 'What does a manifest need to be installable?', a: 'Four fields do the work: a name or short_name for the label under the icon, a start_url for what opens on launch, a display value of standalone, fullscreen or minimal-ui so it does not just open a browser tab, and at least one icon of 192 pixels or larger. Browsers additionally require the site to be served over HTTPS and, in Chromium, to register a service worker with a fetch handler. A manifest that satisfies its own four fields is necessary but not sufficient.' },
+    { q: 'Where should the manifest file live?', a: 'Anywhere you like, because the browser follows the href in your <link rel="manifest">. Do not assume /manifest.json: real sites name it manifest.webmanifest, put it behind a CDN, or fingerprint the filename for cache busting. Spotify serves its manifest from open.spotifycdn.com under a hashed name. Any tool that probes /manifest.json directly will report a false negative on sites like that.' },
+    { q: 'How many major sites ship a valid manifest?', a: 'In a measurement of 40 major sites on 2026-08-24, ten met all four install criteria, nineteen had no <link rel="manifest"> in their served HTML at all, three had a manifest with fields missing, one served a manifest URL whose content would not parse as JSON, and seven refused the probe outright with a 403, a 400 or a network failure. Those seven were recorded separately, because a refusal is not an absence.' },
+    { q: 'Why does display matter so much?', a: 'Because it is the difference between an installed app and a bookmark. With display set to browser, or absent entirely, the launcher opens your site inside the normal browser chrome with an address bar, which is what a shortcut already did. Setting standalone gives the site its own window with no browser UI, which is the whole reason a user installed it. Airbnb was the one site in this measurement whose manifest was otherwise complete but had no usable display value.' },
+  ]}
+>
+  <p>A <strong>web app manifest</strong> is a small JSON file that turns a website into something a phone can install. It is the difference between a bookmark and an icon on the home screen that opens in its own window.</p>
+
+  <p>The spec is short and the implementation is a single file. So how many large sites actually get it right? On <strong>2026-08-24</strong> I measured 40 well known domains. The raw data, the method and the limits are published openly with a DOI: <a href="https://zenodo.org/records/22084209" rel="noopener">10.5281/zenodo.22084209</a>.</p>
+
+  <h2>The result</h2>
+
+  <pre><code>installable            10   manifest present, all four criteria met
+no manifest link       19   no &lt;link rel="manifest"&gt; in the served HTML
+probe refused           7   403, 400, or network failure
+incomplete              3   manifest present, criteria missing
+unparsable              1   manifest URL present, content not JSON</code></pre>
+
+  <p>The three incomplete ones are instructive because each fails differently:</p>
+
+  <pre><code>airbnb.com     missing display
+figma.com      missing start_url
+linkedin.com   missing start_url, display, and any icon >= 192px</code></pre>
+
+  <h2>Read the link, never guess the path</h2>
+
+  <p>The single most important thing this measurement does is find the manifest the way a browser does: parse the served HTML, take the <code>href</code> from <code>&lt;link rel="manifest"&gt;</code>, and resolve it against the final URL after redirects.</p>
+
+  <p>Probing <code>/manifest.json</code> directly would have been faster and wrong. <strong>Spotify</strong> serves its manifest from <code>open.spotifycdn.com</code> under a fingerprinted filename. A tool that guesses the path reports Spotify as having no manifest, which is a false negative produced entirely by the tool.</p>
+
+  <h2>Seven refusals are not seven absences</h2>
+
+  <p>Seven of the forty domains would not answer my probe: <code>403</code> from ebay, etsy, medium and stackoverflow, <code>400</code> from facebook after redirects, a truncated read from netflix, a network failure from starbucks.</p>
+
+  <p>They are recorded as <em>probe refused</em>, not as <em>no manifest</em>. Those are different facts, and only one of them is about the site.</p>
+
+  <p>This is not a theoretical scruple, and the first pass of this very measurement proves it. That pass did not follow redirects on the homepage, and it reported <strong>nine</strong> inaccessible domains. Following redirects turned two of them into real results: <strong>uber.com</strong> genuinely has no manifest link, and <strong>flipkart.com</strong> is fully installable. Two of nine "inaccessible" sites were an artefact of my own probe.</p>
+
+  <p>Any survey that folds refusals into a single "not supported" bucket is mixing what it measured with what it could not measure, and the second number will always be larger than the author thinks.</p>
+
+  <h2>What a minimal working manifest looks like</h2>
+
+  <pre><code>{`{
+  "name": "Your Site",
+  "short_name": "Site",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable.png", "sizes": "512x512", "type": "image/png",
+      "purpose": "maskable" }
+  ]
+}`}</code></pre>
+
+  <p>Link it from every page you want installable:</p>
+
+  <pre><code>&lt;link rel="manifest" href="/manifest.webmanifest"&gt;</code></pre>
+
+  <p>Three notes worth more than the file itself:</p>
+
+  <ul>
+    <li><strong><code>start_url</code> with a query parameter</strong> lets your analytics separate installed launches from ordinary visits. It costs nothing and it is the only reliable way to know whether anyone installs your site.</li>
+    <li><strong>A maskable icon</strong> stops Android from putting your square logo inside a white circle. Without <code>"purpose": "maskable"</code> the launcher pads whatever you gave it, and the result usually looks like a mistake.</li>
+    <li><strong><code>display: standalone</code> is the point.</strong> Leave it out, as Airbnb does, and the installed icon opens a browser tab with an address bar. The user did the work of installing and got a bookmark.</li>
+  </ul>
+
+  <h2>Valid is not the same as installable</h2>
+
+  <p>Everything above is about the manifest satisfying its own criteria. A browser asks for more: the site must be served over HTTPS, and Chromium wants a registered service worker with a fetch handler before it offers an install prompt.</p>
+
+  <p>So <em>installable</em> in the table means the manifest is complete, not that Chrome will show the banner. That distinction is in the dataset README too, because a survey that quietly conflates the two would overstate its own result.</p>
+
+  <h2>Check your own in one minute</h2>
+
+  <ol>
+    <li>Open your site, view source, find <code>&lt;link rel="manifest"&gt;</code>. If it is not there, nothing else matters.</li>
+    <li>Open the href it points at. It must return JSON, not an HTML error page dressed as a success.</li>
+    <li>Check the four fields: a name, a <code>start_url</code>, a <code>display</code> of <code>standalone</code>, and an icon of 192px or more.</li>
+    <li>In Chrome DevTools, Application then Manifest, which lists what is missing rather than making you diff the spec.</li>
+  </ol>
+
+  <p>One measurement, one vantage point, one date. If a site has fixed theirs since, the dataset carries its date and rerunning it takes minutes.</p>
+</Article>
