@@ -3,6 +3,15 @@
 //   locales: which locales the page actually exists in (controls links → no 404s)
 const L = ['en', 'fr', 'es', 'de', 'it', 'pt']; // all 6 locales live (articles translated)
 export const GUIDES = [
+  // ⛔ Cette page etait SERVIE en 200 et listee NULLE PART: `cortex-cycle` l'a
+  //    trouvee en comparant 46 pages a 45 entrees. Une page absente d'ici n'existe
+  //    pour aucun index du site (grille d'accueil, hub, listings en derivent tous),
+  //    donc aucun lien interne ne la pointe. Ajoutee le 2026-08-26.
+  //    Locale EN uniquement: le fichier .astro declare lang="en" et il n'existe pas
+  //    de traduction; annoncer d'autres locales fabriquerait des 404.
+  { slug: 'web-app-manifest', cat: 'html', cluster: null, locales: ['en'],
+    title: { en: "Web app manifest: I checked 40 major sites, 10 are actually installable" },
+    desc: { en: "What a web app manifest needs to be installable, and how many big sites get it right. I measured 40 domains on 2026-08-24: 10 pass, 19 have no manifest at all, 3 are incomplete, and 7 only refused my probe. Open dataset with a DOI." } },
   { slug: 'web-feature-adoption-2026', cat: 'css', cluster: null, locales: ['en'],
     title: { en: "We measured 18 modern web features on 600 real sites. :has() is at 50%, dialog at 3.8%" },
     desc: { en: "Support is documented everywhere. Actual use is not. We fetched the home pages of the Tranco top 600, read the served HTML and CSS, and counted what is really there - with the full method, the raw CSV, and the limits." } },
