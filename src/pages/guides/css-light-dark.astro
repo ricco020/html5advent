@@ -1,0 +1,94 @@
+---
+import Article from '../../layouts/Article.astro';
+---
+<Article
+  lang="en"
+  slug="css-light-dark"
+  title="The CSS light-dark() function: two themes on one line, and the one thing it needs first"
+  description="light-dark() takes two colours and picks the right one for the active scheme. It removes most of a dark-mode stylesheet, and it does nothing at all unless color-scheme is declared. What it replaces, where it stops, and how it degrades."
+  cat="css"
+  day={null}
+  hero="/img/css-light-dark-hero.jpg"
+  heroAlt="A rocker light switch on a rough painted wall, lit from the upper right so that half the wall is bright and a hard diagonal shadow covers the lower left corner"
+  cluster={null}
+  faq={[
+    { q: 'What does the CSS light-dark() function do?', a: 'It takes two colour values and returns the first when the used colour scheme is light and the second when it is dark. It lets a single declaration carry both themes, so a stylesheet no longer needs a duplicate block inside a prefers-color-scheme media query.' },
+    { q: 'Why is light-dark() not working?', a: 'Almost always because color-scheme has not been declared. The function reads the used colour scheme of the element, and without color-scheme: light dark on :root that value stays light, so light-dark() silently returns its first argument and everything looks like the light theme.' },
+    { q: 'Does light-dark() replace prefers-color-scheme?', a: 'For colours, largely yes. For anything that is not a colour it does not, because the function only returns colour values. A different image, a different border radius or a hidden element per scheme still needs the media query.' },
+    { q: 'What happens in a browser that does not support it?', a: 'The whole declaration is dropped at parse time, so the property falls back to whatever was declared before it or to its initial value. Putting a plain colour on the line above gives you a working fallback with no feature query.' },
+    { q: 'Can I use light-dark() with custom properties?', a: 'Yes, and it is where the function pays off most: define your palette once as custom properties whose values are light-dark() pairs, then use those properties everywhere. Changing a theme colour becomes a one line edit rather than two.' },
+  ]}
+>
+  <p>Dark mode in CSS has meant the same thing for years: write your colours, then write them all again inside <code>@media (prefers-color-scheme: dark)</code>. Two blocks, two places to forget, and a stylesheet where every colour appears twice.</p>
+
+  <p><strong><code>light-dark()</code> collapses that into one line per colour.</strong></p>
+
+  <h2>What it looks like</h2>
+
+  <pre><code>{`:root {
+  color-scheme: light dark;
+}
+
+body {
+  background: light-dark(#ffffff, #14161a);
+  color: light-dark(#1a1c20, #e6e8ea);
+}`}</code></pre>
+
+  <p>The function takes two colour values and returns the first when the used colour scheme is light, the second when it is dark. No media query, no duplicate rule block, no second place to update when a colour changes.</p>
+
+  <h2>The line without which nothing happens</h2>
+
+  <p><strong><code>color-scheme: light dark</code> is not optional, and its absence is the single reason people report the function does not work.</strong></p>
+
+  <p><code>light-dark()</code> reads the <em>used colour scheme</em> of the element. That value is computed from the <code>color-scheme</code> property, and its initial value is <code>normal</code>, which resolves to light. So without that declaration on <code>:root</code>, the function faithfully returns its first argument, every time, in every browser, including dark ones.</p>
+
+  <p>Nothing errors. The page simply looks like the light theme and the code looks correct, which is the worst combination for debugging.</p>
+
+  <img src="/img/css-light-dark-inbody.jpg"
+    alt="Three white rocker light switches mounted on a dark polished wooden panel, two side by side above and one below, a shaft of daylight falling across the wood" loading="lazy" />
+  <p><em>Three separate switches on one panel. The function is the equivalent of wiring both states into a single switch, but only after the panel itself has been told that two states exist.</em></p>
+
+  <h2>What it does not replace</h2>
+
+  <p><code>light-dark()</code> returns a <strong>colour</strong>. That is its entire scope, and it is easy to forget once the colours are done.</p>
+
+  <p>A different hero image per scheme, a border that exists only in dark mode, an icon swapped for a lighter variant, an element hidden in one theme: none of these are colours, so all of them still need <code>@media (prefers-color-scheme: dark)</code>. The media query does not disappear from your stylesheet, it just stops carrying the colour palette.</p>
+
+  <p>It also does not give you a manual theme toggle. A user who wants dark mode on a device set to light is choosing something the operating system did not say, and that choice has to live somewhere, in a class or a data attribute on the root element. Setting <code>color-scheme</code> from that attribute is what makes <code>light-dark()</code> follow a toggle rather than only the system.</p>
+
+  <h2>How it fails, and it fails well</h2>
+
+  <p>In a browser without support, the declaration containing <code>light-dark()</code> is invalid at parse time and is dropped. The property keeps whatever value it had before, which makes the fallback a single line placed above:</p>
+
+  <pre><code>{`body {
+  background: #ffffff;
+  background: light-dark(#ffffff, #14161a);
+}`}</code></pre>
+
+  <p>No <code>@supports</code> needed. Old browsers read the first line and ignore the second; current ones apply both and the second wins.</p>
+
+  <h2>Where it genuinely pays off</h2>
+
+  <p>Not on <code>body</code>, where you had one media query anyway, but on a palette of custom properties:</p>
+
+  <pre><code>{`:root {
+  color-scheme: light dark;
+  --surface: light-dark(#ffffff, #14161a);
+  --surface-raised: light-dark(#f6f7f8, #1c1f24);
+  --text: light-dark(#1a1c20, #e6e8ea);
+  --text-muted: light-dark(#5a6068, #9aa1a8);
+  --border: light-dark(#e2e5e8, #2a2e34);
+}`}</code></pre>
+
+  <p>Every component then uses <code>var(--surface)</code> and knows nothing about themes. Adding a colour is one line instead of two, and the two halves of a pair can never drift apart because they are written together.</p>
+
+  <p><strong>That last point is the real gain.</strong> The duplicated-block approach fails slowly: someone adjusts a light colour, forgets the dark block, and the dark theme degrades one commit at a time until it looks neglected. Writing both values on the same line makes that particular mistake impossible.</p>
+
+  <h2>Two things worth checking before shipping</h2>
+
+  <p><strong>Form controls.</strong> Declaring <code>color-scheme</code> also tells the browser to render native widgets, scrollbars, checkboxes and date pickers, in the matching scheme. That is usually what you want, and it is a visible change on pages that previously left them light.</p>
+
+  <p><strong>Contrast in both directions.</strong> A pair that passes contrast in light mode can fail in dark, and the function makes it easy to write a pair without checking the second half. Test both, because <code>light-dark()</code> removes the duplication, not the responsibility.</p>
+
+  <p>Related reading: <a href="/guides/css-contrast-color">the CSS contrast-color() function</a> and <a href="/guides/css-cascade-layers">CSS cascade layers</a>.</p>
+</Article>
