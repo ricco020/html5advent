@@ -10,6 +10,7 @@ import Article from '../../layouts/Article.astro';
   day={9}
   hero="/img/view-transitions-api-hero.jpg"
   heroAlt="A glossy Google Chrome browser logo on a metallic ring"
+  updated="2026-09-06"
   cluster={null}
 >
   <p>The <strong>View Transitions API</strong> animates the change between two states of a page - a list turning into a detail view, a theme toggling, an item being filtered out - with almost no animation code. The browser snapshots the old state, snapshots the new one, and cross-fades (or transforms) between them for you.</p>
@@ -26,12 +27,12 @@ import Article from '../../layouts/Article.astro';
   <p>The callback does your normal DOM work. The browser captures a "before" snapshot just before it runs and an "after" snapshot once it finishes, then animates between them. The default is a smooth cross-fade - already a nice upgrade for free.</p>
 
   <h2>Customising the animation with CSS</h2>
-  <p>During a transition the browser builds a tree of pseudo-elements you can style. The simplest hook is the root transition group:</p>
+  <p>During a transition the browser builds a tree of pseudo-elements you can style: <code>::view-transition</code> at the root, then <code>::view-transition-group()</code>, then <code>::view-transition-image-pair()</code>, which holds <code>::view-transition-old()</code> and <code>::view-transition-new()</code>. That is 5 nested levels, and knowing the nesting is what tells you where a given declaration will actually land. The simplest hook is the root transition group:</p>
   <pre><code>{`::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.3s;
 }`}</code></pre>
-  <p>You target the outgoing snapshot with <code>::view-transition-old()</code> and the incoming one with <code>::view-transition-new()</code>, then apply any CSS animation you like.</p>
+  <p>You target the outgoing snapshot with <code>::view-transition-old()</code> and the incoming one with <code>::view-transition-new()</code>, then apply any CSS animation you like. The <code>0.3s</code> above is an override: the user-agent stylesheet sets <code>animation-duration: 0.25s</code> on <code>::view-transition-group(*)</code>, and the old and new snapshots inherit it through the cascade, so a transition you never style still lasts 250&nbsp;ms.</p>
 
   <figure>
     <img src="/img/view-transitions-api-inbody.jpg" alt="A hand holding a phone showing an app profile screen in front of two desktop monitors" width="1280" height="853" loading="lazy" />
@@ -43,7 +44,7 @@ import Article from '../../layouts/Article.astro';
   <pre><code>{`.hero-image {
   view-transition-name: hero;
 }`}</code></pre>
-  <p>The name must be <strong>unique</strong> on the page at any moment. When the browser finds the same name before and after, it tweens that element's position and size directly instead of cross-fading it, producing a continuous "shared element" effect.</p>
+  <p>The property's initial value is <code>none</code>, so nothing is tracked as a shared element until you opt an element in by naming it. The name must be <strong>unique</strong> on the page at any moment. When the browser finds the same name before and after, it tweens that element's position and size directly instead of cross-fading it, producing a continuous "shared element" effect.</p>
 
   <h2>Cross-document transitions (MPA)</h2>
   <p>Multi-page sites can transition between full page navigations too, with no JavaScript. Opt in from CSS in both pages:</p>

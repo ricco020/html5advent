@@ -10,6 +10,7 @@ import Article from '../../layouts/Article.astro';
   day={1}
   hero="/img/web-dev-code.jpg"
   heroAlt="A code editor on screen showing HTML, CSS and JavaScript source"
+  updated="2026-09-06"
   cluster={null}
   faq={[
     { q: 'How do you make a request with the Fetch API?', a: 'Call fetch with a URL; it returns a promise that resolves to a Response object. Read the body with a method like response.json() or response.text(), which also return promises, so you typically await fetch and then await the parsing.' },
@@ -32,6 +33,7 @@ console.log(data);`}</code></pre>
 
   <h2>The gotcha: fetch does not reject on HTTP errors</h2>
   <p>This trips up almost everyone. A <code>404</code> or <code>500</code> response is still a <em>successful</em> fetch - the promise only rejects on a <strong>network</strong> failure (offline, DNS, CORS). You must check <code>response.ok</code> yourself:</p>
+  <p>It helps to know what <code>ok</code> actually tests. RFC 9110, the HTTP Semantics standard published in June 2022 as STD 97, sorts every status code into <strong>5 classes</strong> by its first digit: 1xx informational, 2xx successful, 3xx redirection, 4xx client error and 5xx server error. <code>response.ok</code> is true for exactly one of them, the 2xx range, so a 404 (client error) and a 500 (server error) both leave it false while the fetch itself succeeded perfectly well.</p>
   <pre><code>{`const res = await fetch(url);
 if (!res.ok) {
   throw new Error(\`HTTP \${res.status} \${res.statusText}\`);
@@ -53,7 +55,7 @@ const data = await res.json();`}</code></pre>
 const created = await res.json();`}</code></pre>
 
   <h2>Aborting a request</h2>
-  <p>Use an <code>AbortController</code> to cancel a request - useful for timeouts or when a component unmounts:</p>
+  <p>Use an <code>AbortController</code> to cancel a request - useful for timeouts or when a component unmounts. Note which error you catch, because the two cases are not the same: a manual <code>controller.abort()</code> rejects with an <code>AbortError</code>, while the built-in <code>AbortSignal.timeout()</code> rejects with a <code>TimeoutError</code>. Distinguishing them is what lets you retry a timeout but not a deliberate cancellation:</p>
   <pre><code>{`const controller = new AbortController();
 const timeout = setTimeout(() => controller.abort(), 5000);
 

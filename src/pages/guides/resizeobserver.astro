@@ -9,6 +9,7 @@ import Article from '../../layouts/Article.astro';
   cat="apis"
   hero="/img/resizeobserver-hero.jpg"
   heroAlt="A yellow tape measure stretched diagonally across a grey background, graduations from 21 to 42 with 30 and 40 printed in red"
+  updated="2026-09-06"
   cluster={null}
 >
 
@@ -21,6 +22,8 @@ import Article from '../../layouts/Article.astro';
   <p>MDN puts it precisely: the interface <em>"reports changes to the dimensions of an <code>Element</code>'s content or border box, or the bounding box of an <code>SVGElement</code>"</em>.</p>
 
   <p>Those two boxes are not the same thing, and picking the wrong one is a common source of off-by-a-few-pixels bugs. The content box is where content goes: the border box minus padding and border. The border box wraps content, padding and border together.</p>
+
+  <p>The specification actually offers <strong>3</strong> box options, not two. Alongside <code>content-box</code> and <code>border-box</code> sits <code>device-pixel-content-box</code>, the content area measured in device pixels before CSS transforms are applied, which is the one you want when sizing a canvas backing store. If you pass no <code>box</code> option at all you get <code>content-box</code>, since that is the declared default.</p>
 
   <pre><code>{`const observer = new ResizeObserver((entries) =&gt; {
   for (const entry of entries) {
@@ -44,7 +47,7 @@ const bad = new ResizeObserver(([entry]) =&gt; {
   entry.target.style.height = entry.contentRect.height + 1 + 'px';
 });`}</code></pre>
 
-  <p>The specification's answer, in MDN's words, is that <em>"infinite loops from cyclic dependencies are addressed by only processing elements deeper in the DOM during each iteration"</em>. Anything that does not meet that condition is deferred to the next paint, and an error event fires on <code>window</code> with a fixed message:</p>
+  <p>The specification's answer, in MDN's words, is that <em>"infinite loops from cyclic dependencies are addressed by only processing elements deeper in the DOM during each iteration"</em>. Concretely, each pass compares an observed element's depth in the tree against the depth already being processed: targets below it go into the active list and are broadcast now, targets at or above it are put aside as skipped. Anything that does not meet that condition is deferred to the next paint, and an error event fires on <code>window</code> with a fixed message:</p>
 
   <p><code>ResizeObserver loop completed with undelivered notifications.</code></p>
 

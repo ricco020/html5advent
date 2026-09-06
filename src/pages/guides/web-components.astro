@@ -10,12 +10,13 @@ import Article from '../../layouts/Article.astro';
   day={5}
   hero="/img/web-components-hero.jpg"
   heroAlt="A pile of colourful interlocking plastic building blocks of different shapes"
+  updated="2026-09-06"
   cluster={null}
 >
   <p><strong>Web Components</strong> are a set of native browser APIs that let you build your own reusable HTML elements - no framework required. A component you ship works the same in plain HTML, React, Vue or Svelte, because it is just an element the browser understands. Three APIs make it work: Custom Elements, the Shadow DOM, and the <code>&lt;template&gt;</code> tag.</p>
 
   <h2>Custom Elements</h2>
-  <p>A Custom Element is a class extending <code>HTMLElement</code>, registered with a tag name that <strong>must contain a hyphen</strong> (so it can never collide with a future built-in tag):</p>
+  <p>A Custom Element is a class extending <code>HTMLElement</code>, registered with a tag name that <strong>must contain a hyphen</strong> (so it can never collide with a future built-in tag). The HTML Living Standard states four conditions for a valid custom element name: it is a valid element local name, its first code point is an ASCII lower alpha, it contains no ASCII upper alphas, and it contains a U+002D hyphen. Eight names are reserved on top of that, borrowed from SVG and MathML, among them <code>annotation-xml</code>, <code>color-profile</code> and <code>missing-glyph</code>, so a hyphen alone is necessary but not quite sufficient:</p>
   <pre><code>{`class GreetingCard extends HTMLElement {
   connectedCallback() {
     const p = document.createElement('p');
@@ -27,7 +28,7 @@ import Article from '../../layouts/Article.astro';
 customElements.define('greeting-card', GreetingCard);`}</code></pre>
   <p>Once defined, you use it like any other tag:</p>
   <pre><code>{`<greeting-card></greeting-card>`}</code></pre>
-  <p>The class gives you <strong>lifecycle callbacks</strong>. The most useful are <code>connectedCallback</code> (the element was added to the page), <code>disconnectedCallback</code> (it was removed), and <code>attributeChangedCallback</code> (a watched attribute changed).</p>
+  <p>The class gives you <strong>lifecycle callbacks</strong>. The most useful are <code>connectedCallback</code> (the element was added to the page), <code>disconnectedCallback</code> (it was removed), and <code>attributeChangedCallback</code> (a watched attribute changed). The standard defines nine in total, but the split matters more than the count: five apply to any custom element, while the remaining four exist only for form-associated ones.</p>
 
   <h2>Reacting to attributes</h2>
   <p>To pass data in, read attributes - exactly like <code>src</code> on an image. Declare which ones to watch with a static <code>observedAttributes</code> getter, then respond in <code>attributeChangedCallback</code>. Building the node with <code>textContent</code> keeps user-supplied values safe:</p>

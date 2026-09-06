@@ -10,11 +10,12 @@ import Article from '../../layouts/Article.astro';
   day={4}
   hero="/img/service-worker-hero.jpg"
   heroAlt="A smartphone screen in airplane mode showing the time, with no network connection"
+  updated="2026-09-06"
   cluster={null}
 >
   <p>A <strong>service worker</strong> is a script the browser runs in the background, separate from your page. It sits between your app and the network like a programmable proxy: it can intercept requests, answer them from a cache, and keep your site working even when the user is offline. It is the foundation of Progressive Web Apps.</p>
 
-  <p>Two ground rules before anything else. A service worker only runs over <strong>HTTPS</strong> (or <code>localhost</code> during development), and it has <strong>no access to the DOM</strong> - it communicates with pages through events and messages, not by touching <code>document</code>.</p>
+  <p>Two ground rules before anything else. A service worker only runs in a <strong>secure context</strong>, which in practice means <strong>HTTPS</strong>, with <code>http://localhost</code> treated as secure so local development still works. And it has <strong>no access to the DOM</strong> - it communicates with pages through events and messages, not by touching <code>document</code>. Its life runs through <strong>3 stages</strong>, download, install and activate, before it can answer a single request.</p>
 
   <h2>Registering a service worker</h2>
   <p>You register the worker from your normal page script. Feature-detect first, then point the browser at the script file:</p>
@@ -81,6 +82,7 @@ self.addEventListener('activate', (event) => {
 
   <h2>Shipping updates without breaking users</h2>
   <p>When you change <code>sw.js</code>, the browser detects the new bytes and installs the new worker, but it stays <em>waiting</em> until every tab using the old one is closed. That prevents two versions running at once. To take over sooner, call <code>self.skipWaiting()</code> in <code>install</code> and <code>clients.claim()</code> in <code>activate</code> - but only do that when you are confident the new version is compatible with already-open pages.</p>
+  <p>The browser also checks for a new worker on its own. A navigation to an in-scope page triggers a check, and so does any event fired on the worker if the script has not been downloaded in the last <strong>24 hours</strong>. That upper bound is why a stale worker cannot pin itself in place indefinitely through caching headers.</p>
   <p>Always bump the cache name (<code>site-v1</code> → <code>site-v2</code>) when assets change. The <code>activate</code> handler above then deletes the stale cache, so users never get a mix of old and new files.</p>
 
   <p>That is the whole core loop: register, pre-cache on install, clean up on activate, and answer requests on fetch. Start with a cache-first strategy for static files and a network-first one for your HTML, and you have a site that loads instantly on repeat visits and survives a dropped connection.</p>

@@ -9,6 +9,7 @@ import Article from '../../layouts/Article.astro';
   cat="apis"
   hero="https://images.pexels.com/photos/164645/pexels-photo-164645.jpeg?auto=compress&cs=tinysrgb&w=1600"
   heroAlt="An open spiral notebook with blank grid pages and a black pen resting on it, beside a passport and a smartphone on a wooden table"
+  updated="2026-09-06"
   cluster={null}
 >
 
@@ -17,13 +18,15 @@ import Article from '../../layouts/Article.astro';
   <p>MDN puts it in one line: the interface <em>"provides the ability to watch for changes being made to the DOM tree"</em>.</p>
 
   <h2>What it can watch</h2>
-  <p>Three kinds of change, selected through the options you pass:</p>
+  <p>Three kinds of change, which are also the <strong>3</strong> values the <code>type</code> field of a record can take, selected through the options you pass:</p>
   <ul>
     <li><code>childList</code>, nodes added or removed</li>
     <li><code>attributes</code>, an attribute changed on the observed element</li>
     <li><code>characterData</code>, the text content of a node changed</li>
   </ul>
   <p>Plus <code>subtree</code>, which extends any of the above to every descendant rather than the target alone. That one word is the difference between watching a container and watching everything inside it.</p>
+
+  <p>The full options dictionary holds <strong>7</strong> members, and the important thing about them is that every boolean one defaults to <code>false</code>. An <code>observe()</code> call with an empty options object therefore watches nothing at all and throws, which is the standard's way of refusing an observer that would never fire. Two of the defaults are conditional rather than fixed: <code>attributes</code> becomes true on its own if you supply <code>attributeFilter</code> or <code>attributeOldValue</code>, and <code>characterData</code> does the same if you supply <code>characterDataOldValue</code>.</p>
 
   <pre><code>{`const observer = new MutationObserver((records) =&gt; {
   for (const record of records) {
