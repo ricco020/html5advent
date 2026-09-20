@@ -1,0 +1,184 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="fr"
+  slug="indexeddb-tutorial"
+  title="Tutoriel IndexedDB : construire une application de notes qui fonctionne hors ligne"
+  description="Un tutoriel IndexedDB pas a pas. Ouvrir une base de donnees, creer un object store, ajouter et lire des enregistrements, interroger par index, supprimer des entrees et gerer les montees de version, le tout dans une petite application de notes executable dans le navigateur."
+  cat="apis"
+  day={null}
+  hero="/img/indexeddb-tutorial-hero.jpg"
+  heroAlt="Une personne debout devant des baies de serveurs vitrees dans un datacenter, tenant un ordinateur portable ouvert, avec un eclairage bleu et des logos de fournisseurs visibles sur les panneaux vitres"
+  cluster={null}
+>
+  <p>Le <a href="/fr/guides/indexeddb">guide conceptuel</a> explique ce qu'est IndexedDB et quand l'utiliser. Ce tutoriel construit une petite application de notes en partant de zero pour que vous voyiez chaque etape : ouvrir une base de donnees, creer un store, ecrire des enregistrements, les relire, interroger par index et supprimer des entrees.</p>
+  <p>Tout s'execute dans le navigateur. Pas d'outils de build, pas de serveur, pas de dependances. Copiez chaque bloc dans un seul fichier HTML et ouvrez-le.</p>
+
+  <h2>Etape 1 : ouvrir la base de donnees</h2>
+  <p>Toute interaction avec IndexedDB commence par <code>indexedDB.open()</code>. Vous passez un nom et un numero de version. Si la base n'existe pas encore, ou si votre version est superieure a celle sur le disque, le navigateur declenche <code>upgradeneeded</code>.</p>
+  <pre><code>{`function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('notes-app', 1);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('notes')) {
+        const store = db.createObjectStore('notes', {
+          keyPath: 'id',
+          autoIncrement: true,
+        });
+        store.createIndex('by_tag', 'tag', { unique: false });
+        store.createIndex('by_date', 'createdAt', { unique: false });
+      }
+    };
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p>Quelques points a remarquer. <code>keyPath: 'id'</code> indique a IndexedDB quelle propriete de chaque objet est la cle primaire. <code>autoIncrement: true</code> fait generer cette cle par la base de donnees. Les deux appels <code>createIndex</code> vous permettront d'interroger les notes par tag ou par date sans parcourir tous les enregistrements.</p>
+
+  <h2>Etape 2 : ajouter un enregistrement</h2>
+  <p>Ecrire dans IndexedDB se fait toujours dans une <strong>transaction</strong>. Vous en ouvrez une sur l'object store dont vous avez besoin, obtenez une reference a ce store, et appelez <code>add()</code> ou <code>put()</code>.</p>
+  <pre><code>{`async function addNote(db, text, tag) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readwrite');
+    const store = tx.objectStore('notes');
+    const record = {
+      text,
+      tag: tag || 'general',
+      createdAt: new Date().toISOString(),
+    };
+    const request = store.add(record);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p><code>add()</code> leve une erreur si un enregistrement avec la meme cle existe deja. <code>put()</code> ecrase a la place. Pour les nouveaux enregistrements, <code>add()</code> est plus sur car il attrape les doublons accidentels.</p>
+
+  <h2>Etape 3 : lire tous les enregistrements</h2>
+  <p>Pour tout lire dans un store, ouvrez une transaction <code>readonly</code> et appelez <code>getAll()</code> :</p>
+  <pre><code>{`async function getAllNotes(db) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readonly');
+    const store = tx.objectStore('notes');
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p>Si vous n'avez besoin que d'un enregistrement et que vous connaissez sa cle, utilisez <code>store.get(key)</code> a la place. Il renvoie un seul objet plutot qu'un tableau.</p>
+
+  <figure>
+    <img src="/img/indexeddb-tutorial-inbody.jpg" alt="Gros plan d'un editeur de code a theme sombre sur un ecran, montrant du code de configuration Ruby avec coloration syntaxique verte et blanche, une arborescence a gauche et des numeros de ligne a droite" width="1280" height="853" loading="lazy" />
+    <figcaption>Ecrire du code dans un editeur sombre. IndexedDB suit le meme schema requete-et-callback que la plupart des API du navigateur, enveloppe ici dans des promesses pour la lisibilite.</figcaption>
+  </figure>
+
+  <h2>Etape 4 : interroger par index</h2>
+  <p>Les index permettent de trouver des enregistrements sans parcourir tout le store. Pour obtenir toutes les notes taguees "work" :</p>
+  <pre><code>{`async function getNotesByTag(db, tag) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readonly');
+    const store = tx.objectStore('notes');
+    const index = store.index('by_tag');
+    const request = index.getAll(tag);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p>Vous pouvez aussi utiliser un <strong>key range</strong> pour interroger une plage de valeurs. Par exemple, pour obtenir les notes creees apres une certaine date :</p>
+  <pre><code>{`const range = IDBKeyRange.lowerBound('2026-01-01T00:00:00.000Z');
+const request = store.index('by_date').getAll(range);`}</code></pre>
+  <p>Les quatre constructeurs de range sont <code>lowerBound</code>, <code>upperBound</code>, <code>bound</code> (les deux extremites) et <code>only</code> (correspondance exacte). Chacun accepte un booleen optionnel pour exclure la valeur limite.</p>
+
+  <h2>Etape 5 : mettre a jour un enregistrement</h2>
+  <p>La mise a jour utilise <code>put()</code>. Vous devez inclure la propriete cle (<code>id</code> dans notre schema) pour qu'IndexedDB sache quel enregistrement ecraser :</p>
+  <pre><code>{`async function updateNote(db, id, newText) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readwrite');
+    const store = tx.objectStore('notes');
+    const getReq = store.get(id);
+    getReq.onsuccess = () => {
+      const note = getReq.result;
+      if (!note) { reject(new Error('Not found')); return; }
+      note.text = newText;
+      const putReq = store.put(note);
+      putReq.onsuccess = () => resolve();
+      putReq.onerror = () => reject(putReq.error);
+    };
+    getReq.onerror = () => reject(getReq.error);
+  });
+}`}</code></pre>
+
+  <h2>Etape 6 : supprimer un enregistrement</h2>
+  <p>Appelez <code>store.delete(key)</code> dans une transaction readwrite :</p>
+  <pre><code>{`async function deleteNote(db, id) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readwrite');
+    const store = tx.objectStore('notes');
+    const request = store.delete(id);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p>Pour vider tous les enregistrements d'un store, utilisez <code>store.clear()</code> a la place.</p>
+
+  <h2>Etape 7 : gerer les montees de version</h2>
+  <p>Quand vous devez ajouter un nouvel index ou un nouveau store apres que les utilisateurs ont deja la version 1, incrementez le numero de version et gerez la migration dans <code>onupgradeneeded</code> :</p>
+  <pre><code>{`request.onupgradeneeded = (event) => {
+  const db = event.target.result;
+  const oldVersion = event.oldVersion;
+
+  if (oldVersion < 1) {
+    const store = db.createObjectStore('notes', {
+      keyPath: 'id',
+      autoIncrement: true,
+    });
+    store.createIndex('by_tag', 'tag', { unique: false });
+    store.createIndex('by_date', 'createdAt', { unique: false });
+  }
+
+  if (oldVersion < 2) {
+    const tx = event.target.transaction;
+    const store = tx.objectStore('notes');
+    store.createIndex('by_priority', 'priority', { unique: false });
+  }
+};`}</code></pre>
+  <p>Verifiez <code>event.oldVersion</code> pour n'executer que les migrations que l'utilisateur n'a pas encore vues. Un utilisateur qui passe de 0 (pas de base) execute les deux blocs. Un utilisateur qui passe de 1 n'execute que le second.</p>
+
+  <h2>Assembler le tout</h2>
+  <p>Voici un script minimal qui exerce toutes les fonctions ci-dessus :</p>
+  <pre><code>{`(async () => {
+  const db = await openDB();
+
+  const id = await addNote(db, 'Buy groceries', 'personal');
+  console.log('Added note with id:', id);
+
+  const all = await getAllNotes(db);
+  console.log('All notes:', all);
+
+  const tagged = await getNotesByTag(db, 'personal');
+  console.log('Personal notes:', tagged);
+
+  await updateNote(db, id, 'Buy groceries and cook dinner');
+  console.log('Updated note', id);
+
+  await deleteNote(db, id);
+  console.log('Deleted note', id);
+})();`}</code></pre>
+  <p>Ouvrez la console du navigateur pour voir la sortie. Chaque operation est asynchrone, chaque ecriture passe par une transaction, et les donnees survivent aux rechargements de page sans aucun serveur.</p>
+
+  <h2>Erreurs courantes</h2>
+  <table>
+    <thead><tr><th>Erreur</th><th>Ce qui se passe</th><th>Correction</th></tr></thead>
+    <tbody>
+      <tr><td>Creer un store en dehors de <code>onupgradeneeded</code></td><td>InvalidStateError</td><td>Tous les changements de schema vont dans <code>onupgradeneeded</code></td></tr>
+      <tr><td>Utiliser <code>await</code> dans un callback de transaction</td><td>La transaction se ferme automatiquement avant que l'await se resolve</td><td>Gardez toutes les operations sur le store synchrones dans un meme tick de transaction, ou ouvrez une nouvelle transaction apres l'await</td></tr>
+      <tr><td>Oublier d'incrementer le numero de version</td><td><code>onupgradeneeded</code> ne se declenche jamais</td><td>Incrementez l'entier de version chaque fois que vous modifiez le schema</td></tr>
+      <tr><td>Passer une chaine la ou une cle attend un nombre</td><td>Enregistrement non trouve</td><td>Respectez le type : si <code>autoIncrement</code> genere des nombres, interrogez avec un nombre</td></tr>
+    </tbody>
+  </table>
+
+  <p>IndexedDB est verbeux, mais chaque element a une raison d'etre : la version controle votre schema, les transactions protegent vos donnees, et les index gardent les lectures rapides. Une fois ces sept etapes devenues routine, vous avez tout ce qu'il faut pour stocker des donnees structurees cote client, que ce soit pour le hors ligne, le cache ou un etat qui survit a la session.</p>
+</Article>
