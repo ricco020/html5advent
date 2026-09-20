@@ -1,0 +1,190 @@
+---
+import Article from '../../../layouts/Article.astro';
+---
+<Article
+  lang="it"
+  slug="indexeddb-tutorial"
+  title="Tutorial IndexedDB: costruire un'app di appunti che funziona offline"
+  description="Un tutorial IndexedDB passo dopo passo. Aprire un database, creare un object store, aggiungere e leggere record, interrogare per indice, eliminare voci e gestire gli upgrade di versione, il tutto in una piccola app di appunti eseguibile nel browser."
+  cat="apis"
+  day={null}
+  hero="/img/indexeddb-tutorial-hero.jpg"
+  heroAlt="Una persona in piedi davanti a rack di server con pareti di vetro in un data center, con un portatile aperto in mano, illuminazione blu e loghi visibili sui pannelli di vetro"
+  cluster={null}
+  faq={[
+    { q: 'Come si apre un database IndexedDB?', a: 'Si chiama indexedDB.open(nome, versione). Il primo argomento e una stringa che identifica il database, il secondo un intero di versione. La chiamata restituisce un IDBOpenDBRequest. Si ascolta il suo evento onsuccess per ottenere l handle del database e onupgradeneeded per creare o modificare gli object store quando cambia la versione.' },
+    { q: 'Che cos e onupgradeneeded in IndexedDB?', a: 'onupgradeneeded si attiva quando il browser non ha ancora un database con quel nome, o quando il numero di versione passato e superiore a quello su disco. E l unico punto in cui si possono creare o eliminare object store e indici. Del codice che tenta di farlo al di fuori di questo evento lancia un errore.' },
+    { q: 'IndexedDB funziona offline?', a: 'Si. IndexedDB memorizza i dati nel browser senza bisogno di rete. Associato a un service worker che mette in cache HTML, CSS e JavaScript, si ottiene un applicazione completamente offline. I dati persistono tra le sessioni finche l utente non cancella i dati del sito o la pressione di archiviazione non spinge il browser a eliminarli.' },
+    { q: 'In cosa si differenzia IndexedDB da localStorage?', a: 'localStorage e sincrono, memorizza solo stringhe ed e limitato a circa 5 MB. IndexedDB e asincrono, memorizza dati strutturati inclusi Blob e ArrayBuffer, supporta indici e transazioni e puo contenere centinaia di megabyte. Usare localStorage per pochi piccoli flag; usare IndexedDB per tutto cio che e piu grande o strutturato.' },
+  ]}
+>
+  <p>La <a href="/it/guides/indexeddb">guida concettuale</a> spiega cos'e IndexedDB e quando usarlo. Questo tutorial costruisce una piccola applicazione di appunti da zero per mostrare ogni passaggio: aprire un database, creare uno store, scrivere record, rileggerli, interrogare per indice ed eliminare voci.</p>
+  <p>Tutto gira nel browser. Nessun build tool, nessun server, nessuna dipendenza. Copiate ogni blocco in un unico file HTML e apritelo.</p>
+
+  <h2>Passo 1: aprire il database</h2>
+  <p>Ogni interazione con IndexedDB inizia con <code>indexedDB.open()</code>. Si passano un nome e un numero di versione. Se il database non esiste ancora, o se la versione e superiore a quella su disco, il browser emette <code>upgradeneeded</code>.</p>
+  <pre><code>{`function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('notes-app', 1);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('notes')) {
+        const store = db.createObjectStore('notes', {
+          keyPath: 'id',
+          autoIncrement: true,
+        });
+        store.createIndex('by_tag', 'tag', { unique: false });
+        store.createIndex('by_date', 'createdAt', { unique: false });
+      }
+    };
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p>Alcune cose da notare. <code>keyPath: 'id'</code> dice a IndexedDB quale proprieta di ogni oggetto e la chiave primaria. <code>autoIncrement: true</code> fa generare la chiave al database. Le due chiamate <code>createIndex</code> permettono di interrogare gli appunti per tag o per data in seguito, senza scorrere ogni record.</p>
+
+  <h2>Passo 2: aggiungere un record</h2>
+  <p>La scrittura in IndexedDB avviene sempre all'interno di una <strong>transazione</strong>. Se ne apre una sull'object store necessario, si ottiene un riferimento allo store e si chiama <code>add()</code> o <code>put()</code>.</p>
+  <pre><code>{`async function addNote(db, text, tag) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readwrite');
+    const store = tx.objectStore('notes');
+    const record = {
+      text,
+      tag: tag || 'general',
+      createdAt: new Date().toISOString(),
+    };
+    const request = store.add(record);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p><code>add()</code> lancia un errore se un record con la stessa chiave esiste gia. <code>put()</code> lo sovrascrive. Per record nuovi, <code>add()</code> e piu sicuro perche intercetta i duplicati accidentali.</p>
+
+  <h2>Passo 3: leggere tutti i record</h2>
+  <p>Per leggere tutto cio che contiene uno store, si apre una transazione <code>readonly</code> e si chiama <code>getAll()</code>:</p>
+  <pre><code>{`async function getAllNotes(db) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readonly');
+    const store = tx.objectStore('notes');
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p>Se serve un solo record e se ne conosce la chiave, usare <code>store.get(key)</code>. Restituisce un singolo oggetto anziche un array.</p>
+
+  <figure>
+    <img src="/img/indexeddb-tutorial-inbody.jpg" alt="Primo piano di un editor di codice a tema scuro su un monitor, che mostra codice di configurazione Ruby con evidenziazione sintattica verde e bianca, un albero di file a sinistra e numeri di riga a destra" width="1280" height="853" loading="lazy" />
+    <figcaption>Scrivere codice in un editor scuro. IndexedDB segue lo stesso schema di richieste e callback visibile nella maggior parte delle API del browser, qui avvolto in promise per leggibilita.</figcaption>
+  </figure>
+
+  <h2>Passo 4: interrogare per indice</h2>
+  <p>Gli indici permettono di trovare record senza scorrere l'intero store. Per ottenere tutti gli appunti con tag "work":</p>
+  <pre><code>{`async function getNotesByTag(db, tag) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readonly');
+    const store = tx.objectStore('notes');
+    const index = store.index('by_tag');
+    const request = index.getAll(tag);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p>Si puo anche usare un <strong>key range</strong> per interrogare un intervallo di valori. Per esempio, per ottenere gli appunti creati dopo una certa data:</p>
+  <pre><code>{`const range = IDBKeyRange.lowerBound('2026-01-01T00:00:00.000Z');
+const request = store.index('by_date').getAll(range);`}</code></pre>
+  <p>I quattro costruttori di range sono <code>lowerBound</code>, <code>upperBound</code>, <code>bound</code> (entrambi gli estremi) e <code>only</code> (corrispondenza esatta). Ognuno accetta un booleano opzionale per escludere il valore limite.</p>
+
+  <h2>Passo 5: aggiornare un record</h2>
+  <p>L'aggiornamento usa <code>put()</code>. Bisogna includere la proprieta chiave (<code>id</code> nel nostro schema) perche IndexedDB sappia quale record sovrascrivere:</p>
+  <pre><code>{`async function updateNote(db, id, newText) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readwrite');
+    const store = tx.objectStore('notes');
+    const getReq = store.get(id);
+    getReq.onsuccess = () => {
+      const note = getReq.result;
+      if (!note) { reject(new Error('Not found')); return; }
+      note.text = newText;
+      const putReq = store.put(note);
+      putReq.onsuccess = () => resolve();
+      putReq.onerror = () => reject(putReq.error);
+    };
+    getReq.onerror = () => reject(getReq.error);
+  });
+}`}</code></pre>
+
+  <h2>Passo 6: eliminare un record</h2>
+  <p>Chiamare <code>store.delete(key)</code> all'interno di una transazione readwrite:</p>
+  <pre><code>{`async function deleteNote(db, id) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('notes', 'readwrite');
+    const store = tx.objectStore('notes');
+    const request = store.delete(id);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}`}</code></pre>
+  <p>Per cancellare tutti i record di uno store, usare <code>store.clear()</code>.</p>
+
+  <h2>Passo 7: gestire gli upgrade di versione</h2>
+  <p>Quando serve aggiungere un nuovo indice o un nuovo object store dopo che gli utenti hanno gia la versione 1, incrementare il numero di versione e gestire la migrazione in <code>onupgradeneeded</code>:</p>
+  <pre><code>{`request.onupgradeneeded = (event) => {
+  const db = event.target.result;
+  const oldVersion = event.oldVersion;
+
+  if (oldVersion < 1) {
+    const store = db.createObjectStore('notes', {
+      keyPath: 'id',
+      autoIncrement: true,
+    });
+    store.createIndex('by_tag', 'tag', { unique: false });
+    store.createIndex('by_date', 'createdAt', { unique: false });
+  }
+
+  if (oldVersion < 2) {
+    const tx = event.target.transaction;
+    const store = tx.objectStore('notes');
+    store.createIndex('by_priority', 'priority', { unique: false });
+  }
+};`}</code></pre>
+  <p>Controllare <code>event.oldVersion</code> per eseguire solo le migrazioni che l'utente non ha ancora visto. Un utente che passa dalla versione 0 (nessun database) esegue entrambi i blocchi. Un utente che passa dalla versione 1 esegue solo il secondo.</p>
+
+  <h2>Mettere tutto insieme</h2>
+  <p>Ecco uno script minimale che esercita ogni funzione descritta sopra:</p>
+  <pre><code>{`(async () => {
+  const db = await openDB();
+
+  const id = await addNote(db, 'Buy groceries', 'personal');
+  console.log('Added note with id:', id);
+
+  const all = await getAllNotes(db);
+  console.log('All notes:', all);
+
+  const tagged = await getNotesByTag(db, 'personal');
+  console.log('Personal notes:', tagged);
+
+  await updateNote(db, id, 'Buy groceries and cook dinner');
+  console.log('Updated note', id);
+
+  await deleteNote(db, id);
+  console.log('Deleted note', id);
+})();`}</code></pre>
+  <p>Aprire la console del browser per vedere l'output. Ogni operazione e asincrona, ogni scrittura passa attraverso una transazione, e i dati sopravvivono al ricaricamento della pagina senza alcun server.</p>
+
+  <h2>Errori comuni</h2>
+  <table>
+    <thead><tr><th>Errore</th><th>Cosa succede</th><th>Rimedio</th></tr></thead>
+    <tbody>
+      <tr><td>Creare uno store fuori da <code>onupgradeneeded</code></td><td>InvalidStateError</td><td>Tutte le modifiche allo schema vanno in <code>onupgradeneeded</code></td></tr>
+      <tr><td>Usare <code>await</code> dentro il callback di una transazione</td><td>La transazione si chiude automaticamente prima che l'await si risolva</td><td>Mantenere tutte le operazioni sullo store sincrone entro un tick della transazione, oppure aprire una nuova transazione dopo l'await</td></tr>
+      <tr><td>Dimenticare di incrementare il numero di versione</td><td><code>onupgradeneeded</code> non si attiva mai</td><td>Incrementare l'intero di versione ogni volta che si cambia lo schema</td></tr>
+      <tr><td>Passare una stringa dove la chiave richiede un numero</td><td>Record non trovato</td><td>Far corrispondere il tipo: se <code>autoIncrement</code> genera numeri, interrogare con un numero</td></tr>
+    </tbody>
+  </table>
+
+  <p>IndexedDB e prolisso, ma ogni pezzo ha uno scopo: la versione protegge lo schema, le transazioni proteggono i dati e gli indici mantengono le letture veloci. Una volta che questi sette passi diventano routine, avrete tutto il necessario per memorizzare dati strutturati sul client, che sia per il supporto offline, il caching o il mantenimento di stato oltre la sessione.</p>
+</Article>
