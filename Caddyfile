@@ -1,0 +1,39 @@
+{
+	auto_https off
+	admin off
+}
+
+:{$PORT:8080} {
+	root * /srv
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+	}
+
+	route {
+		@r0 {
+			path /index.html
+		}
+		redir @r0 "/" 308
+		@r1 {
+			host www.html5advent.com
+			path_regexp r1 ^/(.*)$
+		}
+		redir @r1 "https://html5advent.com/{re.r1.1}" 308
+		@slash path_regexp sl ^(.+)/$
+		redir @slash {re.sl.1} 308
+		@html path_regexp ht ^(.*)\.html$
+		redir @html {re.ht.1} 308
+		try_files {path} {path}/index.html {path}.html
+		file_server
+	}
+
+	handle_errors {
+		@404 expression {err.status_code} == 404
+		rewrite @404 /404.html
+		file_server
+	}
+}
