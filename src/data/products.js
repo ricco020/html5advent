@@ -19,10 +19,10 @@ export const PRODUCTS = {
     // Real, dated list prices (Contabo Cloud VPS, 12-month term, ex. VAT, EUR/month, June 2026).
     // Only emitted as Offer where these prices are shown in the page body (contabo-review).
     offers: [
-      { sku: 'cloud-vps-10', name: 'Contabo Cloud VPS 10', price: '5.50' },
-      { sku: 'cloud-vps-20', name: 'Contabo Cloud VPS 20', price: '7.50' },
-      { sku: 'cloud-vps-30', name: 'Contabo Cloud VPS 30', price: '14.00' },
-      { sku: 'cloud-vps-40', name: 'Contabo Cloud VPS 40', price: '25.00' },
+      { sku: 'cloud-vps-10', name: 'Contabo Cloud VPS 4', price: '5.50' },
+      { sku: 'cloud-vps-20', name: 'Contabo Cloud VPS 6', price: '7.50' },
+      { sku: 'cloud-vps-30', name: 'Contabo Cloud VPS 8', price: '14.00' },
+      { sku: 'cloud-vps-40', name: 'Contabo Cloud VPS 12', price: '25.00' },
     ],
     priceCurrency: 'EUR',
     // Date the listed prices were observed; surfaced as priceValidUntil context.
