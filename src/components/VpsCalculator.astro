@@ -210,6 +210,9 @@ const numFmt = locale === 'en' ? 'en-US' : locale;
         $('vc-p-spec').textContent = plan.cpu + ' ' + S.vcpu + ' · ' + plan.ram + ' ' + S.ram + ' · ' + plan.disk + ' ' + S.disk + ' · ' + cur.format(parseFloat(plan.price)) + ' ' + S.perMonth;
         $('vc-p-note').textContent = plan === PLANS[0] && ram <= 4 && vcpu <= 2 ? S.small : '';
       }
+      // Deep link: /tools/vps-size-calculator?stack=laravel preselects a stack (used by the stack guides).
+      var pre = new URLSearchParams(location.search).get('stack');
+      if (pre && STACKS[pre]) { var r = form.querySelector('input[name=stack][value="' + pre + '"]'); if (r) r.checked = true; }
       form.addEventListener('input', calc);
       form.addEventListener('change', calc);
       calc();

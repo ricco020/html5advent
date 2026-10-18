@@ -67,6 +67,14 @@ const schema = graph.length > 1
   ? { '@context': 'https://schema.org', '@graph': graph }
   : { '@context': 'https://schema.org', ...article };
 
+// Stack guides open the VPS size calculator with their stack preselected (?stack=…).
+const calcStack = /woocommerce/.test(slug) ? 'woocommerce'
+  : /wordpress/.test(slug) ? 'wordpress'
+  : /laravel|php/.test(slug) ? 'laravel'
+  : /node|nextjs/.test(slug) ? 'node'
+  : /static|astro/.test(slug) ? 'static'
+  : null;
+
 const FAQ_LABEL = { en: 'Frequently asked questions', fr: 'Questions fréquentes', es: 'Preguntas frecuentes', de: 'Häufige Fragen', it: 'Domande frequenti', pt: 'Perguntas frequentes' };
 
 // Related guides - internal links so every guide is cross-linked (crawl paths, not a dead end).
@@ -93,7 +101,7 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
 
     {cluster && <Cta cluster={cluster} locale={lang} />}
     {cluster === 'hosting' && (
-      <p class="calc-promo"><a href={localePath(lang, 'tools/vps-size-calculator')}>{({
+      <p class="calc-promo"><a href={localePath(lang, 'tools/vps-size-calculator') + (calcStack ? `?stack=${calcStack}` : '')}>{({
         en: 'Not sure how big your server should be? Try the free VPS size calculator',
         fr: 'Quelle taille de serveur choisir ? Essayez le calculateur de taille de VPS gratuit',
         es: '¿Qué tamaño de servidor necesitas? Prueba la calculadora de tamaño de VPS gratuita',

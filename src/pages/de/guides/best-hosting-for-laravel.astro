@@ -4,22 +4,52 @@ import Article from '../../../layouts/Article.astro';
 <Article
   lang="de"
   slug="best-hosting-for-laravel"
-  title="Eine Laravel-App hosten: VPS, Anforderungen und Deployment"
-  description="Ein praktischer Leitfaden zum Hosten einer Laravel-Anwendung - warum ein VPS meist die richtige Wahl ist, welche Server-Anforderungen zählen (PHP, Erweiterungen, Queue-Worker, Scheduler) und ein echtes Deployment-Durchgang mit Composer, .env, Nginx und Supervisor."
+  title="Laravel-Hosting 2026: so hosten Sie eine Laravel-App (VPS, Forge, Cloud)"
+  description="So hosten Sie eine Laravel-App: die vier Optionen mit echten Preisen im Vergleich (Shared-Hosting, Laravel Cloud, Forge oder Ploi auf einem VPS, reiner VPS), die PHP-Versionen für Laravel 12 und 13, ein vollständiger Deployment-Durchgang und ein Redeploy-Skript."
+  updated="2026-10-18"
   cat="hosting"
   hero="/img/best-hosting-for-laravel-hero.jpg"
   heroAlt="Ein Entwickler mit Kopfhörern arbeitet an einem Schreibtisch vor einem Monitor voller Code, mit an die Wand dahinter projiziertem Code"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
+  faq={[
+    { q: 'Kann ich Laravel auf Shared-Hosting betreiben?', a: 'Manchmal, für eine kleine App ohne Queues: Sie brauchen SSH, Composer, ein unterstütztes PHP und die Möglichkeit, das Document-Root auf public/ zu richten. Die meisten Shared-Tarife scheitern an mindestens einem dieser Punkte, und keiner erlaubt einen Queue-Worker unter Supervisor. Ein VPS oder eine Managed-Plattform erspart Ihnen diesen Kampf.' },
+    { q: 'Was ist der günstigste Weg, eine Laravel-App zu hosten?', a: 'Ein kleiner unmanaged VPS, den Sie selbst einrichten, optional mit dem kostenlosen Tarif von Ploi (1 Server, 1 Site), um Deployments zu automatisieren. Bei den am 18. Oktober 2026 geprüften Preisen sind das etwa 5,50 EUR im Monat für einen Contabo Cloud VPS 4 mit 4 vCPU / 8 GB, gegenüber 5 USD im Monat plus Nutzung bei Laravel Cloud Starter.' },
+    { q: 'Welche PHP-Version braucht Laravel?', a: 'Laravel 13 unterstützt PHP 8.3 bis 8.5, Laravel 12 unterstützt PHP 8.2 bis 8.5 (Support-Tabelle von Laravel, geprüft am 18. Oktober 2026). Laravel 12 erhält Sicherheitsupdates nur noch bis zum 24. Februar 2027, neue Projekte sollten daher mit Laravel 13 und PHP 8.3 oder neuer starten.' },
+    { q: 'Wie viel RAM braucht ein Laravel-Server?', a: 'Eine einzelne App mit MySQL, Redis und zwei Queue-Workern läuft bequem mit 2 bis 4 GB. Zuerst geht der Arbeitsspeicher aus, nicht die CPU: Zählen Sie PHP-FPM-Worker, den Buffer-Pool der Datenbank und Redis zusammen, bevor Sie einen Tarif wählen.' },
+    { q: 'Brauche ich Laravel Forge?', a: 'Nein. Forge (ab 12 USD im Monat) automatisiert Server-Provisionierung, Deployments, SSL und Worker, was Zeit spart, wenn Sie mehrere Server verwalten. Alles, was es tut, lässt sich auch von Hand mit den Befehlen in diesem Leitfaden erledigen.' },
+  ]}
 >
   <p><strong>Laravel</strong> ist ein vollständiges PHP-Anwendungsframework, kein Satz von Seiten, die man per FTP hochlädt. Es erwartet eine echte Laufzeitumgebung: ein aktuelles PHP, mehrere Erweiterungen, ein beschreibbares Storage-Verzeichnis, geplante Aufgaben und - für alles Nicht-Triviale - Queue-Worker im Hintergrund. Deshalb kämpft einfaches Shared-Hosting oft gegen Sie, und deshalb ist ein <strong>VPS</strong> meist das richtige Zuhause für eine Laravel-App. Dieser Leitfaden behandelt, was der Server tatsächlich braucht, und führt durch ein echtes Deployment.</p>
+
+  <h2>Die vier Wege, Laravel zu hosten, mit echten Preisen</h2>
+  <p>Die Preise unten wurden am <strong>18. Oktober 2026</strong> auf den offiziellen Preisseiten der Anbieter abgelesen. Sie ändern sich, prüfen Sie sie also vor dem Kauf.</p>
+  <table>
+    <thead><tr><th>Option</th><th>Was Sie zahlen</th><th>Was Sie bekommen</th><th>Ideal für</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Shared-Hosting</strong></td><td>Ein paar EUR im Monat</td><td>Ein Web-Root, oft kein SSH, keine lang laufenden Prozesse</td><td>Selten Laravel: nur winzige Apps ohne Queues</td></tr>
+      <tr><td><strong>Laravel Cloud</strong> (managed)</td><td>Starter 5 USD/Monat + Nutzung (5 USD Nutzungsguthaben inklusive); Growth 20 USD/Monat + Nutzung</td><td>Vollständig verwaltete Rechenleistung, Queues, Scale-to-Zero; Starter ist auf 2 GiB RAM pro Instanz begrenzt</td><td>Teams, die nie einen Server anfassen wollen</td></tr>
+      <tr><td><strong>Forge oder Ploi + Ihr VPS</strong></td><td>Forge Hobby 12 USD/Monat; Ploi Free (1 Server, 1 Site) oder Basic 8 EUR/Monat. Plus der VPS</td><td>Push-to-Deploy, SSL, Worker und Cron für Sie eingerichtet, auf einem Server, der Ihnen gehört</td><td>Entwickler, die Automatisierung ohne Plattform-Lock-in wollen</td></tr>
+      <tr><td><strong>Reiner VPS</strong> (unmanaged)</td><td>Ab 5,50 EUR/Monat für einen Contabo Cloud VPS 4 (4 vCPU, 8 GB RAM, 100 GB)</td><td>Root-Zugriff, garantierte Ressourcen, Sie übernehmen die Einrichtung unten</td><td>Niedrigste Kosten pro GB RAM, volle Kontrolle</td></tr>
+    </tbody>
+  </table>
+  <p>Die beiden mittleren Zeilen lassen sich kombinieren: Forge und Ploi verkaufen keine Server, sie konfigurieren den, den Sie mieten. Ploi Free plus ein kleiner VPS kostet etwa so viel wie der VPS allein, was es zur günstigsten automatisierten Option für eine einzelne App macht.</p>
 
   <h2>Warum ein VPS zu Laravel passt</h2>
   <p>Shared-Hosting ist für „Dateien in ein Web-Root ablegen" gebaut. Laravel will mehr als das: SSH-Zugriff, um <code>composer</code> und <code>artisan</code> auszuführen, die Möglichkeit, den Webserver auf das Verzeichnis <code>public/</code> zu richten, einen lang laufenden Prozess, um die Queue abzuarbeiten, und einen Cron-Eintrag für den Scheduler. Ein VPS gibt Ihnen <strong>Root-Zugriff, garantierten RAM und CPU sowie volle Kontrolle über den Stack</strong> - genau das, was diese Anforderungen verlangen. Eine Managed-Plattform kann ebenfalls funktionieren, aber ein VPS ist der flexibelste Mittelweg, sobald eine App Queues, eine Datenbank und einen Cache hat.</p>
 
   <h2>Server-Anforderungen</h2>
   <h3>PHP und Erweiterungen</h3>
-  <p>Betreiben Sie eine <strong>aktuell unterstützte PHP-Version</strong>, die zu Ihrem Laravel-Release passt - prüfen Sie die Dokumentation des Frameworks für das genaue Minimum. Laravel benötigt einen Standardsatz an aktivierten PHP-Erweiterungen; auf einem Debian/Ubuntu-VPS werden sie typischerweise zusammen installiert:</p>
+  <p>Wählen Sie die PHP-Version passend zu Ihrem Laravel-Release. Laut der Support-Tabelle von Laravel (geprüft am 18. Oktober 2026):</p>
+  <table>
+    <thead><tr><th>Laravel</th><th>Unterstütztes PHP</th><th>Bugfixes bis</th><th>Sicherheitsupdates bis</th></tr></thead>
+    <tbody>
+      <tr><td>13 (aktuell)</td><td>8.3 bis 8.5</td><td>Q3 2027</td><td>Q1 2028</td></tr>
+      <tr><td>12</td><td>8.2 bis 8.5</td><td>13. Aug. 2026 (beendet)</td><td>24. Feb. 2027</td></tr>
+      <tr><td>11</td><td>8.2 bis 8.4</td><td>beendet</td><td>beendet am 12. März 2026</td></tr>
+    </tbody>
+  </table>
+  <p>In der Praxis: Starten Sie neue Projekte mit Laravel 13 und PHP 8.3 oder neuer, und planen Sie das Upgrade jeder Laravel-11-App ein, die keine Sicherheitsupdates mehr erhält. Die Deployment-Dokumentation nennt die benötigten Erweiterungen: Ctype, cURL, DOM, Fileinfo, Filter, Hash, Mbstring, OpenSSL, PCRE, PDO, Session, Tokenizer und XML. Mehrere davon sind standardmäßig in PHP einkompiliert; auf einem Debian/Ubuntu-VPS kommt der Rest mit diesen Paketen:</p>
   <pre><code>{`# Ubuntu/Debian: PHP-FPM + the extensions Laravel expects
 sudo apt install -y php-fpm php-cli php-mbstring php-xml \\
   php-bcmath php-curl php-mysql php-zip php-gd php-intl
@@ -73,12 +103,11 @@ SESSION_DRIVER=redis
 REDIS_HOST=127.0.0.1`}</code></pre>
 
   <h3>3. Migrieren und für die Produktion cachen</h3>
-  <p>Führen Sie die Datenbankmigrationen aus und bauen Sie dann Laravels gecachte Konfiguration, Routen und Views. Das Cachen dieser Dinge macht das Framework in der Produktion schnell - aber denken Sie daran, sie bei jedem Deployment neu zu bauen, da sie den aktuellen Zustand einfrieren:</p>
+  <p>Führen Sie die Datenbankmigrationen aus und bauen Sie dann Laravels Caches. Seit Laravel 11 cacht ein einziger <code>optimize</code>-Befehl Konfiguration, Events, Routen und Views in einem Durchgang. Bauen Sie den Cache bei jedem Deployment neu, da er den aktuellen Zustand einfriert:</p>
   <pre><code>{`php artisan migrate --force
-
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache`}</code></pre>
+php artisan optimize          # config, events, routes, views
+# php artisan optimize:clear  # removes them again`}</code></pre>
+  <p>Eine Falle, vor der die Dokumentation warnt: Sobald die Konfiguration gecacht ist, wird die <code>.env</code>-Datei nicht mehr geladen, sodass jeder <code>env()</code>-Aufruf außerhalb der Dateien in <code>config/</code> <code>null</code> zurückgibt. Lesen Sie Einstellungen in Ihrem Code über <code>config()</code>.</p>
 
   <h3>4. Nginx auf public/ richten</h3>
   <p>Das Document-Root des Webservers muss das Verzeichnis <code>public/</code> sein - niemals das Projekt-Root, sonst würden Sie <code>.env</code> und Quelldateien offenlegen. Ein Standard-Nginx-+-PHP-FPM-Serverblock:</p>
@@ -127,15 +156,32 @@ sudo supervisorctl start app-worker:*`}</code></pre>
   <p>Laravels Task-Scheduler wird von einem einzigen Cron-Eintrag angetrieben, der jede Minute läuft; Laravel selbst entscheidet, welche Aufgaben fällig sind. Fügen Sie ihn dem Crontab des Deploy-Benutzers hinzu:</p>
   <pre><code>{`* * * * * cd /var/www/app && php artisan schedule:run >> /dev/null 2>&1`}</code></pre>
 
+  <h3>7. Neu deployen, ohne einen Schritt zu vergessen</h3>
+  <p>Jedes spätere Deployment wiederholt dieselbe Abfolge, und der Schritt, den man gern vergisst, ist <code>queue:restart</code>: Worker sind lang laufende Prozesse, die den alten Code im Speicher behalten, bis man sie zum Neuladen auffordert. Packen Sie alles in ein Skript:</p>
+  <pre><code>{`#!/usr/bin/env bash
+# deploy.sh - run from /var/www/app as the deploy user
+set -euo pipefail
+php artisan down --retry=15
+git pull --ff-only
+composer install --no-dev --optimize-autoloader --no-interaction
+php artisan migrate --force
+php artisan optimize
+php artisan queue:restart      # workers reload the new code
+php artisan up
+sudo systemctl reload php8.3-fpm   # match your PHP version`}</code></pre>
+  <p>Damit ist die App für die wenigen Sekunden des Deployments offline. Falls das wichtig ist, sind Release-Ordner plus ein Symlink-Wechsel der nächste Schritt, und genau das automatisieren Forge, Ploi und Envoyer.</p>
+
   <h2>Den VPS dimensionieren</h2>
+  <p>Auf einem Laravel-Server geht zuerst der Arbeitsspeicher aus. Ein grobes Budget für eine App: etwa 0,5 GB für das Betriebssystem, 30 bis 60 MB pro PHP-FPM-Worker, einige hundert MB für MySQL oder PostgreSQL bei kleinem Datenbestand, 50 bis 100 MB für Redis und dieselben Kosten pro Worker für jeden Queue-Worker. Das sind Faustregeln; messen Sie Ihre eigene App mit <code>free -m</code> und <code>ps</code>, sobald sie läuft.</p>
   <table>
-    <thead><tr><th>App-Profil</th><th>Was es braucht</th></tr></thead>
+    <thead><tr><th>App-Profil</th><th>Realistischer Bedarf</th><th>Beispieltarif (geprüft am 18. Okt. 2026)</th></tr></thead>
     <tbody>
-      <tr><td>Kleine App, leichter Traffic</td><td>Einsteiger-VPS: ein paar GB RAM, NVMe-Speicher, 1-2 vCPUs - PHP-FPM plus eine kleine Datenbank.</td></tr>
-      <tr><td>Queues + Redis + Datenbank</td><td>Mehr RAM-Reserve, damit Redis, die Datenbank und mehrere PHP-FPM- und Worker-Prozesse bequem nebeneinander bestehen.</td></tr>
-      <tr><td>Höherer Traffic / schwere Jobs</td><td>Dedizierte vCPUs für gleichmäßige Last, mehr Worker-Prozesse, Raum zum Hochskalieren; erwägen Sie, die Datenbank später zu trennen.</td></tr>
+      <tr><td>Eine App, leichter Traffic, Datenbank auf demselben Server</td><td>2 vCPU, 2 bis 4 GB RAM, 40 GB Speicher</td><td>Contabo Cloud VPS 4: 4 vCPU, 8 GB, 100 GB, ab 5,50 EUR/Monat</td></tr>
+      <tr><td>Queues + Redis + Datenbank, oder 2 bis 4 Apps</td><td>4 vCPU, 6 bis 8 GB RAM</td><td>Cloud VPS 4 reicht noch; Cloud VPS 6 (6 vCPU, 12 GB, ab 7,50 EUR/Monat) für mehr Reserve</td></tr>
+      <tr><td>Höherer Traffic, schwere Jobs, Staging-Kopie</td><td>6 bis 8 vCPU, 12 bis 24 GB RAM</td><td>Cloud VPS 8 (8 vCPU, 24 GB, ab 14 EUR/Monat); die Datenbank später auslagern</td></tr>
     </tbody>
   </table>
+  <p>Sie möchten eine Zahl für Ihren eigenen Traffic? Der <a href="/de/tools/vps-size-calculator?stack=laravel">VPS-Größenrechner</a> öffnet sich mit vorausgewähltem Laravel-Profil und zeigt jede Annahme, die er verwendet.</p>
 
   <h2>Für wen es ist</h2>
   <ul>
