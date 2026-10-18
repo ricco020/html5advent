@@ -1,0 +1,218 @@
+---
+// VPS size calculator (all locales). Logic runs client-side; copy and assumptions come from data/vps-calc.js.
+import Base from '../layouts/Base.astro';
+import { L, PLANS, STACKS, CHECKED } from '../data/vps-calc.js';
+import { localePath, t } from '../i18n/ui.js';
+const { locale = 'en' } = Astro.props;
+const T = L[locale] || L.en;
+const path = 'tools/vps-size-calculator';
+const url = 'https://html5advent.com' + localePath(locale, path);
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: T.h1,
+      url,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any (web browser)',
+      description: T.desc,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      isAccessibleForFree: true,
+      inLanguage: locale,
+      publisher: { '@type': 'Organization', name: 'HTML5 Advent', url: 'https://html5advent.com' },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: T.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+    },
+  ],
+};
+const strings = {
+  vcpu: T.vcpu, ram: T.ram, disk: T.disk, bOs: T.bOs, bApps: T.bApps, bDb: T.bDb, bWorkers: T.bWorkers,
+  bExtras: T.bExtras, bHead: T.bHead, gb: T.ram.split(' ')[0], rps: T.rps, perMonth: T.perMonth, small: T.small, tooBig: T.tooBig,
+};
+const numFmt = locale === 'en' ? 'en-US' : locale;
+---
+<Base lang={locale} title={T.title} description={T.desc} path={path} schema={schema} ogType="website">
+  <main class="vc-wrap" id="main">
+    <nav class="crumb" aria-label="Breadcrumb"><a href={localePath(locale)}>{t(locale, 'home')}</a> &rsaquo; <a href={localePath(locale, 'tools')}>Tools</a> &rsaquo; {T.crumb}</nav>
+    <p class="kicker">// tools / vps</p>
+    <h1>{T.h1}</h1>
+    <p class="lede">{T.lede}</p>
+
+    <form id="vc" class="vc-form" onsubmit="return false">
+      <fieldset class="vc-stacks">
+        <legend>{T.stack}</legend>
+        {Object.keys(STACKS).map((k) => (
+          <label class="vc-chip"><input type="radio" name="stack" value={k} checked={k === 'wordpress'} /><span>{T.stacks[k]}</span></label>
+        ))}
+      </fieldset>
+      <div class="vc-grid">
+        <label class="vc-field"><span>{T.apps}</span><input type="number" id="vc-apps" min="1" max="50" value="1" inputmode="numeric" /></label>
+        <label class="vc-field"><span>{T.visits}</span><input type="number" id="vc-visits" min="0" step="1000" value="30000" inputmode="numeric" /></label>
+        <label class="vc-field"><span>{T.media}</span><input type="number" id="vc-media" min="0" step="1" value="5" inputmode="numeric" /></label>
+        <fieldset class="vc-field vc-pattern">
+          <legend>{T.pattern}</legend>
+          <label><input type="radio" name="pattern" value="4" checked /> {T.steady}</label>
+          <label><input type="radio" name="pattern" value="12" /> {T.spiky}</label>
+        </fieldset>
+      </div>
+      <fieldset class="vc-extras">
+        <legend>{T.extras}</legend>
+        <label><input type="checkbox" id="vc-cache" /> {T.cache}</label>
+        <label><input type="checkbox" id="vc-staging" /> {T.staging}</label>
+        <label><input type="checkbox" id="vc-mail" /> {T.mail}</label>
+        <label><input type="checkbox" id="vc-jobs" /> {T.jobs}</label>
+      </fieldset>
+    </form>
+
+    <section class="vc-out" aria-live="polite">
+      <h2>{T.need}</h2>
+      <div class="vc-big">
+        <div><strong id="vc-o-cpu">-</strong><span>{T.vcpu}</span></div>
+        <div><strong id="vc-o-ram">-</strong><span>{T.ram}</span></div>
+        <div><strong id="vc-o-disk">-</strong><span>{T.disk}</span></div>
+      </div>
+      <p class="vc-peak">{T.peak}: <b id="vc-o-rps">-</b></p>
+      <h3>{T.breakdown}</h3>
+      <ul id="vc-o-break" class="vc-break"></ul>
+
+      <aside class="vc-plan">
+        <p class="vc-plan__k">{T.fit}</p>
+        <p class="vc-plan__name" id="vc-p-name">-</p>
+        <p class="vc-plan__spec" id="vc-p-spec"></p>
+        <p class="vc-plan__note" id="vc-p-note"></p>
+        <a class="vc-plan__btn" href="/go/contabo" rel="nofollow sponsored">{T.btn} &rarr;</a>
+        <p class="vc-plan__aff">{T.priceNote.replace('{date}', CHECKED)} {T.aff}</p>
+      </aside>
+    </section>
+
+    <section class="vc-doc">
+      <h2>{T.howH}</h2>
+      {T.how.map((p) => <p>{p}</p>)}
+      <h2>{T.assumH}</h2>
+      <div class="vc-table"><table>
+        <thead><tr>{T.assumCols.map((c) => <th>{c}</th>)}</tr></thead>
+        <tbody>
+          {Object.entries(STACKS).map(([k, s]) => (
+            <tr><td>{T.stacks[k]}</td><td>{s.ram}</td><td>{s.db || '-'}</td><td>{Math.round(s.cpu * 1000)} ms</td></tr>
+          ))}
+        </tbody>
+      </table></div>
+      <p class="vc-small">{T.assumNote}</p>
+      <h2>{T.faqH}</h2>
+      {T.faq.map(([q, a]) => (<><h3>{q}</h3><p>{a}</p></>))}
+      <h2>{T.related}</h2>
+      <ul>{T.links.map(([h, t]) => <li><a href={h}>{t}</a></li>)}</ul>
+    </section>
+  </main>
+
+  <style>
+    .vc-wrap { max-width: 880px; margin: 0 auto; padding: 0 24px 3rem; }
+    .crumb { font-size: .85rem; color: var(--muted); margin-bottom: 1.2rem; }
+    .crumb a, .vc-doc a { color: var(--accent-blue); }
+    .kicker { font-family: var(--mono); color: var(--accent-amber); font-size: .82rem; margin: 0 0 .3rem; }
+    h1 { font-family: var(--display); font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.05; margin: 0; }
+    .lede { color: var(--muted); font-size: 1.05rem; margin: 1rem 0 2rem; max-width: 62ch; }
+    .vc-form { display: grid; gap: 1.4rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    fieldset { border: 0; padding: 0; margin: 0; }
+    legend, .vc-field > span { font-family: var(--display); font-weight: 600; margin-bottom: .6rem; display: block; color: var(--ink); }
+    .vc-stacks { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .vc-stacks legend { width: 100%; }
+    .vc-chip input { position: absolute; opacity: 0; }
+    .vc-chip span { display: inline-block; padding: .5rem .9rem; border: 1px solid var(--line); border-radius: 999px; cursor: pointer; font-size: .88rem; transition: border-color .15s, background .15s, transform .15s; }
+    .vc-chip:hover span { transform: translateY(-1px); border-color: var(--accent-blue); }
+    .vc-chip input:checked + span { background: var(--accent-amber); color: #1a1205; border-color: var(--accent-amber); font-weight: 600; }
+    .vc-chip input:focus-visible + span { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
+    .vc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.4rem; }
+    .vc-field input { width: 100%; box-sizing: border-box; padding: .65rem .8rem; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
+    .vc-pattern label, .vc-extras label { display: block; font-size: .9rem; margin: .25rem 0; cursor: pointer; }
+    .vc-extras { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.4rem; }
+    .vc-extras legend { grid-column: 1 / -1; }
+    .vc-out { margin-top: 2rem; }
+    .vc-big { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .vc-big div { padding: 1.2rem; border-radius: 14px; border: 1px solid var(--line); background: linear-gradient(160deg, rgba(77,141,255,.12), transparent 70%), var(--surface); }
+    .vc-big strong { display: block; font-family: var(--display); font-size: clamp(2rem, 6vw, 3rem); color: var(--accent-amber); line-height: 1; }
+    .vc-big span { color: var(--muted); font-size: .85rem; }
+    .vc-peak { color: var(--muted); font-size: .9rem; }
+    .vc-break { list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem; font-size: .88rem; }
+    .vc-break li { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--line); padding: .3rem 0; }
+    .vc-plan { margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--accent-amber); border-radius: 16px; background: linear-gradient(135deg, rgba(245,165,36,.14), rgba(77,141,255,.05)), var(--surface); }
+    .vc-plan__k { margin: 0; font-family: var(--mono); font-size: .75rem; color: var(--accent-amber); text-transform: uppercase; letter-spacing: .05em; }
+    .vc-plan__name { font-family: var(--display); font-size: 1.6rem; font-weight: 700; margin: .3rem 0; }
+    .vc-plan__spec { margin: 0; }
+    .vc-plan__note { color: var(--muted); font-size: .9rem; }
+    .vc-plan__btn { display: inline-block; margin-top: .4rem; padding: .8rem 1.4rem; border-radius: 10px; background: var(--accent-amber); color: #1a1205; font-weight: 700; text-decoration: none; font-family: var(--mono); transition: transform .15s, box-shadow .15s; }
+    .vc-plan__btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px var(--accent-amber); }
+    .vc-plan__aff { font-size: .72rem; color: var(--muted); font-family: var(--mono); margin: 1rem 0 0; }
+    .vc-doc { margin-top: 3rem; }
+    .vc-doc h2 { font-family: var(--display); margin-top: 2.2rem; }
+    .vc-table { overflow-x: auto; }
+    .vc-table table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+    .vc-table th, .vc-table td { border: 1px solid var(--line); padding: .5rem .7rem; text-align: left; }
+    .vc-small { font-size: .85rem; color: var(--muted); }
+    @media (max-width: 620px) { .vc-grid, .vc-extras { grid-template-columns: 1fr; } .vc-big { grid-template-columns: 1fr; } }
+  </style>
+
+  <script is:inline define:vars={{ STACKS, PLANS, S: strings, numFmt }}>
+    (function () {
+      var form = document.getElementById('vc'); if (!form) return;
+      var $ = function (id) { return document.getElementById(id); };
+      var nf = new Intl.NumberFormat(numFmt, { maximumFractionDigits: 1 });
+      var cur = new Intl.NumberFormat(numFmt, { style: 'currency', currency: 'EUR' });
+      var cur = new Intl.NumberFormat(numFmt, { style: 'currency', currency: 'EUR' });
+      var CPU_STEPS = [1, 2, 4, 6, 8, 12, 16, 18, 24, 32];
+      function num(id, d) { var v = parseFloat($(id).value); return isFinite(v) && v >= 0 ? v : d; }
+      function up(v, step) { return Math.ceil(v / step) * step; }
+      function calc() {
+        var key = (form.querySelector('input[name=stack]:checked') || {}).value || 'wordpress';
+        var s = STACKS[key];
+        var apps = Math.min(50, Math.max(1, Math.round(num('vc-apps', 1))));
+        var visits = num('vc-visits', 0);
+        var media = num('vc-media', 0);
+        var peakF = parseFloat((form.querySelector('input[name=pattern]:checked') || {}).value || 4);
+        var cache = $('vc-cache').checked, staging = $('vc-staging').checked, mail = $('vc-mail').checked, jobs = $('vc-jobs').checked;
+        var rps = visits * 2.5 / (30 * 86400) * peakF;
+        var cpuPerReq = s.cpu * (cache && s.dynamic && key !== 'node' ? 0.35 : 1);
+        var cores = rps * cpuPerReq * 2 + (jobs ? 0.5 : 0) + (mail ? 0.3 : 0) + (apps > 5 ? 1 : 0);
+        var vcpu = Math.max(s.dynamic ? 2 : 1, Math.ceil(cores));
+        vcpu = CPU_STEPS.find(function (c) { return c >= vcpu; }) || vcpu;
+        var os = 0.5;
+        var appRam = s.ram * apps;
+        var db = s.db ? s.db * (1 + 0.25 * (apps - 1)) * (1 + 0.5 * Math.log10(Math.max(1, visits / 10000))) : 0;
+        var conc = rps * s.resp;
+        var workers = s.worker ? Math.max(2 * apps, Math.ceil(conc) + 2) * s.worker : 0;
+        var extras = (cache ? 0.25 : 0) + (staging ? appRam * 0.5 + db * 0.3 : 0) + (mail ? 1 : 0) + (jobs ? 0.5 : 0);
+        var sub = os + appRam + db + workers + extras;
+        var head = sub * 0.3;
+        var ram = up(sub + head, 0.5);
+        var disk = up((10 + s.disk * apps * (staging ? 2 : 1) + media + (mail ? 10 : 0)) * 1.5, 5);
+
+        $('vc-o-cpu').textContent = vcpu;
+        $('vc-o-ram').textContent = nf.format(ram);
+        $('vc-o-disk').textContent = disk;
+        $('vc-o-rps').textContent = nf.format(Math.round(rps * 100) / 100) + ' ' + S.rps;
+        var list = $('vc-o-break');
+        while (list.firstChild) list.removeChild(list.firstChild);
+        [[S.bOs, os], [S.bApps, appRam], [S.bDb, db], [S.bWorkers, workers], [S.bExtras, extras], [S.bHead, head]].forEach(function (r) {
+          if (r[1] <= 0) return;
+          var li = document.createElement('li'), a = document.createElement('span'), b = document.createElement('b');
+          a.textContent = r[0]; b.textContent = nf.format(Math.round(r[1] * 100) / 100) + ' ' + S.gb;
+          li.appendChild(a); li.appendChild(b); list.appendChild(li);
+        });
+
+        var plan = PLANS.find(function (p) { return p.cpu >= vcpu && p.ram >= ram && p.disk >= disk; });
+        if (!plan) {
+          $('vc-p-name').textContent = '-'; $('vc-p-spec').textContent = ''; $('vc-p-note').textContent = S.tooBig; return;
+        }
+        $('vc-p-name').textContent = plan.name;
+        $('vc-p-spec').textContent = plan.cpu + ' ' + S.vcpu + ' · ' + plan.ram + ' ' + S.ram + ' · ' + plan.disk + ' ' + S.disk + ' · ' + cur.format(parseFloat(plan.price)) + ' ' + S.perMonth;
+        $('vc-p-note').textContent = plan === PLANS[0] && ram <= 4 && vcpu <= 2 ? S.small : '';
+      }
+      form.addEventListener('input', calc);
+      form.addEventListener('change', calc);
+      calc();
+    })();
+  </script>
+</Base>

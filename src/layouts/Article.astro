@@ -92,6 +92,16 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
     {hero && <img class="hero-img" src={hero} alt={heroAlt} width="1280" height="720" loading="eager" />}
 
     {cluster && <Cta cluster={cluster} locale={lang} />}
+    {cluster === 'hosting' && (
+      <p class="calc-promo"><a href={localePath(lang, 'tools/vps-size-calculator')}>{({
+        en: 'Not sure how big your server should be? Try the free VPS size calculator',
+        fr: 'Quelle taille de serveur choisir ? Essayez le calculateur de taille de VPS gratuit',
+        es: '¿Qué tamaño de servidor necesitas? Prueba la calculadora de tamaño de VPS gratuita',
+        de: 'Wie groß muss dein Server sein? Probier den kostenlosen VPS-Größenrechner',
+        it: 'Quanto deve essere grande il tuo server? Prova il calcolatore dimensione VPS gratuito',
+        pt: 'Que tamanho de servidor precisa? Experimente a calculadora de tamanho de VPS gratuita',
+      })[lang] || 'Try the free VPS size calculator'} &rarr;</a></p>
+    )}
 
     <div class="prose"><slot /></div>
 
@@ -124,6 +134,8 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
   </article>
 
   <style>
+    .calc-promo { margin: -1rem 0 2rem; font-family: var(--mono); font-size: .9rem; }
+    .calc-promo a { color: var(--accent-blue); text-decoration: underline; text-underline-offset: 3px; }
     .article { max-width: 760px; margin: 0 auto; }
     .crumb { font-family: var(--mono); font-size: .78rem; color: var(--muted); margin-bottom: 1.5rem; }
     .crumb a { color: var(--accent-blue); text-decoration: none; }
