@@ -10,6 +10,7 @@ import Article from '../../layouts/Article.astro';
   day={15}
   hero="/img/php-hosting-hero.jpg"
   heroAlt="PHP source code on a dark screen, showing version_compare and require_once statements"
+  updated="2026-10-30"
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
 >
@@ -26,11 +27,25 @@ import Article from '../../layouts/Article.astro';
   <h2>PHP versions matter</h2>
   <p>The PHP version isn't a detail - newer releases are meaningfully faster and, crucially, still receive security fixes. Running an end-of-life version means no more patches. Always check which versions a host offers and whether you can switch easily. You can read the running version from code or the CLI:</p>
   <pre><code>{`<?php
-echo phpversion();        // e.g. "8.3.x"
+echo phpversion();        // e.g. "8.5.x"
 // or a full report:
 phpinfo();`}</code></pre>
   <pre><code>{`php -v`}</code></pre>
   <p>A good host lets you select the PHP version per site (often in the control panel) and keeps a range of supported versions available, so you can upgrade on your own schedule.</p>
+
+  <h3 id="php-support-2026">Which PHP versions are supported (October 2026)</h3>
+  <p>State of the branches on 30 October 2026, read from the official php.net support table (supported-versions and eol pages; latest point releases dated 21 October 2026):</p>
+  <table>
+    <thead><tr><th>Branch</th><th>Latest release</th><th>Active support until</th><th>Security fixes until</th></tr></thead>
+    <tbody>
+      <tr><td>8.5</td><td>8.5.12</td><td>2027-12-31</td><td>2029-12-31</td></tr>
+      <tr><td>8.4</td><td>8.4.27</td><td>2026-12-31</td><td>2028-12-31</td></tr>
+      <tr><td>8.3</td><td>8.3.36</td><td>ended (security only)</td><td>2027-12-31</td></tr>
+      <tr><td>8.2</td><td>8.2.35</td><td>ended (security only)</td><td>2026-12-31</td></tr>
+      <tr><td>8.1</td><td>8.1.34</td><td colspan="2">end of life since 31 Dec 2025</td></tr>
+    </tbody>
+  </table>
+  <p>For a new project, pick 8.4 or 8.5. Two dates matter right now: PHP 8.2 stops receiving security fixes on 31 December 2026, and 8.4 leaves active support the same day (security fixes continue until the end of 2028). PHP 8.1 has had no patches since 31 December 2025, so a host still running it by default is a red flag. Before you buy, check that the panel offers 8.4 or 8.5 and lets you switch per site. <a href="https://www.php.net/supported-versions.php" rel="nofollow noopener" target="_blank">php.net/supported-versions</a></p>
 
   <h2>Extensions: check before you commit</h2>
   <p>PHP's functionality is split across extensions, and your app likely depends on several - a database driver, image handling, and so on. Common ones to verify a host provides:</p>
