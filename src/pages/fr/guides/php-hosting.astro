@@ -16,6 +16,8 @@ import Article from '../../../layouts/Article.astro';
 >
   <p>PHP propulse encore une grande partie du web, et l'héberger est un terrain bien balisé - c'est justement pourquoi les offres se ressemblent toutes et que les vraies différences se cachent dans les détails. Ce guide couvre les critères qui comptent vraiment : l'arbitrage mutualisé/VPS, les versions et extensions PHP, la façon de déployer, ce que contrôle le <code>.htaccess</code>, et les leviers de performance à connaître.</p>
 
+  <div class="enbref"><strong>En bref</strong><ul><li>CMS standard ou petit site : un mutualisé suffit.</li><li>Version PHP précise, extensions sur mesure ou performances stables : un VPS.</li><li>En 2026, visez PHP 8.4 ou 8.5 ; 8.2 perd ses correctifs de sécurité le 31 décembre 2026 et 8.1 est déjà en fin de vie.</li></ul></div>
+
   <h2>Hébergement mutualisé vs VPS</h2>
   <p>La première décision porte sur le degré d'isolation de votre environnement.</p>
   <ul>
@@ -94,3 +96,10 @@ opcache.validate_timestamps=1`}</code></pre>
 
   <p>L'hébergement PHP est mature, alors ne surpensez pas les marques - alignez l'hébergeur sur les vrais besoins de votre app : la bonne version PHP, les extensions dont vous dépendez, un serveur web que vous comprenez et OPcache activé. Réussissez ces points et le reste est surtout une question de préférence.</p>
 </Article>
+
+<style>
+  .enbref { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1.1rem; border-left: 3px solid var(--accent-blue); background: var(--surface); }
+  .enbref strong { display: block; margin-bottom: 0.35rem; }
+  .enbref ul { margin: 0; padding-left: 1.1rem; }
+  .enbref li { margin: 0.2rem 0; }
+</style>
