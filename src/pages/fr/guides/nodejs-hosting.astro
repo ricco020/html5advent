@@ -11,6 +11,7 @@ import Article from '../../../layouts/Article.astro';
   hero="/img/nodejs-hosting-hero.jpg"
   heroAlt="Une main insère un serveur lame dans une baie de serveurs éclairée en bleu"
   cluster="hosting"
+  updated="2026-10-30"
   commerce={{ type: 'product', key: 'contabo' }}
 >
   <p>Héberger une application Node.js ne ressemble pas à héberger un site statique ou une page PHP. Node fait tourner un processus de longue durée qui possède son propre serveur HTTP : l'hébergeur doit donc <em>maintenir ce processus en vie</em>, le redémarrer en cas de plantage, et router le trafic public vers lui. Ce guide passe en revue les trois options réalistes et les briques nécessaires quelle que soit celle que vous choisissez.</p>
@@ -22,6 +23,28 @@ import Article from '../../../layouts/Article.astro';
     <li><strong>PaaS (platform-as-a-service)</strong> - vous poussez le code (souvent via Git) et la plateforme construit, exécute et scale le processus pour vous. Moins de contrôle, mise en ligne plus rapide, généralement facturé à l'usage.</li>
     <li><strong>Serverless / fonctions</strong> - vous déployez des handlers individuels plutôt qu'un serveur permanent. La plateforme les démarre à la demande. Idéal pour un trafic en pics ou faible, mais sans état et soumis aux démarrages à froid.</li>
   </ul>
+
+  <h2 id="node-version">Quelle version de Node.js en production (octobre 2026)</h2>
+  <p>En production, utilisez une branche <strong>LTS</strong> (support long terme). D'après le calendrier officiel des versions Node.js (<a href="https://github.com/nodejs/Release" rel="noopener">nodejs/Release</a>, lu le 30 octobre 2026), <strong>Node.js 26 « Lithium » est passé en Active LTS le 28 octobre 2026</strong> avec la v26.13.0. Où en est chaque branche :</p>
+  <table>
+    <thead><tr><th>Branche</th><th>Statut au 30/10/2026</th><th>Fin de vie</th></tr></thead>
+    <tbody>
+      <tr><td>Node.js 26 (Lithium)</td><td>Active LTS depuis le 28/10/2026</td><td>30/04/2029</td></tr>
+      <tr><td>Node.js 24 (Krypton)</td><td>Maintenance LTS depuis le 20/10/2026</td><td>30/04/2028</td></tr>
+      <tr><td>Node.js 22 (Jod)</td><td>Maintenance LTS</td><td>30/04/2027</td></tr>
+      <tr><td>Node.js 20 (Iron)</td><td>En fin de vie depuis le 30/04/2026 : plus aucun correctif de sécurité</td><td>Terminée</td></tr>
+    </tbody>
+  </table>
+  <p>En pratique : démarrez les nouveaux projets sur la 26 ; une application en 24 reste correcte jusqu'en 2028 mais doit prévoir sa migration ; tout ce qui tourne encore en 20 doit être mis à jour maintenant, car cette branche ne reçoit plus de correctifs de sécurité. Les versions impaires comme la 25 ne deviennent jamais LTS : évitez-les sur un serveur. Figez la version testée avec <code>{'"engines": {"node": ">=26"}'}</code> dans <code>package.json</code> ou un fichier <code>.nvmrc</code> : la plupart des PaaS lisent l'un des deux pour choisir le runtime.</p>
+  <pre><code>{`# vérifier la version en service
+node -v
+
+# installer la nouvelle LTS avec nvm et la mettre par défaut
+nvm install 26
+nvm alias default 26
+
+# redémarrer PM2 pour qu'il prenne le nouveau binaire
+pm2 update`}</code></pre>
 
   <h2>Maintenir le processus en vie avec PM2</h2>
   <p>Sur un VPS, lancer <code>node server.js</code> dans votre shell s'arrête dès que vous vous déconnectez, et rien ne redémarre après un plantage. Un gestionnaire de processus résout les deux. <strong>PM2</strong> est le choix courant :</p>
