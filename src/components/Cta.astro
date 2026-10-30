@@ -32,14 +32,13 @@ const T = {
 <style>
   .reco {
     position: relative; margin: 2.5rem 0; padding: 1.5rem 1.5rem 1rem;
-    border: 1px solid var(--accent-amber); border-radius: 16px;
-    background: linear-gradient(135deg, rgba(245,165,36,.12), rgba(77,141,255,.06)), var(--surface);
-    box-shadow: 0 16px 40px -28px rgba(245,165,36,.8);
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--surface);
   }
   .reco__badge {
     position: absolute; top: -.7rem; left: 1.25rem; padding: .2rem .7rem;
     font-family: var(--mono); font-size: .7rem; font-weight: 600; letter-spacing: .04em;
-    color: #1a1205; background: var(--accent-amber); border-radius: 20px;
+    color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 20px;
   }
   .reco__main { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-top: .3rem; }
   .reco__q { font-family: var(--display); font-weight: 700; font-size: 1.15rem; margin: 0; color: var(--ink); }
@@ -48,8 +47,8 @@ const T = {
     flex: none; padding: .8rem 1.4rem; border-radius: 10px; white-space: nowrap;
     background: var(--accent-amber); color: #1a1205; font-weight: 700; text-decoration: none;
     font-family: var(--mono); font-size: .92rem;
-    transition: transform .15s ease, box-shadow .15s ease;
+    transition: background-color .15s ease;
   }
-  .reco__btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px var(--accent-amber); }
+  .reco__btn:hover { background: #ffb940; }
   .reco__aff { margin: 1rem 0 0; font-size: .72rem; color: var(--muted); font-family: var(--mono); }
 </style>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 598" role="img"><rect width="360" height="598" rx="12" fill="#11141e"/>
+<text x="16" y="34" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="18" font-weight="600" fill="#f5a524">VPS</text>
+<text x="60.5" y="34" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="12.5" fill="#9aa3b8">you run the server</text>
+<rect x="16" y="46" width="328" height="32" rx="7" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="28" y="67" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">1. Linux VPS, root</text>
+<rect x="16" y="84" width="328" height="32" rx="7" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="28" y="105" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">2. Node.js 26 LTS</text>
+<rect x="16" y="122" width="328" height="32" rx="7" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="28" y="143" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">3. PM2: restart + cluster</text>
+<rect x="16" y="160" width="328" height="32" rx="7" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="28" y="181" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">4. Nginx + TLS on :443</text>
+<text x="16" y="230" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="18" font-weight="600" fill="#4d8dff">PaaS</text>
+<text x="72.0" y="230" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="12.5" fill="#9aa3b8">the platform runs it</text>
+<rect x="16" y="242" width="328" height="32" rx="7" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="28" y="263" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">1. git push</text>
+<rect x="16" y="280" width="328" height="32" rx="7" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="28" y="301" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">2. Managed build</text>
+<rect x="16" y="318" width="328" height="32" rx="7" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="28" y="339" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">3. Managed process</text>
+<rect x="16" y="356" width="328" height="32" rx="7" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="28" y="377" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">4. Metered scaling</text>
+<text x="16" y="426" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="18" font-weight="600" fill="#7fd1a8">Serverless</text>
+<text x="141.0" y="426" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="12.5" fill="#9aa3b8">runs per request</text>
+<rect x="16" y="438" width="328" height="32" rx="7" fill="#161a26" stroke="#7fd1a8" stroke-opacity=".55"/>
+<text x="28" y="459" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">1. HTTP request</text>
+<rect x="16" y="476" width="328" height="32" rx="7" fill="#161a26" stroke="#7fd1a8" stroke-opacity=".55"/>
+<text x="28" y="497" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">2. Cold start, then run</text>
+<rect x="16" y="514" width="328" height="32" rx="7" fill="#161a26" stroke="#7fd1a8" stroke-opacity=".55"/>
+<text x="28" y="535" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">3. Stateless handler</text>
+<rect x="16" y="552" width="328" height="32" rx="7" fill="#161a26" stroke="#7fd1a8" stroke-opacity=".55"/>
+<text x="28" y="573" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">4. Pay per call</text>
+</svg>

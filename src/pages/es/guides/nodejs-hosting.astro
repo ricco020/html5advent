@@ -13,6 +13,8 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   updated="2026-10-30"
   commerce={{ type: 'product', key: 'contabo' }}
+  diagram={{"src": "/img/nodejs-hosting-paths.svg", "srcMobile": "/img/nodejs-hosting-paths-mobile.svg", "alt": "Esquema de tres formas de alojar Node.js en columnas: VPS (Linux con root, Node.js 26 LTS, PM2, Nginx y TLS), PaaS (git push, build gestionado, proceso gestionado, escalado facturado) y Serverless (petición HTTP, arranque en frío, función sin estado, pago por llamada).", "caption": "Lo que gestionas tú en cada modelo: todo en un VPS, solo tu código en un PaaS, funciones sueltas en serverless."}}
+  choose={{"items": [{"when": "Quieres acceso root y una factura mensual fija, y te manejas en Linux", "pick": "VPS + PM2", "why": "Lo más barato con tráfico estable; Node, Nginx y TLS corren por tu cuenta."}, {"when": "Quieres hacer git push y que otro gestione el servidor", "pick": "PaaS", "why": "Lo más rápido para publicar; se factura por uso, vigila el gasto cuando crece el tráfico."}, {"when": "El tráfico es irregular o escaso y cada petición no guarda estado", "pick": "Serverless", "why": "Pagas por llamada, con arranques en frío y sin conexiones largas."}]}}
 >
   <p>Alojar una app Node.js no se parece a alojar un sitio estático o una página PHP. Node ejecuta un proceso de larga duración que posee su propio servidor HTTP, así que el alojamiento debe <em>mantener vivo ese proceso</em>, reiniciarlo si se cae y enrutar el tráfico público hacia él. Esta guía repasa las tres opciones realistas y las piezas que necesitas elijas la que elijas.</p>
 

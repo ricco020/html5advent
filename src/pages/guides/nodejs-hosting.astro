@@ -13,6 +13,8 @@ import Article from '../../layouts/Article.astro';
   cluster="hosting"
   updated="2026-10-30"
   commerce={{ type: 'product', key: 'contabo' }}
+  diagram={{"src": "/img/nodejs-hosting-paths.svg", "srcMobile": "/img/nodejs-hosting-paths-mobile.svg", "alt": "Diagram of three Node.js hosting paths in columns: VPS (Linux root, Node.js 26 LTS, PM2, Nginx and TLS), PaaS (git push, managed build, managed process, metered scaling) and Serverless (HTTP request, cold start, stateless handler, pay per call).", "caption": "What you operate yourself in each model: everything on a VPS, only your code on a PaaS, single handlers in serverless."}}
+  choose={{"items": [{"when": "You want root access and a fixed monthly bill, and you are comfortable on Linux", "pick": "VPS + PM2", "why": "Cheapest at steady traffic; you run Node, Nginx and TLS yourself."}, {"when": "You want to git push and let someone else run the server", "pick": "PaaS", "why": "Fastest to ship; usage is metered, so watch the bill as traffic grows."}, {"when": "Traffic is spiky or tiny and each request is stateless", "pick": "Serverless", "why": "Pay per call, but expect cold starts and no long-lived connections."}]}}
 >
   <p>Hosting a Node.js app is different from hosting a static site or a PHP page. Node runs a long-lived process that owns its own HTTP server, so the host has to <em>keep that process alive</em>, restart it on crash, and route public traffic to it. This guide walks through the three realistic options and the pieces you need regardless of which you pick.</p>
 

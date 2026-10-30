@@ -1,5 +1,6 @@
 ---
 import Base from './Base.astro';
+import '@fontsource-variable/source-serif-4';
 import Cta from '../components/Cta.astro';
 import { t, localePath } from '../i18n/ui.js';
 import { productNode, itemListNode } from '../data/products.js';
@@ -17,6 +18,12 @@ const {
   commerce = null,
   // Optional FAQ: array of { q, a } - renders a visible FAQ section + FAQPage JSON-LD (GEO).
   faq = null,
+  // Optional decision box shown BEFORE the hero and the affiliate block:
+  // { items: [{ when: 'You want X', pick: 'Option', why: 'short reason' }] }
+  choose = null,
+  // Optional explanatory diagram shown INSTEAD of the hero photo (hero stays the share image):
+  // { src: '/img/x.svg', srcMobile: '/img/x-mobile.svg', alt: '…', caption: '…' }
+  diagram = null,
 } = Astro.props;
 
 const path = `guides/${slug}`;
@@ -75,6 +82,20 @@ const calcStack = /woocommerce/.test(slug) ? 'woocommerce'
   : /static|astro/.test(slug) ? 'static'
   : null;
 
+// Byline: who wrote it and when the facts were last checked (shown under the H1).
+const BYLINE = {
+  en: { by: 'By the HTML5 Advent editorial team', checked: 'Checked on' },
+  fr: { by: 'Par la rédaction HTML5 Advent', checked: 'Vérifié le' },
+  es: { by: 'Por la redacción de HTML5 Advent', checked: 'Verificado el' },
+  de: { by: 'Von der HTML5-Advent-Redaktion', checked: 'Geprüft am' },
+  it: { by: 'Dalla redazione di HTML5 Advent', checked: 'Verificato il' },
+  pt: { by: 'Pela redação do HTML5 Advent', checked: 'Verificado em' },
+};
+const byline = BYLINE[lang] || BYLINE.en;
+const LOCALE_TAG = { en: 'en-GB', fr: 'fr-FR', es: 'es-ES', de: 'de-DE', it: 'it-IT', pt: 'pt-PT' };
+const checkedLabel = new Date(updated + 'T12:00:00Z').toLocaleDateString(LOCALE_TAG[lang] || 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const CHOOSE_LABEL = { en: 'Which option to pick', fr: 'Quelle solution choisir', es: 'Qué opción elegir', de: 'Welche Lösung wählen', it: 'Quale soluzione scegliere', pt: 'Que solução escolher' };
+
 const FAQ_LABEL = { en: 'Frequently asked questions', fr: 'Questions fréquentes', es: 'Preguntas frecuentes', de: 'Häufige Fragen', it: 'Domande frequenti', pt: 'Perguntas frequentes' };
 
 // Related guides - internal links so every guide is cross-linked (crawl paths, not a dead end).
@@ -95,9 +116,29 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
       <p class="kicker">// {cat}{day ? ` · ${t(lang, 'advent')} #${day}` : ''}</p>
       <h1>{title}</h1>
       <p class="lede">{description}</p>
+      <p class="byline">{byline.by} · {byline.checked} <time datetime={updated}>{checkedLabel}</time></p>
     </header>
 
-    {hero && <img class="hero-img" src={hero} alt={heroAlt} width="1280" height="720" loading="eager" />}
+    {choose && Array.isArray(choose.items) && choose.items.length > 0 && (
+      <section class="choose" aria-labelledby="choose-h">
+        <h2 id="choose-h">{CHOOSE_LABEL[lang] || CHOOSE_LABEL.en}</h2>
+        <ul>
+          {choose.items.map((c) => (
+            <li><span class="choose-when">{c.when}</span><strong class="choose-pick">{c.pick}</strong>{c.why && <span class="choose-why">{c.why}</span>}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {diagram ? (
+      <figure class="diagram">
+        <picture>
+          {diagram.srcMobile && <source media="(max-width: 600px)" srcset={diagram.srcMobile} />}
+          <img src={diagram.src} alt={diagram.alt} width="720" height="330" loading="eager" />
+        </picture>
+        {diagram.caption && <figcaption>{diagram.caption}</figcaption>}
+      </figure>
+    ) : hero && <img class="hero-img" src={hero} alt={heroAlt} width="1280" height="720" loading="eager" />}
 
     {cluster && <Cta cluster={cluster} locale={lang} />}
     {cluster === 'hosting' && (
@@ -151,7 +192,30 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
     .art-head h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0; }
     .lede { color: var(--muted); font-size: 1.1rem; margin: 1rem 0 0; }
     .hero-img { width: 100%; height: auto; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--line); }
-    .prose { font-size: 1.02rem; }
+    .diagram { margin: 2rem 0; }
+    .diagram img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--line); }
+    .diagram figcaption { color: var(--muted); font-family: var(--serif); font-size: .9rem; margin-top: .5rem; }
+    .byline { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 1rem 0 0; }
+    .byline time { color: var(--ink); }
+    .choose { margin: 2rem 0 0; padding: 1.1rem 1.25rem 1.2rem; background: var(--surface);
+      border: 1px solid var(--line); border-left: 3px solid var(--accent-amber); border-radius: 10px; }
+    .choose h2 { font-size: 1.1rem; margin: 0 0 .75rem; }
+    .choose ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .65rem; }
+    .choose li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .1rem 1rem; align-items: baseline;
+      padding-bottom: .65rem; border-bottom: 1px solid var(--line); }
+    .choose li:last-child { border-bottom: 0; padding-bottom: 0; }
+    .choose-when { font-family: var(--serif); font-size: 1rem; }
+    .choose-pick { font-family: var(--mono); font-weight: 600; color: var(--accent-amber); font-size: .9rem; text-align: right; }
+    .choose-why { grid-column: 1 / -1; color: var(--muted); font-family: var(--serif); font-size: .92rem; }
+    @media (max-width: 520px) {
+      .choose li { grid-template-columns: 1fr; }
+      .choose-pick { text-align: left; }
+    }
+    .article { --serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif; }
+    .lede { font-family: var(--serif); }
+    .prose { font-family: var(--serif); font-size: 1.12rem; line-height: 1.7; }
+    .prose :global(li), .prose :global(td) { font-family: var(--serif); }
+    .faq dd { font-family: var(--serif); }
     .prose :global(h2) { font-size: 1.6rem; margin: 2.5rem 0 .75rem; }
     .prose :global(h3) { font-size: 1.2rem; margin: 1.75rem 0 .5rem; }
     .prose :global(p) { margin: 1rem 0; }

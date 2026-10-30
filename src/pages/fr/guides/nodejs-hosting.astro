@@ -13,6 +13,8 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   updated="2026-10-30"
   commerce={{ type: 'product', key: 'contabo' }}
+  diagram={{"src": "/img/nodejs-hosting-paths.svg", "srcMobile": "/img/nodejs-hosting-paths-mobile.svg", "alt": "Schéma de trois façons d'héberger Node.js en colonnes : VPS (Linux en root, Node.js 26 LTS, PM2, Nginx et TLS), PaaS (git push, build géré, processus géré, montée en charge facturée) et Serverless (requête HTTP, démarrage à froid, fonction sans état, paiement à l'appel).", "caption": "Ce que vous gérez vous-même dans chaque modèle : tout sur un VPS, seulement votre code sur un PaaS, des fonctions isolées en serverless."}}
+  choose={{"items": [{"when": "Vous voulez l'accès root et une facture mensuelle fixe, et Linux ne vous fait pas peur", "pick": "VPS + PM2", "why": "Le moins cher à trafic régulier ; Node, Nginx et TLS sont à votre charge."}, {"when": "Vous voulez faire un git push et laisser quelqu'un d'autre gérer le serveur", "pick": "PaaS", "why": "Le plus rapide à mettre en ligne ; facturé à l'usage, surveillez la note quand le trafic monte."}, {"when": "Le trafic est irrégulier ou faible et chaque requête est sans état", "pick": "Serverless", "why": "Payé à l'appel, avec des démarrages à froid et sans connexion longue."}]}}
 >
   <p>Héberger une application Node.js ne ressemble pas à héberger un site statique ou une page PHP. Node fait tourner un processus de longue durée qui possède son propre serveur HTTP : l'hébergeur doit donc <em>maintenir ce processus en vie</em>, le redémarrer en cas de plantage, et router le trafic public vers lui. Ce guide passe en revue les trois options réalistes et les briques nécessaires quelle que soit celle que vous choisissez.</p>
 

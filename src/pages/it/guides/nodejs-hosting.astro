@@ -13,6 +13,8 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   updated="2026-10-30"
   commerce={{ type: 'product', key: 'contabo' }}
+  diagram={{"src": "/img/nodejs-hosting-paths.svg", "srcMobile": "/img/nodejs-hosting-paths-mobile.svg", "alt": "Schema di tre modi per ospitare Node.js in colonne: VPS (Linux con root, Node.js 26 LTS, PM2, Nginx e TLS), PaaS (git push, build gestita, processo gestito, scalabilità a consumo) e Serverless (richiesta HTTP, avvio a freddo, handler senza stato, pagamento per chiamata).", "caption": "Cosa gestisci tu in ogni modello: tutto su un VPS, solo il tuo codice su un PaaS, singoli handler nel serverless."}}
+  choose={{"items": [{"when": "Vuoi l'accesso root e una bolletta mensile fissa, e Linux non ti spaventa", "pick": "VPS + PM2", "why": "Il più economico con traffico costante; Node, Nginx e TLS li gestisci tu."}, {"when": "Vuoi fare git push e lasciare ad altri la gestione del server", "pick": "PaaS", "why": "Il più rapido per andare online; si paga a consumo, controlla la spesa quando il traffico cresce."}, {"when": "Il traffico è irregolare o scarso e ogni richiesta è senza stato", "pick": "Serverless", "why": "Paghi per chiamata, con avvii a freddo e senza connessioni lunghe."}]}}
 >
   <p>Ospitare un'app Node.js è diverso dall'ospitare un sito statico o una pagina PHP. Node esegue un processo a lunga durata che possiede il proprio server HTTP, quindi l'host deve <em>mantenere vivo quel processo</em>, riavviarlo in caso di crash e instradare verso di esso il traffico pubblico. Questa guida ti accompagna attraverso le tre opzioni realistiche e i componenti di cui hai bisogno indipendentemente da quella che scegli.</p>
 
