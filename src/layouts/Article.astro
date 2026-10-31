@@ -88,12 +88,12 @@ const calcStack = /woocommerce/.test(slug) ? 'woocommerce'
 
 // Byline: who wrote it and when the facts were last checked (shown under the H1).
 const BYLINE = {
-  en: { by: 'By the HTML5 Advent editorial team', checked: 'Checked on' },
-  fr: { by: 'Par la rédaction HTML5 Advent', checked: 'Vérifié le' },
-  es: { by: 'Por la redacción de HTML5 Advent', checked: 'Verificado el' },
-  de: { by: 'Von der HTML5-Advent-Redaktion', checked: 'Geprüft am' },
-  it: { by: 'Dalla redazione di HTML5 Advent', checked: 'Verificato il' },
-  pt: { by: 'Pela redação do HTML5 Advent', checked: 'Verificado em' },
+  en: { by: 'By the HTML5 Advent editorial team', checked: 'Checked on', how: 'How we check' },
+  fr: { by: 'Par la rédaction HTML5 Advent', checked: 'Vérifié le', how: 'Comment nous vérifions' },
+  es: { by: 'Por la redacción de HTML5 Advent', checked: 'Verificado el', how: 'Cómo verificamos' },
+  de: { by: 'Von der HTML5-Advent-Redaktion', checked: 'Geprüft am', how: 'Wie wir prüfen' },
+  it: { by: 'Dalla redazione di HTML5 Advent', checked: 'Verificato il', how: 'Come verifichiamo' },
+  pt: { by: 'Pela redação do HTML5 Advent', checked: 'Verificado em', how: 'Como verificamos' },
 };
 const byline = BYLINE[lang] || BYLINE.en;
 const LOCALE_TAG = { en: 'en-GB', fr: 'fr-FR', es: 'es-ES', de: 'de-DE', it: 'it-IT', pt: 'pt-PT' };
@@ -120,7 +120,7 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
       <p class="kicker">// {cat}{day ? ` · ${t(lang, 'advent')} #${day}` : ''}</p>
       <h1>{title}</h1>
       <p class="lede">{description}</p>
-      <p class="byline">{byline.by} · {byline.checked} <time datetime={updated}>{checkedLabel}</time></p>
+      <p class="byline">{byline.by} · {byline.checked} <time datetime={updated}>{checkedLabel}</time> · <a href="/about#how-guides-are-written">{byline.how}</a></p>
     </header>
 
     {choose && Array.isArray(choose.items) && choose.items.length > 0 && (
@@ -201,6 +201,8 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
     .diagram figcaption { color: var(--muted); font-family: var(--serif); font-size: .9rem; margin-top: .5rem; }
     .byline { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 1rem 0 0; }
     .byline time { color: var(--ink); }
+    .byline a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+    .byline a:hover { color: var(--ink); }
     .choose { margin: 2rem 0 0; padding: 1.1rem 1.25rem 1.2rem; background: var(--surface);
       border: 1px solid var(--line); border-left: 3px solid var(--accent-amber); border-radius: 10px; }
     .choose h2 { font-size: 1.1rem; margin: 0 0 .75rem; }

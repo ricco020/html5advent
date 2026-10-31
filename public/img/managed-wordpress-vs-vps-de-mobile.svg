@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 620" role="img"><rect width="360" height="620" rx="12" fill="#11141e"/>
+<text x="24" y="34" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="20" font-weight="600" fill="#4d8dff">Managed WordPress</text>
+<text x="24" y="56" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13" fill="#9aa3b8">der Anbieter pflegt alles</text>
+<rect x="12" y="74" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="98" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Updates automatisch</text>
+<rect x="12" y="120" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="144" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Caching inklusive</text>
+<rect x="12" y="166" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="190" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Tägliche Backups</text>
+<rect x="12" y="212" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="236" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Manche Plugins gesperrt</text>
+<rect x="12" y="258" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="282" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Ideal: Inhalte statt Admin</text>
+<text x="24" y="344" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="20" font-weight="600" fill="#f5a524">Eigener VPS</text>
+<text x="24" y="366" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13" fill="#9aa3b8">du bist der Admin</text>
+<rect x="12" y="384" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="408" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Du patchst OS, PHP, WP</text>
+<rect x="12" y="430" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="454" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Caching selbst einrichten</text>
+<rect x="12" y="476" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="500" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Backups sind deine Sache</text>
+<rect x="12" y="522" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="546" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Jedes Plugin, jeder Stack</text>
+<rect x="12" y="568" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="592" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Ideal: Devs mit Kontrollwunsch</text>
+</svg>

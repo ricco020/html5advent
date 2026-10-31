@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 620" role="img"><rect width="360" height="620" rx="12" fill="#11141e"/>
+<text x="24" y="34" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="20" font-weight="600" fill="#4d8dff">VPS non infogéré</text>
+<text x="24" y="56" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13" fill="#9aa3b8">vous êtes l’admin système</text>
+<rect x="12" y="74" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="98" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">OS nu, accès root</text>
+<rect x="12" y="120" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="144" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Mises à jour et sécurité : vous</text>
+<rect x="12" y="166" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="190" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Sauvegardes à configurer</text>
+<rect x="12" y="212" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="236" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Vous réparez les pannes</text>
+<rect x="12" y="258" width="336" height="38" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="282" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Moins cher, le plus souple</text>
+<text x="24" y="344" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="20" font-weight="600" fill="#f5a524">VPS infogéré</text>
+<text x="24" y="366" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13" fill="#9aa3b8">l’hébergeur gère l’OS</text>
+<rect x="12" y="384" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="408" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Mises à jour de l’OS gérées</text>
+<rect x="12" y="430" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="454" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Sécurisation faite</text>
+<rect x="12" y="476" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="500" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Supervision et support</text>
+<rect x="12" y="522" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="546" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Panneau de contrôle, souvent</text>
+<rect x="12" y="568" width="336" height="38" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="592" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13.5" fill="#eef1f8">Plus cher, fait gagner du temps</text>
+</svg>
