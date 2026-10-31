@@ -297,6 +297,7 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
     .prose :global(figure img) { width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); }
     .prose :global(figcaption) { color: var(--muted); font-size: .85rem; margin-top: .5rem; text-align: center; }
     .prose :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: .92rem; }
+    @media (max-width: 640px) { .prose :global(table) { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
     .prose :global(th), .prose :global(td) { border: 1px solid var(--line); padding: .55rem .75rem; text-align: left; }
     .prose :global(th) { background: var(--surface); font-family: var(--display); }
     .faq { max-width: 760px; margin: 3rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
