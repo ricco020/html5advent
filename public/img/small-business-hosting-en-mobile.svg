@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 400" role="img"><rect width="360" height="400" rx="12" fill="#11141e"/>
+<text x="24" y="34" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="14" font-weight="600" fill="#9aa3b8">Your site's job decides the hosting</text>
+<rect x="12" y="52" width="336" height="74" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="75" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="14.5" font-weight="600" fill="#eef1f8">Brochure site</text>
+<text x="24" y="95" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13" fill="#9aa3b8">a few pages, low traffic</text>
+<text x="24" y="115" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="14" font-weight="600" fill="#4d8dff">→ Shared</text>
+<rect x="12" y="136" width="336" height="74" rx="8" fill="#161a26" stroke="#4d8dff" stroke-opacity=".55"/>
+<text x="24" y="159" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="14.5" font-weight="600" fill="#eef1f8">Lead-generation site</text>
+<text x="24" y="179" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13" fill="#9aa3b8">forms, CMS, uptime + support</text>
+<text x="24" y="199" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="14" font-weight="600" fill="#4d8dff">→ Shared</text>
+<rect x="12" y="220" width="336" height="74" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="243" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="14.5" font-weight="600" fill="#eef1f8">Online store</text>
+<text x="24" y="263" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13" fill="#9aa3b8">checkout, backups, peaks</text>
+<text x="24" y="283" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="14" font-weight="600" fill="#f5a524">→ VPS</text>
+<rect x="12" y="304" width="336" height="74" rx="8" fill="#161a26" stroke="#f5a524" stroke-opacity=".55"/>
+<text x="24" y="327" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="14.5" font-weight="600" fill="#eef1f8">Custom app</text>
+<text x="24" y="347" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="13" fill="#9aa3b8">bespoke tool, full control</text>
+<text x="24" y="367" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="14" font-weight="600" fill="#f5a524">→ VPS</text>
+</svg>
