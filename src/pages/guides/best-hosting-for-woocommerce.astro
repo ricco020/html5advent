@@ -17,6 +17,7 @@ import Article from '../../layouts/Article.astro';
   <h2>Why a store is heavier than a blog</h2>
   <p>A typical WordPress blog can cache almost every page and serve it as static HTML. A store can't do that for the pages that matter most. Cart, checkout, "my account" and any logged-in view are <strong>dynamic and per-user</strong>, so they bypass the page cache and hit PHP and the database on every request. Add product search, faceted filtering, coupon logic, stock checks and payment-gateway calls, and the server is doing real work on the exact pages where speed converts to revenue.</p>
   <p>That is why a host that feels fine for a brochure site can struggle for a shop: the bottleneck moves from "can it serve HTML fast" to "can it run PHP and database queries fast, for many concurrent shoppers".</p>
+  <p>If you are still choosing between plan types, our <a href="/guides/php-hosting">PHP server requirements guide</a> explains what shared hosting and a VPS each give PHP, from versions to OPcache.</p>
 
   <h2>The requirements that matter</h2>
   <p>Compare hosts on these concrete dimensions rather than on adjectives like "blazing fast".</p>
