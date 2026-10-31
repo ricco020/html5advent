@@ -14,12 +14,12 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
   diagram={{"src": "/img/php-hosting-shared-vps-fr.svg", "srcMobile": "/img/php-hosting-shared-vps-fr-mobile.svg", "alt": "Schéma comparant mutualisé et VPS en deux colonnes : le mutualisé offre un serveur géré pour vous, une version PHP choisie dans une liste, des extensions imposées, des ressources partagées, idéal pour un CMS ou un petit site ; le VPS donne un accès root avec vos propres mises à jour, n'importe quelle version PHP, toute extension, CPU et RAM dédiés, idéal pour une app sur mesure.", "caption": "Ce que vous contrôlez dans chaque modèle : en mutualisé, l'hébergeur fixe PHP et les extensions ; sur un VPS, vous décidez de tout et vous l'entretenez."}}
+  choose={{"items": [{"when": "Vous faites tourner un CMS standard (WordPress, Joomla) ou un petit site", "pick": "Mutualisé", "why": "L'hébergeur maintient PHP et le serveur à jour ; le moins cher."}, {"when": "Il vous faut une version PHP précise, des extensions sur mesure ou des performances stables", "pick": "VPS", "why": "Accès root et ressources dédiées ; les mises à jour sont pour vous."}, {"when": "Vous choisissez une version PHP en 2026", "pick": "PHP 8.4 ou 8.5", "why": "8.2 perd ses correctifs de sécurité le 31 décembre 2026 ; 8.1 est déjà en fin de vie."}]}}
   ctaTop={false}
   ctaBadge={false}
 >
   <p>PHP propulse encore une grande partie du web, et l'héberger est un terrain bien balisé - c'est justement pourquoi les offres se ressemblent toutes et que les vraies différences se cachent dans les détails. Ce guide couvre les critères qui comptent vraiment : l'arbitrage mutualisé/VPS, les versions et extensions PHP, la façon de déployer, ce que contrôle le <code>.htaccess</code>, et les leviers de performance à connaître.</p>
 
-  <div class="enbref"><strong>En bref</strong><ul><li>CMS standard ou petit site : un mutualisé suffit.</li><li>Version PHP précise, extensions sur mesure ou performances stables : un VPS.</li><li>En 2026, visez PHP 8.4 ou 8.5 ; 8.2 perd ses correctifs de sécurité le 31 décembre 2026 et 8.1 est déjà en fin de vie.</li></ul></div>
 
   <h2>Hébergement mutualisé vs VPS</h2>
   <p>La première décision porte sur le degré d'isolation de votre environnement.</p>
@@ -99,10 +99,3 @@ opcache.validate_timestamps=1`}</code></pre>
 
   <p>L'hébergement PHP est mature, alors ne surpensez pas les marques - alignez l'hébergeur sur les vrais besoins de votre app : la bonne version PHP, les extensions dont vous dépendez, un serveur web que vous comprenez et OPcache activé. Réussissez ces points et le reste est surtout une question de préférence.</p>
 </Article>
-
-<style>
-  .enbref { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1.1rem; border-left: 3px solid var(--accent-blue); background: var(--surface); }
-  .enbref strong { display: block; margin-bottom: 0.35rem; }
-  .enbref ul { margin: 0; padding-left: 1.1rem; }
-  .enbref li { margin: 0.2rem 0; }
-</style>

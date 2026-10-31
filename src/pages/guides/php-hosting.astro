@@ -14,12 +14,12 @@ import Article from '../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
   diagram={{"src": "/img/php-hosting-shared-vps.svg", "srcMobile": "/img/php-hosting-shared-vps-mobile.svg", "alt": "Diagram comparing shared hosting and a VPS in two columns: shared hosting has a server managed for you, PHP versions from a list, preset extensions, shared resources, best for a CMS or small site; a VPS gives root access you patch yourself, any PHP version, any extension, dedicated CPU and RAM, best for a custom app.", "caption": "What you control in each model: on shared hosting the host decides PHP and extensions, on a VPS you decide everything and maintain it."}}
+  choose={{"items": [{"when": "You run a standard CMS (WordPress, Joomla) or a small site", "pick": "Shared hosting", "why": "The host keeps PHP and the server patched; cheapest option."}, {"when": "You need a specific PHP build, custom extensions or steady performance", "pick": "VPS", "why": "Root access and dedicated resources; updates are on you."}, {"when": "You are picking a PHP version in 2026", "pick": "PHP 8.4 or 8.5", "why": "8.2 loses security fixes on 31 December 2026; 8.1 is already end of life."}]}}
   ctaTop={false}
   ctaBadge={false}
 >
   <p>PHP still powers a large share of the web, and hosting it is well-trodden ground - which is exactly why the offers all look the same and the real differences hide in the details. This guide covers the criteria that actually matter: the shared-vs-VPS trade-off, PHP versions and extensions, how you deploy, what <code>.htaccess</code> controls, and the performance knobs worth knowing.</p>
 
-  <div class="enbref"><strong>In short</strong><ul><li>Standard CMS or small site: shared hosting is enough.</li><li>Specific PHP version, custom extensions or steady performance: a VPS.</li><li>In 2026, run PHP 8.4 or 8.5; 8.2 loses security fixes on 31 December 2026 and 8.1 is already end of life.</li></ul></div>
 
   <h2>Shared hosting vs VPS</h2>
   <p>The first decision is how isolated your environment is.</p>
@@ -99,10 +99,3 @@ opcache.validate_timestamps=1`}</code></pre>
 
   <p>PHP hosting is mature, so don't overthink the brand names - match the host to your app's real requirements: the right PHP version, the extensions you depend on, a web server you understand, and OPcache turned on. Get those right and the rest is mostly preference.</p>
 </Article>
-
-<style>
-  .enbref { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1.1rem; border-left: 3px solid var(--accent-blue); background: var(--surface); }
-  .enbref strong { display: block; margin-bottom: 0.35rem; }
-  .enbref ul { margin: 0; padding-left: 1.1rem; }
-  .enbref li { margin: 0.2rem 0; }
-</style>

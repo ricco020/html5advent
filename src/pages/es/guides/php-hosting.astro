@@ -14,12 +14,12 @@ import Article from '../../../layouts/Article.astro';
   cluster="hosting"
   commerce={{ type: 'product', key: 'contabo' }}
   diagram={{"src": "/img/php-hosting-shared-vps-es.svg", "srcMobile": "/img/php-hosting-shared-vps-es-mobile.svg", "alt": "Esquema que compara hosting compartido y VPS en dos columnas: el compartido ofrece un servidor gestionado, PHP elegido de una lista, extensiones fijadas, recursos compartidos, ideal para un CMS o un sitio pequeño; el VPS da acceso root con tus propias actualizaciones, cualquier versión de PHP, cualquier extensión, CPU y RAM dedicadas, ideal para una app a medida.", "caption": "Lo que controlas en cada modelo: en compartido el proveedor fija PHP y las extensiones; en un VPS decides todo y lo mantienes tú."}}
+  choose={{"items": [{"when": "Usas un CMS estándar (WordPress, Joomla) o un sitio pequeño", "pick": "Hosting compartido", "why": "El proveedor mantiene PHP y el servidor al día; la opción más barata."}, {"when": "Necesitas una versión de PHP concreta, extensiones a medida o rendimiento estable", "pick": "VPS", "why": "Acceso root y recursos dedicados; las actualizaciones corren de tu cuenta."}, {"when": "Eliges una versión de PHP en 2026", "pick": "PHP 8.4 u 8.5", "why": "8.2 pierde los parches de seguridad el 31 de diciembre de 2026; 8.1 ya está en fin de vida."}]}}
   ctaTop={false}
   ctaBadge={false}
 >
   <p>PHP todavía impulsa una gran parte de la web, y alojarlo es terreno muy trillado - precisamente por eso todas las ofertas se parecen y las diferencias reales se esconden en los detalles. Esta guía cubre los criterios que de verdad importan: la disyuntiva compartido/VPS, las versiones y extensiones de PHP, cómo despliegas, qué controla el <code>.htaccess</code> y los ajustes de rendimiento que conviene conocer.</p>
 
-  <div class="enbref"><strong>En resumen</strong><ul><li>CMS estándar o sitio pequeño: basta con un hosting compartido.</li><li>Versión de PHP concreta, extensiones a medida o rendimiento estable: un VPS.</li><li>En 2026, usa PHP 8.4 u 8.5; 8.2 pierde los parches de seguridad el 31 de diciembre de 2026 y 8.1 ya está en fin de vida.</li></ul></div>
 
   <h2>Alojamiento compartido vs VPS</h2>
   <p>La primera decisión es cuán aislado está tu entorno.</p>
@@ -99,10 +99,3 @@ opcache.validate_timestamps=1`}</code></pre>
 
   <p>El alojamiento PHP es maduro, así que no le des demasiadas vueltas a las marcas - ajusta el alojamiento a los requisitos reales de tu app: la versión de PHP correcta, las extensiones de las que dependes, un servidor web que entiendas y OPcache activado. Acierta en eso y el resto es sobre todo cuestión de preferencia.</p>
 </Article>
-
-<style>
-  .enbref { margin: 1.25rem 0 1.75rem; padding: 0.9rem 1.1rem; border-left: 3px solid var(--accent-blue); background: var(--surface); }
-  .enbref strong { display: block; margin-bottom: 0.35rem; }
-  .enbref ul { margin: 0; padding-left: 1.1rem; }
-  .enbref li { margin: 0.2rem 0; }
-</style>
