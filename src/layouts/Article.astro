@@ -153,6 +153,21 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
             </tbody>
           </table>
         </div>
+        <ol class="matrix-cards">
+          {matrix.rows.map((r) => (
+            <li>
+              <h3>{r[0]}</h3>
+              <p class="mc-pick"><span>{matrix.head[1]}</span>{r[1]}</p>
+              {r[2] && <p class="mc-upkeep"><span>{matrix.head[2]}</span>{r[2]}</p>}
+              {r[3] && (
+                <details>
+                  <summary>{matrix.head[3]}</summary>
+                  <ul>{String(r[3]).split(/,\s+/).map((x) => <li>{x}</li>)}</ul>
+                </details>
+              )}
+            </li>
+          ))}
+        </ol>
         {matrix.note && <p class="matrix-note">{matrix.note}</p>}
       </section>
     )}
@@ -270,13 +285,23 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
     .matrix tbody th { font-weight: 600; }
     .matrix-pick { font-family: var(--mono); font-weight: 600; font-size: .88rem; color: var(--accent-amber); }
     .matrix-note { margin: .75rem 0 0; color: var(--muted); font-family: var(--serif); font-size: .92rem; }
-    @media (max-width: 640px) {
-      .matrix table, .matrix thead, .matrix tbody, .matrix tr, .matrix th, .matrix td { display: block; min-width: 0; }
-      .matrix thead { display: none; }
-      .matrix tbody tr { padding: .6rem 0; border-bottom: 1px solid var(--line); }
-      .matrix tbody tr:last-child { border-bottom: 0; }
-      .matrix tbody th, .matrix td { border: 0; padding: .1rem 0; }
-      .matrix td::before { content: attr(data-label) ': '; font-family: var(--mono); font-size: .75rem; color: var(--muted); text-transform: uppercase; }
+    .matrix-cards { display: none; }
+    @media (max-width: 767px) {
+      .matrix { padding: 1rem 1rem 1.05rem; }
+      .matrix-scroll { display: none; }
+      .matrix-cards { display: grid; gap: .6rem; list-style: none; margin: 0; padding: 0; }
+      .matrix-cards > li { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .7rem .8rem .6rem; }
+      .matrix-cards h3 { font-size: 1rem; line-height: 1.3; margin: 0 0 .4rem; }
+      .matrix-cards p { margin: 0 0 .35rem; font-family: var(--serif); font-size: .95rem; line-height: 1.45; }
+      .matrix-cards p span { display: block; font-family: var(--mono); font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+      .matrix-cards .mc-pick { font-weight: 600; color: var(--accent-amber); }
+      .matrix-cards .mc-upkeep { color: var(--muted); }
+      .matrix-cards details { border-top: 1px solid var(--line); margin-top: .45rem; padding-top: .35rem; }
+      .matrix-cards summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-family: var(--mono); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--accent-blue); }
+      .matrix-cards summary::-webkit-details-marker { display: none; }
+      .matrix-cards summary::before { content: '\25B8'; margin-right: .45rem; font-size: .9rem; }
+      .matrix-cards details[open] summary::before { content: '\25BE'; }
+      .matrix-cards details ul { margin: .1rem 0 .3rem; padding-left: 1.1rem; font-family: var(--serif); font-size: .93rem; line-height: 1.45; }
     }
     .article { --serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif; }
     .lede { font-family: var(--serif); }
@@ -286,6 +311,11 @@ const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) =>
     .prose :global(h2) { font-size: 1.6rem; margin: 2.5rem 0 .75rem; }
     .prose :global(h3) { font-size: 1.2rem; margin: 1.75rem 0 .5rem; }
     .prose :global(p) { margin: 1rem 0; }
+    .prose :global(.method) { margin: 1.5rem 0 2rem; padding: 1rem 1.2rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-size: 1rem; }
+    .prose :global(.method h2) { font-size: 1.1rem; margin: 0 0 .5rem; }
+    .prose :global(.method ul) { margin: .5rem 0; }
+    .prose :global(.method p) { margin: .5rem 0; }
+    .prose :global(.method .method-src) { color: var(--muted); font-size: .92rem; }
     .prose :global(a) { color: var(--accent-blue); }
     .prose :global(ul), .prose :global(ol) { padding-left: 1.25rem; }
     .prose :global(li) { margin: .4rem 0; }
