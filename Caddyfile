@@ -29,6 +29,11 @@
 		redir @r1 "https://html5advent.com/{re.r1.1}" 308
 		@slash path_regexp sl ^(.+)/$
 		redir @slash {re.sl.1} 308
+		# Fichiers de verification Search Console servis tels quels (sans redirection .html).
+		@gsc_verif path_regexp gv ^/google[0-9a-f]+\.html$
+		handle @gsc_verif {
+			file_server
+		}
 		@html path_regexp ht ^(.*)\.html$
 		redir @html {re.ht.1} 308
 		try_files {path} {path}/index.html {path}.html
