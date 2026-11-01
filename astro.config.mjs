@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import lastmod from './src/data/lastmod.json' with { type: 'json' };
 
 // html5advent.com - modern web platform resource (HTML/CSS/JS, Web APIs) + "Web Platform Advent".
 // Recovered expired domain (DR51). Legacy backlinks point at the ROOT "/" → must return 200.
@@ -20,6 +21,9 @@ export default defineConfig({
         if (item.url !== 'https://html5advent.com/') {
           item.url = item.url.replace(/\/$/, '');
         }
+        // lastmod = date du dernier commit du fichier de page (src/data/lastmod.json, genere par
+        // git log) : aide Google a recrawler les guides vus en 4xx pendant la suspension Vercel (24/09-04/10).
+        if (lastmod[item.url]) item.lastmod = lastmod[item.url];
         return item;
       },
     }),
