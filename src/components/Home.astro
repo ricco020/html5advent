@@ -13,6 +13,15 @@ const CATS = [
   { key: 'hosting', label: { en: 'Hosting & deploy', fr: 'Hébergement', es: 'Alojamiento', de: 'Hosting', it: 'Hosting', pt: 'Hospedagem' } },
 ];
 const groups = CATS.map((c) => ({ ...c, items: avail.filter((g) => g.cat === c.key) })).filter((c) => c.items.length);
+// Free tool surfaced on the home page, first card of the hosting group (same wording as /tools).
+const calcCard = {
+  en: { cat: 'free tool', title: 'VPS size calculator', desc: 'Pick your stack, traffic and extras to estimate the vCPU, RAM and disk your server needs, with every assumption shown.', more: 'Open the free tool' },
+  fr: { cat: 'outil gratuit', title: 'Calculateur de taille de VPS', desc: 'Choisissez votre stack, votre trafic et vos options pour estimer les vCPU, la RAM et le disque nécessaires, hypothèses comprises.', more: "Ouvrir l'outil gratuit" },
+  es: { cat: 'herramienta gratuita', title: 'Calculadora de tamaño de VPS', desc: 'Elige tu stack, tu tráfico y extras para estimar los vCPU, la RAM y el disco que necesita tu servidor, con todas las hipótesis.', more: 'Abrir la herramienta gratuita' },
+  de: { cat: 'kostenloses Tool', title: 'VPS-Größenrechner', desc: 'Wähle Stack, Traffic und Extras und schätze vCPU, RAM und Speicher deines Servers, mit allen Annahmen offen gelegt.', more: 'Kostenloses Tool öffnen' },
+  it: { cat: 'strumento gratuito', title: 'Calcolatore dimensione VPS', desc: 'Scegli stack, traffico ed extra per stimare vCPU, RAM e disco necessari al server, con tutte le ipotesi visibili.', more: 'Apri lo strumento gratuito' },
+  pt: { cat: 'ferramenta gratuita', title: 'Calculadora de tamanho de VPS', desc: 'Escolha o stack, o tráfego e os extras para estimar os vCPU, a RAM e o disco de que o servidor precisa, com todas as hipóteses.', more: 'Abrir a ferramenta gratuita' },
+}[lang];
 const adventCount = avail.length;
 const adventLabel = { en: 'See the calendar', fr: 'Voir le calendrier', es: 'Ver el calendario', de: 'Zum Kalender', it: 'Vedi il calendario', pt: 'Ver o calendário' }[lang];
 const adventBlurb = {
@@ -50,6 +59,16 @@ navigator.serviceWorker
       <span class="cat__count">{group.items.length}</span>
     </div>
     <ul class="cards">
+      {group.key === 'hosting' && calcCard && (
+        <li class="card card--tool" data-home-tool="vps-size-calculator">
+          <a href={localePath(lang, 'tools/vps-size-calculator')}>
+            <span class="card__cat">{calcCard.cat}</span>
+            <span class="card__title">{calcCard.title}</span>
+            <span class="card__desc">{calcCard.desc}</span>
+            <span class="card__more">{calcCard.more} →</span>
+          </a>
+        </li>
+      )}
       {group.items.map((g) => (
         <li class="card">
           <a href={localePath(lang, `guides/${g.slug}`)}>
@@ -103,6 +122,7 @@ navigator.serviceWorker
   .card__cat { font-family: var(--mono); font-size: .7rem; color: var(--accent-blue); text-transform: uppercase; letter-spacing: .06em; }
   .card__title { font-family: var(--display); font-weight: 600; font-size: 1.12rem; color: var(--ink); line-height: 1.2; }
   .card__desc { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+  .card--tool { border-color: var(--accent-amber); }
   .card__more { margin-top: auto; color: var(--accent-amber); font-size: .85rem; font-family: var(--mono); }
 
   /* ADVENT TEASER (secondary) */
