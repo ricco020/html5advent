@@ -14,7 +14,7 @@ import Article from '../../../layouts/Article.astro';
   commerce={{ type: 'product', key: 'contabo' }}
   faq={[
     { q: 'Posso hospedar Laravel num alojamento partilhado?', a: 'Por vezes, para uma aplicação pequena sem filas: precisa de SSH, Composer, um PHP suportado e da possibilidade de apontar a raiz de documentos para public/. A maioria dos planos partilhados falha em pelo menos um destes pontos, e nenhum permite executar um worker de fila sob o Supervisor. Um VPS ou uma plataforma gerida evita essa luta.' },
-    { q: 'Qual é a forma mais barata de hospedar uma aplicação Laravel?', a: 'Um pequeno VPS não gerido que configura por si, opcionalmente com o plano gratuito do Ploi (1 servidor, 1 site) para automatizar as implantações. Com preços verificados a 18 de outubro de 2026, isso dá cerca de 5,50 EUR por mês por um Contabo Cloud VPS 4 com 4 vCPU / 8 GB, contra 5 USD por mês mais utilização no Laravel Cloud Starter.' },
+    { q: 'Qual é a forma mais barata de hospedar uma aplicação Laravel?', a: 'Um pequeno VPS não gerido que configura por si, opcionalmente com o plano gratuito do Ploi (1 servidor, 1 site) para automatizar as implantações. Com preços verificados a 18 de outubro de 2026, isso dá cerca de 4,40 EUR por mês por um Contabo Cloud VPS 4 com 4 vCPU / 8 GB, contra 5 USD por mês mais utilização no Laravel Cloud Starter.' },
     { q: 'Que versão do PHP precisa o Laravel?', a: 'O Laravel 13 suporta PHP 8.3 a 8.5, o Laravel 12 suporta PHP 8.2 a 8.5 (tabela de suporte do Laravel, verificada a 18 de outubro de 2026). O Laravel 12 só recebe correções de segurança até 24 de fevereiro de 2027, por isso os novos projetos devem começar no Laravel 13 com PHP 8.3 ou mais recente.' },
     { q: 'Quanta RAM precisa um servidor Laravel?', a: 'Uma única aplicação com MySQL, Redis e dois workers de fila corre confortavelmente em 2 a 4 GB. É a memória, e não a CPU, que se esgota primeiro: conte os workers PHP-FPM, o buffer pool da base de dados e o Redis antes de escolher um plano.' },
     { q: 'Preciso do Laravel Forge?', a: 'Não. O Forge (a partir de 12 USD por mês) automatiza o aprovisionamento do servidor, as implantações, o SSL e os workers, o que poupa tempo se gerir vários servidores. Tudo o que faz pode ser feito à mão com os comandos deste guia.' },
@@ -31,7 +31,7 @@ import Article from '../../../layouts/Article.astro';
       <tr><td><strong>Alojamento partilhado</strong></td><td>Alguns EUR por mês</td><td>Uma raiz web, muitas vezes sem SSH, sem processos de longa duração</td><td>Raramente Laravel: apenas aplicações minúsculas sem filas</td></tr>
       <tr><td><strong>Laravel Cloud</strong> (gerido)</td><td>Starter 5 USD/mês + utilização (5 USD de créditos de utilização incluídos); Growth 20 USD/mês + utilização</td><td>Computação, filas e scale-to-zero totalmente geridos; o Starter está limitado a 2 GiB de RAM por instância</td><td>Equipas que nunca querem tocar num servidor</td></tr>
       <tr><td><strong>Forge ou Ploi + o seu VPS</strong></td><td>Forge Hobby 12 USD/mês; Ploi Free (1 servidor, 1 site) ou Basic 8 EUR/mês. Mais o VPS</td><td>Push-to-deploy, SSL, workers e cron configurados por si num servidor que é seu</td><td>Programadores que querem automação sem ficar presos a uma plataforma</td></tr>
-      <tr><td><strong>VPS simples</strong> (não gerido)</td><td>A partir de 5,50 EUR/mês por um Contabo Cloud VPS 4 (4 vCPU, 8 GB de RAM, 100 GB)</td><td>Acesso root, recursos garantidos, é você quem faz a configuração abaixo</td><td>Menor custo por GB de RAM, controlo total</td></tr>
+      <tr><td><strong>VPS simples</strong> (não gerido)</td><td>A partir de 4,40 EUR/mês (primeiros 24 meses, 17/11/2026) por um Contabo Cloud VPS 4 (4 vCPU, 8 GB de RAM, 100 GB)</td><td>Acesso root, recursos garantidos, é você quem faz a configuração abaixo</td><td>Menor custo por GB de RAM, controlo total</td></tr>
     </tbody>
   </table>
   <p>As duas linhas do meio combinam-se: o Forge e o Ploi não vendem servidores, configuram aquele que aluga. Uma combinação Ploi Free + pequeno VPS custa praticamente o preço do VPS sozinho, o que a torna a opção automatizada mais barata para uma única aplicação.</p>
@@ -177,7 +177,7 @@ sudo systemctl reload php8.3-fpm   # match your PHP version`}</code></pre>
   <table>
     <thead><tr><th>Perfil da aplicação</th><th>Necessidade realista</th><th>Plano de exemplo (verificado a 18 out 2026)</th></tr></thead>
     <tbody>
-      <tr><td>Uma aplicação, tráfego leve, base de dados na mesma máquina</td><td>2 vCPU, 2 a 4 GB de RAM, 40 GB de disco</td><td>Contabo Cloud VPS 4: 4 vCPU, 8 GB, 100 GB, a partir de 5,50 EUR/mês</td></tr>
+      <tr><td>Uma aplicação, tráfego leve, base de dados na mesma máquina</td><td>2 vCPU, 2 a 4 GB de RAM, 40 GB de disco</td><td>Contabo Cloud VPS 4: 4 vCPU, 8 GB, 100 GB, a partir de 4,40 EUR/mês</td></tr>
       <tr><td>Filas + Redis + base de dados, ou 2 a 4 aplicações</td><td>4 vCPU, 6 a 8 GB de RAM</td><td>O Cloud VPS 4 ainda serve; Cloud VPS 6 (6 vCPU, 12 GB, a partir de 7,50 EUR/mês) para ter margem</td></tr>
       <tr><td>Tráfego mais elevado, trabalhos pesados, cópia de staging</td><td>6 a 8 vCPU, 12 a 24 GB de RAM</td><td>Cloud VPS 8 (8 vCPU, 24 GB, a partir de 14 EUR/mês); mova a base de dados para fora mais tarde</td></tr>
     </tbody>

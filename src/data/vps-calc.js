@@ -1,17 +1,17 @@
 // VPS size calculator: plans, footprint assumptions and localized copy.
-// HONESTY: Contabo specs and headline prices read on https://contabo.com/en/vps/ on 2026-10-18
+// HONESTY: Contabo specs and headline prices read on https://contabo.com/en/vps/ on 2026-11-17
 // (24-month term as stated by Contabo). The page tells the visitor to confirm the live price.
 // Footprints are rules of thumb, shown openly in the "assumptions" table so the user can judge them.
 
-export const CHECKED = '2026-10-18';
+export const CHECKED = '2026-11-17';
 
 export const PLANS = [
-  { name: 'Cloud VPS 4', cpu: 4, ram: 8, disk: 100, price: '5.50' },
-  { name: 'Cloud VPS 6', cpu: 6, ram: 12, disk: 200, price: '7.50' },
-  { name: 'Cloud VPS 8', cpu: 8, ram: 24, disk: 300, price: '14.00' },
-  { name: 'Cloud VPS 12', cpu: 12, ram: 48, disk: 400, price: '25.00' },
-  { name: 'Cloud VPS 16', cpu: 16, ram: 64, disk: 500, price: '37.00' },
-  { name: 'Cloud VPS 18', cpu: 18, ram: 96, disk: 600, price: '49.00' },
+  { name: 'Cloud VPS 4', cpu: 4, ram: 8, disk: 100, price: '4.40' },
+  { name: 'Cloud VPS 6', cpu: 6, ram: 12, disk: 200, price: '6.00' },
+  { name: 'Cloud VPS 8', cpu: 8, ram: 24, disk: 300, price: '11.20' },
+  { name: 'Cloud VPS 12', cpu: 12, ram: 48, disk: 400, price: '20.00' },
+  { name: 'Cloud VPS 16', cpu: 16, ram: 64, disk: 500, price: '29.60' },
+  { name: 'Cloud VPS 18', cpu: 18, ram: 96, disk: 600, price: '39.20' },
 ];
 
 // ram/db in GB, disk in GB per app, cpu = CPU-seconds per uncached request, worker = GB per PHP/app worker.

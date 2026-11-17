@@ -16,17 +16,17 @@ export const PRODUCTS = {
     url: 'https://contabo.com/',
     description:
       'Unmanaged virtual private servers from a German provider, known for generous CPU, RAM and storage allocations at low monthly prices.',
-    // Real, dated list prices (Contabo Cloud VPS, 12-month term, ex. VAT, EUR/month, June 2026).
+    // Real, dated list prices (Contabo Cloud VPS, 24-month term, ex. VAT, EUR/month, read 2026-11-17).
     // Only emitted as Offer where these prices are shown in the page body (contabo-review).
     offers: [
-      { sku: 'cloud-vps-10', name: 'Contabo Cloud VPS 4', price: '5.50' },
-      { sku: 'cloud-vps-20', name: 'Contabo Cloud VPS 6', price: '7.50' },
-      { sku: 'cloud-vps-30', name: 'Contabo Cloud VPS 8', price: '14.00' },
-      { sku: 'cloud-vps-40', name: 'Contabo Cloud VPS 12', price: '25.00' },
+      { sku: 'cloud-vps-10', name: 'Contabo Cloud VPS 4', price: '4.40' },
+      { sku: 'cloud-vps-20', name: 'Contabo Cloud VPS 6', price: '6.00' },
+      { sku: 'cloud-vps-30', name: 'Contabo Cloud VPS 8', price: '11.20' },
+      { sku: 'cloud-vps-40', name: 'Contabo Cloud VPS 12', price: '20.00' },
     ],
     priceCurrency: 'EUR',
     // Date the listed prices were observed; surfaced as priceValidUntil context.
-    priceObservedDate: '2026-06-01',
+    priceObservedDate: '2026-11-17',
   },
   hetzner: {
     name: 'Hetzner Cloud',
