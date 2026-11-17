@@ -112,7 +112,20 @@ const FAQ_LABEL = { en: 'Frequently asked questions', fr: 'Questions fréquentes
 // Same category first, then fill with others; only guides that exist in this locale (no 404s).
 const REL_LABEL = { en: 'Related guides', fr: 'Guides liés', es: 'Guías relacionadas', de: 'Verwandte Guides', it: 'Guide correlate', pt: 'Guias relacionados' };
 const inLang = GUIDES.filter((g) => g.slug !== slug && (g.locales || ['en']).includes(lang));
-const related = [...inLang.filter((g) => g.cat === cat), ...inLang.filter((g) => g.cat !== cat)].slice(0, 4);
+// Reference guides (CSS/JS/APIs) keep 3 same-topic links and give the 4th slot to a deploy/hosting guide
+// (the next step after building something), rotated by slug so each hosting guide gets inbound links.
+const DEPLOY_POOL = ['static-website-hosting', 'web-hosting-for-developers', 'nodejs-hosting', 'best-cheap-vps', 'how-much-does-a-vps-cost', 'vps-hosting', 'astro-hosting'];
+const sameCat = inLang.filter((g) => g.cat === cat);
+let related = [...sameCat, ...inLang.filter((g) => g.cat !== cat)].slice(0, 4);
+if (cat !== 'hosting') {
+  const pool = DEPLOY_POOL.map((s) => inLang.find((g) => g.slug === s)).filter(Boolean);
+  if (pool.length) {
+    const h = [...slug].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+    const pick = pool[h % pool.length];
+    related = [...sameCat.filter((g) => g.slug !== pick.slug).slice(0, 3), pick];
+    if (related.length < 4) related = [...related, ...inLang.filter((g) => !related.includes(g))].slice(0, 4);
+  }
+}
 ---
 <Base title={`${title} - HTML5 Advent`} description={description} lang={lang} path={path} schema={schema} ogType="article">
   <article class="article">
