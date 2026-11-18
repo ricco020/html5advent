@@ -117,6 +117,33 @@ const inLang = GUIDES.filter((g) => g.slug !== slug && (g.locales || ['en']).inc
 const DEPLOY_POOL = ['static-website-hosting', 'web-hosting-for-developers', 'nodejs-hosting', 'best-cheap-vps', 'how-much-does-a-vps-cost', 'vps-hosting', 'astro-hosting'];
 const sameCat = inLang.filter((g) => g.cat === cat);
 let related = [...sameCat, ...inLang.filter((g) => g.cat !== cat)].slice(0, 4);
+// Hosting guides link by topic (before: every hosting guide showed the same first 4 of the list,
+// so the guides Google already indexes never linked to the VPS price/comparison guides).
+const HOSTING_RELATED = {
+  'vps-hosting': ['best-cheap-vps', 'how-much-does-a-vps-cost', 'vps-vs-dedicated-server', 'wordpress-vps'],
+  'contabo-review': ['best-cheap-vps', 'how-much-does-a-vps-cost', 'wordpress-vps', 'vps-vs-cloud-hosting'],
+  'vps-vs-cloud-hosting': ['vps-vs-dedicated-server', 'how-much-does-a-vps-cost', 'best-cheap-vps', 'cloud-hosting'],
+  'php-hosting': ['best-hosting-for-laravel', 'managed-wordpress-hosting', 'wordpress-vps', 'best-hosting-for-small-business'],
+  'nodejs-hosting': ['best-hosting-for-nextjs', 'astro-hosting', 'static-website-hosting', 'web-hosting-for-developers'],
+  'best-cheap-vps': ['how-much-does-a-vps-cost', 'contabo-review', 'vps-hosting', 'vps-vs-dedicated-server'],
+  'how-much-does-a-vps-cost': ['best-cheap-vps', 'contabo-review', 'vps-vs-cloud-hosting', 'vps-vs-dedicated-server'],
+  'vps-vs-dedicated-server': ['vps-vs-cloud-hosting', 'how-much-does-a-vps-cost', 'best-cheap-vps', 'vps-hosting'],
+  'wordpress-vps': ['managed-wordpress-hosting', 'best-hosting-for-woocommerce', 'best-cheap-vps', 'contabo-review'],
+  'managed-wordpress-hosting': ['wordpress-vps', 'best-hosting-for-woocommerce', 'best-hosting-for-small-business', 'php-hosting'],
+  'best-hosting-for-woocommerce': ['wordpress-vps', 'managed-wordpress-hosting', 'best-hosting-for-small-business', 'php-hosting'],
+  'best-hosting-for-small-business': ['managed-wordpress-hosting', 'best-hosting-for-woocommerce', 'cloud-hosting', 'how-much-does-a-vps-cost'],
+  'best-hosting-for-laravel': ['php-hosting', 'vps-hosting', 'best-cheap-vps', 'contabo-review'],
+  'best-hosting-for-nextjs': ['nodejs-hosting', 'astro-hosting', 'static-website-hosting', 'vps-hosting'],
+  'astro-hosting': ['static-website-hosting', 'best-hosting-for-nextjs', 'nodejs-hosting', 'web-hosting-for-developers'],
+  'static-website-hosting': ['astro-hosting', 'web-hosting-for-developers', 'best-cheap-vps', 'nodejs-hosting'],
+  'web-hosting-for-developers': ['vps-hosting', 'nodejs-hosting', 'best-hosting-for-laravel', 'best-cheap-vps'],
+  'cloud-hosting': ['vps-vs-cloud-hosting', 'vps-hosting', 'how-much-does-a-vps-cost', 'best-hosting-for-small-business'],
+  'best-vps-for-web-hosting': ['best-cheap-vps', 'how-much-does-a-vps-cost', 'contabo-review', 'vps-vs-dedicated-server'],
+};
+if (cat === 'hosting' && HOSTING_RELATED[slug]) {
+  const picked = HOSTING_RELATED[slug].map((s) => inLang.find((g) => g.slug === s)).filter(Boolean);
+  related = [...picked, ...sameCat.filter((g) => !picked.includes(g))].slice(0, 4);
+}
 if (cat !== 'hosting') {
   const pool = DEPLOY_POOL.map((s) => inLang.find((g) => g.slug === s)).filter(Boolean);
   if (pool.length) {
