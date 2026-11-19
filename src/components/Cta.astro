@@ -2,7 +2,9 @@
 // Commercial recommendation card - renders only on hosting/deploy pages. ≤2 per article (caller controls).
 // Honest: labelled as affiliate, on-theme, points at /go/<slug>.
 import { offerForCluster } from '../data/cta.js';
-const { cluster, locale = 'en', badge = true } = Astro.props;
+const { cluster, locale = 'en', badge = true, src = '', pos = '' } = Astro.props;
+// src/pos ride along to /go so the CJ sid names the page and placement that sold.
+const q = src ? `?src=${encodeURIComponent(src)}&pos=${encodeURIComponent(pos || 'card')}` : '';
 const offer = cluster ? offerForCluster(cluster) : null;
 const a = offer?.angle?.[locale] || offer?.angle?.en;
 
@@ -23,7 +25,7 @@ const T = {
         <p class="reco__q">{a.title}</p>
         <p class="reco__sub">{a.sub}</p>
       </div>
-      <a class="reco__btn" href={`/go/${offer.slug}`} rel="nofollow sponsored">{`${T.btn} ${offer.label} →`}</a>
+      <a class="reco__btn" href={`/go/${offer.slug}${q}`} rel="nofollow sponsored">{`${T.btn} ${offer.label} →`}</a>
     </div>
     <p class="reco__aff">{T.aff}</p>
   </aside>

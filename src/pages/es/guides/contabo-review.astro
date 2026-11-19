@@ -4,8 +4,8 @@ import Article from '../../../layouts/Article.astro';
 <Article
   lang="es"
   slug="contabo-review"
-  title="Reseña de Contabo: ¿es un buen VPS para proyectos web?"
-  description="Una mirada honesta y sin exageraciones a Contabo como proveedor de VPS para sitios y aplicaciones - su posicionamiento recursos-por-el-precio, el tipo de ofertas que vende, las concesiones a sopesar y para quién encaja realmente."
+  title="Contabo: qué es, para qué se utiliza y si conviene (reseña 2026)"
+  description="Contabo es un proveedor alemán de VPS no gestionados. Para qué se utiliza (WordPress, apps Node o PHP, herramientas autoalojadas, copias), precios desde 4,40 €/mes leídos el 17/11/2026 y para quién no conviene."
   cat="hosting"
   hero="/img/contabo-review-hero.jpg"
   heroAlt="Servidores plateados montados en rack apilados en un armario, iluminados de azul, con una unidad mostrando una luz indicadora roja"
@@ -13,6 +13,16 @@ import Article from '../../../layouts/Article.astro';
   commerce={{ type: 'product', key: 'contabo', software: true, offers: true }}
 >
   <p><strong>Contabo</strong> es una empresa de alojamiento alemana que ha construido su reputación sobre una sola cosa: muchos recursos en bruto por un precio mensual bajo. Si alguna vez has buscado un VPS, probablemente hayas visto sus planes listados con notablemente más RAM, vCPU y disco que competidores de precio similar. Ese posicionamiento es real, pero «más specs por euro» es solo una parte de la historia. Esta reseña examina lo que Contabo ofrece realmente, dónde encaja y las concesiones que vale la pena entender antes de comprometerse - sin inventar benchmarks ni fingir que lo usamos durante meses.</p>
+
+  <h2>¿Para qué se utiliza Contabo?</h2>
+  <p>En la práctica, un VPS de Contabo se usa para alojar cosas que necesitan un servidor propio con acceso root y que un hosting compartido no admite o se queda corto:</p>
+  <ul>
+    <li><strong>Sitios WordPress o WooCommerce</strong> con más control que en un hosting compartido (caché propia, varios sitios en la misma máquina).</li>
+    <li><strong>Aplicaciones Node.js, PHP (Laravel), Python o Docker</strong> que requieren un proceso permanente, una base de datos y un proxy inverso.</li>
+    <li><strong>Herramientas autoalojadas</strong>: n8n, Nextcloud, un servidor VPN WireGuard, paneles de analítica, entornos de preproducción.</li>
+    <li><strong>Copias de seguridad y archivos</strong> en su gama VPS de almacenamiento, cuando importa más el espacio que la potencia.</li>
+  </ul>
+  <p>No conviene si buscas un sitio "listo para usar" sin tocar la línea de comandos: ahí encaja mejor un hosting gestionado. Para saber qué plan cubre tu caso, la <a href="/es/tools/vps-size-calculator">calculadora de tamaño de VPS</a> estima RAM, CPU y disco por pila y tráfico, y muestra el plan de Contabo que corresponde.</p>
 
   <h2>Qué es Contabo</h2>
   <p>Contabo vende <strong>servidores privados virtuales no gestionados</strong>, junto con planes VPS orientados al almacenamiento, servidores dedicados y almacenamiento de objetos. Es un proveedor europeo con sede en Alemania, y a lo largo de los años ha ampliado su presencia de centros de datos a varias regiones de Europa, Norteamérica, Asia y más allá. La propuesta central es constante: asignaciones generosas de CPU, memoria y almacenamiento a precios que tienden a quedar por debajo de los nombres más conocidos.</p>

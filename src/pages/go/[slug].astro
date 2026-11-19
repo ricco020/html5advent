@@ -17,10 +17,26 @@ const target = offer.url;
   <head>
     <meta charset="utf-8" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <noscript><meta http-equiv="refresh" content={`0; url=${target}`} /></noscript>
     <link rel="canonical" href={target} />
     <title>Redirecting…</title>
-    <script is:inline define:vars={{ target }}>window.location.replace(target);</script>
+    <script is:inline define:vars={{ target }}>
+      // CJ sid = <page>-<placement>-<lang> so each sale is tied to the page that sent it.
+      var u = target;
+      try {
+        var q = new URLSearchParams(window.location.search);
+        var clean = function (v) { return (v || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40); };
+        var src = clean(q.get('src')), pos = clean(q.get('pos'));
+        var ref = document.referrer ? new URL(document.referrer) : null;
+        var seg = ref && ref.host === window.location.host ? ref.pathname.split('/').filter(Boolean)[0] : '';
+        var lang = /^(fr|es|de|it|pt)$/.test(seg || '') ? seg : 'en';
+        if (!src && ref && ref.host === window.location.host) src = clean(ref.pathname.split('/').filter(Boolean).pop() || 'home');
+        if (/(tkqlhce|anrdoezrs|jdoqocy|dpbolvw|kqzyfj)\.com\/click-/.test(u) && src) {
+          u += (u.indexOf('?') < 0 ? '?' : '&') + 'sid=' + encodeURIComponent([src, pos || 'link', lang].join('-'));
+        }
+      } catch (e) {}
+      window.location.replace(u);
+    </script>
   </head>
   <body>
     <p>Redirecting to <a rel="nofollow sponsored" href={target}>{offer.label}</a>…</p>
