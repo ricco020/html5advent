@@ -5,7 +5,7 @@ import Article from '../../../layouts/Article.astro';
   lang="es"
   slug="contabo-review"
   title="Contabo: qué es, para qué se utiliza y si conviene (reseña 2026)"
-  description="Contabo es un proveedor alemán de VPS no gestionados. Para qué se utiliza (WordPress, apps Node o PHP, herramientas autoalojadas, copias), precios desde 4,40 €/mes leídos el 17/11/2026 y para quién no conviene."
+  description="Contabo es un proveedor alemán (Múnich, 2003) de VPS no gestionados. De dónde es, si es seguro, para qué se utiliza (WordPress, apps Node o PHP, herramientas autoalojadas, copias), precios desde 4,40 €/mes leídos el 17/11/2026 y para quién no conviene."
   cat="hosting"
   hero="/img/contabo-review-hero.jpg"
   heroAlt="Servidores plateados montados en rack apilados en un armario, iluminados de azul, con una unidad mostrando una luz indicadora roja"
@@ -27,6 +27,19 @@ import Article from '../../../layouts/Article.astro';
   <h2>Qué es Contabo</h2>
   <p>Contabo vende <strong>servidores privados virtuales no gestionados</strong>, junto con planes VPS orientados al almacenamiento, servidores dedicados y almacenamiento de objetos. Es un proveedor europeo con sede en Alemania, y a lo largo de los años ha ampliado su presencia de centros de datos a varias regiones de Europa, Norteamérica, Asia y más allá. La propuesta central es constante: asignaciones generosas de CPU, memoria y almacenamiento a precios que tienden a quedar por debajo de los nombres más conocidos.</p>
   <p>Como los planes VPS son no gestionados, obtienes un sistema operativo desnudo y acceso root - y la responsabilidad de asegurarlo, parchearlo y mantenerlo es tuya. Eso es normal en esta categoría, pero es lo primero que conviene tener claro: Contabo está dirigido a personas cómodas en la línea de comandos, no a alguien que quiera una experiencia totalmente acompañada y gestionada.</p>
+
+  <h2>¿De dónde es Contabo?</h2>
+  <p>Contabo es alemana: la empresa es <strong>Contabo GmbH</strong>, fundada en la primavera de 2003 en <strong>Múnich</strong>, donde sigue teniendo su sede legal (según su página «About us» y su aviso legal). Sus primeros centros de datos estaban en Alemania (Múnich y Núremberg). El primero fuera de Europa abrió en 2020, y hoy ofrece regiones en Estados Unidos (centro, este y oeste) y en Asia-Pacífico. La lista exacta de regiones cambia: compruébala en el selector de ubicación del pedido antes de comprar, porque cada región puede tener un recargo mensual.</p>
+  <p>Consecuencia práctica: el contrato se firma con una sociedad de la Unión Europea, así que se aplica el RGPD a los datos que alojas, también si eliges una región fuera de Europa.</p>
+
+  <h2>¿Es seguro Contabo para un VPS?</h2>
+  <p>Hay que separar lo que hace Contabo de lo que te toca a ti:</p>
+  <ul>
+    <li><strong>Lo que incluye Contabo:</strong> una protección DDoS gratuita para todos los clientes, activada automáticamente en los servidores. La propia Contabo indica en su página de DDoS que no es una garantía contra cualquier ataque.</li>
+    <li><strong>Lo que te toca a ti:</strong> todo lo que pasa dentro del servidor. Un VPS no gestionado llega con el sistema desnudo, así que la seguridad real depende de cinco tareas: entrar por SSH con clave (y desactivar la contraseña de root), activar un cortafuegos (<code>ufw</code> con solo los puertos 22, 80 y 443), instalar las actualizaciones automáticas de seguridad, ejecutar las aplicaciones con un usuario sin privilegios y guardar copias fuera del servidor.</li>
+    <li><strong>Las copias de seguridad:</strong> no des por hecho que vienen incluidas. Revisa en el resumen del pedido si tu plan tiene copias automáticas o si son un complemento de pago, y en cualquier caso guarda una copia en otro proveedor.</li>
+  </ul>
+  <p>Resumen honesto: Contabo es tan seguro como lo configures. Si estas tareas te resultan ajenas, un hosting gestionado te ahorrará problemas. Si las dominas, el modelo de Contabo te da más RAM y disco por euro para el mismo trabajo.</p>
 
   <h2>El enfoque de «recursos por el precio»</h2>
   <p>La razón principal por la que los desarrolladores recurren a Contabo es el valor. Para un presupuesto dado, sus planes generalmente te entregan más memoria y más disco de los que conseguirías en otro sitio, lo cual es atractivo cuando tu carga de trabajo es genuinamente exigente en recursos - una base de datos junto a un servidor de aplicaciones, una herramienta autoalojada, un entorno de preproducción, o varios sitios pequeños en una misma máquina.</p>
