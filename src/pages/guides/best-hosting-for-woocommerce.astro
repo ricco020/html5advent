@@ -59,6 +59,15 @@ import Article from '../../layouts/Article.astro';
   <h3>Scalability</h3>
   <p>Traffic to a store is spiky by nature - launches, sales, seasonal peaks. Ask how the plan scales: can you add RAM and CPU without rebuilding the site? Is there a clear upgrade path from a small plan to a larger one, or to a VPS, as the catalogue and orders grow? A host you can resize on demand beats one where growth means a painful migration.</p>
 
+  <h3>The shared-hosting limits a store hits first</h3>
+  <p>Most cPanel shared hosts cap each account with CloudLinux LVE limits, and the account's resource-usage page in cPanel shows them. The ones that matter for WooCommerce:</p>
+  <ul>
+    <li><strong>Entry processes (EP):</strong> how many PHP requests can run at the same moment. Cart, checkout and "my account" pages bypass the page cache, so every request from a shopper on those pages runs PHP and occupies one entry process while it executes. When the limit is reached, visitors get a <code>508 Resource Limit Reached</code> error instead of the page.</li>
+    <li><strong>CPU and physical memory (PMEM):</strong> a share of one core and a fixed RAM ceiling for the whole account. A product import, a backup plugin or WP-Cron running Action Scheduler jobs eats into the same budget as live orders.</li>
+    <li><strong>Inodes:</strong> a cap on the number of files. Product image thumbnails multiply fast (each upload is saved in several sizes), and a full inode quota stops uploads and updates.</li>
+  </ul>
+  <p>If the resource-usage page shows faults on EP or memory during busy hours, the plan is the bottleneck, not WooCommerce. That is the point where a VPS with guaranteed RAM pays off. The <a href="/tools/vps-size-calculator">VPS size calculator</a> estimates how much memory a WooCommerce stack needs for your traffic.</p>
+
   <h2>Shared vs managed WordPress vs VPS</h2>
   <table>
     <thead><tr><th>Option</th><th>Best for</th><th>Watch out for</th></tr></thead>
