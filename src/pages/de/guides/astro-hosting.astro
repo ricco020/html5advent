@@ -77,6 +77,25 @@ npm install -g pm2
 pm2 start ./dist/server/entry.mjs --name astro-site
 pm2 save`}</code></pre>
 
+  <h2>Was in dist/client und dist/server landet</h2>
+  <p>Sobald ein Adapter konfiguriert ist, teilt <code>npm run build</code> die Ausgabe in zwei Ordner: <code>dist/client/</code> enthält alles, was der Browser lädt (vorgerendertes HTML, CSS, JS und die Dateien aus <code>public/</code>), <code>dist/server/</code> enthält den Code, der Seiten auf Anfrage rendert, mit <code>entry.mjs</code> als Einstiegspunkt. Beide Ordner werden zusammen auf derselben Maschine und mit derselben relativen Struktur deployt.</p>
+  <ul>
+    <li><strong>Standalone-Modus</strong> (<code>mode: 'standalone'</code>): <code>node ./dist/server/entry.mjs</code> liefert die gerenderten Seiten und die Dateien aus <code>dist/client/</code> selbst aus. Den ganzen Ordner <code>dist/</code> mit <code>package.json</code> kopieren, <code>npm install --omit=dev</code> ausführen, starten und Nginx oder Caddy für HTTPS davorschalten. Die Umgebungsvariablen <code>PORT</code> und <code>HOST</code> legen fest, wo der Server lauscht.</li>
+    <li><strong>Middleware-Modus</strong> (<code>mode: 'middleware'</code>): <code>entry.mjs</code> exportiert einen Handler, den Sie in Ihren eigenen Express- oder Fastify-Server einhängen, und <code>dist/client/</code> liefern Sie selbst als statische Dateien aus:</li>
+  </ul>
+  <pre><code>{`// server.mjs - Astro (mode: 'middleware') behind Express
+import express from 'express';
+import { handler as ssrHandler } from './dist/server/entry.mjs';
+
+const app = express();
+app.use('/', express.static('dist/client/'));
+app.use(ssrHandler);
+app.listen(8080);`}</code></pre>
+
+  <h2>Astro auf Shared Hosting (Bluehost, cPanel)</h2>
+  <p>Statische Ausgabe läuft auf jedem Shared-Tarif: <code>npm run build</code> lokal ausführen und dann den <em>Inhalt</em> von <code>dist/</code> (nicht den Ordner selbst) per FTP oder cPanel-Dateimanager nach <code>public_html/</code> hochladen. Vorher <code>site</code> in <code>astro.config.mjs</code> auf Ihre Domain setzen und, wenn die Seite in einem Unterordner liegt, <code>base</code> auf diesen Pfad, damit Links und Assets stimmen.</p>
+  <p>Server-Ausgabe ist auf Shared Hosting der schwierige Teil: Der Node-Prozess muss dauerhaft laufen, und klassische Shared-Tarife sind für PHP gebaut, nicht für langlebige Node-Server. Manche cPanel-Hoster bieten ein Panel "Setup Node.js App", prüfen Sie also vor der Wahl der Server-Ausgabe, ob Ihr Tarif es enthält. Sonst bleibt die Seite statisch, oder Sie wechseln auf <a href="/de/guides/best-cheap-vps">einen VPS</a> und starten <code>entry.mjs</code> wie oben mit PM2.</p>
+
   <h2>Schnellreferenz</h2>
   <table>
     <thead><tr><th>Bedarf</th><th>Modus</th><th>Was hosten</th></tr></thead>

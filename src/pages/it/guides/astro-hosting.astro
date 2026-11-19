@@ -77,6 +77,25 @@ npm install -g pm2
 pm2 start ./dist/server/entry.mjs --name astro-site
 pm2 save`}</code></pre>
 
+  <h2>Cosa finisce in dist/client e dist/server</h2>
+  <p>Appena configuri un adapter, <code>npm run build</code> divide l'output in due: <code>dist/client/</code> contiene tutto ciò che il browser scarica (HTML prerenderizzato, CSS, JS e i file di <code>public/</code>), <code>dist/server/</code> contiene il codice che renderizza le pagine su richiesta, con <code>entry.mjs</code> come punto di ingresso. Le due cartelle vanno distribuite insieme, sulla stessa macchina, con la stessa struttura relativa.</p>
+  <ul>
+    <li><strong>Modalità standalone</strong> (<code>mode: 'standalone'</code>): <code>node ./dist/server/entry.mjs</code> serve da solo le pagine renderizzate e i file di <code>dist/client/</code>. Copia l'intera cartella <code>dist/</code> con <code>package.json</code>, esegui <code>npm install --omit=dev</code>, avvialo e metti Nginx o Caddy davanti per l'HTTPS. Le variabili d'ambiente <code>PORT</code> e <code>HOST</code> decidono dove resta in ascolto.</li>
+    <li><strong>Modalità middleware</strong> (<code>mode: 'middleware'</code>): <code>entry.mjs</code> esporta un handler da montare nel tuo server Express o Fastify, e <code>dist/client/</code> lo servi tu come file statici:</li>
+  </ul>
+  <pre><code>{`// server.mjs - Astro (mode: 'middleware') behind Express
+import express from 'express';
+import { handler as ssrHandler } from './dist/server/entry.mjs';
+
+const app = express();
+app.use('/', express.static('dist/client/'));
+app.use(ssrHandler);
+app.listen(8080);`}</code></pre>
+
+  <h2>Ospitare Astro su hosting condiviso (Bluehost, cPanel)</h2>
+  <p>L'output statico funziona su qualsiasi piano condiviso: esegui <code>npm run build</code> sul tuo computer, poi carica il <em>contenuto</em> di <code>dist/</code> (non la cartella stessa) in <code>public_html/</code> via FTP o con il file manager di cPanel. Prima imposta <code>site</code> in <code>astro.config.mjs</code> sul tuo dominio e, se il sito sta in una sottocartella, imposta <code>base</code> su quel percorso perché link e risorse funzionino.</p>
+  <p>L'output server è il punto difficile sull'hosting condiviso: il processo Node deve restare attivo, e i piani condivisi classici sono pensati per PHP, non per server Node sempre accesi. Alcuni provider cPanel aggiungono un pannello "Setup Node.js App": verifica che il tuo piano lo includa prima di scegliere l'output server. Altrimenti tieni il sito statico, o passa a <a href="/it/guides/best-cheap-vps">un VPS</a> dove <code>entry.mjs</code> gira sotto PM2 come sopra.</p>
+
   <h2>Riferimento rapido</h2>
   <table>
     <thead><tr><th>Esigenza</th><th>Modalità</th><th>Cosa ospitare</th></tr></thead>

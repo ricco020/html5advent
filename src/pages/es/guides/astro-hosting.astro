@@ -77,6 +77,25 @@ npm install -g pm2
 pm2 start ./dist/server/entry.mjs --name astro-site
 pm2 save`}</code></pre>
 
+  <h2>Qué va en dist/client y dist/server</h2>
+  <p>En cuanto configuras un adaptador, <code>npm run build</code> divide la salida en dos: <code>dist/client/</code> guarda todo lo que descarga el navegador (HTML prerenderizado, CSS, JS y los archivos de <code>public/</code>) y <code>dist/server/</code> guarda el código que renderiza las páginas bajo demanda, con <code>entry.mjs</code> como punto de entrada. Despliega las dos carpetas juntas, en la misma máquina y con la misma estructura relativa.</p>
+  <ul>
+    <li><strong>Modo standalone</strong> (<code>mode: 'standalone'</code>): <code>node ./dist/server/entry.mjs</code> sirve por sí solo las páginas renderizadas y los archivos de <code>dist/client/</code>. Copia toda la carpeta <code>dist/</code> con <code>package.json</code>, ejecuta <code>npm install --omit=dev</code>, arráncalo y pon Nginx o Caddy delante para el HTTPS. Las variables de entorno <code>PORT</code> y <code>HOST</code> definen dónde escucha.</li>
+    <li><strong>Modo middleware</strong> (<code>mode: 'middleware'</code>): <code>entry.mjs</code> exporta un handler que montas en tu propio servidor Express o Fastify, y sirves tú mismo <code>dist/client/</code> como archivos estáticos:</li>
+  </ul>
+  <pre><code>{`// server.mjs - Astro (mode: 'middleware') behind Express
+import express from 'express';
+import { handler as ssrHandler } from './dist/server/entry.mjs';
+
+const app = express();
+app.use('/', express.static('dist/client/'));
+app.use(ssrHandler);
+app.listen(8080);`}</code></pre>
+
+  <h2>Alojar Astro en hosting compartido (Bluehost, cPanel)</h2>
+  <p>La salida estática funciona en cualquier plan compartido: ejecuta <code>npm run build</code> en tu ordenador y sube el <em>contenido</em> de <code>dist/</code> (no la carpeta) a <code>public_html/</code> por FTP o con el administrador de archivos de cPanel. Antes, pon tu dominio en <code>site</code> dentro de <code>astro.config.mjs</code> y, si el sitio vive en una subcarpeta, pon esa ruta en <code>base</code> para que enlaces y recursos funcionen.</p>
+  <p>La salida de servidor es lo difícil en un hosting compartido: el proceso Node tiene que seguir en marcha, y los planes compartidos clásicos están pensados para PHP, no para servidores Node permanentes. Algunos proveedores con cPanel añaden un panel "Setup Node.js App": comprueba que tu plan lo incluye antes de elegir la salida de servidor. Si no, deja el sitio estático o pasa a <a href="/es/guides/best-cheap-vps">un VPS</a> donde <code>entry.mjs</code> corre con PM2 como arriba.</p>
+
   <h2>Referencia rápida</h2>
   <table>
     <thead><tr><th>Necesidad</th><th>Modo</th><th>Qué alojar</th></tr></thead>

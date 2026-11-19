@@ -77,6 +77,25 @@ npm install -g pm2
 pm2 start ./dist/server/entry.mjs --name astro-site
 pm2 save`}</code></pre>
 
+  <h2>Ce que contiennent dist/client et dist/server</h2>
+  <p>Dès qu'un adaptateur est configuré, <code>npm run build</code> coupe la sortie en deux : <code>dist/client/</code> contient tout ce que le navigateur télécharge (HTML prérendu, CSS, JS et les fichiers de <code>public/</code>), <code>dist/server/</code> contient le code qui rend les pages à la demande, avec <code>entry.mjs</code> comme point d'entrée. Les deux dossiers se déploient ensemble, sur la même machine, avec la même arborescence relative.</p>
+  <ul>
+    <li><strong>Mode standalone</strong> (<code>mode: 'standalone'</code>) : <code>node ./dist/server/entry.mjs</code> sert seul les pages rendues et les fichiers de <code>dist/client/</code>. Copiez tout le dossier <code>dist/</code> avec <code>package.json</code>, lancez <code>npm install --omit=dev</code>, démarrez, et placez Nginx ou Caddy devant pour le HTTPS. Les variables d'environnement <code>PORT</code> et <code>HOST</code> fixent l'adresse d'écoute.</li>
+    <li><strong>Mode middleware</strong> (<code>mode: 'middleware'</code>) : <code>entry.mjs</code> exporte un handler que vous montez dans votre propre serveur Express ou Fastify, et vous servez vous-même <code>dist/client/</code> en fichiers statiques :</li>
+  </ul>
+  <pre><code>{`// server.mjs - Astro (mode: 'middleware') behind Express
+import express from 'express';
+import { handler as ssrHandler } from './dist/server/entry.mjs';
+
+const app = express();
+app.use('/', express.static('dist/client/'));
+app.use(ssrHandler);
+app.listen(8080);`}</code></pre>
+
+  <h2>Héberger Astro sur un hébergement mutualisé (Bluehost, cPanel)</h2>
+  <p>La sortie statique fonctionne sur n'importe quelle offre mutualisée : lancez <code>npm run build</code> sur votre ordinateur, puis envoyez le <em>contenu</em> de <code>dist/</code> (pas le dossier lui-même) dans <code>public_html/</code> par FTP ou par le gestionnaire de fichiers cPanel. Réglez d'abord <code>site</code> dans <code>astro.config.mjs</code> sur votre domaine, et si le site vit dans un sous-dossier, réglez <code>base</code> sur ce chemin pour que liens et ressources se résolvent.</p>
+  <p>La sortie serveur est le point dur en mutualisé : le processus Node doit rester actif, et les offres mutualisées classiques sont faites pour PHP, pas pour des serveurs Node permanents. Certains hébergeurs cPanel ajoutent un panneau « Setup Node.js App » : vérifiez que votre offre l'inclut avant de choisir la sortie serveur. Sinon gardez le site statique, ou passez sur <a href="/fr/guides/best-cheap-vps">un VPS</a> où <code>entry.mjs</code> tourne sous PM2 comme ci-dessus.</p>
+
   <h2>Référence rapide</h2>
   <table>
     <thead><tr><th>Besoin</th><th>Mode</th><th>Quoi héberger</th></tr></thead>

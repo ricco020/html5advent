@@ -77,6 +77,25 @@ npm install -g pm2
 pm2 start ./dist/server/entry.mjs --name astro-site
 pm2 save`}</code></pre>
 
+  <h2>What goes in dist/client and dist/server</h2>
+  <p>As soon as an adapter is configured, <code>npm run build</code> splits the output in two: <code>dist/client/</code> holds everything the browser downloads (prerendered HTML, CSS, JS and the files from <code>public/</code>), and <code>dist/server/</code> holds the code that renders on-demand pages, with <code>entry.mjs</code> as its entry point. Deploy both folders together, on the same machine, keeping the same relative layout.</p>
+  <ul>
+    <li><strong>Standalone mode</strong> (<code>mode: 'standalone'</code>): <code>node ./dist/server/entry.mjs</code> serves the rendered pages and the files of <code>dist/client/</code> by itself. Copy the whole <code>dist/</code> folder with <code>package.json</code>, run <code>npm install --omit=dev</code>, start it, and put Nginx or Caddy in front for HTTPS. The <code>PORT</code> and <code>HOST</code> environment variables set where it listens.</li>
+    <li><strong>Middleware mode</strong> (<code>mode: 'middleware'</code>): <code>entry.mjs</code> exports a handler that you mount in your own Express or Fastify server, and you serve <code>dist/client/</code> yourself as static files:</li>
+  </ul>
+  <pre><code>{`// server.mjs - Astro (mode: 'middleware') behind Express
+import express from 'express';
+import { handler as ssrHandler } from './dist/server/entry.mjs';
+
+const app = express();
+app.use('/', express.static('dist/client/'));
+app.use(ssrHandler);
+app.listen(8080);`}</code></pre>
+
+  <h2>Hosting Astro on shared hosting (Bluehost, cPanel)</h2>
+  <p>Static output works on any shared plan: run <code>npm run build</code> on your computer, then upload the <em>contents</em> of <code>dist/</code> (not the folder itself) into <code>public_html/</code> by FTP or the cPanel file manager. Set <code>site</code> in <code>astro.config.mjs</code> to your domain first, and if the site lives in a subfolder, set <code>base</code> to that path so links and assets resolve.</p>
+  <p>Server output is the hard part on shared hosting: the Node process has to stay running, and classic shared plans are built for PHP, not for long-lived Node servers. Some cPanel hosts add a "Setup Node.js App" panel, so check that your plan includes it before you pick server output. Otherwise keep the site static, or move to <a href="/guides/best-cheap-vps">a VPS</a> where you run <code>entry.mjs</code> under PM2 as shown above.</p>
+
   <h2>Quick reference</h2>
   <table>
     <thead><tr><th>Need</th><th>Mode</th><th>What to host</th></tr></thead>
