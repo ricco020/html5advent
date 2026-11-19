@@ -36,6 +36,9 @@ import Article from '../../../layouts/Article.astro';
   </table>
   <p>Las dos filas centrales se combinan: Forge y Ploi no venden servidores, configuran el que tú alquilas. Una combinación de Ploi Free + VPS pequeño cuesta más o menos lo mismo que el VPS solo, lo que la convierte en la opción automatizada más barata para una sola aplicación.</p>
 
+  <h3>¿Se puede alojar Laravel en Cloudflare?</h3>
+  <p>No como aplicación completa. Cloudflare Pages sirve archivos estáticos y Cloudflare Workers ejecuta JavaScript y WebAssembly, no PHP: no hay un proceso PHP-FPM donde correr <code>artisan</code>, las colas ni el planificador. Lo que sí funciona es poner Cloudflare <strong>delante</strong> de tu servidor Laravel: DNS, certificado, caché de los recursos estáticos y filtrado de tráfico, con la aplicación corriendo en un VPS o en Laravel Cloud. En ese caso, declara los proxies de confianza (<code>trustProxies</code> en <code>bootstrap/app.php</code> desde Laravel 11) para que Laravel lea la IP real del visitante y el esquema HTTPS que envía Cloudflare.</p>
+
   <h2>Por qué un VPS le va bien a Laravel</h2>
   <p>El alojamiento compartido está pensado para «soltar archivos en una raíz web». Laravel quiere más que eso: acceso SSH para ejecutar <code>composer</code> y <code>artisan</code>, la capacidad de apuntar el servidor web al directorio <code>public/</code>, un proceso de larga duración para vaciar la cola y una entrada cron para el planificador. Un VPS te da <strong>acceso root, RAM y CPU garantizadas y control total del stack</strong> - exactamente lo que requieren esas necesidades. Una plataforma gestionada también puede servir, pero un VPS es el término medio más flexible una vez que una aplicación tiene colas, una base de datos y una caché.</p>
 
