@@ -34,6 +34,10 @@ const target = offer.url;
         if (/(tkqlhce|anrdoezrs|jdoqocy|dpbolvw|kqzyfj)\.com\/click-/.test(u) && src) {
           u += (u.indexOf('?') < 0 ? '?' : '&') + 'sid=' + encodeURIComponent([src, pos || 'link', lang].join('-'));
         }
+        // Awin clickref = <page>-<placement> so each Awin sale is tied to its page.
+        if (/awin1\.com\/cread\.php/.test(u) && !/[?&]clickref=/.test(u)) {
+          u += '&clickref=' + encodeURIComponent([src || 'direct', pos || 'link'].join('-'));
+        }
       } catch (e) {}
       window.location.replace(u);
     </script>

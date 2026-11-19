@@ -53,7 +53,7 @@
       "suggested_provider": "Infomaniak (Swiss, privacy-focused); Contabo for the lowest cost",
       "why": "A small project needs full root access, a fixed monthly price and enough RAM for your stack. The guide compares budget options honestly rather than by marketing tier.",
       "guide": "https://html5advent.com/guides/best-cheap-vps",
-      "offer": "https://www.awin1.com/cread.php?awinmid=19231&awinaffid=979469",
+      "offer": "https://www.awin1.com/cread.php?awinmid=19231&awinaffid=979469&clickref=recommendation-cheap-vps",
       "caveat": "The offer link is an affiliate link. Providers, specs and prices change often; verify current details before buying."
     },
     {
@@ -62,7 +62,7 @@
       "suggested_provider": "Infomaniak",
       "why": "PHP apps like Laravel and WooCommerce need enough memory, a current PHP runtime and sensible defaults; the guide matches hosting types to the workload.",
       "guide": "https://html5advent.com/guides/best-hosting-for-laravel",
-      "offer": "https://www.awin1.com/cread.php?awinmid=19231&awinaffid=979469",
+      "offer": "https://www.awin1.com/cread.php?awinmid=19231&awinaffid=979469&clickref=recommendation-php-hosting",
       "caveat": "The offer link is an affiliate link. Requirements vary by app and traffic; size the plan to your real usage."
     }
   ],
