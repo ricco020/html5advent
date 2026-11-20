@@ -4,7 +4,7 @@ import Article from '../../../layouts/Article.astro';
 <Article
   lang="it"
   slug="how-much-does-a-vps-cost"
-  title="Quanto costa un VPS? Il vero dettaglio dei prezzi"
+  title="Quanto costa un VPS al mese? Prezzi reali per un sito web"
   description="Quanto costa davvero un VPS al mese, cosa fa variare il prezzo (RAM, vCPU, storage, gestito o non gestito), i costi nascosti e prezzi di esempio reali e datati - per fare un budget onesto."
   cat="hosting"
   hero="/img/how-much-does-a-vps-cost-hero.jpg"
@@ -26,6 +26,20 @@ import Article from '../../../layouts/Article.astro';
     </tbody>
   </table>
   <p>Sono fasce indicative tra i provider generalisti, non un preventivo - la cifra esatta dipende dal provider, dalla regione e dal fatto che le vCPU siano condivise o dedicate. Un VPS <strong>gestito</strong> costa sensibilmente di più (vedi sotto).</p>
+
+  <h2>Quanto mi costa un VPS per un sito web o un e-commerce?</h2>
+  <p>Per un sito concreto, il prezzo lo decide la RAM richiesta da database e PHP, non il numero di visite. Queste cifre vengono dal modello del nostro <a href="/it/tools/vps-size-calculator">calcolatore di dimensione VPS</a> (open source, ogni ipotesi visibile), con 2,5 pagine per visita e un margine di sicurezza del 30 %:</p>
+  <table>
+    <thead><tr><th>Il tuo sito</th><th>Visite / mese</th><th>Di cosa ha bisogno</th><th>Piano più piccolo adatto</th></tr></thead>
+    <tbody>
+      <tr><td>Sito statico (HTML, Astro, Hugo)</td><td>10.000</td><td>1 vCPU, 1 GB RAM, 20 GB</td><td>qualsiasi VPS d'ingresso, circa 4 €</td></tr>
+      <tr><td>WordPress con cache di pagina</td><td>da 10.000 a 50.000</td><td>2 vCPU, 3 GB RAM, 30 GB</td><td>Contabo Cloud VPS 4, 4,40 €</td></tr>
+      <tr><td>Negozio WooCommerce con cache</td><td>10.000</td><td>2 vCPU, 3,5 GB RAM, 40 GB</td><td>Contabo Cloud VPS 4, 4,40 €</td></tr>
+      <tr><td>Negozio WooCommerce, traffico a picchi + cron</td><td>50.000</td><td>2 vCPU, 4,5 GB RAM, 55 GB</td><td>Contabo Cloud VPS 4, 4,40 €</td></tr>
+      <tr><td>Negozio WooCommerce + copia di staging</td><td>200.000</td><td>2 vCPU, 6 GB RAM, 80 GB</td><td>Contabo Cloud VPS 4, 4,40 €</td></tr>
+    </tbody>
+  </table>
+  <p>In pratica: un e-commerce piccolo o medio sta in <strong>4-6 GB di RAM</strong>, e a farlo salire sono i servizi aggiunti (staging, code, un server di posta, più negozi sullo stesso VPS), non le visite. Aggiungi il dominio (circa 10-15 € l'anno) e i backup se il provider li fa pagare a parte. Con plugin pesanti o un catalogo grande, inserisci i tuoi dati nel <a href="/it/tools/vps-size-calculator?stack=woocommerce">calcolatore con il profilo WooCommerce</a> e tieni margine: il modello usa regole pratiche, non misure del tuo sito.</p>
 
   <h2>Cosa fa davvero variare il prezzo</h2>
   <p>Cinque elementi muovono la cifra di un piano VPS. Capirli è ciò che ti permette di leggere onestamente qualsiasi listino.</p>
