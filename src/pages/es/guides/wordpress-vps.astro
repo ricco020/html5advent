@@ -31,6 +31,26 @@ import Article from '../../../layouts/Article.astro';
     <figcaption>Un VPS significa ser dueño del servidor: parchearlo, asegurarlo y ajustarlo tú mismo - bien si disfrutas ese trabajo, una carga si no.</figcaption>
   </figure>
 
+  <h2>¿Qué es un VPS en la ciberseguridad de WordPress?</h2>
+  <p>Desde el punto de vista de la seguridad, un VPS es una <strong>frontera de aislamiento</strong>: tu WordPress corre en una máquina virtual con su propio sistema, sus propios usuarios y su propia IP, separada por el hipervisor de los demás clientes del servidor físico. Eso cambia tres cosas frente a un alojamiento compartido:</p>
+  <ul>
+    <li><strong>Los vecinos dejan de ser un riesgo directo.</strong> En un compartido, la separación entre cuentas depende de cómo el proveedor la haya configurado (usuarios PHP distintos, CageFS u otro sistema). En un VPS, otro cliente no comparte tu sistema de archivos ni tus procesos.</li>
+    <li><strong>La IP es solo tuya.</strong> En un compartido, si otra web del mismo servidor envía spam, la IP común puede acabar en una lista negra y tus correos de WooCommerce o de formularios dejan de llegar. En un VPS la reputación de la IP depende de ti.</li>
+    <li><strong>Controlas las defensas del servidor.</strong> Cortafuegos (ufw o nftables), fail2ban contra los intentos de fuerza bruta en <code>wp-login.php</code> y <code>xmlrpc.php</code>, un pool PHP-FPM con su propio usuario por sitio para que una web infectada no pueda escribir en las demás, y la versión de PHP que elijas.</li>
+  </ul>
+  <p>Lo que un VPS <strong>no</strong> arregla: la mayoría de los fallos de WordPress están dentro de WordPress. Patchstack registró 11 334 vulnerabilidades nuevas en el ecosistema WordPress en 2025, el 91 % en plugins y el 9 % en temas, con solo 6 de baja prioridad en el núcleo (<a href="https://patchstack.com/whitepaper/state-of-wordpress-security-in-2026/" rel="noopener">informe State of WordPress Security in 2026</a>). Un plugin vulnerable se explota igual en un VPS que en un compartido. Además, en un VPS no administrado las actualizaciones del sistema, el SSH y las copias pasan a ser tu trabajo: un VPS abandonado es menos seguro que un buen alojamiento gestionado.</p>
+  <table>
+    <thead><tr><th>Riesgo</th><th>Hosting compartido</th><th>VPS</th></tr></thead>
+    <tbody>
+      <tr><td>Otro cliente del servidor comprometido</td><td>Depende del aislamiento del proveedor</td><td>Separado por el hipervisor</td></tr>
+      <tr><td>IP en lista negra por un vecino</td><td>Posible (IP compartida)</td><td>No, IP dedicada</td></tr>
+      <tr><td>Fuerza bruta en wp-login.php</td><td>Lo que filtre el proveedor</td><td>Tú: fail2ban, límite de peticiones en Nginx</td></tr>
+      <tr><td>Plugin o tema vulnerable</td><td>Igual de expuesto</td><td>Igual de expuesto</td></tr>
+      <tr><td>Parches del sistema y de PHP</td><td>El proveedor</td><td>Tú (o el proveedor si es VPS administrado)</td></tr>
+    </tbody>
+  </table>
+  <p>En la práctica: el VPS te da el aislamiento y las herramientas, y el paso 1 de la instalación de más abajo (endurecer el servidor) es lo que las activa. La regla que más hacks evita sigue siendo la misma en cualquier alojamiento: pocos plugins, todos actualizados, y copias fuera del servidor.</p>
+
   <h2>Qué buscar en un VPS para WordPress</h2>
   <h3>RAM</h3>
   <p>El recurso que WordPress y su base de datos agotan primero, especialmente con WooCommerce, maquetadores de páginas o muchos plugins. El agotamiento de la memoria es la causa habitual de que un sitio se caiga bajo carga, así que dimensiona con margen en lugar de al mínimo absoluto.</p>

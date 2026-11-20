@@ -31,6 +31,26 @@ import Article from '../../layouts/Article.astro';
     <figcaption>A VPS means owning the server: patching, securing and tuning it yourself - fine if you enjoy that work, a burden if you don't.</figcaption>
   </figure>
 
+  <h2>What a VPS changes for WordPress security</h2>
+  <p>In security terms, a VPS is an <strong>isolation boundary</strong>: your WordPress runs in a virtual machine with its own OS, its own users and its own IP, kept apart from the other customers on the physical server by the hypervisor. Compared with shared hosting, that changes three things:</p>
+  <ul>
+    <li><strong>Neighbours stop being a direct risk.</strong> On shared hosting, separation between accounts depends on how the host set it up (separate PHP users, CageFS or similar). On a VPS, another customer does not share your filesystem or your processes.</li>
+    <li><strong>The IP is yours alone.</strong> On shared hosting, if another site on the box sends spam, the shared IP can land on a blocklist and your WooCommerce or contact-form emails stop arriving. On a VPS the IP's reputation depends on you.</li>
+    <li><strong>You control the server's defences.</strong> A firewall (ufw or nftables), fail2ban against brute force on <code>wp-login.php</code> and <code>xmlrpc.php</code>, one PHP-FPM pool with its own user per site so an infected site cannot write into the others, and the PHP version you choose.</li>
+  </ul>
+  <p>What a VPS does <strong>not</strong> fix: most WordPress holes are inside WordPress. Patchstack logged 11,334 new vulnerabilities in the WordPress ecosystem in 2025, 91% in plugins and 9% in themes, with only 6 low-priority ones in core (<a href="https://patchstack.com/whitepaper/state-of-wordpress-security-in-2026/" rel="noopener">State of WordPress Security in 2026</a>). A vulnerable plugin is exploited the same way on a VPS as on shared hosting. And on an unmanaged VPS, OS updates, SSH and backups become your job: a neglected VPS is less safe than good managed hosting.</p>
+  <table>
+    <thead><tr><th>Risk</th><th>Shared hosting</th><th>VPS</th></tr></thead>
+    <tbody>
+      <tr><td>Another customer on the server compromised</td><td>Depends on the host's isolation</td><td>Separated by the hypervisor</td></tr>
+      <tr><td>IP blocklisted because of a neighbour</td><td>Possible (shared IP)</td><td>No, dedicated IP</td></tr>
+      <tr><td>Brute force on wp-login.php</td><td>Whatever the host filters</td><td>You: fail2ban, Nginx rate limiting</td></tr>
+      <tr><td>Vulnerable plugin or theme</td><td>Equally exposed</td><td>Equally exposed</td></tr>
+      <tr><td>OS and PHP patches</td><td>The host</td><td>You (or the host on a managed VPS)</td></tr>
+    </tbody>
+  </table>
+  <p>In practice: the VPS gives you the isolation and the tools, and step 1 of the setup below (harden the server first) is what switches them on. The rule that prevents the most hacks is the same on any hosting: few plugins, all kept updated, and backups stored off the server.</p>
+
   <h2>What to look for in a VPS for WordPress</h2>
   <h3>RAM</h3>
   <p>The resource WordPress and its database run out of first, especially with WooCommerce, page builders or many plugins. Memory exhaustion is the usual cause of a site falling over under load, so size with headroom rather than to the bare minimum.</p>
