@@ -7,6 +7,7 @@ import Article from '../../layouts/Article.astro';
   title="Static website hosting: how to deploy an Astro, Vite or plain HTML site"
   description="What static hosting is, how a CDN serves your build, and how to deploy an Astro, Vite or JAMstack site with a custom domain and free HTTPS."
   cat="hosting"
+  updated="2026-11-20"
   day={12}
   hero="/img/static-website-hosting-hero.jpg"
   heroAlt="A technician's hand servicing a blue-lit server in a data center rack"
@@ -53,6 +54,24 @@ npm run build        # outputs to ./dist
     <li>A <strong>CNAME</strong> record pointing a subdomain (<code>www.example.com</code>) to the host's provided hostname.</li>
   </ul>
   <p>Many platforms also support <strong>nameserver delegation</strong>, where you hand DNS management to the host entirely. After the records propagate, the host serves your site on your own domain.</p>
+
+  <h2>Example: a static HTML site on Infomaniak (Switzerland) with your own domain</h2>
+  <p>If you want the files hosted in Switzerland rather than on a global CDN, Infomaniak is a common choice. Its two relevant offers for a static site, as listed on infomaniak.com on 20 November 2026:</p>
+  <table>
+    <thead><tr><th>Offer</th><th>Price</th><th>What fits a static site</th><th>Limit to know</th></tr></thead>
+    <tbody>
+      <tr><td>Web Hosting Starter</td><td>Free with a domain registered at Infomaniak</td><td>A single simple HTML page (CV, links)</td><td>10 MB, built with Infomaniak's Welcome Page tool, not for uploading an Astro or Vite build</td></tr>
+      <tr><td>Web Hosting</td><td>From CHF 10.91 / month, 30-day free trial (card required)</td><td>Any <code>dist</code> folder, up to 20 sites, unlimited traffic</td><td>Shared hosting: you upload files, there is no build step on their side</td></tr>
+    </tbody>
+  </table>
+  <p>The deployment for an Astro, Vite or hand-written site on the paid Web Hosting plan:</p>
+  <ol>
+    <li><strong>Build locally:</strong> <code>npm run build</code> produces <code>dist/</code>. For a plain HTML site, your folder is already the output.</li>
+    <li><strong>Create the site in the Manager</strong> and attach your domain. If the domain is registered at Infomaniak, the DNS records are created for you. If it is registered elsewhere, either point its nameservers to Infomaniak or add the A/AAAA records the Manager shows, as described above.</li>
+    <li><strong>Upload the contents of <code>dist/</code></strong> (not the folder itself) into the site's root directory by FTP, or over SSH, which the plan includes, for example <code>rsync -avz --delete dist/ user@host:path/to/site/</code>. The <code>--delete</code> flag removes old hashed assets so the server matches your build.</li>
+    <li><strong>Enable HTTPS</strong> with the free Let's Encrypt certificate from the Manager, then force the redirect from HTTP to HTTPS.</li>
+  </ol>
+  <p>For one static page with no build, the free Starter is enough. For a real Astro or Vite project, or several sites, the paid plan is the one that takes your files. If you already deploy with Git to a CDN platform, Infomaniak mainly makes sense when Swiss hosting or bundling email with the domain matters to you. <a href="/go/infomaniak?src=static-website-hosting&amp;pos=example" rel="nofollow sponsored">See Infomaniak's Web Hosting plans</a>.</p>
 
   <h2>HTTPS for free</h2>
   <p>HTTPS is no longer optional - browsers flag plain HTTP as "not secure", and many web platform APIs only work in a secure context. The good news: virtually every modern static host issues and renews TLS certificates for you automatically, usually via Let's Encrypt. Once your domain is connected, the certificate is provisioned without any manual step, and renewals happen on their own.</p>
