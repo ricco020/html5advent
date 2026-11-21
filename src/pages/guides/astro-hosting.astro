@@ -11,6 +11,7 @@ export const prerender = true; // force static - overrides the prerender=false s
   hero="/img/astro-hosting-hero.jpg"
   heroAlt="HTML source code with anchor and list-item tags shown in colour on a dark screen"
   cluster="deploy"
+  updated="2026-11-21"
 >
   <p><strong>Astro</strong> can ship your site two very different ways, and which one you pick decides where and how you host it. By default Astro builds a folder of plain HTML, CSS and JS - files any static host can serve. But Astro can also run on a server, rendering pages on demand (SSR) for things like authentication, forms or per-request data. This guide explains both output modes, the build commands behind them, how adapters fit in, and how to choose a host for each.</p>
 
@@ -76,6 +77,10 @@ Publish/output:   dist`}</code></pre>
 npm install -g pm2
 pm2 start ./dist/server/entry.mjs --name astro-site
 pm2 save`}</code></pre>
+
+  <h3>What a Node server for Astro SSR costs</h3>
+  <p>A PaaS bills the RAM and CPU the process keeps reserved, a VPS bills a flat month. Railway's published rates (read on 20 November 2026: Hobby $5/month including $5 of usage, then $10 per GB of RAM and $20 per vCPU per month) put a small always-on Node process at 512 MB and 0.25 vCPU around $10/month. Contabo's smallest Cloud VPS is 4.40 EUR/month ex. VAT on a 24-month term (list price read on 17 November 2026), and one VPS can run several Astro servers side by side: give each its own <code>PORT</code>, start each under PM2, and let Caddy or Nginx route each domain to its port. Check the memory each one actually holds with <code>pm2 monit</code> before sizing up. Detailed figures are in the <a href="/guides/nodejs-hosting">Node.js hosting guide</a>.</p>
+  <p><a href="/go/contabo?src=astro-hosting&amp;pos=ssr-cost" rel="nofollow sponsored">See Contabo Cloud VPS plans</a>.</p>
 
   <h2>What goes in dist/client and dist/server</h2>
   <p>As soon as an adapter is configured, <code>npm run build</code> splits the output in two: <code>dist/client/</code> holds everything the browser downloads (prerendered HTML, CSS, JS and the files from <code>public/</code>), and <code>dist/server/</code> holds the code that renders on-demand pages, with <code>entry.mjs</code> as its entry point. Deploy both folders together, on the same machine, keeping the same relative layout.</p>

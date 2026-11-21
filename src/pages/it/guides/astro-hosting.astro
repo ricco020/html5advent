@@ -11,6 +11,7 @@ export const prerender = true; // force static - overrides the prerender=false s
   hero="/img/astro-hosting-hero.jpg"
   heroAlt="Codice sorgente HTML con tag di ancora ed elemento di lista mostrati a colori su uno schermo scuro"
   cluster="deploy"
+  updated="2026-11-21"
 >
   <p><strong>Astro</strong> può consegnare il tuo sito in due modi molto diversi, e quello che scegli decide dove e come lo ospiti. Per impostazione predefinita Astro costruisce una cartella di semplici file HTML, CSS e JS - file che qualsiasi host statico può servire. Ma Astro può anche girare su un server, renderizzando le pagine su richiesta (SSR) per cose come autenticazione, moduli o dati per richiesta. Questa guida spiega entrambe le modalità di output, i comandi di build che vi stanno dietro, come si inseriscono gli adattatori, e come scegliere un host per ciascuna.</p>
 
@@ -76,6 +77,10 @@ Publish/output:   dist`}</code></pre>
 npm install -g pm2
 pm2 start ./dist/server/entry.mjs --name astro-site
 pm2 save`}</code></pre>
+
+  <h3>Quanto costa un server Node per Astro in SSR</h3>
+  <p>Una PaaS fattura la RAM e la CPU che il processo tiene riservate, un VPS fattura un mese fisso. Le tariffe pubblicate da Railway (lette il 20 novembre 2026: piano Hobby a 5 $/mese con 5 $ di utilizzo inclusi, poi 10 $ per GB di RAM e 20 $ per vCPU al mese) collocano un piccolo processo Node sempre acceso, 512 MB e 0,25 vCPU, intorno a 10 $/mese. Il Cloud VPS più piccolo di Contabo costa 4,40 EUR/mese IVA esclusa su 24 mesi (prezzo di listino letto il 17 novembre 2026), e un solo VPS può far girare più server Astro affiancati: assegna a ciascuno la sua <code>PORT</code>, avvia ciascuno con PM2 e lascia che Caddy o Nginx instradi ogni dominio verso la sua porta. Controlla la memoria realmente occupata da ciascuno con <code>pm2 monit</code> prima di passare a un piano superiore. Le cifre dettagliate sono nella <a href="/it/guides/nodejs-hosting">guida all'hosting Node.js</a>.</p>
+  <p><a href="/go/contabo?src=astro-hosting&amp;pos=ssr-cost" rel="nofollow sponsored">Vedi i piani Cloud VPS di Contabo</a>.</p>
 
   <h2>Cosa finisce in dist/client e dist/server</h2>
   <p>Appena configuri un adapter, <code>npm run build</code> divide l'output in due: <code>dist/client/</code> contiene tutto ciò che il browser scarica (HTML prerenderizzato, CSS, JS e i file di <code>public/</code>), <code>dist/server/</code> contiene il codice che renderizza le pagine su richiesta, con <code>entry.mjs</code> come punto di ingresso. Le due cartelle vanno distribuite insieme, sulla stessa macchina, con la stessa struttura relativa.</p>
