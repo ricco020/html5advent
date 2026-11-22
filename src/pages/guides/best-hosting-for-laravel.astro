@@ -4,13 +4,14 @@ import Article from '../../layouts/Article.astro';
 <Article
   lang="en"
   slug="best-hosting-for-laravel"
-  title="Laravel hosting in 2026: how to host a Laravel app (VPS, Forge, Cloud)"
-  description="How to host a Laravel app: the four options compared with real prices (shared, Laravel Cloud, Forge or Ploi on a VPS, plain VPS), the PHP versions Laravel 12 and 13 need, a full deployment walkthrough and a redeploy script."
-  updated="2026-10-18"
+  title="Laravel hosting and deployment in 2026: server requirements, VPS, Forge, Cloud"
+  description="Laravel server requirements and deployment: PHP 8.3+ and extensions, Nginx root on public/, storage permissions, a Supervisor queue worker and the scheduler cron, then the four hosting options with real prices (shared, Laravel Cloud, Forge on a VPS, plain VPS)."
+  updated="2026-11-23"
   cat="hosting"
   hero="/img/best-hosting-for-laravel-hero.jpg"
   heroAlt="A developer wearing headphones working at a desk in front of a monitor full of code, with code projected on the wall behind"
   cluster="hosting"
+  keyfacts={{"def": "To deploy Laravel in production, the server needs a supported PHP (8.3 to 8.5 for Laravel 13) with the extensions the docs list, Composer and SSH, a web server whose document root is public/, write access to storage/ and bootstrap/cache, a database, a queue worker kept alive by Supervisor and a one-minute cron for the scheduler.", "items": [{"k": "PHP 8.3+", "v": "Laravel 13 supports PHP 8.3 to 8.5 (support table checked 18 Oct 2026)."}, {"k": "Long-running processes", "v": "The queue worker and the cron are what most shared plans block."}, {"k": "RAM first", "v": "2 to 4 GB runs one app with MySQL, Redis and two queue workers."}]}}
   commerce={{ type: 'product', key: 'contabo' }}
   faq={[
     { q: 'Can I host Laravel on shared hosting?', a: 'Sometimes, for a small app without queues: you need SSH, Composer, a supported PHP and the ability to point the document root at public/. Most shared plans fail on at least one of those, and none let you run a queue worker under Supervisor. A VPS or a managed platform avoids the fight.' },
@@ -79,6 +80,12 @@ sudo chmod -R ug+rwX storage bootstrap/cache`}</code></pre>
   <pre><code>{`git clone https://github.com/you/your-app.git /var/www/app
 cd /var/www/app
 composer install --no-dev --optimize-autoloader`}</code></pre>
+  <p>PHP-FPM then needs write access to exactly two directories: <code>storage/</code> (logs, sessions, compiled views, file cache) and <code>bootstrap/cache/</code> (cached config, routes, packages). Give them to the web server's group rather than making the whole project writable:</p>
+  <pre><code>{`# deploy = the user you log in and run composer/artisan as
+sudo chown -R deploy:www-data /var/www/app
+cd /var/www/app
+sudo chmod -R ug+rwX storage bootstrap/cache`}</code></pre>
+  <p>If this step is missing, the first request usually ends in a 500 with <code>The stream or file "storage/logs/laravel.log" could not be opened in append mode: Failed to open stream: Permission denied</code>. Never fix it with <code>chmod -R 777</code>: that lets any process on the server rewrite your cached config and views.</p>
 
   <h3>2. Configure the environment</h3>
   <p>Laravel reads configuration from a <code>.env</code> file that is <strong>never committed to git</strong>. Copy the example, generate the app key, and fill in the real values:</p>
