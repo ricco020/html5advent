@@ -11,6 +11,7 @@ import Article from '../../layouts/Article.astro';
   hero="/img/css-has-selector-hero.jpg"
   heroAlt="Close-up of colorful CSS code lines on a computer screen"
   cluster={null}
+  updated="2026-11-22"
 >
   <p>The <strong>:has()</strong> pseudo-class is the feature CSS authors asked for for two decades: a way to style an element based on what is <em>inside</em> it, or what comes after it. It is usually called the "parent selector," though it is really more powerful than that - it is a <strong>relational</strong> selector. It now ships in every modern browser, so you can use it in production today.</p>
 
@@ -47,6 +48,24 @@ form:has(input:invalid) {
 
   <figure><img src="/img/css-has-selector-inbody.jpg" alt="Close-up view of HTML and CSS code displayed on a screen" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>:has() reads the relationship between elements, so a container can respond to the content and state inside it - no JavaScript required.</figcaption></figure>
 
+  <h2>Style the parent if a child has a certain class</h2>
+  <p>This is the question most people arrive with: "can I set CSS on a parent when a child with a given class is present?" Yes. Put the child's class inside <code>:has()</code> and write the rule for the parent.</p>
+  <pre><code>{`/* Any .menu that contains an item with class .active */
+.menu:has(.active) {
+  background: #f4f4f4;
+}
+
+/* Only a DIRECT child counts: use the > combinator */
+.menu:has(> li.active) {
+  outline: 2px solid currentColor;
+}
+
+/* A list item that is NOT holding an .active link */
+li:not(:has(a.active)) {
+  opacity: 0.7;
+}`}</code></pre>
+  <p>Without the <code>&gt;</code>, <code>:has(.active)</code> matches at any depth, so an outer wrapper several levels up also matches. Add <code>&gt;</code> when you only want the immediate parent.</p>
+
   <h2>Practical patterns</h2>
   <ul>
     <li><strong>Quantity and content queries:</strong> style a gallery differently when it has exactly one image versus many - <code>.gallery:has(img:only-child)</code>.</li>
@@ -56,7 +75,30 @@ form:has(input:invalid) {
   </ul>
 
   <h2>Browser support</h2>
-  <p>Support is broad in 2026. <code>:has()</code> shipped in Chrome and Edge 105 (August 2022) and Safari 15.4, with Firefox joining in version 121 (December 2023). That means it is now available across the current versions of every major browser, and it is safe to rely on for most audiences. For older browsers you can treat <code>:has()</code> styles as a progressive enhancement, since a browser that does not understand the selector simply ignores the rule.</p>
+  <p>Support is broad in 2026. <code>:has()</code> is Baseline across current browsers:</p>
+  <table>
+    <thead><tr><th>Browser</th><th>First version with :has()</th><th>Released</th></tr></thead>
+    <tbody>
+      <tr><td>Safari (macOS and iOS)</td><td>15.4</td><td>March 2022</td></tr>
+      <tr><td>Chrome, Edge, Opera</td><td>105</td><td>August to September 2022</td></tr>
+      <tr><td>Firefox</td><td>121</td><td>December 2023</td></tr>
+    </tbody>
+  </table>
+  <p>For older browsers, treat <code>:has()</code> styles as a progressive enhancement: a browser that does not understand the selector drops that rule and keeps the rest of the stylesheet. If you need a different fallback layout, test for support explicitly with <code>@supports selector()</code>:</p>
+  <pre><code>{`.card { display: block; }               /* fallback for every browser */
+
+@supports selector(:has(img)) {
+  .card:has(img) { display: grid; grid-template-columns: 200px 1fr; }
+}`}</code></pre>
+  <p>One detail that trips people up: never group a <code>:has()</code> selector with other selectors in the same rule (<code>.a, .b:has(img) &#123; &#125;</code>). In a browser without support the whole rule is invalid, so <code>.a</code> loses its styles too. Keep <code>:has()</code> rules separate.</p>
+
+  <h2>Does :has() have a performance impact?</h2>
+  <p>A normal selector is matched by looking at an element and its ancestors. <code>:has()</code> looks the other way, down into descendants or forward to siblings, so each time the DOM or an input state changes the engine may have to re-check ancestors that use it. Chromium, WebKit and Gecko all added invalidation optimisations so that only the affected subtrees are re-evaluated, which is why component-level use is cheap in practice. What still costs:</p>
+  <ul>
+    <li><strong>Unanchored, page-wide checks</strong> such as <code>body:has(.x)</code> or <code>:has(.x)</code> with nothing before it, on a page that changes often (live feeds, large tables).</li>
+    <li><strong>Deep descendant arguments</strong> like <code>.page:has(.a .b .c)</code>, which force a walk of the whole subtree.</li>
+  </ul>
+  <p>Prefer a specific subject and the child combinator: <code>.card:has(&gt; img)</code> is cheaper to evaluate than <code>.card:has(img)</code>, and both are far cheaper than <code>:has(img)</code>. To check a real page, record a trace in the browser's Performance panel while you interact and look at the "Recalculate Style" time before and after adding the rule.</p>
 
   <h2>Gotchas worth knowing</h2>
   <ul>
@@ -69,7 +111,8 @@ form:has(input:invalid) {
   <h2>FAQ</h2>
   <p><strong>Is :has() really the CSS parent selector?</strong> Effectively yes, and more. It selects an ancestor based on its descendants, which is the classic "parent selector" use case, but because it accepts combinators it can also select based on following siblings, so it is better described as a relational selector.</p>
   <p><strong>Can I use :has() in production in 2026?</strong> For most sites, yes - it is supported in the current versions of all major browsers. Use it as a progressive enhancement if you must support very old browsers.</p>
+  <p><strong>How do I select a parent only if a child has a class?</strong> Write <code>.parent:has(.child-class)</code>, or <code>.parent:has(&gt; .child-class)</code> to limit the match to direct children.</p>
   <p><strong>Does :has() hurt performance?</strong> Rarely, if you keep selectors scoped. Extremely broad, document-wide :has() checks on large, constantly changing pages can add cost, but component-level usage is fine.</p>
 
-  <p>For more modern CSS, see our guides on <a href="/guides/css-nesting">native CSS nesting</a> and <a href="/guides/css-container-queries">container queries</a>.</p>
+  <p>For more modern CSS, see our guides on <a href="/guides/css-nesting">native CSS nesting</a> and <a href="/guides/css-container-queries">container queries</a>. Ready to put a CSS demo online? Our <a href="/guides/static-website-hosting">static website hosting guide</a> compares the free and cheap options.</p>
 </Article>

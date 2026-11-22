@@ -11,6 +11,7 @@ import Article from '../../../layouts/Article.astro';
   hero="/img/css-has-selector-hero.jpg"
   heroAlt="Primer plano de lineas de codigo CSS de colores en la pantalla de un ordenador"
   cluster={null}
+  updated="2026-11-22"
 >
   <p>La pseudoclase <strong>:has()</strong> es la funcionalidad que los autores de CSS pidieron durante dos decadas: una forma de dar estilo a un elemento segun lo que hay <em>dentro</em> de el, o lo que viene despues. Se le suele llamar el "selector de padre", aunque en realidad es mas potente que eso: es un selector <strong>relacional</strong>. Ahora esta disponible en todos los navegadores modernos, asi que puedes usarlo hoy en produccion.</p>
 
@@ -47,6 +48,24 @@ form:has(input:invalid) {
 
   <figure><img src="/img/css-has-selector-inbody.jpg" alt="Vista en primer plano de codigo HTML y CSS mostrado en una pantalla" loading="lazy" width="1200" height="700" style="width:100%;height:auto;border-radius:12px" /><figcaption>:has() lee la relacion entre elementos, de modo que un contenedor puede responder al contenido y al estado que hay dentro: sin necesidad de JavaScript.</figcaption></figure>
 
+  <h2>Dar estilo al padre si un hijo tiene una clase</h2>
+  <p>Es la pregunta mas habitual: «se puede aplicar CSS al padre cuando hay un hijo con una clase concreta?» Si. Pon la clase del hijo dentro de <code>:has()</code> y escribe la regla para el padre.</p>
+  <pre><code>{`/* Cualquier .menu que contenga un elemento con clase .active */
+.menu:has(.active) {
+  background: #f4f4f4;
+}
+
+/* Solo cuenta un hijo DIRECTO: combinador > */
+.menu:has(> li.active) {
+  outline: 2px solid currentColor;
+}
+
+/* Un li que NO contiene un enlace .active */
+li:not(:has(a.active)) {
+  opacity: 0.7;
+}`}</code></pre>
+  <p>Sin el <code>&gt;</code>, <code>:has(.active)</code> busca a cualquier profundidad, asi que un contenedor varios niveles por encima tambien coincide. Anade <code>&gt;</code> cuando solo quieras el padre inmediato.</p>
+
   <h2>Patrones practicos</h2>
   <ul>
     <li><strong>Consultas de cantidad y contenido:</strong> da estilo a una galeria de forma distinta cuando tiene exactamente una imagen frente a cuando tiene muchas: <code>.gallery:has(img:only-child)</code>.</li>
@@ -56,7 +75,30 @@ form:has(input:invalid) {
   </ul>
 
   <h2>Compatibilidad con navegadores</h2>
-  <p>La compatibilidad es amplia en 2026. <code>:has()</code> llego a Chrome y Edge 105 (agosto de 2022) y a Safari 15.4, y Firefox se sumo en la version 121 (diciembre de 2023). Eso significa que ahora esta disponible en las versiones actuales de todos los navegadores principales, y es seguro apoyarse en el para la mayoria de las audiencias. Para navegadores mas antiguos puedes tratar los estilos con <code>:has()</code> como una mejora progresiva, ya que un navegador que no entiende el selector simplemente ignora la regla.</p>
+  <p>La compatibilidad es amplia en 2026, <code>:has()</code> es Baseline en los navegadores actuales:</p>
+  <table>
+    <thead><tr><th>Navegador</th><th>Primera version con :has()</th><th>Lanzamiento</th></tr></thead>
+    <tbody>
+      <tr><td>Safari (macOS e iOS)</td><td>15.4</td><td>marzo de 2022</td></tr>
+      <tr><td>Chrome, Edge, Opera</td><td>105</td><td>agosto a septiembre de 2022</td></tr>
+      <tr><td>Firefox</td><td>121</td><td>diciembre de 2023</td></tr>
+    </tbody>
+  </table>
+  <p>Para navegadores antiguos, trata los estilos <code>:has()</code> como mejora progresiva: un navegador que no entiende el selector descarta esa regla y conserva el resto de la hoja. Si necesitas otro diseno de respaldo, comprueba la compatibilidad con <code>@supports selector()</code>:</p>
+  <pre><code>{`.card { display: block; }   /* respaldo para todos los navegadores */
+
+@supports selector(:has(img)) {
+  .card:has(img) { display: grid; grid-template-columns: 200px 1fr; }
+}`}</code></pre>
+  <p>Un error comun: no agrupes nunca un selector <code>:has()</code> con otros en la misma regla (<code>.a, .b:has(img) &#123; &#125;</code>). En un navegador sin soporte toda la regla es invalida y <code>.a</code> pierde tambien sus estilos. Manten las reglas con <code>:has()</code> separadas.</p>
+
+  <h2>¿Que impacto tiene :has() en el rendimiento?</h2>
+  <p>Un selector normal se comprueba mirando un elemento y sus ancestros. <code>:has()</code> mira en sentido contrario, hacia los descendientes o los hermanos siguientes, asi que cada vez que cambia el DOM o el estado de un campo el motor puede tener que revisar los ancestros que lo usan. Chromium, WebKit y Gecko anadieron optimizaciones de invalidacion para reevaluar solo los subarboles afectados, por eso el uso a nivel de componente es barato. Lo que sigue costando:</p>
+  <ul>
+    <li><strong>Comprobaciones sin ancla, a nivel de toda la pagina</strong>, como <code>body:has(.x)</code> o <code>:has(.x)</code> sin nada delante, en paginas que cambian a menudo (feeds en directo, tablas grandes).</li>
+    <li><strong>Argumentos de descendientes profundos</strong> como <code>.page:has(.a .b .c)</code>, que obligan a recorrer todo el subarbol.</li>
+  </ul>
+  <p>Prefiere un sujeto concreto y el combinador de hijo: <code>.card:has(&gt; img)</code> se evalua mas rapido que <code>.card:has(img)</code>, y ambos mucho mas rapido que <code>:has(img)</code>. Para medir una pagina real, graba una traza en el panel Performance del navegador mientras interactuas y compara el tiempo de «Recalculate Style» antes y despues de la regla.</p>
 
   <h2>Detalles que conviene conocer</h2>
   <ul>
@@ -67,6 +109,7 @@ form:has(input:invalid) {
   </ul>
 
   <h2>Preguntas frecuentes</h2>
+  <p><strong>¿Como selecciono un padre solo si un hijo tiene una clase?</strong> Escribe <code>.padre:has(.clase-hijo)</code>, o <code>.padre:has(&gt; .clase-hijo)</code> para limitarlo a hijos directos.</p>
   <p><strong>¿Es :has() realmente el selector de padre de CSS?</strong> En la practica si, y mas. Selecciona un ancestro segun sus descendientes, que es el caso de uso clasico del "selector de padre", pero como acepta combinadores tambien puede seleccionar segun los hermanos siguientes, asi que se describe mejor como un selector relacional.</p>
   <p><strong>¿Puedo usar :has() en produccion en 2026?</strong> Para la mayoria de los sitios, si: es compatible con las versiones actuales de todos los navegadores principales. Usalo como una mejora progresiva si necesitas dar soporte a navegadores muy antiguos.</p>
   <p><strong>¿:has() perjudica el rendimiento?</strong> Rara vez, si mantienes los selectores acotados. Comprobaciones :has() extremadamente amplias, a nivel de todo el documento, en paginas grandes que cambian constantemente pueden anadir coste, pero el uso a nivel de componente va bien.</p>
