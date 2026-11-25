@@ -3,7 +3,11 @@
 // EPC drives prioritisation: Contabo (~46€) >> O2switch (3.84€) → Contabo primary on VPS/server pages.
 export const OFFERS = {
   contabo: {
-    url: 'https://www.tkqlhce.com/click-101853517-12454592', // Contabo VPS textlink EN (verified)
+    // 25/11 : vente Black Friday Contabo ouverte (contabo.com/en/black-friday/, Core VPS des 4,40, VPS Plus 2 -20 %) :
+    // lien CJ 17389597 pendant la fenetre, evalue au build, retour seul au lien EN 12454592 a tout build apres le 03/12 00h.
+    url: (Date.now() >= Date.parse('2026-11-25T00:00:00+01:00') && Date.now() < Date.parse('2026-12-03T00:00:00+01:00'))
+      ? 'https://www.tkqlhce.com/click-101853517-17389597'
+      : 'https://www.tkqlhce.com/click-101853517-12454592', // Contabo VPS textlink EN (verified)
     label: 'Contabo',
     epc: 46,
   },
